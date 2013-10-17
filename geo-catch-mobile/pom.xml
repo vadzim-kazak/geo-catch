@@ -5,17 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>geo-catch-mobile</artifactId>
-    <version>${module.version}</version>
+    <version>0.1-SNAPSHOT</version>
     <packaging>apk</packaging>
 
     <parent>
         <groupId>com.jrew.lab</groupId>
         <artifactId>geo-catch</artifactId>
-        <version>${project.version}</version>
     </parent>
 
     <properties>
-        <module.version>0.1-SNAPSHOT</module.version>
+        <module.version></module.version>
     </properties>
 
     <dependencies>
