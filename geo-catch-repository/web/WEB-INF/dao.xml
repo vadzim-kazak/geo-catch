@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <context:property-placeholder location="classpath*:*.properties" />
+
+    <bean id="databaseManager" class="com.jrew.geocatch.repository.dao.database.DatabaseManagerHibernateJPAImpl" scope="singleton" >
+        <property name="maxImagesPerQuery" value="${databaseManager.maxImagesPerQuery}" />
+        <property name="loadImagesQuery" value="SELECT image FROM Image image WHERE image.latitude &lt; ?1 AND image.longitude &lt; ?2 AND image.latitude &gt;= ?3 AND image.longitude &gt;= ?4" />
+    </bean>
+
+    <!-- JDBC Data Source. It is assumed you have MySQL running on localhost port 3306 with
+      username root and blank password. Change below if it's not the case -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="${dataSource.url}"/>
+        <property name="username" value="${dataSource.username}"/>
+        <property name="password" value="${dataSource.password}"/>
+    </bean>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="JpaPersistenceUnit" />
+        <property name="dataSource" ref="dataSource" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="showSql" value="true"/>
+                <property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect"/>
+            </bean>
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean class="org.springframework.orm.jpa.JpaTransactionManager"
+          id="transactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+
+    <tx:annotation-driven mode="proxy" transaction-manager="transactionManager" />
+
+</beans>

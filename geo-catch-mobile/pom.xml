@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>geo-catch-mobile</artifactId>
+    <version>${module.version}</version>
+    <packaging>apk</packaging>
+
+    <parent>
+        <groupId>com.jrew.lab</groupId>
+        <artifactId>geo-catch</artifactId>
+        <version>${project.version}</version>
+    </parent>
+
+    <properties>
+        <module.version>0.1-SNAPSHOT</module.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+            <version>2.2.1</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!-- This should be just the artifact identifier, no version on the APK file,
+             because this is what IntelliJ will use by default. -->
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                <artifactId>android-maven-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <sdk>
+                        <!-- Don't forget to set your ANDROID_HOME environment variable to your SDK directory! -->
+                        <path>${env.ANDROID_HOME}</path>
+                        <platform>15</platform>
+                    </sdk>
+
+                    <!-- All of these go into the /src/main/android/ directory, we don't
+                         want to polute the project root directory. -->
+                    <androidManifestFile>${project.basedir}/src/main/android/AndroidManifest.xml</androidManifestFile>
+                    <resourceDirectory>${project.basedir}/src/main/android/res</resourceDirectory>
+                    <assetsDirectory>${project.basedir}/src/main/android/assets</assetsDirectory>
+                    <nativeLibrariesDirectory>${project.basedir}/src/main/android/native</nativeLibrariesDirectory>
+                    <resourceOverlayDirectory>${project.basedir}/src/main/android/overlay</resourceOverlayDirectory>
+
+                    <!-- Read the Android Maven plugin documentation about these settings -->
+                    <undeployBeforeDeploy>true</undeployBeforeDeploy>
+                </configuration>
+                <extensions>true</extensions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Nexus Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/google-snapshots/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+</project>
