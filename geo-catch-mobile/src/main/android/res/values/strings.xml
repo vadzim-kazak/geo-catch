@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MyHelloWorld</string>
+
+    <string name="takePhotoButton">Take a photo</string>
+
+    <string name="uploadPhotoButton">Upload a photo</string>
+
 </resources>

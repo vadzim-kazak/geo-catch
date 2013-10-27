@@ -3,6 +3,13 @@
       package="com.jrew.geocatch.mobile"
       android:versionCode="1"
       android:versionName="1.0">
+
+    <!-- Allow using of this app only to devices with camera -->
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application android:label="@string/app_name" android:icon="@drawable/icon">
         <activity android:name="com.jrew.geocatch.mobile.activities.StartActivity">
             <intent-filter>

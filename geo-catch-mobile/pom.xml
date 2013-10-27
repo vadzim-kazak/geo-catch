@@ -11,6 +11,7 @@
     <parent>
         <groupId>com.jrew.lab</groupId>
         <artifactId>geo-catch</artifactId>
+        <version>0.1-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -24,6 +25,13 @@
             <version>2.2.1</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Apache http components -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.1.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
