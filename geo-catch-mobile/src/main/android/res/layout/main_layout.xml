@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical"
+              xmlns:android="http://schemas.android.com/apk/res/android">
 
-
-    <fragment android:layout_width="fill_parent"
-              android:layout_height="25dp"
-              android:name="com.jrew.geocatch.mobile.fragments.BottomBarFragment" android:id="@+id/bottomBarFragment"
-              android:layout_alignParentLeft="false" android:layout_alignParentBottom="true"
-              android:layout_alignParentRight="false" android:layout_alignParentTop="false"
-            />
-    <fragment android:layout_width="fill_parent"
+    <!-- fragment android:id="@+id/mapFragment"
+              android:name="com.jrew.geocatch.mobile.fragments.MapFragment"
+              android:layout_width="fill_parent"
               android:layout_height="wrap_content"
-              android:name="com.jrew.geocatch.mobile.fragments.MapFragment" android:id="@+id/mapFragment"
               android:layout_alignParentTop="true"
-              android:layout_alignRight="@+id/fragment" android:layout_above="@+id/bottomBarFragment"/>
-</RelativeLayout>
+              android:layout_above="@+id/bottomBarFragment"/ -->
+
+</LinearLayout>

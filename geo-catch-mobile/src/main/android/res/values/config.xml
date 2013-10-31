@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="geoCatchRepositoryUrl">http://192.168.0.103:8080/fishing/</string>
+    <item name="geoCatchRepositoryUrl" type="config">http://192.168.0.103:8080/fishing/</item>
 </resources>
