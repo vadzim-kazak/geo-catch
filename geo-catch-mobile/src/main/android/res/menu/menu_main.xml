@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/viewMapButton"
+
+    <item android:id="@+id/viewMapMenuOption"
           android:icon="@android:drawable/ic_menu_mapmode"
+          android:checked="true"
           android:showAsAction="always">
     </item>
-    <item android:id="@+id/settingsButton"
+
+    <item android:id="@+id/viewSettingsMenuOption"
           android:icon="@android:drawable/ic_menu_search"
           android:showAsAction="always">
     </item>
-    <item android:id="@+id/viewImageButton"
+
+    <item android:id="@+id/viewImageMenuOption"
           android:icon="@android:drawable/ic_menu_view"
           android:showAsAction="always">
     </item>
-    <item android:id="@+id/takeImageButton"
+
+    <item android:id="@+id/takeImageMenuOption"
           android:icon="@android:drawable/ic_menu_camera"
           android:showAsAction="always">
     </item>
-    <item android:id="@+id/ownImagesButton"
+
+    <item android:id="@+id/ownImagesMenuOption"
           android:icon="@android:drawable/ic_menu_myplaces"
           android:showAsAction="always">
     </item>
+
 </menu>

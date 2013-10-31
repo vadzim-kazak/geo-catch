@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MyHelloWorld</string>
+    <string name="app_name">Geo-Catch</string>
 
     <string name="takePhotoButton">Take a photo</string>
 
     <string name="uploadPhotoButton">Upload a photo</string>
+
+    <string name="mapLabel">Map</string>
+
+    <string name="viewSettingsLabel">View settings</string>
+
+    <string name="viewImageLabel">View image</string>
+
+    <string name="takeImageLabel">Take a photo</string>
+
+    <string name="ownImagesLabel">Album</string>
 
 </resources>
