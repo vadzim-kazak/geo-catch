@@ -6,7 +6,7 @@
 
     <groupId>com.jrew.lab</groupId>
     <artifactId>geo-catch</artifactId>
-    <version>${project.version}</version>
+    <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -15,8 +15,13 @@
     </modules>
 
     <properties>
-        <project.version>0.1-SNAPSHOT</project.version>
+
+        <!-- !! Set this before maven using -->
+        <root.module.path>d:/Lab/geo-catch</root.module.path>
+        <!-- !! -->
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <config.file.path>${root.module.path}/geo-catch.properties</config.file.path>
     </properties>
 
     <build>
@@ -29,6 +34,38 @@
                     <source>1.6</source>
                     <target>1.6</target>
                 </configuration>
+            </plugin>
+            <!-- Read configuration from external properties file -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0-alpha-2</version>
+                <executions>
+                    <execution>
+                        <id>pre-clean-config</id>
+                        <phase>pre-clean</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>${config.file.path}</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>initialize-config</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>${config.file.path}</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

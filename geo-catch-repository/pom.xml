@@ -5,20 +5,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>geo-catch-repository</artifactId>
-    <version>${module.version}</version>
+    <version>0.5-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <parent>
         <groupId>com.jrew.lab</groupId>
         <artifactId>geo-catch</artifactId>
-        <version>${project.version}</version>
+        <version>0.1-SNAPSHOT</version>
     </parent>
 
     <properties>
-        <module.version>0.1-SNAPSHOT</module.version>
-        <war.name>${repository.context.path}</war.name>
         <hibernate.version>4.2.0.Final</hibernate.version>
         <mysql.connector.version>5.1.21</mysql.connector.version>
+        <logfile.path>../logs/${repository.context.path}.log</logfile.path>
     </properties>
 
     <dependencies>
@@ -151,7 +150,7 @@
                 <version>2.4</version>
                 <configuration>
                     <filters>
-                        <filter>../geo-catch.properties</filter>
+                        <filter>${config.file.path}</filter>
                     </filters>
                     <webResources>
                         <resource>
@@ -181,7 +180,7 @@
                         </resource>
                     </webResources>
                     <warSourceDirectory>web</warSourceDirectory>
-                    <warName>${war.name}</warName>
+                    <warName>${repository.context.path}</warName>
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
@@ -189,38 +188,6 @@
                     </archive>
                     <webXml>web\WEB-INF\web.xml</webXml>
                 </configuration>
-            </plugin>
-            <!-- Read configuration from external properties file -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>properties-maven-plugin</artifactId>
-                <version>1.0-alpha-2</version>
-                <executions>
-                    <execution>
-                        <id>pre-clean-config</id>
-                        <phase>pre-clean</phase>
-                        <goals>
-                            <goal>read-project-properties</goal>
-                        </goals>
-                        <configuration>
-                            <files>
-                                <file>../geo-catch.properties</file>
-                            </files>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>initialize-config</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>read-project-properties</goal>
-                        </goals>
-                        <configuration>
-                            <files>
-                                <file>../geo-catch.properties</file>
-                            </files>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
