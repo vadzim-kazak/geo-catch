@@ -38,11 +38,11 @@ public class MainActivity extends SherlockActivity {
         ActionBar actionBar = getSupportActionBar();
         Resources resources = getResources();
 
-        //actionBar.setHomeButtonEnabled(false);
-
         // Set app icon and name to action bar
         actionBar.setIcon(resources.getDrawable(R.drawable.ic_action_location));
         actionBar.setTitle(resources.getString(R.string.app_name));
+
+
     }
 
     @Override
