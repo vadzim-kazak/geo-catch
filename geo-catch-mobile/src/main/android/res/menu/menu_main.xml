@@ -3,7 +3,6 @@
 
     <item android:id="@+id/viewMapMenuOption"
           android:icon="@android:drawable/ic_menu_mapmode"
-          android:checked="true"
           android:showAsAction="always">
     </item>
 

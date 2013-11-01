@@ -6,7 +6,7 @@
               xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- fragment android:id="@+id/mapFragment"
-              android:name="com.jrew.geocatch.mobile.fragments.MapFragment"
+              android:name="com.jrew.geocatch.mobile.fragmentMapFragment"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
               android:layout_alignParentTop="true"
