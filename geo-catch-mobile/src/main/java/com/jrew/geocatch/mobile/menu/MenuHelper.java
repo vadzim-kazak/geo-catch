@@ -1,9 +1,15 @@
 package com.jrew.geocatch.mobile.menu;
 
 import android.app.Activity;
+import android.content.res.Resources;
+import android.support.v4.view.MenuItemCompat;
+import android.view.View;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.internal.view.menu.MenuWrapper;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.jrew.geocatch.mobile.R;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,19 +29,76 @@ public class MenuHelper {
     /** **/
     private Menu menu;
 
+    /** **/
+    private SherlockActivity activity;
+
     /**
      *
      * @param menu
      */
-    public MenuHelper(Menu menu) {
+    public MenuHelper(Menu menu, SherlockActivity activity) {
         this.menu = menu;
+        this.activity = activity;
     }
 
     /**
      *
-     * @param selectedMenuItem
      */
-    public void processMenuItemBackgroundSelection(MenuItem selectedMenuItem, Activity activity) {
+    public void init() {
+
+        setDefaultBackground();
+
+        // As menu helper is responsible for action bar title setting itis decided
+        // to init action bar title here
+        activity.findViewById(R.id.viewMapMenuOption).setBackgroundResource(SELECTED_ACTION_BAR_ITEM_COLOR);
+        final ActionBar actionBar = activity.getSupportActionBar();
+        final Resources resources = activity.getResources();
+        actionBar.setSubtitle(resources.getString(R.string.mapLabel));
+    }
+
+    /**
+     *
+     * @param item
+     */
+    public void onOptionsItemSelected(MenuItem item) {
+
+        final ActionBar actionBar = activity.getSupportActionBar();
+        final Resources resources = activity.getResources();
+
+        processMenuItemBackgroundSelection(item);
+
+        switch (item.getItemId()) {
+
+            case R.id.viewMapMenuOption:
+                actionBar.setSubtitle(resources.getString(R.string.mapLabel));
+                break;
+
+            case R.id.viewSettingsMenuOption:
+                actionBar.setSubtitle(resources.getString(R.string.viewSettingsLabel));
+                break;
+
+            case R.id.viewImageMenuOption:
+                actionBar.setSubtitle(resources.getString(R.string.viewImageLabel));
+                break;
+
+            case R.id.takeImageMenuOption:
+                actionBar.setSubtitle(resources.getString(R.string.takeImageLabel));
+                break;
+
+            case R.id.ownImagesMenuOption:
+                actionBar.setSubtitle(resources.getString(R.string.ownImagesLabel));
+                break;
+
+            default:
+                break;
+        }
+    }
+
+
+    /**
+     *
+     */
+    private void processMenuItemBackgroundSelection(MenuItem selectedMenuItem) {
 
         for (int i = 0; i < menu.size(); i++) {
             MenuItem menuItem = menu.getItem(i);
@@ -50,4 +113,13 @@ public class MenuHelper {
         }
     }
 
+    /**
+     *
+     */
+    public void setDefaultBackground() {
+        for (int i = 0; i < menu.size(); i++) {
+            int itemId = menu.getItem(i).getItemId();
+            activity.findViewById(itemId).setBackgroundResource(USUAL_ACTION_BAR_ITEM_COLOR);
+        }
+    }
 }

@@ -1,7 +1,11 @@
 package com.jrew.geocatch.mobile.activity;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.AttributeSet;
+import android.view.View;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -18,8 +22,10 @@ import com.jrew.geocatch.mobile.menu.MenuHelper;
  */
 public class MainActivity extends SherlockActivity {
 
+    /** **/
     private static int theme = R.style.Theme_Sherlock_Light;
 
+    /** **/
     private MenuHelper menuHelper;
 
     @Override
@@ -37,54 +43,28 @@ public class MainActivity extends SherlockActivity {
         // Set app icon and name to action bar
         actionBar.setIcon(resources.getDrawable(R.drawable.ic_action_location));
         actionBar.setTitle(resources.getString(R.string.app_name));
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getSupportMenuInflater().inflate(R.menu.menu_main, menu);
-        menuHelper = new MenuHelper(menu);
+        menuHelper = new MenuHelper(menu, this);
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                menuHelper.init();
+            }
+        });
+
         return super.onCreateOptionsMenu(menu);
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        final SherlockActivity activity = this;
-        final ActionBar actionBar = getSupportActionBar();
-        final Resources resources = getResources();
-
-        menuHelper.processMenuItemBackgroundSelection(item, activity);
-
-        switch (item.getItemId()) {
-
-            case R.id.viewMapMenuOption:
-                actionBar.setSubtitle(resources.getString(R.string.mapLabel));
-                break;
-
-            case R.id.viewSettingsMenuOption:
-                actionBar.setSubtitle(resources.getString(R.string.viewSettingsLabel));
-                break;
-
-            case R.id.viewImageMenuOption:
-                actionBar.setSubtitle(resources.getString(R.string.viewImageLabel));
-                break;
-
-            case R.id.takeImageMenuOption:
-                actionBar.setSubtitle(resources.getString(R.string.takeImageLabel));
-                break;
-
-            case R.id.ownImagesMenuOption:
-                actionBar.setSubtitle(resources.getString(R.string.ownImagesLabel));
-                break;
-
-            default:
-                break;
-        }
-
+        menuHelper.onOptionsItemSelected(item);
         return true;
     }
+
 }
