@@ -6,6 +6,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.view.View;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.internal.view.menu.MenuWrapper;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -30,13 +31,13 @@ public class MenuHelper {
     private Menu menu;
 
     /** **/
-    private SherlockActivity activity;
+    private SherlockFragmentActivity activity;
 
     /**
      *
      * @param menu
      */
-    public MenuHelper(Menu menu, SherlockActivity activity) {
+    public MenuHelper(Menu menu, SherlockFragmentActivity activity) {
         this.menu = menu;
         this.activity = activity;
     }

@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
@@ -20,7 +21,7 @@ import com.jrew.geocatch.mobile.menu.MenuHelper;
  * Time: 19:02
  * To change this template use File | Settings | File Templates.
  */
-public class MainActivity extends SherlockActivity {
+public class MainActivity extends SherlockFragmentActivity {
 
     /** **/
     private static int theme = R.style.Theme_Sherlock_Light;
