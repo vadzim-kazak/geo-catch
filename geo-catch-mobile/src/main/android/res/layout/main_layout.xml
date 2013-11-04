@@ -6,9 +6,9 @@
               xmlns:android="http://schemas.android.com/apk/res/android">
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+              class="com.jrew.geocatch.mobile.fragment.GeoCatchMapFragment"
               android:id="@+id/map"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:name="com.google.android.gms.maps.SupportMapFragment"/>
+              android:layout_height="match_parent"/>
 
 </LinearLayout>

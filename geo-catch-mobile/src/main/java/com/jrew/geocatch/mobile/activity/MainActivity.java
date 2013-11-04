@@ -11,7 +11,9 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.android.gms.maps.GoogleMap;
 import com.jrew.geocatch.mobile.R;
+import com.jrew.geocatch.mobile.fragment.GeoCatchMapFragment;
 import com.jrew.geocatch.mobile.menu.MenuHelper;
 
 /**
@@ -42,8 +44,6 @@ public class MainActivity extends SherlockFragmentActivity {
         // Set app icon and name to action bar
         actionBar.setIcon(resources.getDrawable(R.drawable.ic_action_location));
         actionBar.setTitle(resources.getString(R.string.app_name));
-
-
     }
 
     @Override
