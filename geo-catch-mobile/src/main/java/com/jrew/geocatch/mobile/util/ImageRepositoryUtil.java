@@ -24,26 +24,4 @@ import java.io.IOException;
  */
 public class ImageRepositoryUtil {
 
-    public static void loadImages(LatLngBounds latLngBounds) {
-
-        StringBuilder url =  new StringBuilder();
-        url.append("http://192.168.0.103:8080/fishing/spring/images/load/")
-           .append(latLngBounds.northeast.latitude).append('/')
-           .append(latLngBounds.northeast.longitude).append('/')
-           .append(latLngBounds.southwest.latitude).append('/')
-           .append(latLngBounds.southwest.longitude);
-
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpContext localContext = new BasicHttpContext();
-        HttpGet httpGet = new HttpGet(url.toString());
-
-        try {
-            HttpResponse response = httpClient.execute(httpGet, localContext);
-            response.getEntity();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
 }

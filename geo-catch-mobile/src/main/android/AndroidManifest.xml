@@ -36,5 +36,7 @@
             </intent-filter>
         </activity>
 
+        <service android:enabled="true" android:name=".service.ImageService" />
+
     </application>
 </manifest> 
