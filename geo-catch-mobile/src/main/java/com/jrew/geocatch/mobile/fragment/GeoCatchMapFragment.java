@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.*;
+import com.jrew.geocatch.mobile.listener.MarkerOnclickListener;
 import com.jrew.geocatch.mobile.model.Image;
+import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.service.ImageServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.ImageService;
 
@@ -32,7 +34,7 @@ public class GeoCatchMapFragment extends SupportMapFragment { // implements Goog
     private GoogleMap googleMap;
 
     /** **/
-    private Map<Integer, Marker> markers;
+    private Map<Integer, ImageMarkerPair> imageMarkerPairs;
 
     public ImageServiceResultReceiver imageResultReceiver;
 
@@ -40,7 +42,7 @@ public class GeoCatchMapFragment extends SupportMapFragment { // implements Goog
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View result = super.onCreateView(inflater, container, savedInstanceState);
 
-        markers = new HashMap<Integer, Marker>();
+        imageMarkerPairs = new HashMap<Integer, ImageMarkerPair>();
 
         googleMap = getMap();
         googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
@@ -55,6 +57,10 @@ public class GeoCatchMapFragment extends SupportMapFragment { // implements Goog
             }
         });
 
+        /** Set custom on marker click listener  **/
+        MarkerOnclickListener markerOnclickListener = new MarkerOnclickListener(imageMarkerPairs, this);
+        googleMap.setOnMarkerClickListener(markerOnclickListener);
+
         imageResultReceiver = new ImageServiceResultReceiver(new Handler());
         imageResultReceiver.setReceiver(new ImageServiceResultReceiver.Receiver() {
             @Override
@@ -67,7 +73,7 @@ public class GeoCatchMapFragment extends SupportMapFragment { // implements Goog
 
                             if (images != null && !images.isEmpty()) {
                                 for (Image image : images) {
-                                    if(!markers.containsKey(image.getId())) {
+                                    if(!imageMarkerPairs.containsKey(image.getId())) {
                                         loadThumbnail(image);
                                     }
                                 }
@@ -85,7 +91,8 @@ public class GeoCatchMapFragment extends SupportMapFragment { // implements Goog
                         markerOptions.position(new LatLng(image.getLatitude(), image.getLongitude()));
                         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
 
-                        markers.put(image.getId(), googleMap.addMarker(markerOptions));
+                        Marker marker = googleMap.addMarker(markerOptions);
+                        imageMarkerPairs.put(image.getId(), new ImageMarkerPair(image, marker));
 
                     case ImageService.ResultStatus.ERROR:
 
@@ -118,6 +125,14 @@ public class GeoCatchMapFragment extends SupportMapFragment { // implements Goog
         final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), ImageService.class);
         intent.putExtra(ImageService.RECEIVER_KEY, imageResultReceiver);
         intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.LOAD_IMAGE_THUMBNAIL);
+        intent.putExtra(ImageService.IMAGE_KEY, image);
+        getActivity().startService(intent);
+    }
+
+    public void loadImagePicture(Image image) {
+        final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), ImageService.class);
+        intent.putExtra(ImageService.RECEIVER_KEY, imageResultReceiver);
+        intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.LOAD_IMAGE);
         intent.putExtra(ImageService.IMAGE_KEY, image);
         getActivity().startService(intent);
     }

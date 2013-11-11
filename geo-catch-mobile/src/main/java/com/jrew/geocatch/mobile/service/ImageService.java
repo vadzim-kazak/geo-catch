@@ -47,6 +47,9 @@ public class ImageService extends IntentService {
         public static final String LOAD_IMAGE_THUMBNAIL = "loadImageThumbnail";
 
         /** **/
+        public static final String LOAD_IMAGE = "loadImage";
+
+        /** **/
         public static final String UPLOAD_IMAGE = "uploadImage";
     }
 
