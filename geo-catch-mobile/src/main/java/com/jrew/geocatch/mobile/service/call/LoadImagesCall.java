@@ -1,10 +1,8 @@
 package com.jrew.geocatch.mobile.service.call;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.model.Image;
@@ -22,7 +20,6 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,19 +29,9 @@ import java.util.List;
  */
 public class LoadImagesCall implements RestCall {
 
-    /** **/
-    private Resources resources;
-
-    /**
-     *
-     * @param resources
-     */
-    public LoadImagesCall(Resources resources) {
-        this.resources = resources;
-    }
 
     @Override
-    public Bundle process(Intent intent) throws Exception{
+    public Bundle process(Intent intent, Resources resources) throws Exception{
 
         HttpClient httpClient = new DefaultHttpClient();
         HttpContext localContext = new BasicHttpContext();
@@ -60,12 +47,11 @@ public class LoadImagesCall implements RestCall {
                 .append(latLngBounds.southwest.latitude).append('/')
                 .append(latLngBounds.southwest.longitude);
 
-        Bundle bundle = new Bundle();
 
         HttpGet httpGet = new HttpGet(loadImagesUrl.toString());
-
-
         HttpResponse response = httpClient.execute(httpGet, localContext);
+
+        Bundle bundle = new Bundle();
 
         // put result to intent bundle
         JSONArray result = parseHttpResponse(response);

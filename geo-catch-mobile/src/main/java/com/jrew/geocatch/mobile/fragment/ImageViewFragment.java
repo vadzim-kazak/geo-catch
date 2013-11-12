@@ -1,5 +1,6 @@
 package com.jrew.geocatch.mobile.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -28,28 +29,34 @@ public class ImageViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        final ProgressDialog progress = new ProgressDialog(getActivity());
+        progress.setMessage("Loading image...");
+        progress.show();
+
         View imageViewFragmentLayout = inflater.inflate(R.layout.image_view_fragment, container, false);
 
         final ImageView imageView = (ImageView) imageViewFragmentLayout.findViewById(R.id.imageView);
-
-        Bundle fragmentData = getArguments();
-        Image image = (Image) fragmentData.getSerializable(ImageService.IMAGE_KEY);
-        loadImagePicture(image);
 
         imageResultReceiver = new ImageServiceResultReceiver(new Handler());
         imageResultReceiver.setReceiver(new ImageServiceResultReceiver.Receiver() {
 
             @Override
             public void onReceiveResult(int resultCode, Bundle resultData) {
+
                 switch (resultCode) {
                     case ImageService.ResultStatus.LOAD_IMAGE_FINISHED:
                          Bitmap image = (Bitmap) resultData.get(ImageService.RESULT_KEY);
-                        imageView.setImageBitmap(image);
+                         imageView.setImageBitmap(image);
+                         progress.dismiss();
                          break;
                 }
             }
 
         });
+
+        Bundle fragmentData = getArguments();
+        Image image = (Image) fragmentData.getSerializable(ImageService.IMAGE_KEY);
+        loadImagePicture(image);
 
 
         return imageViewFragmentLayout;

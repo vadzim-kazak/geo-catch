@@ -1,6 +1,7 @@
 package com.jrew.geocatch.mobile.service.call;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 /**
@@ -15,6 +16,6 @@ public interface RestCall {
      *
      * @return
      */
-    public Bundle process(Intent intent) throws Exception;
+    public Bundle process(Intent intent, Resources resources) throws Exception;
 
 }

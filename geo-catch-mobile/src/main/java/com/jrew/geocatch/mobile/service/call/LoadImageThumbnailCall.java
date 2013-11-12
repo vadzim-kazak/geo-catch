@@ -1,9 +1,11 @@
 package com.jrew.geocatch.mobile.service.call;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.model.Image;
 import com.jrew.geocatch.mobile.service.ImageService;
 import org.apache.http.HttpResponse;
@@ -25,7 +27,7 @@ import java.io.InputStream;
 public class LoadImageThumbnailCall implements RestCall {
 
     @Override
-    public Bundle process(Intent intent) throws Exception {
+    public Bundle process(Intent intent, Resources resources) throws Exception {
 
         HttpClient httpClient = new DefaultHttpClient();
         HttpContext localContext = new BasicHttpContext();
@@ -33,7 +35,7 @@ public class LoadImageThumbnailCall implements RestCall {
         Image image = (Image) intent.getSerializableExtra(ImageService.IMAGE_KEY);
 
         StringBuilder loadImageThumbnailUrl = new StringBuilder();
-        loadImageThumbnailUrl.append("http://192.168.0.100:8080")
+        loadImageThumbnailUrl.append(resources.getString(R.config.repositoryUrl))
                 .append(image.getThumbnailPath());
 
         // Temporary workaround. Need to be fixed on server side
