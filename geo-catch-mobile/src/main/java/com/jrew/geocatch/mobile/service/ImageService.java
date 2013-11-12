@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 import com.jrew.geocatch.mobile.model.Image;
+import com.jrew.geocatch.mobile.service.call.LoadImageCall;
 import com.jrew.geocatch.mobile.service.call.LoadImageThumbnailCall;
 import com.jrew.geocatch.mobile.service.call.LoadImagesCall;
 import org.apache.http.HttpResponse;
@@ -62,7 +63,10 @@ public class ImageService extends IntentService {
         public static final int LOAD_THUMBNAIL_FINISHED = 2;
 
         /** **/
-        public static final int ERROR = 3;
+        public static final int LOAD_IMAGE_FINISHED = 3;
+
+        /** **/
+        public static final int ERROR = 4;
     }
 
     /** **/
@@ -71,17 +75,21 @@ public class ImageService extends IntentService {
     /** **/
     private LoadImageThumbnailCall loadImageThumbnailCall;
 
+    /** **/
+    private LoadImageCall loadImageCall;
 
     public ImageService(String name) {
         super(name);
-        loadImagesCall = new LoadImagesCall();
+        loadImagesCall = new LoadImagesCall(getResources());
         loadImageThumbnailCall = new LoadImageThumbnailCall();
+        loadImageCall = new LoadImageCall();
     }
 
     public ImageService() {
         super(ImageService.class.getName());
-        loadImagesCall = new LoadImagesCall();
+        loadImagesCall = new LoadImagesCall(getResources());
         loadImageThumbnailCall = new LoadImageThumbnailCall();
+        loadImageCall = new LoadImageCall();
     }
 
     @Override
@@ -90,6 +98,7 @@ public class ImageService extends IntentService {
         String command = intent.getStringExtra(COMMAND_KEY);
 
         try {
+
             if(command.equals(Commands.LOAD_IMAGES)) {
 
                 receiver.send(ResultStatus.LOAD_IMAGES_FINISHED,
@@ -99,6 +108,11 @@ public class ImageService extends IntentService {
 
                 receiver.send(ResultStatus.LOAD_THUMBNAIL_FINISHED,
                         loadImageThumbnailCall.process(intent));
+
+            } else if (command.equals(Commands.LOAD_IMAGE)) {
+
+                receiver.send(ResultStatus.LOAD_IMAGE_FINISHED,
+                        loadImageCall.process(intent));
             }
 
         } catch(Exception exception) {

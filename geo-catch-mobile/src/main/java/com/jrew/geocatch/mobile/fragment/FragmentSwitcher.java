@@ -1,0 +1,119 @@
+package com.jrew.geocatch.mobile.fragment;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import com.jrew.geocatch.mobile.R;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: Kazak_VV
+ * Date: 12.11.13
+ * Time: 16:56
+ * To change this template use File | Settings | File Templates.
+ */
+public class FragmentSwitcher {
+
+    public interface TAG {
+
+        /** **/
+        String MAP_FRAGMENT_TAG = "mapFragmentTag";
+
+        /** **/
+        String MAP_SETTINGS_FRAGMENT_TAG = "mapSettingsFragmentTag";
+
+        /** **/
+        String IMAGE_VIEW_FRAGMENT_TAG = "viewImageFragmentTag";
+
+        /** **/
+        String TAKE_IMAGE_FRAGMENT_TAG = "takeImageFragmentTag";
+
+        /** **/
+        String OWN_IMAGES_FRAGMENT_TAG = "ownImagesFragmentTag";
+    }
+
+
+    /** **/
+    private FragmentManager fragmentManager;
+
+    /**
+     *
+     * @param fragmentManager
+     */
+    public FragmentSwitcher(FragmentManager fragmentManager) {
+        this.fragmentManager = fragmentManager;
+    }
+
+
+    /**
+     *
+     * @param fragmentTag
+     */
+    private void showFragment(String fragmentTag) {
+
+        showFragment(fragmentTag, null);
+    }
+
+    /**
+     *
+     * @param fragmentTag
+     * @param fragmentData
+     */
+    private void showFragment(String fragmentTag, Bundle fragmentData) {
+
+        Fragment fragment = fragmentManager.findFragmentByTag(fragmentTag);
+        if (fragment == null) {
+            fragment = createFragment(fragmentTag);
+        }
+
+        if (fragmentData != null) {
+            fragment.setArguments(fragmentData);
+        }
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment, fragmentTag);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+
+    /**
+     *
+     * @param fragmentTag
+     * @return
+     */
+    private Fragment createFragment(String fragmentTag) {
+
+        if(TAG.MAP_FRAGMENT_TAG.equals(fragmentTag)){
+            return new MapFragment();
+        } else if(TAG.MAP_SETTINGS_FRAGMENT_TAG.equals(fragmentTag)) {
+            return new MapSettingsFragment();
+        } else if(TAG.IMAGE_VIEW_FRAGMENT_TAG.equals(fragmentTag)) {
+            return new ImageViewFragment();
+        }
+
+        return null;
+    }
+
+    /**
+     *
+     */
+    public void showMapFragment() {
+        showFragment(TAG.MAP_FRAGMENT_TAG);
+    }
+
+    /**
+     *
+     */
+    public void showMapSettingsFragment() {
+        showFragment(TAG.MAP_SETTINGS_FRAGMENT_TAG);
+    }
+
+    /**
+     *
+     */
+    public void showImageViewFragment(Bundle bundle) {
+        showFragment(TAG.IMAGE_VIEW_FRAGMENT_TAG, bundle);
+    }
+}

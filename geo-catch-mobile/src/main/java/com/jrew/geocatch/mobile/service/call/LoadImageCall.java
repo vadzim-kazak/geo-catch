@@ -18,11 +18,12 @@ import java.io.InputStream;
 
 /**
  * Created with IntelliJ IDEA.
- * User: Vadim
- * Date: 11/10/13
- * Time: 3:41 PM
+ * User: Kazak_VV
+ * Date: 12.11.13
+ * Time: 17:48
+ * To change this template use File | Settings | File Templates.
  */
-public class LoadImageThumbnailCall implements RestCall {
+public class LoadImageCall implements RestCall {
 
     @Override
     public Bundle process(Intent intent) throws Exception {
@@ -34,7 +35,7 @@ public class LoadImageThumbnailCall implements RestCall {
 
         StringBuilder loadImageThumbnailUrl = new StringBuilder();
         loadImageThumbnailUrl.append("http://192.168.0.100:8080")
-                .append(image.getThumbnailPath());
+                .append(image.getPath());
 
         // Temporary workaround. Need to be fixed on server side
         String finalUrl = loadImageThumbnailUrl.toString().replace("\\","/");

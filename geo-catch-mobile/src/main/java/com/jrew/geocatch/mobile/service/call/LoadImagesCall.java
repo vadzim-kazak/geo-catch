@@ -2,9 +2,11 @@ package com.jrew.geocatch.mobile.service.call;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.model.Image;
 import com.jrew.geocatch.mobile.service.ImageService;
 import org.apache.http.HttpResponse;
@@ -30,23 +32,29 @@ import java.util.List;
  */
 public class LoadImagesCall implements RestCall {
 
+    /** **/
+    private Resources resources;
+
+    /**
+     *
+     * @param resources
+     */
+    public LoadImagesCall(Resources resources) {
+        this.resources = resources;
+    }
+
     @Override
     public Bundle process(Intent intent) throws Exception{
-
 
         HttpClient httpClient = new DefaultHttpClient();
         HttpContext localContext = new BasicHttpContext();
 
-        String imagesRepositoryUrl = "http://192.168.0.100:8080/fishing/";
-
-        String loadImagesPath = "spring/images/load/";
-
-
         LatLngBounds latLngBounds = (LatLngBounds) intent.getParcelableExtra(ImageService.REQUEST_KEY);
 
         StringBuilder loadImagesUrl = new StringBuilder();
-        loadImagesUrl.append(imagesRepositoryUrl)
-                .append(loadImagesPath)
+        loadImagesUrl.append(resources.getString(R.config.repositoryUrl))
+                .append(resources.getString(R.config.repositoryPath))
+                .append(resources.getString(R.config.repositoryLoadImagesUri))
                 .append(latLngBounds.northeast.latitude).append('/')
                 .append(latLngBounds.northeast.longitude).append('/')
                 .append(latLngBounds.southwest.latitude).append('/')

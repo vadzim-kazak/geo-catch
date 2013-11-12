@@ -10,7 +10,8 @@ import android.view.ViewGroup;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.*;
-import com.jrew.geocatch.mobile.listener.MarkerOnclickListener;
+import com.jrew.geocatch.mobile.R;
+import com.jrew.geocatch.mobile.listener.MarkerOnClickListener;
 import com.jrew.geocatch.mobile.model.Image;
 import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.service.ImageServiceResultReceiver;
@@ -28,7 +29,7 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  *
  */
-public class GeoCatchMapFragment extends SupportMapFragment { // implements GoogleMap.OnCameraChangeListener {
+public class MapFragment extends SupportMapFragment {
 
     /** **/
     private GoogleMap googleMap;
@@ -36,18 +37,21 @@ public class GeoCatchMapFragment extends SupportMapFragment { // implements Goog
     /** **/
     private Map<Integer, ImageMarkerPair> imageMarkerPairs;
 
+    /** **/
     public ImageServiceResultReceiver imageResultReceiver;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View result = super.onCreateView(inflater, container, savedInstanceState);
 
         imageMarkerPairs = new HashMap<Integer, ImageMarkerPair>();
 
         googleMap = getMap();
-        googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        int mapType = Integer.parseInt(getResources().getString(R.config.mapType));
+        googleMap.setMapType(mapType);
 
-        final GeoCatchMapFragment fragment = this;
+        final MapFragment fragment = this;
         googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
             @Override
@@ -58,7 +62,7 @@ public class GeoCatchMapFragment extends SupportMapFragment { // implements Goog
         });
 
         /** Set custom on marker click listener  **/
-        MarkerOnclickListener markerOnclickListener = new MarkerOnclickListener(imageMarkerPairs, this);
+        MarkerOnClickListener markerOnclickListener = new MarkerOnClickListener(imageMarkerPairs, this);
         googleMap.setOnMarkerClickListener(markerOnclickListener);
 
         imageResultReceiver = new ImageServiceResultReceiver(new Handler());
@@ -129,11 +133,4 @@ public class GeoCatchMapFragment extends SupportMapFragment { // implements Goog
         getActivity().startService(intent);
     }
 
-    public void loadImagePicture(Image image) {
-        final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), ImageService.class);
-        intent.putExtra(ImageService.RECEIVER_KEY, imageResultReceiver);
-        intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.LOAD_IMAGE);
-        intent.putExtra(ImageService.IMAGE_KEY, image);
-        getActivity().startService(intent);
-    }
 }

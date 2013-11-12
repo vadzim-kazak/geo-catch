@@ -1,19 +1,20 @@
 package com.jrew.geocatch.mobile.activity;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.AttributeSet;
-import android.view.View;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.google.android.gms.maps.GoogleMap;
 import com.jrew.geocatch.mobile.R;
-import com.jrew.geocatch.mobile.fragment.GeoCatchMapFragment;
+import com.jrew.geocatch.mobile.fragment.FragmentSwitcher;
+import com.jrew.geocatch.mobile.fragment.MapFragment;
+import com.jrew.geocatch.mobile.fragment.ImageViewFragment;
+import com.jrew.geocatch.mobile.fragment.MapSettingsFragment;
 import com.jrew.geocatch.mobile.menu.MenuHelper;
 
 /**
@@ -31,6 +32,9 @@ public class MainActivity extends SherlockFragmentActivity {
     /** **/
     private MenuHelper menuHelper;
 
+    /** **/
+    private FragmentSwitcher fragmentSwitcher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(theme);
@@ -44,6 +48,11 @@ public class MainActivity extends SherlockFragmentActivity {
         // Set app icon and name to action bar
         actionBar.setIcon(resources.getDrawable(R.drawable.ic_action_location));
         actionBar.setTitle(resources.getString(R.string.app_name));
+
+        fragmentSwitcher = new FragmentSwitcher(getSupportFragmentManager());
+
+        // Set default fragment
+        fragmentSwitcher.showMapFragment();
     }
 
     @Override
@@ -68,4 +77,11 @@ public class MainActivity extends SherlockFragmentActivity {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
+    public FragmentSwitcher getFragmentSwitcher() {
+        return fragmentSwitcher;
+    }
 }

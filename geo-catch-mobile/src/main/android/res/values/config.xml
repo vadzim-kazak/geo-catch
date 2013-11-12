@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <item name="geoCatchRepositoryUrl" type="config">http://192.168.0.103:8080/fishing/</item>
+    <item name="repositoryUrl" type="config">http://192.168.0.103:8080/</item>
 
-    <!-- Possible values:
+    <item name="repositoryPath" type="config">fishing/</item>
+
+    <item name="repositoryLoadImagesUri" type="config">spring/images/load/</item>
+
+    <!--
+        Possible values:
             MAP_TYPE_NONE = 0;
             MAP_TYPE_NORMAL = 1;
             MAP_TYPE_SATELLITE = 2;
             MAP_TYPE_TERRAIN = 3;
             MAP_TYPE_HYBRID = 4;
-     -->
-    <item name="geoCatchMapType" type="config">3</item>
+    -->
+    <item name="mapType" type="config">3</item>
 </resources>

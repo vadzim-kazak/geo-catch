@@ -1,10 +1,10 @@
 package com.jrew.geocatch.mobile.listener;
 
-import android.content.Intent;
+import android.os.Bundle;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Marker;
-import com.jrew.geocatch.mobile.fragment.GeoCatchMapFragment;
+import com.jrew.geocatch.mobile.activity.MainActivity;
+import com.jrew.geocatch.mobile.fragment.MapFragment;
 import com.jrew.geocatch.mobile.model.Image;
 import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.service.ImageService;
@@ -17,16 +17,16 @@ import java.util.Map;
  * Date: 11/11/13
  * Time: 3:42 PM
  */
-public class MarkerOnclickListener implements GoogleMap.OnMarkerClickListener {
+public class MarkerOnClickListener implements GoogleMap.OnMarkerClickListener {
 
     /** **/
-    private GeoCatchMapFragment mapFragment;
+    private MapFragment mapFragment;
 
     /** **/
     private Map<Integer, ImageMarkerPair> imageMarkerPairs;
 
     /** Constructor **/
-    public MarkerOnclickListener(Map<Integer, ImageMarkerPair> imageMarkerPairs, GeoCatchMapFragment mapFragment){
+    public MarkerOnClickListener(Map<Integer, ImageMarkerPair> imageMarkerPairs, MapFragment mapFragment){
         this.imageMarkerPairs = imageMarkerPairs;
         this.mapFragment = mapFragment;
     }
@@ -36,7 +36,10 @@ public class MarkerOnclickListener implements GoogleMap.OnMarkerClickListener {
 
         Image image = findImage(marker);
         if (image != null) {
-            mapFragment.loadImagePicture(image);
+            Bundle fragmentData = new Bundle();
+            fragmentData.putSerializable(ImageService.IMAGE_KEY, image);
+            MainActivity activity = (MainActivity) mapFragment.getActivity();
+            activity.getFragmentSwitcher().showImageViewFragment(fragmentData);
         }
 
         return false;

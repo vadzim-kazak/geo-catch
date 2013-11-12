@@ -1,16 +1,14 @@
 package com.jrew.geocatch.mobile.menu;
 
-import android.app.Activity;
 import android.content.res.Resources;
-import android.support.v4.view.MenuItemCompat;
-import android.view.View;
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.internal.view.menu.MenuWrapper;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
+import com.jrew.geocatch.mobile.activity.MainActivity;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,15 +29,18 @@ public class MenuHelper {
     private Menu menu;
 
     /** **/
-    private SherlockFragmentActivity activity;
+    private MainActivity activity;
+
+    private Map<Integer, Boolean> menuSelection;
 
     /**
      *
      * @param menu
      */
-    public MenuHelper(Menu menu, SherlockFragmentActivity activity) {
+    public MenuHelper(Menu menu, MainActivity activity) {
         this.menu = menu;
         this.activity = activity;
+        menuSelection = new HashMap<Integer, Boolean>();
     }
 
     /**
@@ -48,6 +49,7 @@ public class MenuHelper {
     public void init() {
 
         setDefaultBackground();
+        markMenuOptionsUnselected();
 
         // As menu helper is responsible for action bar title setting itis decided
         // to init action bar title here
@@ -55,6 +57,7 @@ public class MenuHelper {
         final ActionBar actionBar = activity.getSupportActionBar();
         final Resources resources = activity.getResources();
         actionBar.setSubtitle(resources.getString(R.string.mapLabel));
+        menuSelection.put(R.id.viewMapMenuOption, true);
     }
 
     /**
@@ -66,35 +69,74 @@ public class MenuHelper {
         final ActionBar actionBar = activity.getSupportActionBar();
         final Resources resources = activity.getResources();
 
-        processMenuItemBackgroundSelection(item);
+        if(isNewOptionMenuSelected(item)) {
 
-        switch (item.getItemId()) {
+            markMenuOptionsUnselected();
+            menuSelection.put(item.getItemId(), true);
 
-            case R.id.viewMapMenuOption:
-                actionBar.setSubtitle(resources.getString(R.string.mapLabel));
-                break;
+            processMenuItemBackgroundSelection(item);
 
-            case R.id.viewSettingsMenuOption:
-                actionBar.setSubtitle(resources.getString(R.string.viewSettingsLabel));
-                break;
+            switch (item.getItemId()) {
 
-            case R.id.viewImageMenuOption:
-                actionBar.setSubtitle(resources.getString(R.string.viewImageLabel));
-                break;
+                case R.id.viewMapMenuOption:
+                    actionBar.setSubtitle(resources.getString(R.string.mapLabel));
+                    activity.getFragmentSwitcher().showMapFragment();
+                    break;
 
-            case R.id.takeImageMenuOption:
-                actionBar.setSubtitle(resources.getString(R.string.takeImageLabel));
-                break;
+                case R.id.viewSettingsMenuOption:
+                    actionBar.setSubtitle(resources.getString(R.string.viewSettingsLabel));
+                    activity.getFragmentSwitcher().showMapSettingsFragment();
+                    break;
 
-            case R.id.ownImagesMenuOption:
-                actionBar.setSubtitle(resources.getString(R.string.ownImagesLabel));
-                break;
+                case R.id.viewImageMenuOption:
+                    actionBar.setSubtitle(resources.getString(R.string.viewImageLabel));
+                    activity.getFragmentSwitcher().showImageViewFragment(null);
+                    break;
 
-            default:
-                break;
+                case R.id.takeImageMenuOption:
+                    actionBar.setSubtitle(resources.getString(R.string.takeImageLabel));
+                    break;
+
+                case R.id.ownImagesMenuOption:
+                    actionBar.setSubtitle(resources.getString(R.string.ownImagesLabel));
+                    break;
+
+                default:
+                    break;
+            }
         }
     }
 
+    /**
+     *
+     * @param selectedMenuItem
+     * @return
+     */
+    private boolean isNewOptionMenuSelected(MenuItem selectedMenuItem) {
+
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem menuItem = menu.getItem(i);
+            int menuItemId = menuItem.getItemId();
+
+            if (menuSelection.get(menuItemId) &&
+                selectedMenuItem.getItemId() != menuItemId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     *
+     */
+    private void markMenuOptionsUnselected() {
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem menuItem = menu.getItem(i);
+            int menuItemId = menuItem.getItemId();
+            menuSelection.put(menuItemId, false);
+        }
+    }
 
     /**
      *

@@ -1,6 +1,8 @@
 package com.jrew.geocatch.mobile.util;
 
+import android.content.res.Resources;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.jrew.geocatch.mobile.service.ImageService;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -23,5 +25,10 @@ import java.io.IOException;
  * Time: 3:45 PM
  */
 public class ImageRepositoryUtil {
+
+    public static Resources testMthod() {
+        ImageService imageService = new ImageService();
+        return imageService.getResources();
+    }
 
 }
