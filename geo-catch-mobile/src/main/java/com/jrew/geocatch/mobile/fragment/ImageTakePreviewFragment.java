@@ -40,7 +40,7 @@ public class ImageTakePreviewFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 MainActivity activity = (MainActivity) getActivity();
-                activity.getFragmentSwitcher().showImageTakeInfoFragment(fragmentData);
+                activity.getFragmentSwitcher().showImageTakeInfoFragment(new Bundle(fragmentData));
             }
         });
 

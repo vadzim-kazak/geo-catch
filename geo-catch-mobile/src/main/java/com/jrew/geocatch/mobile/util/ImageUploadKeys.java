@@ -27,4 +27,7 @@ public class ImageUploadKeys {
     /** **/
     public static final String FILE = "file";
 
+    /** **/
+    public static final String RATING = "rating";
+
 }

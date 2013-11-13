@@ -155,18 +155,52 @@ public class RepositoryRestUtil {
 
         MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 
+        Bundle imageBundle = (Bundle) intent.getParcelableExtra(ImageService.REQUEST_KEY);
+
+        /**
+         String url = "http://192.168.0.103:8080/fishing/spring/images/upload";
+
+         request.add(new BasicNameValuePair("userId", "123132"));
+         request.add(new BasicNameValuePair("image", imageName));
+         request.add(new BasicNameValuePair("description", "Test description"));
+         request.add(new BasicNameValuePair("latitude", Float.toString(latitude)));
+         request.add(new BasicNameValuePair("longitude", Float.toString(longitude)));
+         request.add(new BasicNameValuePair("date", "13023121212128"));
+         request.add(new BasicNameValuePair("rating", "130231"));
+
+        **/
+
+//        entity.addPart(ImageUploadKeys.USER_ID,
+//                new StringBody("1"));
+//        entity.addPart(ImageUploadKeys.DESCRIPTION,
+//                new StringBody(imageBundle.getString(ImageUploadKeys.DESCRIPTION)));
+//        entity.addPart(ImageUploadKeys.LATITUDE,
+//                new StringBody(imageBundle.getString(ImageUploadKeys.LATITUDE)));
+//        entity.addPart(ImageUploadKeys.LONGITUDE,
+//                new StringBody(imageBundle.getString(ImageUploadKeys.LONGITUDE)));
+//        entity.addPart(ImageUploadKeys.DATE,
+//                new StringBody(imageBundle.getString(ImageUploadKeys.DATE)));
+//        entity.addPart(ImageUploadKeys.RATING,
+//                new StringBody("0"));
+//        entity.addPart(ImageUploadKeys.FILE,
+//                new StringBody(imageBundle.getString(ImageUploadKeys.FILE)));
+
+
         entity.addPart(ImageUploadKeys.USER_ID,
-                new StringBody(intent.getStringExtra(ImageUploadKeys.USER_ID)));
+                new StringBody("1"));
         entity.addPart(ImageUploadKeys.DESCRIPTION,
-                new StringBody(intent.getStringExtra(ImageUploadKeys.DESCRIPTION)));
+                new StringBody(imageBundle.getString(ImageUploadKeys.DESCRIPTION)));
         entity.addPart(ImageUploadKeys.LATITUDE,
-                new StringBody(intent.getStringExtra(ImageUploadKeys.LATITUDE)));
+                new StringBody(imageBundle.getString(ImageUploadKeys.LATITUDE)));
         entity.addPart(ImageUploadKeys.LONGITUDE,
-                new StringBody(intent.getStringExtra(ImageUploadKeys.LONGITUDE)));
+                new StringBody(imageBundle.getString(ImageUploadKeys.LONGITUDE)));
         entity.addPart(ImageUploadKeys.DATE,
-                new StringBody(intent.getStringExtra(ImageUploadKeys.DATE)));
+                new StringBody(imageBundle.getString(ImageUploadKeys.DATE)));
+        entity.addPart(ImageUploadKeys.RATING,
+                new StringBody("0"));
         entity.addPart(ImageUploadKeys.FILE,
-                new StringBody(intent.getStringExtra(ImageUploadKeys.FILE)));
+                new FileBody(new File(imageBundle.getString(ImageUploadKeys.FILE))));
+
 
         HttpPost httpPost = new HttpPost(uploadUrl.toString());
         httpPost.setEntity(entity);

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -111,6 +112,10 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
 
         });
 
+        // Acquire a reference to the system Location Manager
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 500.0f, this);
+
         return result;
     }
 
@@ -128,7 +133,7 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
             }
 
             FileOutputStream out = new FileOutputStream(uploadingImage);
-            image.compress(Bitmap.CompressFormat.PNG, 100, out);
+            image.compress(Bitmap.CompressFormat.PNG, 70, out);
             out.flush();
             out.close();
             bundle.putString(ImageUploadKeys.FILE, uploadingImage.getAbsolutePath());

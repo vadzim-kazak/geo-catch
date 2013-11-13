@@ -85,13 +85,13 @@ public class MapFragment extends SupportMapFragment {
     private void removeInvisibleMarkers(LatLngBounds latLngBounds) {
 
         for (Map.Entry<Integer, ImageMarkerPair> entry : imageMarkerPairs.entrySet()) {
-            ImageMarkerPair imageMarkerPair = entry.getValue();
-            Marker currentMarker = imageMarkerPair.getMarker();
-            if (latLngBounds.contains(currentMarker.getPosition())) {
-                currentMarker.remove();
-                Image image = imageMarkerPair.getImage();
-                imageMarkerPairs.remove(image.getId());
-            }
+//            ImageMarkerPair imageMarkerPair = entry.getValue();
+//            Marker currentMarker = imageMarkerPair.getMarker();
+//            if (latLngBounds.contains(currentMarker.getPosition())) {
+//                currentMarker.remove();
+//                Image image = imageMarkerPair.getImage();
+//                imageMarkerPairs.remove(image.getId());
+//            }
         }
     }
 

@@ -80,7 +80,6 @@ public class FragmentSwitcher {
             } else {
                 fragment.setArguments(fragmentData);
             }
-
         }
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
