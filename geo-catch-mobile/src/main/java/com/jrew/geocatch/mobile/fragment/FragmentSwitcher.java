@@ -73,7 +73,14 @@ public class FragmentSwitcher {
         }
 
         if (fragmentData != null) {
-            fragment.setArguments(fragmentData);
+            Bundle bundle = fragment.getArguments();
+            if (bundle != null ) {
+                bundle.clear();
+                bundle.putAll(fragmentData);
+            } else {
+                fragment.setArguments(fragmentData);
+            }
+
         }
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
