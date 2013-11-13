@@ -7,6 +7,10 @@
 
     <item name="repositoryLoadImagesUri" type="config">spring/images/load/</item>
 
+    <item name="repositoryUploadImagesUri" type="config">spring/images/upload</item>
+
+    <item name="repositoryUploadImagesDateFormat" type="config">yyDDDHHmmssSSS</item>
+
     <!--
         Possible values:
             MAP_TYPE_NONE = 0;
@@ -16,4 +20,8 @@
             MAP_TYPE_HYBRID = 4;
     -->
     <item name="mapType" type="config">3</item>
+
+    <item name="debugTag" type="config">geoCatch</item>
+
 </resources>
+

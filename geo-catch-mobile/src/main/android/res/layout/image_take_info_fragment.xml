@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <ImageView android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:maxWidth="40dip"
+               android:maxHeight="40dip"
+               android:scaleType="center"
+               android:id="@+id/imageThumbnail"
+               android:src="@android:drawable/ic_menu_compass"
+               android:layout_gravity="center_horizontal|center_vertical"/>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="Fish type:"
+                  android:id="@+id/fishTypeTextView"
+                  android:layout_gravity="left|center_vertical"/>
+
+        <AutoCompleteTextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:text="AutoCompleteTextView"
+                              android:id="@+id/autoCompleteTextView1"
+                              android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="Fishing tool:"
+                  android:id="@+id/fishingToolTextView"
+                  android:layout_gravity="left|center_vertical"/>
+
+        <AutoCompleteTextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:text="AutoCompleteTextView"
+                              android:id="@+id/autoCompleteTextView2"
+                              android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="Share settings:"
+                  android:layout_gravity="left|center_vertical"/>
+
+        <RadioGroup android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="left|center_vertical"
+                    android:text="Share settings:">
+
+            <RadioButton android:id="@+id/sharePublic"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:text="Public"
+                         android:checked="true" />
+
+            <RadioButton android:id="@+id/shareFriens"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:text="For friends" />
+
+            <RadioButton android:id="@+id/sharePrivate"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:text="Private" />
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <Button android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="upload"
+            android:id="@+id/uploadButton"
+            android:layout_gravity="center_horizontal|center_vertical"/>
+
+</LinearLayout>

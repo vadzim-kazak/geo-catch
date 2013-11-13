@@ -11,10 +11,10 @@
           android:showAsAction="always">
     </item>
 
-    <item android:id="@+id/viewImageMenuOption"
+    <!-- item android:id="@+id/viewImageMenuOption"
           android:icon="@android:drawable/ic_menu_view"
           android:showAsAction="always">
-    </item>
+    </item -->
 
     <item android:id="@+id/takeImageMenuOption"
           android:icon="@android:drawable/ic_menu_camera"

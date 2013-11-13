@@ -88,13 +88,16 @@ public class MenuHelper {
                     activity.getFragmentSwitcher().showMapSettingsFragment();
                     break;
 
+                /**
                 case R.id.viewImageMenuOption:
                     actionBar.setSubtitle(resources.getString(R.string.viewImageLabel));
                     activity.getFragmentSwitcher().showImageViewFragment(null);
                     break;
+                **/
 
                 case R.id.takeImageMenuOption:
                     actionBar.setSubtitle(resources.getString(R.string.takeImageLabel));
+                    activity.getFragmentSwitcher().showImageTakeCameraFragment();
                     break;
 
                 case R.id.ownImagesMenuOption:

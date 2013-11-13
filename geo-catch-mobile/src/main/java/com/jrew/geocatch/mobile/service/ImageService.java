@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import com.jrew.geocatch.mobile.service.call.LoadImageCall;
-import com.jrew.geocatch.mobile.service.call.LoadImageThumbnailCall;
-import com.jrew.geocatch.mobile.service.call.LoadImagesCall;
+import com.jrew.geocatch.mobile.util.RepositoryRestUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,6 +31,9 @@ public class ImageService extends IntentService {
     public static final String IMAGE_KEY = "image";
 
 
+    /**
+     *
+     */
     public interface Commands {
 
         /** **/
@@ -48,6 +49,9 @@ public class ImageService extends IntentService {
         public static final String UPLOAD_IMAGE = "uploadImage";
     }
 
+    /**
+     *
+     */
     public interface ResultStatus {
 
         /** **/
@@ -63,54 +67,54 @@ public class ImageService extends IntentService {
         public static final int LOAD_IMAGE_FINISHED = 4;
 
         /** **/
-        public static final int ERROR = 5;
+        public static final int UPLOAD_IMAGE_FINISHED = 5;
+
+        /** **/
+        public static final int ERROR = 6;
     }
 
-    /** **/
-    private LoadImagesCall loadImagesCall;
-
-    /** **/
-    private LoadImageThumbnailCall loadImageThumbnailCall;
-
-    /** **/
-    private LoadImageCall loadImageCall;
-
+    /**
+     *
+     * @param name
+     */
     public ImageService(String name) {
         super(name);
-        loadImagesCall = new LoadImagesCall();
-        loadImageThumbnailCall = new LoadImageThumbnailCall();
-        loadImageCall = new LoadImageCall();
     }
 
+    /**
+     *
+     */
     public ImageService() {
         super(ImageService.class.getName());
-        loadImagesCall = new LoadImagesCall();
-        loadImageThumbnailCall = new LoadImageThumbnailCall();
-        loadImageCall = new LoadImageCall();
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
+
         final ResultReceiver receiver = intent.getParcelableExtra(RECEIVER_KEY);
         String command = intent.getStringExtra(COMMAND_KEY);
         Resources resources = getResources();
 
         try {
-
             if(command.equals(Commands.LOAD_IMAGES)) {
 
                 receiver.send(ResultStatus.LOAD_IMAGES_FINISHED,
-                        loadImagesCall.process(intent, resources));
+                        RepositoryRestUtil.loadImages(intent, resources));
 
             } else if (command.equals(Commands.LOAD_IMAGE_THUMBNAIL)) {
 
                 receiver.send(ResultStatus.LOAD_THUMBNAIL_FINISHED,
-                        loadImageThumbnailCall.process(intent, resources));
+                        RepositoryRestUtil.loadThumbnail(intent, resources));
 
             } else if (command.equals(Commands.LOAD_IMAGE)) {
 
                 receiver.send(ResultStatus.LOAD_IMAGE_FINISHED,
-                        loadImageCall.process(intent, resources));
+                        RepositoryRestUtil.loadImage(intent, resources));
+
+            } else if (command.equals(Commands.UPLOAD_IMAGE)) {
+
+                receiver.send(ResultStatus.UPLOAD_IMAGE_FINISHED,
+                        RepositoryRestUtil.uploadImage(intent, resources));
             }
 
         } catch(Exception exception) {

@@ -1,7 +1,6 @@
 package com.jrew.geocatch.mobile.fragment;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -14,11 +13,10 @@ import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.listener.MarkerOnClickListener;
 import com.jrew.geocatch.mobile.model.Image;
 import com.jrew.geocatch.mobile.model.ImageMarkerPair;
-import com.jrew.geocatch.mobile.service.ImageServiceResultReceiver;
+import com.jrew.geocatch.mobile.reciever.ImageServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.ImageService;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,68 +43,56 @@ public class MapFragment extends SupportMapFragment {
 
         View result = super.onCreateView(inflater, container, savedInstanceState);
 
-        imageMarkerPairs = new HashMap<Integer, ImageMarkerPair>();
+        if (googleMap == null) {
 
-        googleMap = getMap();
-        int mapType = Integer.parseInt(getResources().getString(R.config.mapType));
-        googleMap.setMapType(mapType);
+            googleMap = getMap();
+            int mapType = Integer.parseInt(getResources().getString(R.config.mapType));
+            googleMap.setMapType(mapType);
 
-        final MapFragment fragment = this;
-        googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+            imageMarkerPairs = new HashMap<Integer, ImageMarkerPair>();
 
-            @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
-                LatLngBounds latLngBounds = googleMap.getProjection().getVisibleRegion().latLngBounds;
-                loadImages(latLngBounds);
-            }
-        });
+            final MapFragment fragment = this;
+            googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
-        /** Set custom on marker click listener  **/
-        MarkerOnClickListener markerOnclickListener = new MarkerOnClickListener(imageMarkerPairs, this);
-        googleMap.setOnMarkerClickListener(markerOnclickListener);
+                @Override
+                public void onCameraChange(CameraPosition cameraPosition) {
 
-        imageResultReceiver = new ImageServiceResultReceiver(new Handler());
-        imageResultReceiver.setReceiver(new ImageServiceResultReceiver.Receiver() {
-            @Override
-            public void onReceiveResult(int resultCode, Bundle resultData) {
-                switch (resultCode) {
-                    case ImageService.ResultStatus.LOAD_IMAGES_FINISHED:
+                    // Get current view bounds
+                    LatLngBounds latLngBounds = googleMap.getProjection().getVisibleRegion().latLngBounds;
 
-                        List<Image> images =
-                                (List<Image>) resultData.getSerializable(ImageService.RESULT_KEY);
+                    // Remove invisible markers
+                    removeInvisibleMarkers(latLngBounds);
 
-                            if (images != null && !images.isEmpty()) {
-                                for (Image image : images) {
-                                    if(!imageMarkerPairs.containsKey(image.getId())) {
-                                        loadThumbnail(image);
-                                    }
-                                }
-                            }
-                        break;
-
-                    case ImageService.ResultStatus.LOAD_THUMBNAIL_FINISHED:
-
-                        Image image =
-                                (Image) resultData.getSerializable(ImageService.IMAGE_KEY);
-
-                        Bitmap bitmap = (Bitmap) resultData.getParcelable(ImageService.RESULT_KEY);
-
-                        MarkerOptions markerOptions = new MarkerOptions();
-                        markerOptions.position(new LatLng(image.getLatitude(), image.getLongitude()));
-                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
-
-                        Marker marker = googleMap.addMarker(markerOptions);
-                        imageMarkerPairs.put(image.getId(), new ImageMarkerPair(image, marker));
-
-                    case ImageService.ResultStatus.ERROR:
-
-                        // handle the error;
-                        break;
+                    // Load new images for view bounds
+                    loadImages(latLngBounds);
                 }
-            }
-        });
+            });
+
+            /** Set custom on marker click listener  **/
+            MarkerOnClickListener markerOnclickListener = new MarkerOnClickListener(imageMarkerPairs, this);
+            googleMap.setOnMarkerClickListener(markerOnclickListener);
+
+            imageResultReceiver = new ImageServiceResultReceiver(new Handler(), this);
+        }
 
         return result;
+    }
+
+    /**
+     *
+     * @param latLngBounds
+     */
+    private void removeInvisibleMarkers(LatLngBounds latLngBounds) {
+
+        for (Map.Entry<Integer, ImageMarkerPair> entry : imageMarkerPairs.entrySet()) {
+            ImageMarkerPair imageMarkerPair = entry.getValue();
+            Marker currentMarker = imageMarkerPair.getMarker();
+            if (latLngBounds.contains(currentMarker.getPosition())) {
+                currentMarker.remove();
+                Image image = imageMarkerPair.getImage();
+                imageMarkerPairs.remove(image.getId());
+            }
+        }
     }
 
     /**
@@ -125,7 +111,7 @@ public class MapFragment extends SupportMapFragment {
      *
      * @param image
      */
-    private void loadThumbnail(Image image) {
+    public void loadThumbnail(Image image) {
         final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), ImageService.class);
         intent.putExtra(ImageService.RECEIVER_KEY, imageResultReceiver);
         intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.LOAD_IMAGE_THUMBNAIL);
@@ -133,4 +119,19 @@ public class MapFragment extends SupportMapFragment {
         getActivity().startService(intent);
     }
 
+    /**
+     *
+     * @return
+     */
+    public Map<Integer, ImageMarkerPair> getImageMarkerPairs() {
+        return imageMarkerPairs;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public GoogleMap getGoogleMap() {
+        return googleMap;
+    }
 }

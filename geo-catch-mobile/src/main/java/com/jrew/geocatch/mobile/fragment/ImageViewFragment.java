@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.model.Image;
 import com.jrew.geocatch.mobile.service.ImageService;
-import com.jrew.geocatch.mobile.service.ImageServiceResultReceiver;
+import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,21 +24,21 @@ import com.jrew.geocatch.mobile.service.ImageServiceResultReceiver;
 public class ImageViewFragment extends Fragment {
 
     /** **/
-    public ImageServiceResultReceiver imageResultReceiver;
+    public ServiceResultReceiver imageResultReceiver;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final ProgressDialog progress = new ProgressDialog(getActivity());
         progress.setMessage("Loading image...");
-        progress.show();
+
 
         View imageViewFragmentLayout = inflater.inflate(R.layout.image_view_fragment, container, false);
 
         final ImageView imageView = (ImageView) imageViewFragmentLayout.findViewById(R.id.imageView);
 
-        imageResultReceiver = new ImageServiceResultReceiver(new Handler());
-        imageResultReceiver.setReceiver(new ImageServiceResultReceiver.Receiver() {
+        imageResultReceiver = new ServiceResultReceiver(new Handler());
+        imageResultReceiver.setReceiver(new ServiceResultReceiver.Receiver() {
 
             @Override
             public void onReceiveResult(int resultCode, Bundle resultData) {
@@ -55,13 +55,19 @@ public class ImageViewFragment extends Fragment {
         });
 
         Bundle fragmentData = getArguments();
-        Image image = (Image) fragmentData.getSerializable(ImageService.IMAGE_KEY);
-        loadImagePicture(image);
-
+        if (fragmentData != null && !fragmentData.isEmpty()) {
+            Image image = (Image) fragmentData.getSerializable(ImageService.IMAGE_KEY);
+            loadImagePicture((Image) image);
+            progress.show();
+        }
 
         return imageViewFragmentLayout;
     }
 
+    /**
+     *
+     * @param image
+     */
     private void loadImagePicture(Image image) {
         final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), ImageService.class);
         intent.putExtra(ImageService.RECEIVER_KEY, imageResultReceiver);

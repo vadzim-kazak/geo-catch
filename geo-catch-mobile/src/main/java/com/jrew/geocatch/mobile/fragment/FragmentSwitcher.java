@@ -27,7 +27,13 @@ public class FragmentSwitcher {
         String IMAGE_VIEW_FRAGMENT_TAG = "viewImageFragmentTag";
 
         /** **/
-        String TAKE_IMAGE_FRAGMENT_TAG = "takeImageFragmentTag";
+        String IMAGE_TAKE_CAMERA_FRAGMENT_TAG = "takeImageCameraFragmentTag";
+
+        /** **/
+        String IMAGE_TAKE_PREVIEW_FRAGMENT_TAG = "takeImagePreviewFragmentTag";
+
+        /** **/
+        String IMAGE_TAKE_INFO_FRAGMENT_TAG = "takeImageInfoFragmentTag";
 
         /** **/
         String OWN_IMAGES_FRAGMENT_TAG = "ownImagesFragmentTag";
@@ -44,7 +50,6 @@ public class FragmentSwitcher {
     public FragmentSwitcher(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
     }
-
 
     /**
      *
@@ -85,12 +90,18 @@ public class FragmentSwitcher {
      */
     private Fragment createFragment(String fragmentTag) {
 
-        if(TAG.MAP_FRAGMENT_TAG.equals(fragmentTag)){
+        if (TAG.MAP_FRAGMENT_TAG.equals(fragmentTag)){
             return new MapFragment();
-        } else if(TAG.MAP_SETTINGS_FRAGMENT_TAG.equals(fragmentTag)) {
+        } else if (TAG.MAP_SETTINGS_FRAGMENT_TAG.equals(fragmentTag)) {
             return new MapSettingsFragment();
-        } else if(TAG.IMAGE_VIEW_FRAGMENT_TAG.equals(fragmentTag)) {
+        } else if (TAG.IMAGE_VIEW_FRAGMENT_TAG.equals(fragmentTag)) {
             return new ImageViewFragment();
+        } else if (TAG.IMAGE_TAKE_CAMERA_FRAGMENT_TAG.equals(fragmentTag)) {
+            return new ImageTakeCameraFragment();
+        } else if (TAG.IMAGE_TAKE_PREVIEW_FRAGMENT_TAG.equals(fragmentTag)) {
+            return new ImageTakePreviewFragment();
+        } else if (TAG.IMAGE_TAKE_INFO_FRAGMENT_TAG.equals(fragmentTag)) {
+            return new ImageTakeInfoFragment();
         }
 
         return null;
@@ -112,8 +123,32 @@ public class FragmentSwitcher {
 
     /**
      *
+     * @param bundle
      */
     public void showImageViewFragment(Bundle bundle) {
         showFragment(TAG.IMAGE_VIEW_FRAGMENT_TAG, bundle);
+    }
+
+    /**
+     *
+     */
+    public void showImageTakeCameraFragment() {
+        showFragment(TAG.IMAGE_TAKE_CAMERA_FRAGMENT_TAG);
+    }
+
+    /**
+     *
+     * @param bundle
+     */
+    public void showImageTakePreviewFragment(Bundle bundle) {
+        showFragment(TAG.IMAGE_TAKE_PREVIEW_FRAGMENT_TAG, bundle);
+    }
+
+    /**
+     *
+     * @param bundle
+     */
+    public void showImageTakeInfoFragment(Bundle bundle) {
+        showFragment(TAG.IMAGE_TAKE_INFO_FRAGMENT_TAG, bundle);
     }
 }
