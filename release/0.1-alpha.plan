@@ -1,6 +1,4 @@
-GeoCatch v 0.1-alpha functionality description
-
-Mobile application:
+GeoCatch v 0.1-alpha mobile functionality description
 
 	1) Google map screen
 	
@@ -87,13 +85,8 @@ Mobile application:
 			 - fish type field with autopopulated edit field.
 			 - fishing tool field with autopopulated edit field.
 			
-			
 			On screen displaying location provider must start.
-			
-			
 			After upload event own images screen must be shown.
-	
-			!!! Twitter integration !!!
 
 	5) Own images screen
 		
@@ -106,5 +99,6 @@ Mobile application:
 		- Take image option
 		- Own images option (selected)	
 		
-		Grid view with images. 
-		On image onClick event fullsize image will be shown with possibility to edit metadata or delete.
+		List view with images. 
+		For uploaded images fullsize image is displayed with possibility to edit metadata or delete.
+		For uploaded error images failed message + thumbnail will be displayed + possibility to reload or delete.
