@@ -1,0 +1,110 @@
+GeoCatch v 0.1-alpha functionality description
+
+Mobile application:
+
+	1) Google map screen
+	
+	Top menu:
+		GeoCatch application icon + Google map label
+
+	Bottom menu:
+	- Google map option (selected)
+	- Google map settings option
+	- Take image option
+	- Own images option
+
+	Displaying current user location on map loading with some initial zoom level
+	
+	Google map contains loaded from repository images in form of customized markers.
+	Markers are loaded for current google map view bounds.
+	All invisible markers are removed.
+	NEXTRELEASE: Markers caching
+	
+	
+	Markers description:
+		- Have convenient for view and click size
+		- Dynamically changing size depending on google map zoom level. (from smaller to bigger)
+				
+	2) Marker onclick event:
+
+		Fragment with fullsize image and metadata will be opened.
+		Top menu will contains back button (<) - onclick will refer user back to google map.
+		Google map selection will be lifted in bottom menu and selected back on 'back to map' action.
+		
+	3) Google map settings screen.
+
+		Top menu: 
+			back button (<) + GeoCatch application icon + Google map settings label
+			(<) onclick will refer user back to google map.
+			
+		Bottom menu:
+		- Google map option
+		- Google map settings option (selected)
+		- Take image option
+		- Own images option	
+
+		Following settings must be provided:
+		
+		Fish type selector: checkbox + autopopulatededitfield 
+		
+		Fish tool selector: checkbox + autopopulatededitfield
+		
+		Images share properties - radiocontrol with two options:
+		- All (default selection)
+		- Own
+
+	4) Take image flow.
+	
+		Loaded on "Take image option" onclick event
+		
+		New activity with it all fragment set will be loaded.
+		
+		4.1) Photo preview screen
+		Top menu:
+			back button (X) + GeoCatch application icon + Preview label
+			(X) onclick will refer user back to google map.
+			
+			Bottom menu:
+			- Take image button
+			
+			Contains photo preview area.
+			Size: ~ 640 x 640
+			
+		4.2) Taken picture screen
+		Top menu:
+			back button (<) + GeoCatch application icon + Image approval label + proceed button (>)
+			(<) onclick will refer user back to 4.1 screen
+			(>) onclick will refer user next to 4.3 screen
+		
+		4.3) Image info screen
+			Top menu:
+			back button (<) + GeoCatch application icon + Image upload label + proceed button (>)
+			?(<)? onclick will refer user back to 4.1 screen
+			(>) onclick will rise image upload action
+			
+			Contains: 
+			 - small image thumbnail
+			 - fish type field with autopopulated edit field.
+			 - fishing tool field with autopopulated edit field.
+			
+			
+			On screen displaying location provider must start.
+			
+			
+			After upload event own images screen must be shown.
+	
+			!!! Twitter integration !!!
+
+	5) Own images screen
+		
+		Top menu: 
+			GeoCatch application icon + Own images label
+			
+		Bottom menu:
+		- Google map option
+		- Google map settings option
+		- Take image option
+		- Own images option (selected)	
+		
+		Grid view with images. 
+		On image onClick event fullsize image will be shown with possibility to edit metadata or delete.
