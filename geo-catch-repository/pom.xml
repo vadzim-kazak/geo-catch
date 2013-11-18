@@ -180,7 +180,7 @@
                         </resource>
                     </webResources>
                     <warSourceDirectory>web</warSourceDirectory>
-                    <warName>${repository.context.path}</warName>
+                    <!-- warName>${repository.context.path}</warName -->
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
@@ -195,7 +195,7 @@
                 <configuration>
                     <url>http://localhost:8080/manager/text</url>
                     <server>TomcatServer</server>
-                    <path>/cf-support</path>
+                    <path>/fishing</path>
                 </configuration>
             </plugin>
         </plugins>

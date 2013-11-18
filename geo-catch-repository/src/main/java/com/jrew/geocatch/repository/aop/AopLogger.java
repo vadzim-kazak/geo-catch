@@ -7,6 +7,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 
 import java.text.SimpleDateFormat;
 
@@ -34,13 +35,18 @@ public class AopLogger {
         dateFormat = new SimpleDateFormat(dateFormatPattern);
     }
 
+    // Trace injected methods and constructors -->
+    @Pointcut("execution(* com.jrew.geocatch.repository..*.*(..)) && " +
+              "!execution(* com.jrew.geocatch.repository.converter..*.*(..))")
+    public void commonPackagesPointcut() {}
+
     /**
      * Logs method invocation time
      *
      * @param pjp
      * @throws Throwable
      */
-    @Around("execution(* com.jrew.geocatch.repository..*.*(..))")
+    @Around("commonPackagesPointcut()")
     public Object logMethodInvocationTime(ProceedingJoinPoint pjp) throws Throwable {
 
         Logger logger = LogUtils.getLogger(pjp);
@@ -66,7 +72,7 @@ public class AopLogger {
      * @throws Throwable
      */
     @AfterThrowing(
-            pointcut = "execution(* com.jrew.geocatch.repository..*.*(..))",
+            pointcut = "commonPackagesPointcut()",
             throwing = "exception"
     )
     public void logExceptionThrowing(JoinPoint joinPoint, Throwable exception) throws Throwable {

@@ -36,7 +36,7 @@ public class ImageController {
     ServletContext servletContext;
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public String uploadImage(@ModelAttribute("Image")@Valid Image image) throws IOException {
+    public String uploadImage(@RequestBody @Valid Image image) throws IOException {
 
         WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(servletContext);
 

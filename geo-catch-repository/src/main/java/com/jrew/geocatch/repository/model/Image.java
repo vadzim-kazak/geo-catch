@@ -6,7 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,7 +29,7 @@ public class Image {
     /** Image id **/
     @Id
     @GeneratedValue
-    private int id;
+    private long id;
 
     /** **/
     private int userId;
@@ -68,17 +70,20 @@ public class Image {
     @NotNull
     MultipartFile file;
 
+   // @ElementCollection
+   // private List<DomainProperty> domainProperties = new ArrayList<DomainProperty>();
+
     /**
      * @return
      */
-    public int getId() {
+    public long getId() {
         return id;
     }
 
     /**
      * @param id
      */
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
