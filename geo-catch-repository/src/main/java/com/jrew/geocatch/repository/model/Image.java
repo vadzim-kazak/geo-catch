@@ -17,7 +17,7 @@ import java.util.List;
  * Time: 12:10 AM
  * To change this template use File | Settings | File Templates.
  */
-@Entity
+//@Entity
 @Table(name="Images")
 public class Image {
 
@@ -71,7 +71,7 @@ public class Image {
     MultipartFile file;
 
    // @ElementCollection
-   // private List<DomainProperty> domainProperties = new ArrayList<DomainProperty>();
+    private List<DomainProperty> domainProperties;
 
     /**
      * @return
@@ -228,6 +228,22 @@ public class Image {
      */
     public void setFile(MultipartFile file) {
         this.file = file;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<DomainProperty> getDomainProperties() {
+        return domainProperties;
+    }
+
+    /**
+     *
+     * @param domainProperties
+     */
+    public void setDomainProperties(List<DomainProperty> domainProperties) {
+        this.domainProperties = domainProperties;
     }
 
     @Override

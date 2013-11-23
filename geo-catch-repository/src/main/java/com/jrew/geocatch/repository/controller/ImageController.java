@@ -3,17 +3,22 @@ package com.jrew.geocatch.repository.controller;
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.model.ViewBounds;
 import com.jrew.geocatch.repository.service.ImageProvider;
+import com.jrew.geocatch.repository.util.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import javax.validation.Valid;
+import javax.validation.Validator;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,13 +35,18 @@ import java.util.List;
 @RequestMapping("/images")
 public class ImageController {
 
-    String dateFormatPattern;
-
     @Autowired
     ServletContext servletContext;
 
+    @Resource
+    private Validator validator;
+
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public String uploadImage(@RequestBody @Valid Image image) throws IOException {
+    public String uploadImage(@RequestParam("image") Image image,
+                              @RequestPart("file") MultipartFile file) throws IOException {
+
+        image.setFile(file);
+        ValidationUtils.validate(image, validator);
 
         WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(servletContext);
 
@@ -68,30 +78,4 @@ public class ImageController {
         return images;
     }
 
-
-
-    @Value("${global.dateFormatPattern}")
-    public void setDateFormatPattern(String dateFormatPattern) {
-        this.dateFormatPattern = dateFormatPattern;
-    }
-
-    /**
-     *
-     */
-    @InitBinder("Image")
-    public void setDisallowedFields(WebDataBinder dataBinder) {
-        dataBinder.setDisallowedFields("id", "thumbnailPath", "path", "isDeleted");
-    }
-
-    /**
-     *
-     * @param dataBinder
-     */
-    @InitBinder("Image")
-    public void registerCustomDateEditor(WebDataBinder dataBinder) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatPattern);
-        dateFormat.setLenient(false);
-        CustomDateEditor customDateEditor = new CustomDateEditor(dateFormat, true);
-        dataBinder.registerCustomEditor(Date.class, customDateEditor);
-    }
 }

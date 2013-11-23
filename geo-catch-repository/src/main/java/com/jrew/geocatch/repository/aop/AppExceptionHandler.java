@@ -1,5 +1,6 @@
 package com.jrew.geocatch.repository.aop;
 
+import com.jrew.geocatch.repository.exception.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,19 @@ public class AppExceptionHandler {
         }
 
         return errorMessages;
+    }
+
+    /**
+     * Handles images uploading validation errors
+     *
+     * @param exception
+     * @return
+     */
+    @ExceptionHandler(ValidationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    protected List<String> handleValidationErrors(ValidationException exception) {
+        return exception.getErrors();
     }
 
     /**
