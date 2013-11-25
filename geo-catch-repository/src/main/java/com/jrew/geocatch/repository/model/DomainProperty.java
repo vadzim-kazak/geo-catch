@@ -1,9 +1,6 @@
 package com.jrew.geocatch.repository.model;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -13,13 +10,20 @@ import java.util.List;
  * Time: 1:13 PM
  */
 
-@Embeddable
+@Entity
+@Table(name="DOMAIN_PROPERTY")
 public class DomainProperty {
 
     /** **/
     @Id
     @GeneratedValue
-    private int id;
+    private long id;
+
+    /** **/
+    private long type;
+
+    /** **/
+    private long item;
 
     /** **/
     private String locale;
@@ -34,7 +38,7 @@ public class DomainProperty {
      *
      * @return
      */
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -42,8 +46,40 @@ public class DomainProperty {
      *
      * @param id
      */
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public long getType() {
+        return type;
+    }
+
+    /**
+     *
+     * @param type
+     */
+    public void setType(long type) {
+        this.type = type;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public long getItem() {
+        return item;
+    }
+
+    /**
+     *
+     * @param item
+     */
+    public void setItem(long item) {
+        this.item = item;
     }
 
     /**

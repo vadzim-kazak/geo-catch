@@ -9,18 +9,22 @@
             var image = {
                 userId : $('#userId').val(),
                 description : $('#description').val(),
-                latitude : /**$('#latitude').val()**/ '123456',
+                latitude : $('#latitude').val(),
                 longitude : $('#longitude').val(),
                 date : $('#date').val(),
                 rating : $('#rating').val(),
                 domainProperties : [
                     {
-                        id :   $('#fishType').val(),
+                        id : $('#fishId').val(),
+                        type : 1,
+                        item :   $('#fishItem').val(),
                         locale :  $('#fishLocale').val(),
                         value:  $('#fishValue').val()
                     },
                     {
-                        id :   $('#fishingToolType').val(),
+                        id :   $('#fishingToolId').val(),
+                        type : 2,
+                        item :   $('#fishingToolItem').val(),
                         locale :  $('#fishingToolLocale').val(),
                         value:  $('#fishingToolValue').val()
                     }
@@ -47,13 +51,17 @@
     <br/>
     <input type="text" name="rating" id="rating" value="1"/> rating
     <br/>
-    <input type="text" name="rating" id="fishType" value="1"/> fish type
+    <input type="text" id="fishId" value="1"/> fish id
+    <br/>
+    <input type="text" id="fishItem" value="1"/> fish item
     <br/>
     <input type="text" name="fishValue" id="fishValue" value="pike"/> fish value
     <br/>
     <input type="text" name="fishLocale" id="fishLocale" value="en"/> fish locale
     <br/>
-    <input type="text" name="fishingToolType" id="fishingToolType" value="1"/> fishing tool type
+    <input type="text" id="fishingToolId" value="5"/> fishing tool id
+    <br/>
+    <input type="text" id="fishingToolItem" value="10"/> fishing tool item
     <br/>
     <input type="text" name="fishingToolValue" id="fishingToolValue" value="rod"/> fishing tool value
     <br/>

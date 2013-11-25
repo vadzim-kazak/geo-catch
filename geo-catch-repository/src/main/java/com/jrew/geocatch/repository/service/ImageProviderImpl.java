@@ -1,9 +1,12 @@
 package com.jrew.geocatch.repository.service;
 
 import com.jrew.geocatch.repository.dao.database.DatabaseManager;
+import com.jrew.geocatch.repository.dao.database.DomainPropertyDBManager;
 import com.jrew.geocatch.repository.dao.filesystem.FileSystemManager;
+import com.jrew.geocatch.repository.model.DomainProperty;
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.model.ViewBounds;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,6 +28,9 @@ public class ImageProviderImpl implements ImageProvider {
     /** **/
     private final DatabaseManager databaseManager;
 
+    @Autowired
+    private DomainPropertyDBManager propertyManager;
+
     public ImageProviderImpl(FileSystemManager fileSystemManager, DatabaseManager databaseManager) {
         this.fileSystemManager = fileSystemManager;
         this.databaseManager = databaseManager;
@@ -42,6 +48,11 @@ public class ImageProviderImpl implements ImageProvider {
 
         // Save uploaded image to file system
         fileSystemManager.saveImage(image);
+
+        List<DomainProperty> properties =  image.getDomainProperties();
+        for (DomainProperty domainProperty : properties) {
+            propertyManager.saveDomainProperty(domainProperty);
+        }
 
         // Save image to database
         databaseManager.saveImage(image);

@@ -50,4 +50,5 @@
         <constructor-arg name="dateFormatPattern" value="${logger.dateFormatPattern}"/>
     </bean>
 
+
 </beans>
