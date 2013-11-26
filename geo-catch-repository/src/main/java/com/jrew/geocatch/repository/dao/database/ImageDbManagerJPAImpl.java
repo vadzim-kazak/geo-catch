@@ -17,7 +17,7 @@ import java.util.List;
  * Time: 9:46 PM
  */
 @Repository
-public class DatabaseManagerHibernateJPAImpl implements DatabaseManager {
+public class ImageDBManagerJPAImpl implements ImageDBManager {
 
     /** Limits max fetching images number per request**/
     private int maxImagesPerQuery;
@@ -25,7 +25,7 @@ public class DatabaseManagerHibernateJPAImpl implements DatabaseManager {
     /** Load images typed parameters query **/
     private String loadImagesQuery;
 
-    public DatabaseManagerHibernateJPAImpl() {
+    public ImageDBManagerJPAImpl() {
     }
 
     @PersistenceContext
@@ -40,9 +40,7 @@ public class DatabaseManagerHibernateJPAImpl implements DatabaseManager {
     }
 
     @Override
-    public void deleteImage(Image image) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+    public void deleteImage(Image image) {}
 
     @Override
     public List<Image> loadImages(ViewBounds viewBounds) {

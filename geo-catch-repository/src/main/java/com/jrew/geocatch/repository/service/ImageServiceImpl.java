@@ -1,7 +1,7 @@
 package com.jrew.geocatch.repository.service;
 
-import com.jrew.geocatch.repository.dao.database.DatabaseManager;
 import com.jrew.geocatch.repository.dao.database.DomainPropertyDBManager;
+import com.jrew.geocatch.repository.dao.database.ImageDBManager;
 import com.jrew.geocatch.repository.dao.filesystem.FileSystemManager;
 import com.jrew.geocatch.repository.model.DomainProperty;
 import com.jrew.geocatch.repository.model.Image;
@@ -18,28 +18,28 @@ import java.util.List;
  * Time: 9:37 PM
  * To change this template use File | Settings | File Templates.
  *
- * Implementation for {@link ImageProvider} interface
+ * Implementation for {@link ImageService} interface
  */
-public class ImageProviderImpl implements ImageProvider {
+public class ImageServiceImpl implements ImageService {
 
     /** **/
     private final FileSystemManager fileSystemManager;
 
     /** **/
-    private final DatabaseManager databaseManager;
+    private final ImageDBManager imageDBManager;
 
     @Autowired
     private DomainPropertyDBManager propertyManager;
 
-    public ImageProviderImpl(FileSystemManager fileSystemManager, DatabaseManager databaseManager) {
+    public ImageServiceImpl(FileSystemManager fileSystemManager, ImageDBManager imageDBManager) {
         this.fileSystemManager = fileSystemManager;
-        this.databaseManager = databaseManager;
+        this.imageDBManager = imageDBManager;
     }
 
     @Override
     public List<Image> getImages(ViewBounds viewBounds) {
 
-        List<Image> images = databaseManager.loadImages(viewBounds);
+        List<Image> images = imageDBManager.loadImages(viewBounds);
         return fileSystemManager.updateImagesPath(images);
     }
 
@@ -55,7 +55,7 @@ public class ImageProviderImpl implements ImageProvider {
         }
 
         // Save image to database
-        databaseManager.saveImage(image);
+        imageDBManager.saveImage(image);
     }
 
     @Override

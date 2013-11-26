@@ -2,14 +2,10 @@ package com.jrew.geocatch.repository.controller;
 
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.model.ViewBounds;
-import com.jrew.geocatch.repository.service.ImageProvider;
+import com.jrew.geocatch.repository.service.ImageService;
 import com.jrew.geocatch.repository.util.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -20,8 +16,6 @@ import javax.servlet.ServletContext;
 import javax.validation.Valid;
 import javax.validation.Validator;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,8 +44,8 @@ public class ImageController {
 
         WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(servletContext);
 
-        ImageProvider imageProvider = (ImageProvider) context.getBean("imageProvider");
-        imageProvider.uploadImage(image);
+        ImageService imageService = (ImageService) context.getBean("imageProvider");
+        imageService.uploadImage(image);
 
         return "imageUpload";
     }
@@ -61,8 +55,8 @@ public class ImageController {
 
         WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(servletContext);
 
-        ImageProvider imageProvider = (ImageProvider) context.getBean("imageProvider");
-        List<Image> images = imageProvider.getImages(viewBounds);
+        ImageService imageService = (ImageService) context.getBean("imageProvider");
+        List<Image> images = imageService.getImages(viewBounds);
 
         return images;
     }
@@ -72,8 +66,8 @@ public class ImageController {
     public  @ResponseBody List<Image> ajaxLoadImage(@Valid ViewBounds viewBounds) throws IOException {
 
         WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-        ImageProvider imageProvider = (ImageProvider) context.getBean("imageProvider");
-        List<Image> images = imageProvider.getImages(viewBounds);
+        ImageService imageService = (ImageService) context.getBean("imageProvider");
+        List<Image> images = imageService.getImages(viewBounds);
 
         return images;
     }

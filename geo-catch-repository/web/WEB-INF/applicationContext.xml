@@ -8,9 +8,9 @@
 
     <context:property-placeholder location="classpath*:*.properties" />
 
-    <bean id="imageProvider" class="com.jrew.geocatch.repository.service.ImageProviderImpl" scope="singleton">
+    <bean id="imageService" class="com.jrew.geocatch.repository.service.ImageServiceImpl" scope="singleton">
         <constructor-arg name="fileSystemManager" ref="fileSystemManager"/>
-        <constructor-arg name="databaseManager" ref="databaseManager"/>
+        <constructor-arg name="imageDBManager" ref="databaseManager"/>
     </bean>
 
     <bean id="fileSystemManager" class="com.jrew.geocatch.repository.dao.filesystem.FileSystemManagerImpl" scope="singleton">

@@ -13,11 +13,25 @@ import java.util.List;
  * Time: 9:23 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface ImageProvider {
+public interface ImageService {
 
+    /**
+     *
+     * @param viewBounds
+     * @return
+     */
     public List<Image> getImages(ViewBounds viewBounds);
 
+    /**
+     *
+     * @param image
+     * @throws IOException
+     */
     public void uploadImage(Image image) throws IOException;
 
+    /**
+     *
+     * @param image
+     */
     public void deleteImage(Image image);
 }

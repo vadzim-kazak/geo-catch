@@ -15,9 +15,9 @@
 
     <context:property-placeholder location="classpath*:*.properties" />
 
-    <bean id="domainPropertyDBManager" class="com.jrew.geocatch.repository.dao.database.DomainPropertyJPAImpl" />
+    <bean id="domainPropertyDBManager" class="com.jrew.geocatch.repository.dao.database.DomainPropertyDBManagerJPAImpl" />
 
-    <bean id="databaseManager" class="com.jrew.geocatch.repository.dao.database.DatabaseManagerHibernateJPAImpl" scope="singleton" >
+    <bean id="databaseManager" class="com.jrew.geocatch.repository.dao.database.ImageDBManagerJPAImpl" scope="singleton" >
         <property name="maxImagesPerQuery" value="${databaseManager.maxImagesPerQuery}" />
         <property name="loadImagesQuery" value="SELECT image FROM Image image WHERE image.latitude &lt; ?1 AND image.longitude &lt; ?2 AND image.latitude &gt;= ?3 AND image.longitude &gt;= ?4" />
     </bean>

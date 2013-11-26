@@ -6,13 +6,9 @@ import com.jrew.geocatch.repository.model.ViewBounds;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Vadim
- * Date: 7/31/13
- * Time: 9:38 PM
- * To change this template use File | Settings | File Templates.
+ * Presents Image processing functionality
  */
-public interface DatabaseManager {
+public interface ImageDBManager {
 
     /**
      *
