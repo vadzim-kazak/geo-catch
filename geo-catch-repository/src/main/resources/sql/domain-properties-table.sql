@@ -1,5 +1,7 @@
+-- Set client connection character set
 SET NAMES utf8;
 
+-- Create domain property table
 CREATE TABLE IF NOT EXISTS domain_property (
   id BIGINT(20) NOT NULL AUTO_INCREMENT,
   isDefault TINYINT(1) NOT NULL,

@@ -33,7 +33,7 @@
 
     <jdbc:initialize-database data-source="dataSource">
         <jdbc:script location="classpath:sql/domain-properties-table.sql" encoding="UTF-8"/>
-        <jdbc:script location="classpath:sql/domain-properties-data.sql" encoding="UTF-8"/>
+        <jdbc:script location="classpath:sql/fishing-domain-properties-data.sql" encoding="UTF-8"/>
     </jdbc:initialize-database>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
