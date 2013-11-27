@@ -166,19 +166,8 @@
                             <targetPath>WEB-INF/classes/META-INF</targetPath>
                         </resource>
                         <resource>
-                            <directory>src\main\java</directory>
+                            <directory>src\main\resources</directory>
                             <targetPath>WEB-INF/classes</targetPath>
-                            <includes>
-                                <include>
-                                    config.properties
-                                </include>
-                                <include>
-                                    log4j2.xml
-                                </include>
-                                <include>
-                                    messages.properties
-                                </include>
-                            </includes>
                             <filtering>true</filtering>
                         </resource>
                         <resource>
