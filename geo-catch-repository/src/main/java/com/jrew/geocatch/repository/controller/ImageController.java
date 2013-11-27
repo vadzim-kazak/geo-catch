@@ -2,6 +2,7 @@ package com.jrew.geocatch.repository.controller;
 
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.model.ViewBounds;
+import com.jrew.geocatch.repository.service.DomainPropertyService;
 import com.jrew.geocatch.repository.service.ImageService;
 import com.jrew.geocatch.repository.util.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,9 @@ public class ImageController {
         ValidationUtils.validate(image, validator);
 
         WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+
+        DomainPropertyService domainPropertyService = (DomainPropertyService) context.getBean("domainPropertyService");
+        domainPropertyService.processDomainProperties(image.getDomainProperties());
 
         ImageService imageService = (ImageService) context.getBean("imageService");
         imageService.uploadImage(image);

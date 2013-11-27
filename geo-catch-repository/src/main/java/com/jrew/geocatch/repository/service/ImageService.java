@@ -7,11 +7,8 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Vadim
- * Date: 7/23/13
- * Time: 9:23 PM
- * To change this template use File | Settings | File Templates.
+ *
+ * Represents
  */
 public interface ImageService {
 

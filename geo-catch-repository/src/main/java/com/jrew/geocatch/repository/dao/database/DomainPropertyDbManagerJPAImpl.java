@@ -37,13 +37,18 @@ public class DomainPropertyDBManagerJPAImpl implements DomainPropertyDBManager {
     }
 
     @Override
-    public DomainProperty findDomainProperty(String type, String value) {
+    public DomainProperty findDomainProperty(long type, String value) {
 
         TypedQuery<DomainProperty> query = entityManager.createQuery(findDomainPropertyQuery, DomainProperty.class);
         query.setParameter(1, type);
         query.setParameter(2, value);
 
-        return query.getSingleResult();
+        List<DomainProperty> result = query.getResultList();
+        if (result != null && !result.isEmpty()) {
+            return result.get(0);
+        }
+
+        return null;
     }
 
     @Override

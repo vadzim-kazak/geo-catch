@@ -12,9 +12,15 @@
                            http://www.springframework.org/schema/util
                            http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
+    <context:spring-configured/>
+
     <context:property-placeholder location="classpath*:*.properties" />
 
     <util:properties id="queryProperties" location="classpath:query.properties" />
+
+    <bean id="domainPropertyService" class="com.jrew.geocatch.repository.service.DomainPropertyServiceImpl" scope="singleton">
+        <constructor-arg name="dbManager" ref="domainPropertyDBManager"/>
+    </bean>
 
     <bean id="imageService" class="com.jrew.geocatch.repository.service.ImageServiceImpl" scope="singleton">
         <constructor-arg name="fileSystemManager" ref="fileSystemManager"/>

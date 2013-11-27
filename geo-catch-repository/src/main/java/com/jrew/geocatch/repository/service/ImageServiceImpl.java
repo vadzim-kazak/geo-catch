@@ -12,12 +12,6 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Vadim
- * Date: 7/23/13
- * Time: 9:37 PM
- * To change this template use File | Settings | File Templates.
- *
  * Implementation for {@link ImageService} interface
  */
 public class ImageServiceImpl implements ImageService {
@@ -27,9 +21,6 @@ public class ImageServiceImpl implements ImageService {
 
     /** **/
     private final ImageDBManager imageDBManager;
-
-    @Autowired
-    private DomainPropertyDBManager propertyManager;
 
     public ImageServiceImpl(FileSystemManager fileSystemManager, ImageDBManager imageDBManager) {
         this.fileSystemManager = fileSystemManager;
@@ -48,11 +39,6 @@ public class ImageServiceImpl implements ImageService {
 
         // Save uploaded image to file system
         fileSystemManager.saveImage(image);
-
-//        List<DomainProperty> properties =  image.getDomainProperties();
-//        for (DomainProperty domainProperty : properties) {
-//            propertyManager.saveDomainProperty(domainProperty);
-//        }
 
         // Save image to database
         imageDBManager.saveImage(image);

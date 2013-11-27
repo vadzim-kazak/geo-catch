@@ -35,10 +35,11 @@ public interface DomainPropertyDBManager {
     /**
      * Finds domain property
      *
+     *
      * @param type
      * @param value
      * @return
      */
-    public DomainProperty findDomainProperty(String type, String value);
+    public DomainProperty findDomainProperty(long type, String value);
 
 }
