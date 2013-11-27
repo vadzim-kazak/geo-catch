@@ -44,7 +44,7 @@ public class ImageController {
 
         WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(servletContext);
 
-        ImageService imageService = (ImageService) context.getBean("imageProvider");
+        ImageService imageService = (ImageService) context.getBean("imageService");
         imageService.uploadImage(image);
 
         return "imageUpload";
@@ -55,7 +55,7 @@ public class ImageController {
 
         WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(servletContext);
 
-        ImageService imageService = (ImageService) context.getBean("imageProvider");
+        ImageService imageService = (ImageService) context.getBean("imageService");
         List<Image> images = imageService.getImages(viewBounds);
 
         return images;

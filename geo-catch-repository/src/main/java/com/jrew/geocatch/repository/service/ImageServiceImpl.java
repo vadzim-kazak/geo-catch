@@ -49,10 +49,10 @@ public class ImageServiceImpl implements ImageService {
         // Save uploaded image to file system
         fileSystemManager.saveImage(image);
 
-        List<DomainProperty> properties =  image.getDomainProperties();
-        for (DomainProperty domainProperty : properties) {
-            propertyManager.saveDomainProperty(domainProperty);
-        }
+//        List<DomainProperty> properties =  image.getDomainProperties();
+//        for (DomainProperty domainProperty : properties) {
+//            propertyManager.saveDomainProperty(domainProperty);
+//        }
 
         // Save image to database
         imageDBManager.saveImage(image);

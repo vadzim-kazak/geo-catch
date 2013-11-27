@@ -1,6 +1,7 @@
 package com.jrew.geocatch.repository.dao.database;
 
 import com.jrew.geocatch.repository.model.DomainProperty;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -15,6 +16,12 @@ public class DomainPropertyDBManagerJPAImpl implements DomainPropertyDBManager {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Value("#{queryProperties['query.domain.property.find']}")
+    private String findDomainPropertyQuery;
+
+    @Value("#{queryProperties['query.domain.properties.load']}")
+    private String loadDomainPropertiesQuery;
 
     @Transactional
     @Override
@@ -32,10 +39,7 @@ public class DomainPropertyDBManagerJPAImpl implements DomainPropertyDBManager {
     @Override
     public DomainProperty findDomainProperty(String type, String value) {
 
-        String searchQuery = "SELECT domainProperty FROM DomainProperty domainProperty WHERE domainProperty.type LIKE ?1 AND " +
-                "domainProperty.value LIKE ?2 ";
-
-        TypedQuery<DomainProperty> query = entityManager.createQuery(searchQuery, DomainProperty.class);
+        TypedQuery<DomainProperty> query = entityManager.createQuery(findDomainPropertyQuery, DomainProperty.class);
         query.setParameter(1, type);
         query.setParameter(2, value);
 
@@ -43,11 +47,11 @@ public class DomainPropertyDBManagerJPAImpl implements DomainPropertyDBManager {
     }
 
     @Override
-    public List<DomainProperty> loadDomainProperties(long type) {
+    public List<DomainProperty> loadDomainProperties(long type, String locale) {
 
-        String searchQuery = "SELECT domainProperty FROM DomainProperty domainProperty WHERE domainProperty.type LIKE ?1";
-        TypedQuery<DomainProperty> query = entityManager.createQuery(searchQuery, DomainProperty.class);
+        TypedQuery<DomainProperty> query = entityManager.createQuery(loadDomainPropertiesQuery, DomainProperty.class);
         query.setParameter(1, type);
+        query.setParameter(2, locale);
 
         return query.getResultList();
     }

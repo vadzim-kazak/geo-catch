@@ -4,22 +4,26 @@
        xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context.xsd
-       http://www.springframework.org/schema/tx
-       http://www.springframework.org/schema/tx/spring-tx.xsd
-       http://www.springframework.org/schema/jdbc
-	   http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd">
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://www.springframework.org/schema/jdbc
+                           http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
     <context:property-placeholder location="classpath*:*.properties" />
+
+    <util:properties id="queryProperties" location="classpath:query.properties" />
 
     <bean id="domainPropertyDBManager" class="com.jrew.geocatch.repository.dao.database.DomainPropertyDBManagerJPAImpl" />
 
     <bean id="databaseManager" class="com.jrew.geocatch.repository.dao.database.ImageDBManagerJPAImpl" scope="singleton" >
         <property name="maxImagesPerQuery" value="${databaseManager.maxImagesPerQuery}" />
-        <property name="loadImagesQuery" value="SELECT image FROM Image image WHERE image.latitude &lt; ?1 AND image.longitude &lt; ?2 AND image.latitude &gt;= ?3 AND image.longitude &gt;= ?4" />
     </bean>
 
     <!-- JDBC Data Source. It is assumed you have MySQL running on localhost port 3306 with
@@ -52,11 +56,9 @@
         </property>
     </bean>
 
-    <bean class="org.springframework.orm.jpa.JpaTransactionManager"
-          id="transactionManager">
+    <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory" />
     </bean>
 
     <tx:annotation-driven mode="proxy" transaction-manager="transactionManager" />
-
 </beans>

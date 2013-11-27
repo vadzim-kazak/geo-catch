@@ -59,11 +59,11 @@
     <br/>
     <input type="text" name="fishLocale" id="fishLocale" value="en"/> fish locale
     <br/>
-    <input type="text" id="fishingToolId" value="5"/> fishing tool id
+    <input type="text" id="fishingToolId" value="5000"/> fishing tool id
     <br/>
-    <input type="text" id="fishingToolItem" value="10"/> fishing tool item
+    <input type="text" id="fishingToolItem" value="5000"/> fishing tool item
     <br/>
-    <input type="text" name="fishingToolValue" id="fishingToolValue" value="rod"/> fishing tool value
+    <input type="text" name="fishingToolValue" id="fishingToolValue" value="spinning"/> fishing tool value
     <br/>
     <input type="text" name="fishingToolLocale" id="fishingToolLocale" value="en"/> fishing tool locale
     <br/>

@@ -2,6 +2,7 @@ package com.jrew.geocatch.repository.dao.database;
 
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.model.ViewBounds;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,17 +17,15 @@ import java.util.List;
  * Date: 7/31/13
  * Time: 9:46 PM
  */
-@Repository
 public class ImageDBManagerJPAImpl implements ImageDBManager {
 
     /** Limits max fetching images number per request**/
     private int maxImagesPerQuery;
 
-    /** Load images typed parameters query **/
+    @Value("#{queryProperties['query.images.load']}")
     private String loadImagesQuery;
 
-    public ImageDBManagerJPAImpl() {
-    }
+    public ImageDBManagerJPAImpl() {}
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -65,11 +64,4 @@ public class ImageDBManagerJPAImpl implements ImageDBManager {
         this.maxImagesPerQuery = maxImagesPerQuery;
     }
 
-    /**
-     *
-     * @param loadImagesQuery
-     */
-    public void setLoadImagesQuery(String loadImagesQuery) {
-        this.loadImagesQuery = loadImagesQuery;
-    }
 }

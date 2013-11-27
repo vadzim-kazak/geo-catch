@@ -25,12 +25,12 @@ public interface DomainPropertyDBManager {
     public DomainProperty loadDomainProperty(long id);
 
     /**
-     * Load domain properties for provided type
      *
      * @param type
+     * @param locale
      * @return
      */
-    public List<DomainProperty> loadDomainProperties(long type);
+    public List<DomainProperty> loadDomainProperties(long type, String locale);
 
     /**
      * Finds domain property
