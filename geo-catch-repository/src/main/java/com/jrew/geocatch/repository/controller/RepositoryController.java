@@ -1,5 +1,6 @@
 package com.jrew.geocatch.repository.controller;
 
+import com.jrew.geocatch.repository.model.DomainProperty;
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.model.ViewBounds;
 import com.jrew.geocatch.repository.service.DomainPropertyService;
@@ -28,10 +29,13 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/images")
-public class ImageController {
+public class RepositoryController {
 
     @Autowired
-    ServletContext servletContext;
+    ImageService imageService;
+
+    @Autowired
+    DomainPropertyService domainPropertyService;
 
     @Resource
     private Validator validator;
@@ -43,37 +47,25 @@ public class ImageController {
         image.setFile(file);
         ValidationUtils.validate(image, validator);
 
-        WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-
-        DomainPropertyService domainPropertyService = (DomainPropertyService) context.getBean("domainPropertyService");
         domainPropertyService.processDomainProperties(image.getDomainProperties());
-
-        ImageService imageService = (ImageService) context.getBean("imageService");
         imageService.uploadImage(image);
 
         return "imageUpload";
     }
 
-    @RequestMapping(value = "/load", method = RequestMethod.POST)
-    public  @ResponseBody List<Image> loadImage(@ModelAttribute("ViewBounds") ViewBounds viewBounds) throws IOException {
-
-        WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-
-        ImageService imageService = (ImageService) context.getBean("imageService");
-        List<Image> images = imageService.getImages(viewBounds);
-
-        return images;
-    }
-
     @RequestMapping(value = "/load/{northEastLat}/{northEastLng}/{southWestLat}/{southWestLng}",
                     method = RequestMethod.GET, produces = "application/json")
-    public  @ResponseBody List<Image> ajaxLoadImage(@Valid ViewBounds viewBounds) throws IOException {
+    public @ResponseBody List<Image> loadImage(@Valid ViewBounds viewBounds) {
 
-        WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-        ImageService imageService = (ImageService) context.getBean("imageProvider");
-        List<Image> images = imageService.getImages(viewBounds);
+        return imageService.getImages(viewBounds);
+    }
 
-        return images;
+    @RequestMapping(value = "/load/{type}/{locale}",
+                    method = RequestMethod.GET, produces = "application/json")
+    public List<DomainProperty> loadDomainInfo(@RequestParam("type") long type,
+                                               @RequestParam("locale") String locale) {
+
+        return domainPropertyService.loadDomainProperties(type, locale);
     }
 
 }
