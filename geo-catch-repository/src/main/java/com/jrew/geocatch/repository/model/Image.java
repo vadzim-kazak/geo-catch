@@ -32,7 +32,7 @@ public class Image {
     private long id;
 
     /** **/
-    private int userId;
+    private long userId;
 
     /** Description **/
     private String description;
@@ -40,12 +40,12 @@ public class Image {
     /** **/
     @NotNull
     @Range(min = -90, max = 90, message = "Invalid value")
-    private float latitude;
+    private double latitude;
 
     /** **/
     @NotNull
     @Range(min = -180, max = 180, message = "Invalid value")
-    private float longitude;
+    private double longitude;
 
     /** **/
     private String path;
@@ -107,7 +107,7 @@ public class Image {
     /**
      * @return
      */
-    public float getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
@@ -121,7 +121,7 @@ public class Image {
     /**
      * @return
      */
-    public float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
@@ -191,7 +191,7 @@ public class Image {
     /**
      * @return
      */
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 

@@ -22,6 +22,9 @@
 
     <bean id="domainPropertyDBManager" class="com.jrew.geocatch.repository.dao.database.DomainPropertyDBManagerJPAImpl" />
 
+    <bean id="criteriaSearchHelper" class="com.jrew.geocatch.repository.dao.database.CriteriaSearchHelperJPAImpl" />
+
+
     <bean id="databaseManager" class="com.jrew.geocatch.repository.dao.database.ImageDBManagerJPAImpl" scope="singleton" >
         <property name="maxImagesPerQuery" value="${databaseManager.maxImagesPerQuery}" />
     </bean>

@@ -5,16 +5,15 @@ import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.model.ViewBounds;
 import com.jrew.geocatch.repository.service.DomainPropertyService;
 import com.jrew.geocatch.repository.service.ImageService;
+import com.jrew.geocatch.repository.util.UrlUtils;
 import com.jrew.geocatch.repository.util.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.Validator;
 import java.io.IOException;
@@ -55,9 +54,10 @@ public class RepositoryController {
 
     @RequestMapping(value = "/load/{northEastLat}/{northEastLng}/{southWestLat}/{southWestLng}",
                     method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody List<Image> loadImage(@Valid ViewBounds viewBounds) {
+    public @ResponseBody List<Image> loadImage(@Valid ViewBounds viewBounds, HttpServletRequest httpServletRequest) {
 
-        return imageService.getImages(viewBounds);
+        return imageService.getImages(viewBounds,
+                UrlUtils.createSearchCriteria(httpServletRequest.getQueryString()));
     }
 
     @RequestMapping(value = "/load/{type}/{locale}",

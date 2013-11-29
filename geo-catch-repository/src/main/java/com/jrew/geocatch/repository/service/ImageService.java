@@ -5,22 +5,22 @@ import com.jrew.geocatch.repository.model.ViewBounds;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
- *
- * Represents
+ * Represents images manipulation functionality.
  */
 public interface ImageService {
 
     /**
      *
      * @param viewBounds
+     * @param searchCriteria
      * @return
      */
-    public List<Image> getImages(ViewBounds viewBounds);
+    public List<Image> getImages(ViewBounds viewBounds, Map<String, String> searchCriteria);
 
     /**
-     *
      * @param image
      * @throws IOException
      */

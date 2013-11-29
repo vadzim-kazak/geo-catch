@@ -1,15 +1,23 @@
 package com.jrew.geocatch.repository.dao.database;
 
 import com.jrew.geocatch.repository.model.Image;
+import com.jrew.geocatch.repository.model.Image_;
 import com.jrew.geocatch.repository.model.ViewBounds;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,6 +32,10 @@ public class ImageDBManagerJPAImpl implements ImageDBManager {
 
     @Value("#{queryProperties['query.images.load']}")
     private String loadImagesQuery;
+
+    /** **/
+    @Autowired
+    private CriteriaSearchHelper criteriaSearchHelper;
 
     public ImageDBManagerJPAImpl() {}
 
@@ -42,18 +54,25 @@ public class ImageDBManagerJPAImpl implements ImageDBManager {
     public void deleteImage(Image image) {}
 
     @Override
-    public List<Image> loadImages(ViewBounds viewBounds) {
+    public List<Image> loadImages(ViewBounds viewBounds, Map<String, String> searchCriteria) {
 
-        TypedQuery<Image> query = entityManager.createQuery(loadImagesQuery, Image.class);
-        query.setParameter(1, viewBounds.getNorthEastLat());
-        query.setParameter(2, viewBounds.getNorthEastLng());
-        query.setParameter(3, viewBounds.getSouthWestLat());
-        query.setParameter(4, viewBounds.getSouthWestLng());
+
+        CriteriaQuery<Image> criteriaQuery = criteriaSearchHelper.createSearchImagesCriteria(viewBounds, searchCriteria);
+
+        TypedQuery<Image> query = entityManager.createQuery(criteriaQuery);
 
         query.setFirstResult(0);
         query.setMaxResults(maxImagesPerQuery);
 
         return query.getResultList();
+    }
+
+
+    private List<Predicate> createPredicates(List<Predicate> predicates) {
+
+
+
+        return predicates;
     }
 
     /**

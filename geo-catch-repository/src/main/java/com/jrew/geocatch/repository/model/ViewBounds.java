@@ -18,22 +18,22 @@ public class ViewBounds {
     /** **/
     @NotNull
     @Range(min = -90, max = 90, message = "Invalid value")
-    private float northEastLat;
+    private double northEastLat;
 
     /** **/
     @NotNull
     @Range(min = -180, max = 180, message = "Invalid value")
-    private float northEastLng;
+    private double northEastLng;
 
     /** **/
     @NotNull
     @Range(min = -90, max = 90, message = "Invalid value")
-    private float southWestLat;
+    private double southWestLat;
 
     /** **/
     @NotNull
     @Range(min = -180, max = 180, message = "Invalid value")
-    private float southWestLng;
+    private double southWestLng;
 
     /**
      *
@@ -47,10 +47,10 @@ public class ViewBounds {
      * @param southWestLat
      * @param southWestLng
      */
-    public ViewBounds(float northEastLat,
-                      float northEastLng,
-                      float southWestLat,
-                      float southWestLng) {
+    public ViewBounds(double northEastLat,
+                      double northEastLng,
+                      double southWestLat,
+                      double southWestLng) {
 
         this.northEastLat = northEastLat;
         this.northEastLng = northEastLng;
@@ -62,7 +62,7 @@ public class ViewBounds {
      *
      * @return
      */
-    public float getNorthEastLat() {
+    public double getNorthEastLat() {
         return northEastLat;
     }
 
@@ -70,7 +70,7 @@ public class ViewBounds {
      *
      * @return
      */
-    public float getNorthEastLng() {
+    public double getNorthEastLng() {
         return northEastLng;
     }
 
@@ -78,7 +78,7 @@ public class ViewBounds {
      *
      * @return
      */
-    public float getSouthWestLat() {
+    public double getSouthWestLat() {
         return southWestLat;
     }
 
@@ -86,35 +86,35 @@ public class ViewBounds {
      *
      * @return
      */
-    public float getSouthWestLng() {
+    public double getSouthWestLng() {
         return southWestLng;
     }
 
     /**
      * @param northEastLat
      */
-    public void setNorthEastLat(float northEastLat) {
+    public void setNorthEastLat(double northEastLat) {
         this.northEastLat = northEastLat;
     }
 
     /**
      * @param northEastLng
      */
-    public void setNorthEastLng(float northEastLng) {
+    public void setNorthEastLng(double northEastLng) {
         this.northEastLng = northEastLng;
     }
 
     /**
      * @param southWestLat
      */
-    public void setSouthWestLat(float southWestLat) {
+    public void setSouthWestLat(double southWestLat) {
         this.southWestLat = southWestLat;
     }
 
     /**
      * @param southWestLng
      */
-    public void setSouthWestLng(float southWestLng) {
+    public void setSouthWestLng(double southWestLng) {
         this.southWestLng = southWestLng;
     }
 

@@ -4,9 +4,10 @@ import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.model.ViewBounds;
 
 import java.util.List;
+import java.util.Map;
 
 /**
- * Presents Image processing functionality
+ * Represents Image processing functionality on persistence layer
  */
 public interface ImageDBManager {
 
@@ -24,8 +25,10 @@ public interface ImageDBManager {
 
     /**
      *
+     *
      * @param viewBounds
+     * @param searchCriteria
      * @return
      */
-    public List<Image> loadImages(ViewBounds viewBounds);
+    public List<Image> loadImages(ViewBounds viewBounds, Map<String, String> searchCriteria);
 }

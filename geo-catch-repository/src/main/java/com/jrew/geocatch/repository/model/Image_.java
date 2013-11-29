@@ -1,0 +1,56 @@
+package com.jrew.geocatch.repository.model;
+
+import javax.persistence.metamodel.CollectionAttribute;
+import javax.persistence.metamodel.SingularAttribute;
+import javax.persistence.metamodel.StaticMetamodel;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: Kazak_VV
+ * Date: 29.11.13
+ * Time: 16:41
+ * To change this template use File | Settings | File Templates.
+ */
+
+@StaticMetamodel(Image.class)
+/**
+ *  Metamodel class for {@link Image} entity.
+ */
+public class Image_ {
+
+    /** **/
+    public static volatile SingularAttribute<Image, Long> id;
+
+    /** **/
+    public static volatile SingularAttribute<Image, Long> userId;
+
+    /** **/
+    public static volatile SingularAttribute<Image, String> description;
+
+    /** **/
+    public static volatile SingularAttribute<Image, Double> latitude;
+
+    /** **/
+    public static volatile SingularAttribute<Image, Double> longitude;
+
+    /** **/
+    public static volatile SingularAttribute<Image, String> path;
+
+    /** **/
+    public static volatile SingularAttribute<Image, String> thumbnailPath;
+
+    /** **/
+    public static volatile SingularAttribute<Image, Date> date;
+
+    /** **/
+    public static volatile SingularAttribute<Image, Integer> rating;
+
+    /** **/
+    public static volatile SingularAttribute<Image, Boolean> isDeleted;
+
+    /** **/
+    public static volatile CollectionAttribute<Image, DomainProperty> domainProperties;
+
+}

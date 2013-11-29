@@ -20,7 +20,7 @@ public interface FolderLocator {
      * @param longitude
      * @return
      */
-    public String getFolderAbsolutePath(float latitude, float longitude) throws IOException;
+    public String getFolderAbsolutePath(double latitude, double longitude) throws IOException;
 
     /**
      * Gets full path to images root folder

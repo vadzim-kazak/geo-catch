@@ -22,16 +22,16 @@ public class FolderLocatorImpl implements FolderLocator {
     private static final Logger logger = LogManager.getLogger(FolderLocatorImpl.class);
 
     /** Max latitude value **/
-    private final static float MAX_LATITUDE_VALUE = 90f;
+    private final static double MAX_LATITUDE_VALUE = 90d;
 
     /** Min latitude value **/
-    private final static float MIN_LATITUDE_VALUE = -90f;
+    private final static double MIN_LATITUDE_VALUE = -90d;
 
     /** Max longitude value **/
-    private final static float MAX_LONGITUDE_VALUE = 180f;
+    private final static double MAX_LONGITUDE_VALUE = 180d;
 
     /** Min longitude value **/
-    private final static float MIN_LONGITUDE_VALUE = -180f;
+    private final static double MIN_LONGITUDE_VALUE = -180d;
 
     /** Folder's name is composed from area coordinates:
      * <lat1>separator<long1>separator<lat2>separator<long2>
@@ -45,7 +45,7 @@ public class FolderLocatorImpl implements FolderLocator {
      *  Each folder will store images from some area with lat1, long1, lat2, long2 coordinates.
      *  This variable set degrees range for all folders, i.e. |lat1 - lat2| value.
      *  **/
-        private final float foldersDegreeCoverage;
+     private final double foldersDegreeCoverage;
 
     /**
      *  Util class for degree range value representation.
@@ -53,10 +53,10 @@ public class FolderLocatorImpl implements FolderLocator {
     public class DegreeRange {
 
         /** Start degree range value **/
-        private float startDegree;
+        private double startDegree;
 
         /** End degree range value **/
-        private float endDegree;
+        private double endDegree;
 
         /**
          */
@@ -66,28 +66,28 @@ public class FolderLocatorImpl implements FolderLocator {
         /**
          * @return
          */
-        float getStartDegree() {
+        public double getStartDegree() {
             return startDegree;
         }
 
         /**
          * @param startDegree
          */
-        void setStartDegree(float startDegree) {
+        public void setStartDegree(double startDegree) {
             this.startDegree = startDegree;
         }
 
         /**
          * @return
          */
-        float getEndDegree() {
+        public double getEndDegree() {
             return endDegree;
         }
 
         /**
          * @param endDegree
          */
-        void setEndDegree(float endDegree) {
+        public void setEndDegree(double endDegree) {
             this.endDegree = endDegree;
         }
     }
@@ -118,8 +118,18 @@ public class FolderLocatorImpl implements FolderLocator {
     }
 
     @Override
-    public String getFolderAbsolutePath(float latitude, float longitude) throws IOException {
+    public String getFolderAbsolutePath(double latitude, double longitude) throws IOException {
         return  rootFolderPath + File.separator + getFolder(latitude, longitude);
+    }
+
+    /**
+     * Gets folder latitude range for provided latitude value.
+     *
+     * @param latitude
+     * @return
+     */
+    private DegreeRange getFolderLatitudeRange(double latitude) {
+        return  getFolderDegreeRange(latitude, MIN_LATITUDE_VALUE, MAX_LATITUDE_VALUE);
     }
 
     /**
@@ -129,7 +139,7 @@ public class FolderLocatorImpl implements FolderLocator {
      * @param longitude
      * @return folder name
      */
-    private String getFolder(float latitude, float longitude) {
+    private String getFolder(double latitude, double longitude) {
 
         DegreeRange latitudeRange = getFolderLatitudeRange(latitude);
         DegreeRange longitudeRange = getFolderLongitudeRange(longitude);
@@ -140,19 +150,9 @@ public class FolderLocatorImpl implements FolderLocator {
         */
 
         return (int)latitudeRange.getStartDegree() + folderDegreeSeparator +
-               (int)longitudeRange.getStartDegree() + folderDegreeSeparator +
-               (int)latitudeRange.getEndDegree() + folderDegreeSeparator +
-               (int)longitudeRange.getEndDegree();
-    }
-
-    /**
-     * Gets folder latitude range for provided latitude value.
-     *
-     * @param latitude
-     * @return
-     */
-    private DegreeRange getFolderLatitudeRange(float latitude) {
-        return  getFolderDegreeRange(latitude, MIN_LATITUDE_VALUE, MAX_LATITUDE_VALUE);
+                (int)longitudeRange.getStartDegree() + folderDegreeSeparator +
+                (int)latitudeRange.getEndDegree() + folderDegreeSeparator +
+                (int)longitudeRange.getEndDegree();
     }
 
     /**
@@ -161,7 +161,7 @@ public class FolderLocatorImpl implements FolderLocator {
      * @param longitude
      * @return
      */
-    private DegreeRange getFolderLongitudeRange(float longitude) {
+    private DegreeRange getFolderLongitudeRange(double longitude) {
         return getFolderDegreeRange(longitude, MIN_LONGITUDE_VALUE, MAX_LONGITUDE_VALUE);
     }
 
@@ -176,11 +176,11 @@ public class FolderLocatorImpl implements FolderLocator {
      * @param maxValue
      * @return
      */
-    private DegreeRange getFolderDegreeRange(float degree, float minValue, float maxValue){
+    private DegreeRange getFolderDegreeRange(double degree, double minValue, double maxValue){
 
         DegreeRange degreeRange = new DegreeRange();
 
-        for (float i = minValue; i < maxValue + foldersDegreeCoverage; i = i + foldersDegreeCoverage) {
+        for (double i = minValue; i < maxValue + foldersDegreeCoverage; i = i + foldersDegreeCoverage) {
             if (i >= degree) {
                 degreeRange.setStartDegree(i - foldersDegreeCoverage);
                 if (i <= maxValue) {
