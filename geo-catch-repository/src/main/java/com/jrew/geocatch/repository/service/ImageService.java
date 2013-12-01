@@ -2,6 +2,7 @@ package com.jrew.geocatch.repository.service;
 
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.model.ViewBounds;
+import com.jrew.geocatch.repository.model.criteria.SearchCriteria;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,13 +15,13 @@ public interface ImageService {
 
     /**
      *
-     * @param viewBounds
      * @param searchCriteria
      * @return
      */
-    public List<Image> getImages(ViewBounds viewBounds, Map<String, String> searchCriteria);
+    public List<Image> getImages(SearchCriteria searchCriteria);
 
     /**
+     *
      * @param image
      * @throws IOException
      */

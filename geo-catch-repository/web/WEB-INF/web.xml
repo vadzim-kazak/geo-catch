@@ -22,7 +22,7 @@
 
     <servlet-mapping>
         <servlet-name>mvc-dispatcher</servlet-name>
-        <url-pattern>/spring/*</url-pattern>
+        <url-pattern>/repo/*</url-pattern>
     </servlet-mapping>
 
     <!-- Load spring beans definition files -->

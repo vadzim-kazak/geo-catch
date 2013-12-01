@@ -33,7 +33,7 @@ public class DomainPropertyServiceImpl implements DomainPropertyService {
     public void processDomainProperties(List<DomainProperty> uploadedDomainProperties) {
 
         for (DomainProperty uploadedDomainProperty : uploadedDomainProperties) {
-            processUploadedDomainProperty(uploadedDomainProperty);
+                processUploadedDomainProperty(uploadedDomainProperty);
         }
     }
 

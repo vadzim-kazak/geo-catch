@@ -1,8 +1,7 @@
 package com.jrew.geocatch.repository.dao.database;
 
 import com.jrew.geocatch.repository.model.Image;
-import com.jrew.geocatch.repository.model.Image_;
-import com.jrew.geocatch.repository.model.ViewBounds;
+import com.jrew.geocatch.repository.model.criteria.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,14 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.EntityType;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -54,10 +48,10 @@ public class ImageDBManagerJPAImpl implements ImageDBManager {
     public void deleteImage(Image image) {}
 
     @Override
-    public List<Image> loadImages(ViewBounds viewBounds, Map<String, String> searchCriteria) {
+    public List<Image> loadImages(SearchCriteria searchCriteria) {
 
 
-        CriteriaQuery<Image> criteriaQuery = criteriaSearchHelper.createSearchImagesCriteria(viewBounds, searchCriteria);
+        CriteriaQuery<Image> criteriaQuery = criteriaSearchHelper.createSearchImagesCriteria(searchCriteria);
 
         TypedQuery<Image> query = entityManager.createQuery(criteriaQuery);
 

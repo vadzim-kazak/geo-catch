@@ -22,6 +22,20 @@ import java.util.List;
 public class Image {
 
     /**
+     *  Image privacy level
+     */
+    public enum PrivacyLevel {
+
+        /** **/
+        PRIVATE,
+
+        FRIENDS_ONLY,
+
+        /** **/
+        PUBLIC
+    }
+
+    /**
      *
      */
     public Image() {}
@@ -33,6 +47,9 @@ public class Image {
 
     /** **/
     private long userId;
+
+    /** **/
+    private String deviceId;
 
     /** Description **/
     private String description;
@@ -68,13 +85,17 @@ public class Image {
     /** **/
     @Transient
     @NotNull
-    MultipartFile file;
+    private MultipartFile file;
 
     @ManyToMany
     @JoinTable( name="IMAGE_DOMAIN_PROPERTY",
                 joinColumns={@JoinColumn(name="image_id", referencedColumnName="id")},
                 inverseJoinColumns={@JoinColumn(name="domain_property_id", referencedColumnName="id")})
     private List<DomainProperty> domainProperties;
+
+    /** **/
+    @Enumerated(EnumType.ORDINAL)
+    private PrivacyLevel privacyLevel;
 
     /**
      * @return
@@ -102,34 +123,6 @@ public class Image {
      */
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    /**
-     * @return
-     */
-    public double getLatitude() {
-        return latitude;
-    }
-
-    /**
-     * @param latitude
-     */
-    public void setLatitude(float latitude) {
-        this.latitude = latitude;
-    }
-
-    /**
-     * @return
-     */
-    public double getLongitude() {
-        return longitude;
-    }
-
-    /**
-     * @param longitude
-     */
-    public void setLongitude(float longitude) {
-        this.longitude = longitude;
     }
 
     /**
@@ -191,20 +184,6 @@ public class Image {
     /**
      * @return
      */
-    public long getUserId() {
-        return userId;
-    }
-
-    /**
-     * @param userId
-     */
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    /**
-     * @return
-     */
     public boolean isDeleted() {
         return isDeleted;
     }
@@ -249,12 +228,93 @@ public class Image {
         this.domainProperties = domainProperties;
     }
 
+    /**
+     *
+     * @return
+     */
+    public long getUserId() {
+        return userId;
+    }
+
+    /**
+     *
+     * @param userId
+     */
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    /**
+     *
+     * @param deviceId
+     */
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public double getLatitude() {
+        return latitude;
+    }
+
+    /**
+     *
+     * @param latitude
+     */
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public double getLongitude() {
+        return longitude;
+    }
+
+    /**
+     *
+     * @param longitude
+     */
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public PrivacyLevel getPrivacyLevel() {
+        return privacyLevel;
+    }
+
+    /**
+     *
+     * @param privacyLevel
+     */
+    public void setPrivacyLevel(PrivacyLevel privacyLevel) {
+        this.privacyLevel = privacyLevel;
+    }
+
     @Override
     public String toString() {
 
         StringBuilder message = new StringBuilder();
         message.append(id).append(':')
                .append(userId).append(':')
+               .append(deviceId).append(':')
                .append(description).append(':')
                .append(latitude).append(':')
                .append(longitude).append(':')
@@ -262,7 +322,8 @@ public class Image {
                .append(thumbnailPath).append(':')
                .append(date).append(':')
                .append(rating).append(':')
-               .append(isDeleted);
+               .append(isDeleted)
+               .append(privacyLevel.toString());
 
         return message.toString();
     }

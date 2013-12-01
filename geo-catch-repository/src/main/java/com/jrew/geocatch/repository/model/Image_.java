@@ -1,6 +1,10 @@
 package com.jrew.geocatch.repository.model;
 
+import com.jrew.geocatch.repository.model.DomainProperty;
+import com.jrew.geocatch.repository.model.Image;
+
 import javax.persistence.metamodel.CollectionAttribute;
+import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import java.util.Date;
@@ -27,6 +31,9 @@ public class Image_ {
     public static volatile SingularAttribute<Image, Long> userId;
 
     /** **/
+    public static volatile SingularAttribute<Image, String> deviceId;
+
+    /** **/
     public static volatile SingularAttribute<Image, String> description;
 
     /** **/
@@ -51,6 +58,9 @@ public class Image_ {
     public static volatile SingularAttribute<Image, Boolean> isDeleted;
 
     /** **/
-    public static volatile CollectionAttribute<Image, DomainProperty> domainProperties;
+    public static volatile ListAttribute<Image, DomainProperty> domainProperties;
+
+    /** **/
+    public static volatile SingularAttribute<Image, Image.PrivacyLevel> privacyLevel;
 
 }

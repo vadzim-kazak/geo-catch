@@ -3,11 +3,10 @@ package com.jrew.geocatch.repository.service;
 import com.jrew.geocatch.repository.dao.database.ImageDBManager;
 import com.jrew.geocatch.repository.dao.filesystem.FileSystemManager;
 import com.jrew.geocatch.repository.model.Image;
-import com.jrew.geocatch.repository.model.ViewBounds;
+import com.jrew.geocatch.repository.model.criteria.SearchCriteria;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Implementation for {@link ImageService} interface
@@ -26,9 +25,9 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public List<Image> getImages(ViewBounds viewBounds, Map<String, String> searchCriteria) {
+    public List<Image> getImages(SearchCriteria searchCriteria) {
 
-        List<Image> images = imageDBManager.loadImages(viewBounds, searchCriteria);
+        List<Image> images = imageDBManager.loadImages(searchCriteria);
         return fileSystemManager.updateImagesPath(images);
     }
 

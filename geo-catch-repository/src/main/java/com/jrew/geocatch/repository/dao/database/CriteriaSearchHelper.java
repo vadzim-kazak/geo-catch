@@ -2,6 +2,7 @@ package com.jrew.geocatch.repository.dao.database;
 
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.model.ViewBounds;
+import com.jrew.geocatch.repository.model.criteria.SearchCriteria;
 
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.Map;
@@ -13,10 +14,9 @@ public interface CriteriaSearchHelper {
 
     /**
      *
-     * @param viewBounds
      * @param searchCriteria
      * @return
      */
-    public CriteriaQuery<Image> createSearchImagesCriteria(ViewBounds viewBounds, Map<String, String> searchCriteria);
+    public CriteriaQuery<Image> createSearchImagesCriteria(SearchCriteria searchCriteria);
 
 }

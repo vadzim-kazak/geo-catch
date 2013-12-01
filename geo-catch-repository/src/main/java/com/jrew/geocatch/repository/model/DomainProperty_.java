@@ -1,10 +1,13 @@
 package com.jrew.geocatch.repository.model;
 
+import com.jrew.geocatch.repository.model.DomainProperty;
+import com.jrew.geocatch.repository.model.Image;
+
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
 /**
- * Metamodel class for {@link Image} entity.
+ * Metamodel class for {@link com.jrew.geocatch.repository.model.Image} entity.
  */
 @StaticMetamodel(DomainProperty.class)
 public class DomainProperty_ {

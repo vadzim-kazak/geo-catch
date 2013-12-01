@@ -2,6 +2,7 @@ package com.jrew.geocatch.repository.dao.database;
 
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.model.ViewBounds;
+import com.jrew.geocatch.repository.model.criteria.SearchCriteria;
 
 import java.util.List;
 import java.util.Map;
@@ -26,9 +27,9 @@ public interface ImageDBManager {
     /**
      *
      *
-     * @param viewBounds
+     *
      * @param searchCriteria
      * @return
      */
-    public List<Image> loadImages(ViewBounds viewBounds, Map<String, String> searchCriteria);
+    public List<Image> loadImages(SearchCriteria searchCriteria);
 }

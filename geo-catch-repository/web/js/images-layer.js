@@ -30,11 +30,50 @@ var ImageLayer = function(map) {
      *
      */
     loadImages = function() {
+
+        var currentLocale="ru";
+
+        requestData = {
+            viewBounds : getViewBounds(),
+            deviceId: $('#deviceId').val(),
+            owner : $('#owner').val(),
+            domainProperties: []
+        }
+
+        var fish = $("#fish").val();
+        if (fish && fish.length > 0 ) {
+            requestData.domainProperties.push({
+                type: 1,
+                locale : currentLocale,
+                item : $("#fish").val()
+            });
+        }
+
+        var tool = $("#fishingTool").val();
+        if (tool && tool.length > 0) {
+            requestData.domainProperties.push({
+                type: 2,
+                locale : currentLocale,
+                item : $("#fishingTool").val()
+            });
+        }
+
+        var byte = $("#fishingByte").val();
+        if (byte && byte.length > 0) {
+            requestData.domainProperties.push({
+                type: 3,
+                locale : currentLocale,
+                item : $("#fishingByte").val()
+            });
+        }
+
         // make ajax call to marker provide service
         $.ajax({
             dataType: "json",
             url: generateImageProviderUrl(),
-            data: null,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(requestData),
             success: imageProviderResponseHandler
         });
     }
@@ -43,23 +82,23 @@ var ImageLayer = function(map) {
      * @returns {string}
      */
     var generateImageProviderUrl = function() {
-        return imageProviderUrl + generateBoundsString();
+        return imageProviderUrl;
     }
 
     /**
      * @returns {string}
      */
-    var generateBoundsString = function() {
+    var getViewBounds = function() {
         // Get current view bounds
         var viewBounds = map.getBounds();
 
         var northEast = viewBounds.getNorthEast();
         var southWest = viewBounds.getSouthWest();
 
-        return northEast.lat() + "/" +
-            northEast.lng() + "/" +
-            southWest.lat() + "/" +
-            southWest.lng();
+        return { northEastLat : northEast.lat(),
+                 northEastLng : northEast.lng(),
+                 southWestLat : southWest.lat(),
+                 southWestLng : southWest.lng() }
     }
 
     /**
@@ -203,6 +242,18 @@ var ImageLayer = function(map) {
             var newIcon = createIcon(image);
             image.marker.setIcon(newIcon);
         }
+    }
+
+    this.refresh = function() {
+        for (var i = 0; i < images.length; i++){
+            var image = images[i];
+            // Remove marker from map
+            image.marker.setMap(null);
+        }
+
+        images = [];
+
+        loadImages();
     }
 
 }

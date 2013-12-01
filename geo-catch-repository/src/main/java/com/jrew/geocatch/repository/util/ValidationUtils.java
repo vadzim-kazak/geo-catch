@@ -1,7 +1,9 @@
 package com.jrew.geocatch.repository.util;
 
 import com.jrew.geocatch.repository.exception.ValidationException;
+import com.jrew.geocatch.repository.model.DomainProperty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -39,6 +41,27 @@ public class ValidationUtils {
             }
             throw new ValidationException(errors);
         }
+    }
+
+    /**
+     *
+     * @param domainProperty
+     * @return
+     */
+    private boolean validateDomainProperty(DomainProperty domainProperty) {
+        if (domainProperty != null) {
+
+            if (domainProperty.getId() > 0) {
+                return true;
+            }
+
+            if (domainProperty.getType() > 0 && !StringUtils.isEmpty(domainProperty.getValue()) &&
+                    !StringUtils.isEmpty(domainProperty.getLocale())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

@@ -2,45 +2,62 @@
 <head>
     <script src="js/jquery-1.10.2.js"></script>
     <script src="js/jquery.upload-1.0.2.min.js"></script>
+    <script src="js/domain.js"></script>
 
     <script type="text/javascript">
 
+        var defaultLocale = 'ru';
+
         function setImageData() {
             var image = {
-                userId : $('#userId').val(),
+                deviceId : $('#deviceId').val(),
                 description : $('#description').val(),
                 latitude : $('#latitude').val(),
                 longitude : $('#longitude').val(),
                 date : $('#date').val(),
+                privacyLevel : $('#privacyLevel').val(),
                 rating : $('#rating').val(),
                 domainProperties : [
                     {
-                        id : $('#fishId').val(),
-                        type : 1,
-                        item :   $('#fishItem').val(),
-                        locale :  $('#fishLocale').val(),
-                        value:  $('#fishValue').val()
-                    },
-                    {
-                        id :   $('#fishingToolId').val(),
-                        type : 2,
-                        item :   $('#fishingToolItem').val(),
-                        locale :  $('#fishingToolLocale').val(),
-                        value:  $('#fishingToolValue').val()
+                        id : $('#fishId').val()
                     }
                 ]
+            }
+
+            if ($("#fishingTool").val() != "") {
+                image.domainProperties.push({
+                    id : $('#fishingTool').val()
+                });
+            }
+
+            if ($("#fishingByte").val() != "") {
+                image.domainProperties.push({
+                    id : $('#fishingByte').val()
+                });
             }
 
             $('#image').val(JSON.stringify(image));
         }
 
+        $( document ).ready(function() {
+            populateDomainProperty('1', 'ru', 'fish');
+            populateDomainProperty('2', 'ru', 'fishingTool', false, true);
+            populateDomainProperty('3', 'ru', 'fishingBite', false, true);
+        });
+
     </script>
 
 </head>
 <body>
-<form action="${pageContext.request.contextPath}/spring/images/upload" method="post" enctype="multipart/form-data" >
-    <input type="text" name="userId" id="userId" value="1"/> User ID
+<form action="${pageContext.request.contextPath}/repo/images" method="post" enctype="multipart/form-data" >
+    <input type="text" id="deviceId" value="1"/> Device ID
     <br/>
+
+    <select id="privacyLevel">
+        <option value="PUBLIC" selected>Public</option>
+        <option value="PRIVATE">Private</option>
+    </select> Privacy Level<br/>
+
     <input type="text" name="description" id="description" value="bla"/> Description
     <br/>
     <input type="text" name="latitude" id="latitude" value="12"/> latitude
@@ -51,6 +68,18 @@
     <br/>
     <input type="text" name="rating" id="rating" value="1"/> rating
     <br/>
+
+    Fish: <select id="fish">
+          </select><br/>
+
+    Fishing tool: <select id="fishingTool">
+                  </select><br/>
+
+    Fishing bite: <select id="fishingBite">
+                  </select></br>
+
+    <!--
+    New domain properties: <br/>
     <input type="text" id="fishId" value="1"/> fish id
     <br/>
     <input type="text" id="fishItem" value="1"/> fish item
@@ -66,7 +95,9 @@
     <input type="text" name="fishingToolValue" id="fishingToolValue" value="spinning"/> fishing tool value
     <br/>
     <input type="text" name="fishingToolLocale" id="fishingToolLocale" value="en"/> fishing tool locale
-    <br/>
+    <hr/>
+    <br/> -->
+
     Load file: <input type="file" name="file" id="file" size="40" onclick="setImageData();"/>
     <br/>
     <input type="hidden" id="image" name="image">
