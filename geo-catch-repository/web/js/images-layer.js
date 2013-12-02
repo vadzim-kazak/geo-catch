@@ -67,6 +67,24 @@ var ImageLayer = function(map) {
             });
         }
 
+        if($("#hours").is(':checked')){
+            var dayPeriod = {
+                fromHour:  $("#fromHour").val(),
+                toHour: $("#toHour").val()
+            }
+
+            requestData.dayPeriod = dayPeriod;
+        }
+
+        if($("#months").is(':checked')){
+            var monthPeriod = {
+                fromHour:  $("#fromMonth").val(),
+                toHour: $("#toMonth").val()
+            }
+
+            requestData.monthPeriod = monthPeriod;
+        }
+
         // make ajax call to marker provide service
         $.ajax({
             dataType: "json",
@@ -76,6 +94,7 @@ var ImageLayer = function(map) {
             data: JSON.stringify(requestData),
             success: imageProviderResponseHandler
         });
+
     }
 
     /**

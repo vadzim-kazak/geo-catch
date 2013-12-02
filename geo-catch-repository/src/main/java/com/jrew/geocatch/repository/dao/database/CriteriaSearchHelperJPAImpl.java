@@ -1,6 +1,8 @@
 package com.jrew.geocatch.repository.dao.database;
 
 import com.jrew.geocatch.repository.model.*;
+import com.jrew.geocatch.repository.model.criteria.DayPeriodSearchCriterion;
+import com.jrew.geocatch.repository.model.criteria.MonthPeriodSearchCriterion;
 import com.jrew.geocatch.repository.model.criteria.SearchCriteria;
 import org.springframework.util.StringUtils;
 
@@ -9,7 +11,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  *  Implements criteria query creation functionality under JPA specification
@@ -17,17 +18,13 @@ import java.util.Map;
 public class CriteriaSearchHelperJPAImpl implements CriteriaSearchHelper {
 
     /** **/
-    private static String OWNER_KEY = "owner";
+    private static String TIME_HOUR_KEY = "hour";
+
+    /** **/
+    private static String TIME_MONTH_KEY = "month";
 
     /** **/
     private static String OWNER_ANY_VALUE = "any";
-
-    /** **/
-    private static String OWNER_SELF_VALUE = "self";
-
-    /** **/
-    private static String DEVICE_ID = "deviceId";
-
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -48,15 +45,27 @@ public class CriteriaSearchHelperJPAImpl implements CriteriaSearchHelper {
         List<Predicate> predicates = new ArrayList<Predicate>();
 
         // Add view bound predicate
-        predicates.add(createViewBoundsCriteria(criteriaBuilder, image, searchCriteria));
+        predicates.add(createViewBoundsCriterion(criteriaBuilder, image, searchCriteria));
 
         // Add owner predicate
-        predicates.add(createOwnerCriteria(criteriaBuilder, image, searchCriteria));
+        predicates.add(createOwnerCriterion(criteriaBuilder, image, searchCriteria));
 
         // Add domainProperties predicate
-        Predicate domainPropertiesCriteria = createDomainInfoCriteria(criteriaBuilder, image, searchCriteria);
-        if (domainPropertiesCriteria != null) {
-            predicates.add(domainPropertiesCriteria);
+        Predicate domainPropertiesCriterion = createDomainInfoCriterion(criteriaBuilder, image, searchCriteria);
+        if (domainPropertiesCriterion != null) {
+            predicates.add(domainPropertiesCriterion);
+        }
+
+        // Add day period predicate
+        Predicate dayPeriodCriterion = createDayPeriodCriterion(criteriaBuilder, image, searchCriteria);
+        if (dayPeriodCriterion != null) {
+            predicates.add(dayPeriodCriterion);
+        }
+
+        // Add month period predicate
+        Predicate monthPeriodCriterion = createMonthPeriodCriterion(criteriaBuilder, image, searchCriteria);
+        if (monthPeriodCriterion != null) {
+            predicates.add(monthPeriodCriterion);
         }
 
         Predicate[] predicatesArray = predicates.toArray(new Predicate[predicates.size()]);
@@ -73,8 +82,8 @@ public class CriteriaSearchHelperJPAImpl implements CriteriaSearchHelper {
      * @param searchCriteria
      * @return
      */
-    private Predicate createViewBoundsCriteria(CriteriaBuilder criteriaBuilder,
-                                                     Root<Image> image, SearchCriteria searchCriteria) {
+    private Predicate createViewBoundsCriterion(CriteriaBuilder criteriaBuilder,
+                                                Root<Image> image, SearchCriteria searchCriteria) {
 
         ViewBounds viewBounds = searchCriteria.getViewBounds();
 
@@ -96,8 +105,8 @@ public class CriteriaSearchHelperJPAImpl implements CriteriaSearchHelper {
      * @param searchCriteria
      * @return
      */
-    private Predicate createOwnerCriteria(CriteriaBuilder criteriaBuilder,
-                                          Root<Image> image, SearchCriteria searchCriteria) {
+    private Predicate createOwnerCriterion(CriteriaBuilder criteriaBuilder,
+                                           Root<Image> image, SearchCriteria searchCriteria) {
         //searchCriteria.put(DEVICE_ID, "1");
 
         // Provided deviceId
@@ -145,8 +154,8 @@ public class CriteriaSearchHelperJPAImpl implements CriteriaSearchHelper {
      * @param searchCriteria
      * @return
      */
-    private Predicate createDomainInfoCriteria(CriteriaBuilder criteriaBuilder,
-                                               Root<Image> image, SearchCriteria searchCriteria) {
+    private Predicate createDomainInfoCriterion(CriteriaBuilder criteriaBuilder,
+                                                Root<Image> image, SearchCriteria searchCriteria) {
 
         List<DomainProperty> domainProperties = searchCriteria.getDomainProperties();
         if (domainProperties != null && !domainProperties.isEmpty()) {
@@ -169,4 +178,46 @@ public class CriteriaSearchHelperJPAImpl implements CriteriaSearchHelper {
         return null;
     }
 
+    /**
+     *
+     * @param criteriaBuilder
+     * @param image
+     * @param searchCriteria
+     * @return
+     */
+    private Predicate createDayPeriodCriterion(CriteriaBuilder criteriaBuilder,
+                                               Root<Image> image, SearchCriteria searchCriteria) {
+
+        DayPeriodSearchCriterion dayPeriodCriterion = searchCriteria.getDayPeriod();
+        if (dayPeriodCriterion != null) {
+            // Create expressions that extract time parts:
+            Expression<Integer> hour = criteriaBuilder.function(TIME_HOUR_KEY, Integer.class, image.get(Image_.date));
+            return criteriaBuilder. between(hour, dayPeriodCriterion.getFromHour(),
+                    dayPeriodCriterion.getToHour());
+        }
+
+        return null;
+    }
+
+
+    /**
+     *
+     * @param criteriaBuilder
+     * @param image
+     * @param searchCriteria
+     * @return
+     */
+    private Predicate createMonthPeriodCriterion(CriteriaBuilder criteriaBuilder,
+                                                 Root<Image> image, SearchCriteria searchCriteria) {
+
+        MonthPeriodSearchCriterion monthPeriodCriterion = searchCriteria.getMonthPeriod();
+        if (monthPeriodCriterion != null) {
+            // Create expressions that extract time parts:
+            Expression<Integer> month = criteriaBuilder.function(TIME_MONTH_KEY, Integer.class, image.get(Image_.date));
+            return criteriaBuilder.between(month, monthPeriodCriterion.getFromMonth(),
+                    monthPeriodCriterion.getToMonth());
+        }
+
+        return null;
+    }
 }

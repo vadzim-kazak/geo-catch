@@ -85,6 +85,14 @@
       Fishing bite: <select id="fishingBite">
       </select>
 
+      <input type="checkbox" id="hours"/>
+      Hours from: <input type="text" id="fromHour" value="1" size="2"/>
+      to: <input type="text" id="toHour" value="24" size="2"/>
+
+      <input type="checkbox" id="months" />
+      Months from: <input type="text" id="fromMonth" value="1" size="2"/>
+      to: <input type="text" id="toMonth" value="12" size="2"/>
+
      <input type="button" id="refresh" value="Refresh" >
   </div>
   <div id="map-canvas"></div>
