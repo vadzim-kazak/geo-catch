@@ -19,20 +19,22 @@
                 rating : $('#rating').val(),
                 domainProperties : [
                     {
-                        id : $('#fishId').val()
+                        id : $('#fish').val()
                     }
                 ]
             }
 
-            if ($("#fishingTool").val() != "") {
+            var fishingTool = $("#fishingTool").val();
+            if (fishingTool && fishingTool.length > 0) {
                 image.domainProperties.push({
-                    id : $('#fishingTool').val()
+                    id : fishingTool
                 });
             }
 
-            if ($("#fishingByte").val() != "") {
+            var fishingByte = $("#fishingBite").val();
+            if (fishingByte && fishingByte.length > 0) {
                 image.domainProperties.push({
-                    id : $('#fishingByte').val()
+                    id : fishingByte
                 });
             }
 

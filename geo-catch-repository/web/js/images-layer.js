@@ -45,7 +45,7 @@ var ImageLayer = function(map) {
             requestData.domainProperties.push({
                 type: 1,
                 locale : currentLocale,
-                item : $("#fish").val()
+                item : fish
             });
         }
 
@@ -54,16 +54,16 @@ var ImageLayer = function(map) {
             requestData.domainProperties.push({
                 type: 2,
                 locale : currentLocale,
-                item : $("#fishingTool").val()
+                item : tool
             });
         }
 
-        var byte = $("#fishingByte").val();
-        if (byte && byte.length > 0) {
+        var bite = $("#fishingBite").val();
+        if (bite && bite.length > 0) {
             requestData.domainProperties.push({
                 type: 3,
                 locale : currentLocale,
-                item : $("#fishingByte").val()
+                item : bite
             });
         }
 

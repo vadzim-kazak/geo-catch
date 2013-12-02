@@ -151,14 +151,14 @@ public class CriteriaSearchHelperJPAImpl implements CriteriaSearchHelper {
         List<DomainProperty> domainProperties = searchCriteria.getDomainProperties();
         if (domainProperties != null && !domainProperties.isEmpty()) {
 
-            // Perform join to have possibility to search by Domain Properties
-            Join domainPropertyJoin = image.join(Image_.domainProperties);
             List<Predicate> domainPropertyPredicates = new ArrayList<Predicate>();
 
             for (DomainProperty domainProperty : domainProperties) {
+                // Perform join to have possibility to search by Domain Properties
+                Join domainPropertyJoin = image.join(Image_.domainProperties);
+
                 Predicate domainPropertyPredicate =
-                        //criteriaBuilder.equal(domainPropertyJoin.get(DomainProperty_.item), (Long) domainProperty.getType());
-                        criteriaBuilder.equal(domainPropertyJoin.get(DomainProperty_.item), domainProperty.getType());
+                        criteriaBuilder.equal(domainPropertyJoin.get(DomainProperty_.item), domainProperty.getItem());
                 domainPropertyPredicates.add(domainPropertyPredicate);
             }
 
