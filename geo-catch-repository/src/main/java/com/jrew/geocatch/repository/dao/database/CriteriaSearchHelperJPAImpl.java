@@ -192,8 +192,9 @@ public class CriteriaSearchHelperJPAImpl implements CriteriaSearchHelper {
         if (dayPeriodCriterion != null) {
             // Create expressions that extract time parts:
             Expression<Integer> hour = criteriaBuilder.function(TIME_HOUR_KEY, Integer.class, image.get(Image_.date));
-            return criteriaBuilder. between(hour, dayPeriodCriterion.getFromHour(),
-                    dayPeriodCriterion.getToHour());
+            Predicate fromHour = criteriaBuilder.greaterThanOrEqualTo(hour, dayPeriodCriterion.getFromHour());
+            Predicate toHour = criteriaBuilder.lessThan(hour,dayPeriodCriterion.getToHour());
+            return criteriaBuilder.and(fromHour, toHour);
         }
 
         return null;
@@ -214,8 +215,9 @@ public class CriteriaSearchHelperJPAImpl implements CriteriaSearchHelper {
         if (monthPeriodCriterion != null) {
             // Create expressions that extract time parts:
             Expression<Integer> month = criteriaBuilder.function(TIME_MONTH_KEY, Integer.class, image.get(Image_.date));
-            return criteriaBuilder.between(month, monthPeriodCriterion.getFromMonth(),
-                    monthPeriodCriterion.getToMonth());
+            Predicate fromMonth = criteriaBuilder.greaterThanOrEqualTo(month, monthPeriodCriterion.getFromMonth());
+            Predicate toMonth = criteriaBuilder.lessThan(month, monthPeriodCriterion.getToMonth());
+            return criteriaBuilder.and(fromMonth, toMonth);
         }
 
         return null;

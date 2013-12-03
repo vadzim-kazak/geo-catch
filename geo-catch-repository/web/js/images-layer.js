@@ -78,8 +78,8 @@ var ImageLayer = function(map) {
 
         if($("#months").is(':checked')){
             var monthPeriod = {
-                fromHour:  $("#fromMonth").val(),
-                toHour: $("#toMonth").val()
+                fromMonth:  $("#fromMonth").val(),
+                toMonth: $("#toMonth").val()
             }
 
             requestData.monthPeriod = monthPeriod;
