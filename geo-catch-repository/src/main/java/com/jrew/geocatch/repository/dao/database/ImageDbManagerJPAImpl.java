@@ -50,11 +50,9 @@ public class ImageDBManagerJPAImpl implements ImageDBManager {
     @Override
     public List<Image> loadImages(SearchCriteria searchCriteria) {
 
-
         CriteriaQuery<Image> criteriaQuery = criteriaSearchHelper.createSearchImagesCriteria(searchCriteria);
 
         TypedQuery<Image> query = entityManager.createQuery(criteriaQuery);
-
         query.setFirstResult(0);
         query.setMaxResults(maxImagesPerQuery);
 

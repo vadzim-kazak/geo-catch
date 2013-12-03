@@ -39,9 +39,6 @@ public class CriteriaSearchHelperJPAImpl implements CriteriaSearchHelper {
         // Root criteria instance
         Root<Image> image = criteriaQuery.from(Image.class);
 
-        // Fetch all domain properties during search - emulate EAGER fetch strategy
-        image.fetch(Image_.domainProperties);
-
         List<Predicate> predicates = new ArrayList<Predicate>();
 
         // Add view bound predicate

@@ -1,5 +1,6 @@
 package com.jrew.geocatch.repository.controller;
 
+import com.jrew.geocatch.repository.model.ClientImagePreview;
 import com.jrew.geocatch.repository.model.DomainProperty;
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.model.criteria.SearchCriteria;
@@ -49,10 +50,18 @@ public class RepositoryController {
         return "imageUpload";
     }
 
-//    @RequestMapping(value = "/load/{northEastLat}/{northEastLng}/{southWestLat}/{southWestLng}",
-//                    method = RequestMethod.GET, produces = "application/json")
-           @RequestMapping(value = "images", method = RequestMethod.POST, produces = "application/json")
-    public @ResponseBody List<Image> loadImage(@RequestBody SearchCriteria searchCriteria) {
+    @RequestMapping(value = "/images/{imageId}", method = RequestMethod.POST)
+    public void updateImage(@RequestBody Image image) {
+
+    }
+
+    @RequestMapping(value = "/images/{imageId}", method = RequestMethod.DELETE)
+    public void deleteImage(@RequestBody Image image) {
+
+    }
+
+    @RequestMapping(value = "images", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody List<ClientImagePreview> loadImage(@RequestBody SearchCriteria searchCriteria) {
 
         return imageService.getImages(searchCriteria);
     }

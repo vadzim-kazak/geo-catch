@@ -80,9 +80,6 @@ public class Image {
     private int rating;
 
     /** **/
-    private boolean isDeleted;
-
-    /** **/
     @Transient
     @NotNull
     private MultipartFile file;
@@ -179,21 +176,6 @@ public class Image {
      */
     public void setRating(int rating) {
         this.rating = rating;
-    }
-
-    /**
-     * @return
-     */
-    public boolean isDeleted() {
-        return isDeleted;
-    }
-
-    /**
-     *
-     * @param deleted
-     */
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
     }
 
     /**
@@ -322,7 +304,6 @@ public class Image {
                .append(thumbnailPath).append(':')
                .append(date).append(':')
                .append(rating).append(':')
-               .append(isDeleted)
                .append(privacyLevel.toString());
 
         return message.toString();
