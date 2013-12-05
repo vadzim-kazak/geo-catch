@@ -1,14 +1,12 @@
-package com.jrew.geocatch.repository.model;
+package com.jrew.geocatch.repository.model.metamodel;
 
 import com.jrew.geocatch.repository.model.DomainProperty;
 import com.jrew.geocatch.repository.model.Image;
 
-import javax.persistence.metamodel.CollectionAttribute;
 import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,7 +16,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 
-@StaticMetamodel(Image.class)
+@StaticMetamodel(com.jrew.geocatch.repository.model.Image.class)
 /**
  *  Metamodel class for {@link Image} entity.
  */
