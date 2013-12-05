@@ -64,6 +64,7 @@
         <constructor-arg name="dateFormatPattern" value="${logger.dateFormatPattern}"/>
     </bean>
 
-    <bean id="clientImageConverter" class="com.jrew.geocatch.repository.converter.ClientImageConverter" />
+    <bean class="com.jrew.geocatch.repository.converter.ClientImagePreviewConverter" />
+    <bean class="com.jrew.geocatch.repository.converter.ClientImageConverter" />
 
 </beans>

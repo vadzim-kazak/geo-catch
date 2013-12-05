@@ -35,11 +35,6 @@ public class Image {
         PUBLIC
     }
 
-    /**
-     *
-     */
-    public Image() {}
-
     /** Image id **/
     @Id
     @GeneratedValue
@@ -93,6 +88,11 @@ public class Image {
     /** **/
     @Enumerated(EnumType.ORDINAL)
     private PrivacyLevel privacyLevel;
+
+    /**
+     *
+     */
+    public Image() {}
 
     /**
      * @return

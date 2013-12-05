@@ -1,23 +1,32 @@
 package com.jrew.geocatch.repository.converter;
 
-import com.jrew.geocatch.repository.model.ClientImagePreview;
+import com.jrew.geocatch.repository.model.ClientImage;
 import com.jrew.geocatch.repository.model.Image;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.converter.Converter;
 
 /**
- * Performs conversion {@link Image} entity to {@link com.jrew.geocatch.repository.model.ClientImagePreview} entity
+ * Performs conversion {@link com.jrew.geocatch.repository.model.Image} entity
+ * to {@link com.jrew.geocatch.repository.model.ClientImage} entity
  */
-public class ClientImageConverter implements Converter<Image, ClientImagePreview> {
+@Qualifier("clientImageConverter")
+public class ClientImageConverter implements Converter<Image, ClientImage> {
 
     @Override
-    public ClientImagePreview convert(Image image) {
+    public ClientImage convert(Image image) {
 
-        ClientImagePreview clientImagePreview = new ClientImagePreview();
-        clientImagePreview.setId(image.getId());
-        clientImagePreview.setLatitude(image.getLatitude());
-        clientImagePreview.setLongitude(image.getLongitude());
-        clientImagePreview.setThumbnailPath(image.getThumbnailPath());
+        ClientImage clientImage = new ClientImage();
 
-        return clientImagePreview;
+        clientImage.setId(image.getId());
+        clientImage.setDescription(image.getDescription());
+        clientImage.setLatitude(image.getLatitude());
+        clientImage.setLongitude(image.getLongitude());
+        clientImage.setPath(image.getPath());
+        clientImage.setDate(image.getDate());
+        clientImage.setDomainProperties(image.getDomainProperties());
+        clientImage.setRating(image.getRating());
+        clientImage.setPrivacyLevel(image.getPrivacyLevel());
+
+        return clientImage;
     }
 }

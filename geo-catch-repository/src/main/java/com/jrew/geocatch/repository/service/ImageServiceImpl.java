@@ -6,6 +6,7 @@ import com.jrew.geocatch.repository.model.ClientImagePreview;
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.model.criteria.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.converter.Converter;
 
 import java.io.IOException;
@@ -25,7 +26,8 @@ public class ImageServiceImpl implements ImageService {
 
     /** **/
     @Autowired
-    private Converter<Image, ClientImagePreview> clientImageConverter;
+    @Qualifier("clientImagePreviewConverter")
+    private Converter<Image, ClientImagePreview> clientImagePreviewConverter;
 
     public ImageServiceImpl(FileSystemManager fileSystemManager, ImageDBManager imageDBManager) {
         this.fileSystemManager = fileSystemManager;
@@ -65,7 +67,7 @@ public class ImageServiceImpl implements ImageService {
     private List<ClientImagePreview> convertToClientImages(List<Image> images) {
         List<ClientImagePreview> clientImagePreviews = new ArrayList<ClientImagePreview>(images.size());
         for (Image image : images) {
-            clientImagePreviews.add(clientImageConverter.convert(image));
+            clientImagePreviews.add(clientImagePreviewConverter.convert(image));
         }
         return clientImagePreviews;
     }
