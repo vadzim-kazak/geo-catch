@@ -1,5 +1,6 @@
 package com.jrew.geocatch.repository.controller;
 
+import com.jrew.geocatch.repository.model.ClientImage;
 import com.jrew.geocatch.repository.model.ClientImagePreview;
 import com.jrew.geocatch.repository.model.DomainProperty;
 import com.jrew.geocatch.repository.model.Image;
@@ -8,6 +9,7 @@ import com.jrew.geocatch.repository.service.DomainPropertyService;
 import com.jrew.geocatch.repository.service.ImageService;
 import com.jrew.geocatch.repository.util.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,13 +53,20 @@ public class RepositoryController {
     }
 
     @RequestMapping(value = "/images/{imageId}", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
     public void updateImage(@RequestBody Image image) {
-
+        //imageService.
     }
 
     @RequestMapping(value = "/images/{imageId}", method = RequestMethod.DELETE)
-    public void deleteImage(@RequestBody Image image) {
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteImage(@RequestParam("deviceId") String deviceId, @PathVariable("imageId") long imageId) {
+       // imageService.deleteImage(, image, );
+    }
 
+    @RequestMapping(value = "/images/{imageId}", method = RequestMethod.GET)
+    public @ResponseBody ClientImage getImage(@PathVariable("imageId") long imageId) {
+        return imageService.getImage(imageId);
     }
 
     @RequestMapping(value = "images", method = RequestMethod.POST, produces = "application/json")

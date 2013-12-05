@@ -59,14 +59,6 @@ public class ImageDBManagerJPAImpl implements ImageDBManager {
         return query.getResultList();
     }
 
-
-    private List<Predicate> createPredicates(List<Predicate> predicates) {
-
-
-
-        return predicates;
-    }
-
     /**
      *
      * @param maxImagesPerQuery
@@ -75,4 +67,13 @@ public class ImageDBManagerJPAImpl implements ImageDBManager {
         this.maxImagesPerQuery = maxImagesPerQuery;
     }
 
+
+    @Override
+    public Image loadImage(long id) {
+        Image image = entityManager.find(Image.class, id);
+        // Need this to load domain properties collection
+        image.getDomainProperties().size();
+
+        return image;
+    }
 }

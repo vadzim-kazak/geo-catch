@@ -1,5 +1,6 @@
 package com.jrew.geocatch.repository.service;
 
+import com.jrew.geocatch.repository.model.ClientImage;
 import com.jrew.geocatch.repository.model.ClientImagePreview;
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.model.criteria.SearchCriteria;
@@ -21,6 +22,19 @@ public interface ImageService {
 
     /**
      *
+     * @param imageId
+     * @return
+     */
+    public ClientImage getImage(long imageId);
+
+    /**
+     *
+     * @param image
+     */
+    public void updateImage(Image image);
+
+    /**
+     *
      * @param image
      * @throws IOException
      */
@@ -28,7 +42,8 @@ public interface ImageService {
 
     /**
      *
-     * @param image
+     * @param imageId
+     * @param deviceId
      */
-    public void deleteImage(Image image);
+    public void deleteImage(long imageId, String deviceId);
 }

@@ -32,4 +32,11 @@ public interface ImageDBManager {
      * @return
      */
     public List<Image> loadImages(SearchCriteria searchCriteria);
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    public Image loadImage(long id);
 }

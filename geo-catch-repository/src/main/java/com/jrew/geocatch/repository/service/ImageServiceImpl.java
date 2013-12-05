@@ -2,6 +2,7 @@ package com.jrew.geocatch.repository.service;
 
 import com.jrew.geocatch.repository.dao.database.ImageDBManager;
 import com.jrew.geocatch.repository.dao.filesystem.FileSystemManager;
+import com.jrew.geocatch.repository.model.ClientImage;
 import com.jrew.geocatch.repository.model.ClientImagePreview;
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.model.criteria.SearchCriteria;
@@ -29,6 +30,11 @@ public class ImageServiceImpl implements ImageService {
     @Qualifier("clientImagePreviewConverter")
     private Converter<Image, ClientImagePreview> clientImagePreviewConverter;
 
+    /** **/
+    @Autowired
+    @Qualifier("clientImageConverter")
+    private Converter<Image, ClientImage> clientImageConverter;
+
     public ImageServiceImpl(FileSystemManager fileSystemManager, ImageDBManager imageDBManager) {
         this.fileSystemManager = fileSystemManager;
         this.imageDBManager = imageDBManager;
@@ -46,6 +52,12 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    public ClientImage getImage(long imageId) {
+        Image image = imageDBManager.loadImage(imageId);
+        return clientImageConverter.convert(image);
+    }
+
+    @Override
     public void uploadImage(Image image) throws IOException {
 
         // Save uploaded image to file system
@@ -56,7 +68,9 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void deleteImage(Image image) {
+    public void deleteImage(long imageId, String deviceId) {
+
+
     }
 
     /**
@@ -70,5 +84,10 @@ public class ImageServiceImpl implements ImageService {
             clientImagePreviews.add(clientImagePreviewConverter.convert(image));
         }
         return clientImagePreviews;
+    }
+
+    @Override
+    public void updateImage(Image image) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }
