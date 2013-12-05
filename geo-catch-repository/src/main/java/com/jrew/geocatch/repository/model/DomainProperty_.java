@@ -1,4 +1,4 @@
-package com.jrew.geocatch.repository.model.metamodel;
+package com.jrew.geocatch.repository.model;
 
 import com.jrew.geocatch.repository.model.DomainProperty;
 

@@ -6,8 +6,8 @@ import com.jrew.geocatch.repository.model.ViewBounds;
 import com.jrew.geocatch.repository.model.criteria.DayPeriodSearchCriterion;
 import com.jrew.geocatch.repository.model.criteria.MonthPeriodSearchCriterion;
 import com.jrew.geocatch.repository.model.criteria.SearchCriteria;
-import com.jrew.geocatch.repository.model.metamodel.DomainProperty_;
-import com.jrew.geocatch.repository.model.metamodel.Image_;
+import com.jrew.geocatch.repository.model.DomainProperty_;
+import com.jrew.geocatch.repository.model.Image_;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
@@ -194,7 +194,7 @@ public class CriteriaSearchHelperJPAImpl implements CriteriaSearchHelper {
             // Create expressions that extract time parts:
             Expression<Integer> hour = criteriaBuilder.function(TIME_HOUR_KEY, Integer.class, image.get(Image_.date));
             Predicate fromHour = criteriaBuilder.greaterThanOrEqualTo(hour, dayPeriodCriterion.getFromHour());
-            Predicate toHour = criteriaBuilder.lessThan(hour,dayPeriodCriterion.getToHour());
+            Predicate toHour = criteriaBuilder.lessThan(hour, dayPeriodCriterion.getToHour());
             return criteriaBuilder.and(fromHour, toHour);
         }
 
