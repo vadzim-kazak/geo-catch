@@ -32,6 +32,7 @@
             /WEB-INF/spring/mvc-dispatcher-servlet.xml
             /WEB-INF/spring/applicationContext.xml
             /WEB-INF/spring/dao.xml
+            /WEB-INF/spring/security.xml
         </param-value>
     </context-param>
     
