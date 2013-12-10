@@ -195,4 +195,8 @@ public class FolderLocatorImpl implements FolderLocator {
         return degreeRange;
     }
 
+    @Override
+    public String getRootFolderPath() {
+        return rootFolderPath;
+    }
 }

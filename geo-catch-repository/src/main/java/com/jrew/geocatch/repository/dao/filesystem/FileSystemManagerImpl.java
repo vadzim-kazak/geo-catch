@@ -102,6 +102,23 @@ public class FileSystemManagerImpl implements FileSystemManager {
         }
     }
 
+    @Override
+    public void deleteImage(Image image) {
+
+        // Get absolute path images prefix
+        String pathPrefix = folderLocator.getRootFolderPath();
+
+        // Delete image
+        String imageFilePath = pathPrefix + image.getPath();
+        File imageFile = new File(imageFilePath);
+        imageFile.delete();
+
+        // Delete image thumbnail
+        String imageThumbnailFilePath = pathPrefix + image.getThumbnailPath();
+        File imageThumbnailFile = new File(imageThumbnailFilePath);
+        imageThumbnailFile.delete();
+    }
+
     /**
      *
      * @param fullAbsolutePath

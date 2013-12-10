@@ -39,13 +39,18 @@ public class ImageDBManagerJPAImpl implements ImageDBManager {
     @Override
     @Transactional
     public void saveImage(Image image) {
-        entityManager.persist(image);
+
+        entityManager.merge(image);
+        //entityManager.persist(image);
+
         entityManager.flush();
         entityManager.close();
     }
 
     @Override
-    public void deleteImage(Image image) {}
+    public void deleteImage(Image image) {
+        entityManager.remove(image);
+    }
 
     @Override
     public List<Image> loadImages(SearchCriteria searchCriteria) {

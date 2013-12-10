@@ -55,13 +55,13 @@ public class RepositoryController {
     @RequestMapping(value = "/images/{imageId}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void updateImage(@RequestBody Image image) {
-        //imageService.
+        imageService.updateImage(image);
     }
 
     @RequestMapping(value = "/images/{imageId}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void deleteImage(@RequestParam("deviceId") String deviceId, @PathVariable("imageId") long imageId) {
-       // imageService.deleteImage(, image, );
+       imageService.deleteImage(imageId, deviceId);
     }
 
     @RequestMapping(value = "/images/{imageId}", method = RequestMethod.GET)

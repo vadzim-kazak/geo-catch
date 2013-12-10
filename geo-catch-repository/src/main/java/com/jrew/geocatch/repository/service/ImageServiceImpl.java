@@ -70,7 +70,17 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public void deleteImage(long imageId, String deviceId) {
 
+        Image image = imageDBManager.loadImage(imageId);
 
+        // Need to verify that image has the same deviceId as provided before deletion
+        if (image.getDeviceId().equalsIgnoreCase(deviceId)) {
+
+            // 1) Remove image from file system
+            fileSystemManager.deleteImage(image);
+
+            //2) Remove image from db
+            imageDBManager.deleteImage(image);
+        }
     }
 
     /**
@@ -88,6 +98,6 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public void updateImage(Image image) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        imageDBManager.saveImage(image);
     }
 }

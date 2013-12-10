@@ -29,4 +29,11 @@ public interface FolderLocator {
      * @param fullPath
      */
     public String getRelativeToRootPath(String fullPath);
+
+    /**
+     * Gets path to root folder of images repository
+     *
+     * @return
+     */
+    public String getRootFolderPath();
 }
