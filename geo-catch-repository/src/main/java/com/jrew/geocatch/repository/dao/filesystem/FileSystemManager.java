@@ -36,12 +36,23 @@ public interface FileSystemManager {
      * Updates images path.
      *
      * Each image record in database contain image path relative to root folder.
-     * This method updates all this relative paths with some configured relative to
+     * This method updates all thumbnail relative paths with some configured relative to
      * app prefix.
+     *
      *
      * @param images
      * @return
      */
-    public List<Image> updateImagesPath(List<Image> images);
+    public void updateThumbnailPath(List<Image> images);
+
+    /**
+     *
+     *
+     *
+     *
+     * @param image
+     * @return
+     */
+    public void updatePath(Image image);
 
 }

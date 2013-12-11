@@ -150,9 +150,13 @@ var ImageLayer = function(map) {
         });
 
         // Create & set to image new info window entity
-        image.infoWindow = createInfoWindow(image);
+        //image.infoWindow = loadFullImage(image);
         google.maps.event.addListener(image.marker, 'click', function() {
-            image.infoWindow.open(map, image.marker);
+            if (image.fullImage) {
+                image.infoWindow.open(map, image.marker);
+            } else {
+                loadFullImage(image);
+            }
         });
     }
 
@@ -166,6 +170,24 @@ var ImageLayer = function(map) {
             size : new google.maps.Size(iconSize, iconSize), // desired size
             scaledSize: new google.maps.Size(iconSize, iconSize)
         };
+    }
+
+
+    var loadFullImage = function(image) {
+        // make ajax call to marker provide service
+        $.ajax({
+            dataType: "json",
+            url: generateImageProviderUrl() + "/" + image.id,
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(requestData),
+            success: function (fullImage) {
+                image.infoWindow = createInfoWindow(fullImage);
+                image.fullImage = fullImage;
+                image.infoWindow.open(map, image.marker);
+            }
+        });
+
     }
 
     /**

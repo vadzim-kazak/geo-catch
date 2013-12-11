@@ -59,17 +59,17 @@ public class FileSystemManagerImpl implements FileSystemManager {
     }
 
     @Override
-    public List<Image> updateImagesPath(List<Image> images) {
-
+    public void updateThumbnailPath(List<Image> images) {
         for (Image image : images) {
-            String imageFullPath = rootRelativePath + image.getPath();
-            image.setPath(imageFullPath);
-
             String thumbnailFullPath = rootRelativePath + image.getThumbnailPath();
             image.setThumbnailPath(thumbnailFullPath);
         }
+    }
 
-        return images;
+    @Override
+    public void updatePath(Image image) {
+        String imageFullPath = rootRelativePath + image.getPath();
+        image.setPath(imageFullPath);
     }
 
     /**

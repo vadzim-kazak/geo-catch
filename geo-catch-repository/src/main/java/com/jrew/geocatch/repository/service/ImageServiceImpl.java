@@ -45,8 +45,8 @@ public class ImageServiceImpl implements ImageService {
 
         List<Image> images = imageDBManager.loadImages(searchCriteria);
 
-        // Update images pathes
-        images = fileSystemManager.updateImagesPath(images);
+        // Update images paths
+        fileSystemManager.updateThumbnailPath(images);
 
         return convertToClientImages(images);
     }
@@ -54,6 +54,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public ClientImage getImage(long imageId) {
         Image image = imageDBManager.loadImage(imageId);
+        fileSystemManager.updatePath(image);
         return clientImageConverter.convert(image);
     }
 
