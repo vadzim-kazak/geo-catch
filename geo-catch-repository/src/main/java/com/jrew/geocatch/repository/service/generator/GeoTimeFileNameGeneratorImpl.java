@@ -53,13 +53,12 @@ public class GeoTimeFileNameGeneratorImpl implements FileNameGenerator {
     }
 
     @Override
-    public String generate(Image image) throws IllegalArgumentException {
+    public String generate(Image image, MultipartFile file) throws IllegalArgumentException {
 
-        if (image == null) {
-            throw new IllegalArgumentException("Provided image is empty.");
+        if (file == null) {
+            throw new IllegalArgumentException("Provided image file is empty.");
         }
 
-        MultipartFile file = image.getFile();
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 
         return decimalFormat.format(image.getLatitude()) + fileNameSeparator +

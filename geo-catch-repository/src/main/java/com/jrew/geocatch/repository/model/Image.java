@@ -74,10 +74,6 @@ public class Image {
     /** **/
     private int rating;
 
-    /** **/
-    @Transient
-    private MultipartFile file;
-
     @ManyToMany
     @JoinTable( name="IMAGE_DOMAIN_PROPERTY",
                 joinColumns={@JoinColumn(name="image_id", referencedColumnName="id")},
@@ -175,22 +171,6 @@ public class Image {
      */
     public void setRating(int rating) {
         this.rating = rating;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public MultipartFile getFile() {
-        return file;
-    }
-
-    /**
-     *
-     * @param file
-     */
-    public void setFile(MultipartFile file) {
-        this.file = file;
     }
 
     /**

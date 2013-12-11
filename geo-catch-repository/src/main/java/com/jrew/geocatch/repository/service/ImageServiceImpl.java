@@ -9,6 +9,7 @@ import com.jrew.geocatch.repository.model.criteria.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,10 +60,10 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void uploadImage(Image image) throws IOException {
+    public void uploadImage(Image image, MultipartFile file) throws IOException {
 
         // Save uploaded image to file system
-        fileSystemManager.saveImage(image);
+        fileSystemManager.saveImage(image, file);
 
         // Save image to database
         imageDBManager.saveImage(image);

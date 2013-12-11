@@ -37,16 +37,16 @@ public class FileSystemManagerImpl implements FileSystemManager {
     private String rootRelativePath;
 
     @Override
-    public void saveImage(Image image) throws IOException, IllegalArgumentException {
+    public void saveImage(Image image, MultipartFile file) throws IOException, IllegalArgumentException {
 
-        checkInputParameters(image);
+        checkInputParameters(file);
 
         // 1) Save image
         String imageFolderPath = folderLocator.getFolderAbsolutePath(image.getLatitude(), image.getLongitude());
         FolderUtils.checkOrCreateFoldersStructure(imageFolderPath);
 
-        String imageAbsolutePath = imageFolderPath  + File.separator + fileNameGenerator.generate(image);
-        writeImageToFolder(image.getFile(), imageAbsolutePath);
+        String imageAbsolutePath = imageFolderPath  + File.separator + fileNameGenerator.generate(image, file);
+        writeImageToFolder(file, imageAbsolutePath);
         // Set to image relative to image file path
         image.setPath(getImageRelativePath(imageAbsolutePath));
 
@@ -75,12 +75,11 @@ public class FileSystemManagerImpl implements FileSystemManager {
     /**
      * Checks input image parameters
      *
-     * @param image
+     * @param file
      * @throws IllegalArgumentException in case if some image parameters isn't valid
      */
-    private void checkInputParameters(Image image) throws IllegalArgumentException{
-        MultipartFile imageFile = image.getFile();
-        if (imageFile == null || imageFile.isEmpty()) {
+    private void checkInputParameters(MultipartFile file) throws IllegalArgumentException{
+        if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("Uploaded image file is empty.");
         }
     }

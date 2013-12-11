@@ -1,6 +1,7 @@
 package com.jrew.geocatch.repository.service.generator;
 
 import com.jrew.geocatch.repository.model.Image;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,9 +16,11 @@ public interface FileNameGenerator {
     /**
      *
      *
+     *
      * @param image
+     * @param file
      * @return
      */
-    public String generate(Image image) throws IllegalArgumentException;
+    public String generate(Image image, MultipartFile file) throws IllegalArgumentException;
 
 }

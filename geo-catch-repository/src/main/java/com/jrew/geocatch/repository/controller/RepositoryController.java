@@ -43,15 +43,10 @@ public class RepositoryController {
     public String uploadImage(@RequestParam("image") Image image,
                               @RequestPart("file") MultipartFile file) throws IOException {
 
-        image.setFile(file);
-        // Temporary fix for image loading validation as @Transient and @NotNull couldn't be used at the same time
-        if (image.getFile() == null) {
-            throw new IllegalArgumentException("Image file isn't provided.");
-        }
         ValidationUtils.validate(image, validator);
 
         domainPropertyService.processDomainProperties(image.getDomainProperties());
-        imageService.uploadImage(image);
+        imageService.uploadImage(image, file);
 
         return "imageUpload";
     }

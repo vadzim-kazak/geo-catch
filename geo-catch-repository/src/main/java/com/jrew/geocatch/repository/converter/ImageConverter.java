@@ -4,6 +4,7 @@ import com.jrew.geocatch.repository.model.Image;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.util.StringUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -26,26 +27,21 @@ public class ImageConverter implements Converter<String, Image> {
 
         Image image = null;
 
-        try {
-            ObjectMapper mapper = new ObjectMapper();
+        if (!StringUtils.isEmpty(request)) {
+            try {
+                ObjectMapper mapper = new ObjectMapper();
 
-            /** Set date formatter to object mapper **/
-            final DateFormat dateFormat = new SimpleDateFormat(dateFormatPattern);
-            mapper.setDateFormat(dateFormat);
+                /** Set date formatter to object mapper **/
+                final DateFormat dateFormat = new SimpleDateFormat(dateFormatPattern);
+                mapper.setDateFormat(dateFormat);
 
-            image = mapper.readValue(request, Image.class);
+                return image = mapper.readValue(request, Image.class);
 
-        } catch (Exception exc) {
-            exc.printStackTrace();
-
+            } catch (Exception exc) {
+                exc.printStackTrace();
+            }
         }
 
-        //validator.validate(image);
         return image;
     }
-
-
-//    public void setDateFormatPattern(String dateFormatPattern) {
-//        this.dateFormatPattern = dateFormatPattern;
-//    }
 }
