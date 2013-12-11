@@ -11,6 +11,9 @@ INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VA
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5, 1, 3, 'bream', 'en', 1);
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (6, 1, 3, 'лещ', 'ru', 0);
 
+-- Tench
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (7, 1, 4, 'tench', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8, 1, 4, 'линь', 'ru', 0);
 
 -- Fishing tools
 -- Spinning
