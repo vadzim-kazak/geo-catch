@@ -73,7 +73,7 @@ public class ImageServiceImpl implements ImageService {
         Image image = imageDBManager.loadImage(imageId);
 
         // Need to verify that image has the same deviceId as provided before deletion
-        if (image.getDeviceId().equalsIgnoreCase(deviceId)) {
+        if (image != null && image.getDeviceId().equalsIgnoreCase(deviceId)) {
 
             // 1) Remove image from file system
             fileSystemManager.deleteImage(image);

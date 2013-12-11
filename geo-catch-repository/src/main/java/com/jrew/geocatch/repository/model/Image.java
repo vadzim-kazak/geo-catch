@@ -76,7 +76,6 @@ public class Image {
 
     /** **/
     @Transient
-    @NotNull
     private MultipartFile file;
 
     @ManyToMany

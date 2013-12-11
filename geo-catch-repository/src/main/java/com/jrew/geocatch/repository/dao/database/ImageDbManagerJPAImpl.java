@@ -39,17 +39,16 @@ public class ImageDBManagerJPAImpl implements ImageDBManager {
     @Override
     @Transactional
     public void saveImage(Image image) {
-
         entityManager.merge(image);
-        //entityManager.persist(image);
-
-        entityManager.flush();
-        entityManager.close();
     }
 
     @Override
+    @Transactional
     public void deleteImage(Image image) {
-        entityManager.remove(image);
+        Image loadedImage = entityManager.find(Image.class, image.getId());
+        if (loadedImage != null) {
+            entityManager.remove(loadedImage);
+        }
     }
 
     @Override
@@ -74,10 +73,14 @@ public class ImageDBManagerJPAImpl implements ImageDBManager {
 
 
     @Override
+    @Transactional
     public Image loadImage(long id) {
         Image image = entityManager.find(Image.class, id);
-        // Need this to load domain properties collection
-        image.getDomainProperties().size();
+
+        if (image != null) {
+            // Need this to load domain properties collection
+            image.getDomainProperties().size();
+        }
 
         return image;
     }

@@ -111,12 +111,16 @@ public class FileSystemManagerImpl implements FileSystemManager {
         // Delete image
         String imageFilePath = pathPrefix + image.getPath();
         File imageFile = new File(imageFilePath);
-        imageFile.delete();
+        if (imageFile.exists()) {
+            imageFile.delete();
+        }
 
         // Delete image thumbnail
         String imageThumbnailFilePath = pathPrefix + image.getThumbnailPath();
         File imageThumbnailFile = new File(imageThumbnailFilePath);
-        imageThumbnailFile.delete();
+        if (imageThumbnailFile.exists()) {
+            imageThumbnailFile.delete();
+        }
     }
 
     /**

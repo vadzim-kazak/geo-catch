@@ -44,6 +44,10 @@ public class RepositoryController {
                               @RequestPart("file") MultipartFile file) throws IOException {
 
         image.setFile(file);
+        // Temporary fix for image loading validation as @Transient and @NotNull couldn't be used at the same time
+        if (image.getFile() == null) {
+            throw new IllegalArgumentException("Image file isn't provided.");
+        }
         ValidationUtils.validate(image, validator);
 
         domainPropertyService.processDomainProperties(image.getDomainProperties());
@@ -79,7 +83,6 @@ public class RepositoryController {
                     method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody List<DomainProperty> loadDomainInfo(@PathVariable("type") Long type,
                                                @PathVariable("locale") String locale) {
-
         return domainPropertyService.loadDomainProperties(type, locale);
     }
 
