@@ -2,6 +2,7 @@ package com.jrew.geocatch.repository.service.generator;
 
 import com.jrew.geocatch.repository.model.Image;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.DecimalFormat;
@@ -20,40 +21,40 @@ import java.util.Date;
 public class GeoTimeFileNameGeneratorImpl implements FileNameGenerator {
 
     /** Used for date postfix generation **/
-    private final String dateFormatPattern;
+    @Value("#{configProperties['fileNameGenerator.dateFormatPattern']}")
+    private String dateFormatPattern = null;
 
     /** Separator of values in file name **/
-    private final String fileNameSeparator;
+    @Value("#{configProperties['fileNameGenerator.fileNameSeparator']}")
+    private String fileNameSeparator = null;
 
     /** Specifies how many digits after dot will be taken **/
-    private final int degreeFraction;
+    @Value("#{configProperties['fileNameGenerator.degreeFraction']}")
+    private int degreeFraction = 0;
 
     /** **/
-    private final  DecimalFormat decimalFormat;
+    private DecimalFormat decimalFormat;
 
     /** **/
-    private final SimpleDateFormat simpleDateFormat;
+    private SimpleDateFormat simpleDateFormat;
 
     /**
      * Constructor
-     *
-     * @param dateFormatPattern
-     * @param fileNameSeparator
-     * @param degreeFraction
      */
-    public GeoTimeFileNameGeneratorImpl(String dateFormatPattern, String fileNameSeparator, int degreeFraction) {
-        this.dateFormatPattern = dateFormatPattern;
-        this.fileNameSeparator = fileNameSeparator;
-        this.degreeFraction = degreeFraction;
-
-        decimalFormat = new DecimalFormat();
-        decimalFormat.setMaximumFractionDigits(degreeFraction);
-
-        simpleDateFormat = new SimpleDateFormat(dateFormatPattern);
-    }
+    public GeoTimeFileNameGeneratorImpl() {}
 
     @Override
     public String generate(Image image, MultipartFile file) throws IllegalArgumentException {
+
+        if (decimalFormat == null) {
+            decimalFormat = new DecimalFormat();
+            decimalFormat.setMaximumFractionDigits(degreeFraction);
+        }
+
+        if (simpleDateFormat == null) {
+            simpleDateFormat = new SimpleDateFormat(dateFormatPattern);
+        }
+
 
         if (file == null) {
             throw new IllegalArgumentException("Provided image file is empty.");

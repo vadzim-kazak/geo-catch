@@ -22,6 +22,7 @@ import java.util.List;
 public class ImageDBManagerJPAImpl implements ImageDBManager {
 
     /** Limits max fetching images number per request**/
+    @Value("#{configProperties['databaseManager.maxImagesPerQuery']}")
     private int maxImagesPerQuery;
 
     @Value("#{queryProperties['query.images.load']}")
@@ -62,15 +63,6 @@ public class ImageDBManagerJPAImpl implements ImageDBManager {
 
         return query.getResultList();
     }
-
-    /**
-     *
-     * @param maxImagesPerQuery
-     */
-    public void setMaxImagesPerQuery(int maxImagesPerQuery) {
-        this.maxImagesPerQuery = maxImagesPerQuery;
-    }
-
 
     @Override
     @Transactional

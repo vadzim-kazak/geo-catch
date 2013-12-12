@@ -16,18 +16,11 @@
                            http://www.springframework.org/schema/util
                            http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
-    <context:property-placeholder location="classpath*:*.properties" />
-
-    <util:properties id="queryProperties" location="classpath:query.properties" />
-
     <bean id="domainPropertyDBManager" class="com.jrew.geocatch.repository.dao.database.DomainPropertyDBManagerJPAImpl" />
 
     <bean id="criteriaSearchHelper" class="com.jrew.geocatch.repository.dao.database.CriteriaSearchHelperJPAImpl" />
 
-
-    <bean id="databaseManager" class="com.jrew.geocatch.repository.dao.database.ImageDBManagerJPAImpl" scope="singleton" >
-        <property name="maxImagesPerQuery" value="${databaseManager.maxImagesPerQuery}" />
-    </bean>
+    <bean id="databaseManager" class="com.jrew.geocatch.repository.dao.database.ImageDBManagerJPAImpl" />
 
     <!-- JDBC Data Source. It is assumed you have MySQL running on localhost port 3306 with
       username root and blank password. Change below if it's not the case -->

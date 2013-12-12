@@ -14,54 +14,40 @@
 
     <context:spring-configured/>
 
-    <context:property-placeholder location="classpath*:*.properties" />
-
     <util:properties id="queryProperties" location="classpath:query.properties" />
 
-    <bean id="domainPropertyService" class="com.jrew.geocatch.repository.service.DomainPropertyServiceImpl" scope="singleton">
+    <util:properties id="configProperties" location="classpath:config.properties" />
+
+    <bean id="domainPropertyService" class="com.jrew.geocatch.repository.service.DomainPropertyServiceImpl" >
         <constructor-arg name="dbManager" ref="domainPropertyDBManager"/>
     </bean>
 
-    <bean id="imageService" class="com.jrew.geocatch.repository.service.ImageServiceImpl" scope="singleton">
+    <bean id="imageService" class="com.jrew.geocatch.repository.service.ImageServiceImpl" >
         <constructor-arg name="fileSystemManager" ref="fileSystemManager"/>
         <constructor-arg name="imageDBManager" ref="databaseManager"/>
     </bean>
 
-    <bean id="fileSystemManager" class="com.jrew.geocatch.repository.dao.filesystem.FileSystemManagerImpl" scope="singleton">
+    <bean id="fileSystemManager" class="com.jrew.geocatch.repository.dao.filesystem.FileSystemManagerImpl" >
         <property name="fileNameGenerator" ref="fileNameGenerator"/>
         <property name="folderLocator" ref="folderLocator"/>
         <property name="thumbnailFactory" ref="thumbnailFactory"/>
-        <property name="rootRelativePath" value="${fileSystemManager.rootRelativePath}"/>
     </bean>
 
-    <bean id="thumbnailFactory" class="com.jrew.geocatch.repository.service.thumbnail.CoobirdThumbnailFactoryImpl"
-          scope="singleton">
-        <constructor-arg name="scaleFactor" value="${thumbnailFactory.scaleFactor}"/>
-        <constructor-arg name="thumbnailPostfix" value="${thumbnailFactory.thumbnailPostfix}"/>
-    </bean>
+    <bean id="thumbnailFactory" class="com.jrew.geocatch.repository.service.thumbnail.CoobirdThumbnailFactoryImpl"/>
 
-    <bean id="folderLocator" class="com.jrew.geocatch.repository.dao.filesystem.FolderLocatorImpl" scope="singleton">
-        <constructor-arg name="rootFolderPath" value="${folderLocator.rootFolderPath}"/>
-        <constructor-arg name="foldersDegreeCoverage" value="${folderLocator.foldersDegreeCoverage}"/>
-        <constructor-arg name="folderDegreeSeparator" value="${folderLocator.folderDegreeSeparator}"/>
-    </bean>
+    <bean id="folderLocator" class="com.jrew.geocatch.repository.dao.filesystem.FolderLocatorImpl" />
 
-    <bean id="fileNameGenerator" class="com.jrew.geocatch.repository.service.generator.GeoTimeFileNameGeneratorImpl"
-          scope="singleton">
-        <constructor-arg name="dateFormatPattern" value="${fileNameGenerator.dateFormatPattern}"/>
-        <constructor-arg name="fileNameSeparator" value="${fileNameGenerator.fileNameSeparator}"/>
-        <constructor-arg name="degreeFraction" value="${fileNameGenerator.degreeFraction}"/>
-    </bean>
+    <bean id="fileNameGenerator" class="com.jrew.geocatch.repository.service.generator.GeoTimeFileNameGeneratorImpl" />
 
-    <bean id="multipartResolver"
-          class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
 
     <aop:aspectj-autoproxy>
         <aop:include name="aopLogger"/>
     </aop:aspectj-autoproxy>
 
-    <bean id="aopLogger" class="com.jrew.geocatch.repository.aop.AopLogger" scope="singleton">
-        <constructor-arg name="dateFormatPattern" value="${logger.dateFormatPattern}"/>
+    <bean id="aopLogger" class="com.jrew.geocatch.repository.aop.AopLogger" >
+        <constructor-arg name="dateFormatPattern" value="#{configProperties['logger.dateFormatPattern']}"/>
     </bean>
 
     <bean class="com.jrew.geocatch.repository.converter.ClientImagePreviewConverter" />

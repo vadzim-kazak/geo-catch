@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat;
  */
 public class ImageConverter implements Converter<String, Image> {
 
-    @Value("${global.dateFormatPattern}")
+    @Value("#{configProperties['global.dateFormatPattern']}")
     private String dateFormatPattern;
 
     @Override

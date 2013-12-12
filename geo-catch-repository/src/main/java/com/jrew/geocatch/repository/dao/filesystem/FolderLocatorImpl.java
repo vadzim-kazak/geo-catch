@@ -2,6 +2,7 @@ package com.jrew.geocatch.repository.dao.filesystem;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,16 +37,19 @@ public class FolderLocatorImpl implements FolderLocator {
     /** Folder's name is composed from area coordinates:
      * <lat1>separator<long1>separator<lat2>separator<long2>
      *  This variable represents separator value   **/
-    private final String folderDegreeSeparator;
+    @Value("#{configProperties['folderLocator.folderDegreeSeparator']}")
+    private String folderDegreeSeparator;
 
     /** Path to root folder of images storage  **/
-    private final String rootFolderPath;
+    @Value("#{configProperties['folderLocator.rootFolderPath']}")
+    private String rootFolderPath;
 
     /**
      *  Each folder will store images from some area with lat1, long1, lat2, long2 coordinates.
      *  This variable set degrees range for all folders, i.e. |lat1 - lat2| value.
      *  **/
-     private final double foldersDegreeCoverage;
+    @Value("#{configProperties['folderLocator.foldersDegreeCoverage']}")
+    private double foldersDegreeCoverage;
 
     /**
      *  Util class for degree range value representation.
@@ -94,16 +98,8 @@ public class FolderLocatorImpl implements FolderLocator {
 
     /**
      * Constructor
-     *
-     * @param folderDegreeSeparator
-     * @param rootFolderPath
-     * @param foldersDegreeCoverage
      */
-    public FolderLocatorImpl(String folderDegreeSeparator, String rootFolderPath, float foldersDegreeCoverage) {
-        this.folderDegreeSeparator = folderDegreeSeparator;
-        this.rootFolderPath = rootFolderPath;
-        this.foldersDegreeCoverage = foldersDegreeCoverage;
-    }
+    public FolderLocatorImpl() {}
 
     @Override
     public String getRelativeToRootPath(String fullPath) {

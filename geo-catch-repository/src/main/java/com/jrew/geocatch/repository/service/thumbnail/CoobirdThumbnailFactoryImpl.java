@@ -2,6 +2,7 @@ package com.jrew.geocatch.repository.service.thumbnail;
 
 import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,21 +21,17 @@ import java.io.IOException;
 public class CoobirdThumbnailFactoryImpl implements ThumbnailFactory {
 
     /** Thumbnail image postfix **/
-    public final String thumbnailPostfix;// = "_thumb";
+    @Value("#{configProperties['thumbnailFactory.thumbnailPostfix']}")
+    public String thumbnailPostfix;
 
     /** Scale factor of original image **/
-    public final double scaleFactor;// = 0.1d;
+    @Value("#{configProperties['thumbnailFactory.scaleFactor']}")
+    public double scaleFactor;
 
     /**
      * Constructor
-     *
-     * @param thumbnailPostfix
-     * @param scaleFactor
      */
-    public CoobirdThumbnailFactoryImpl(String thumbnailPostfix, double scaleFactor) {
-        this.thumbnailPostfix = thumbnailPostfix;
-        this.scaleFactor = scaleFactor;
-    }
+    public CoobirdThumbnailFactoryImpl() {}
 
     /**
      * Creates thumbnail image for provided image.

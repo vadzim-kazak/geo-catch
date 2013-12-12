@@ -5,6 +5,7 @@ import com.jrew.geocatch.repository.service.generator.FileNameGenerator;
 import com.jrew.geocatch.repository.service.thumbnail.ThumbnailFactory;
 import com.jrew.geocatch.repository.util.FolderUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -34,6 +35,7 @@ public class FileSystemManagerImpl implements FileSystemManager {
     private ThumbnailFactory thumbnailFactory;
 
     /** Relative to application path **/
+    @Value("#{configProperties['fileSystemManager.rootRelativePath']}")
     private String rootRelativePath;
 
     @Override
@@ -153,13 +155,5 @@ public class FileSystemManagerImpl implements FileSystemManager {
      */
     public void setThumbnailFactory(ThumbnailFactory thumbnailFactory) {
         this.thumbnailFactory = thumbnailFactory;
-    }
-
-    /**
-     *
-     * @param rootRelativePath
-     */
-    public void setRootRelativePath(String rootRelativePath) {
-        this.rootRelativePath = rootRelativePath;
     }
 }
