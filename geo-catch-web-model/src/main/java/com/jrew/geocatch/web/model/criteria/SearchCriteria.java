@@ -1,7 +1,7 @@
-package com.jrew.geocatch.repository.model.criteria;
+package com.jrew.geocatch.web.model.criteria;
 
-import com.jrew.geocatch.repository.model.DomainProperty;
-import com.jrew.geocatch.repository.model.ViewBounds;
+import com.jrew.geocatch.web.model.DomainProperty;
+import com.jrew.geocatch.web.model.ViewBounds;
 
 import java.util.List;
 

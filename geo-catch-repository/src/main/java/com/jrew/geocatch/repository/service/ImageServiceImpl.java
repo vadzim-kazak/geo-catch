@@ -5,7 +5,7 @@ import com.jrew.geocatch.repository.dao.filesystem.FileSystemManager;
 import com.jrew.geocatch.repository.model.ClientImage;
 import com.jrew.geocatch.repository.model.ClientImagePreview;
 import com.jrew.geocatch.repository.model.Image;
-import com.jrew.geocatch.repository.model.criteria.SearchCriteria;
+import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.converter.Converter;

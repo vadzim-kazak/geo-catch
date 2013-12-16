@@ -22,16 +22,11 @@
     </properties>
 
     <dependencies>
-        <!-- dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.2.7</version>
-        </dependency>
         <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
-            <version>2.2.5-b10</version>
-        </dependency-->
+            <artifactId>geo-catch-web-model</artifactId>
+            <groupId>com.jrew.lab</groupId>
+            <version>0.5</version>
+        </dependency>
         <!-- Apache http components -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>

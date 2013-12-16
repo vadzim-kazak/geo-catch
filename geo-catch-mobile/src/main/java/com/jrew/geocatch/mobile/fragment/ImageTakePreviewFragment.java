@@ -10,8 +10,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.activity.MainActivity;
-import com.jrew.geocatch.mobile.model.Image;
-import com.jrew.geocatch.mobile.service.ImageService;
 
 /**
  * Created with IntelliJ IDEA.

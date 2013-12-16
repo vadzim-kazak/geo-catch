@@ -11,7 +11,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.*;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.listener.MarkerOnClickListener;
-import com.jrew.geocatch.mobile.model.Image;
 import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.reciever.ImageServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.ImageService;

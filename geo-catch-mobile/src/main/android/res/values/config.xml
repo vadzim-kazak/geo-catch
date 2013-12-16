@@ -5,7 +5,7 @@
 
     <item name="repositoryPath" type="config">fishing/</item>
 
-    <item name="repositoryLoadImagesUri" type="config">spring/images/load/</item>
+    <item name="repositoryLoadImagesUri" type="config">repo/search</item>
 
     <item name="repositoryUploadImagesUri" type="config">spring/images/upload</item>
 

@@ -15,6 +15,11 @@
     </parent>
 
     <dependencies>
+        <dependency>
+            <artifactId>geo-catch-web-model</artifactId>
+            <groupId>com.jrew.lab</groupId>
+            <version>0.5</version>
+        </dependency>
         <!-- Apache http components -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -37,6 +42,12 @@
             <artifactId>actionbarsherlock</artifactId>
             <version>4.4.0</version>
             <type>apklib</type>
+        </dependency>
+        <!-- json -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.4</version>
         </dependency>
 
         <!-- Google play Services for Map V2 -->

@@ -6,19 +6,25 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.gson.Gson;
 import com.jrew.geocatch.mobile.R;
-import com.jrew.geocatch.mobile.model.Image;
 import com.jrew.geocatch.mobile.service.ImageService;
+import com.jrew.geocatch.web.model.ClientImagePreview;
+import com.jrew.geocatch.web.model.ClientImage;
+import com.jrew.geocatch.web.model.ViewBounds;
+import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,22 +57,31 @@ public class RepositoryRestUtil {
 
         StringBuilder loadImagesUrl = new StringBuilder();
         loadImagesUrl.append(resources.getString(R.config.repositoryUrl))
-                .append(resources.getString(R.config.repositoryPath))
-                .append(resources.getString(R.config.repositoryLoadImagesUri))
-                .append(latLngBounds.northeast.latitude).append('/')
-                .append(latLngBounds.northeast.longitude).append('/')
-                .append(latLngBounds.southwest.latitude).append('/')
-                .append(latLngBounds.southwest.longitude);
+                     .append(resources.getString(R.config.repositoryPath))
+                     .append(resources.getString(R.config.repositoryLoadImagesUri));
 
+        SearchCriteria searchCriteria = new SearchCriteria();
 
-        HttpGet httpGet = new HttpGet(loadImagesUrl.toString());
-        HttpResponse response = httpClient.execute(httpGet, localContext);
+        ViewBounds viewBounds = new ViewBounds(latLngBounds.northeast.latitude,
+                                               latLngBounds.northeast.longitude,
+                                               latLngBounds.southwest.latitude,
+                                               latLngBounds.southwest.longitude);
+
+        searchCriteria.setViewBounds(viewBounds);
+
+        Gson gson = new Gson();
+        String json = gson.toJson(searchCriteria);
+
+        HttpPost httpPost = new HttpPost(loadImagesUrl.toString());
+        httpPost.setEntity(new ByteArrayEntity(json.getBytes("UTF8")));
+        httpPost.setHeader(HTTP.CONTENT_TYPE,"application/json; charset=UTF-8");
+        HttpResponse response = httpClient.execute(httpPost, localContext);
 
         Bundle bundle = new Bundle();
 
         // put result to intent bundle
         JSONArray result = WebUtil.parseHttpResponse(response);
-        ArrayList<Image> images = new ArrayList<Image>();
+        ArrayList<ClientImagePreview> images = new ArrayList<ClientImagePreview>();
         for (int i = 0; i < result.length(); i++) {
             images.add(WebUtil.convertToImage(result.getJSONObject(i)));
         }
@@ -84,8 +99,8 @@ public class RepositoryRestUtil {
      * @throws Exception
      */
     public static Bundle loadThumbnail(Intent intent, Resources resources) throws Exception  {
-        Image image = (Image) intent.getSerializableExtra(ImageService.IMAGE_KEY);
-        return loadImageFromPath(intent, resources, image.getThumbnailPath());
+        ClientImagePreview imagePreview = (ClientImagePreview) intent.getSerializableExtra(ImageService.IMAGE_KEY);
+        return loadImageFromPath(intent, resources, imagePreview.getThumbnailPath());
     }
 
     /**
@@ -96,7 +111,7 @@ public class RepositoryRestUtil {
      * @throws Exception
      */
     public static Bundle loadImage(Intent intent, Resources resources) throws Exception  {
-        Image image = (Image) intent.getSerializableExtra(ImageService.IMAGE_KEY);
+        ClientImage image = (ClientImage) intent.getSerializableExtra(ImageService.IMAGE_KEY);
         return loadImageFromPath(intent, resources, image.getPath());
     }
 
@@ -114,7 +129,7 @@ public class RepositoryRestUtil {
         HttpClient httpClient = new DefaultHttpClient();
         HttpContext localContext = new BasicHttpContext();
 
-        Image image = (Image) intent.getSerializableExtra(ImageService.IMAGE_KEY);
+        ClientImage clientImage = (ClientImage) intent.getSerializableExtra(ImageService.IMAGE_KEY);
 
         StringBuilder loadImageThumbnailUrl = new StringBuilder();
         loadImageThumbnailUrl.append(resources.getString(R.config.repositoryUrl))
@@ -129,7 +144,7 @@ public class RepositoryRestUtil {
         Bundle bundle = new Bundle();
 
         // put result to intent bundle
-        bundle.putSerializable(ImageService.IMAGE_KEY, image);
+        bundle.putSerializable(ImageService.IMAGE_KEY, clientImage);
         bundle.putParcelable(ImageService.RESULT_KEY, WebUtil.getImageFromWeb(response));
 
         return bundle;

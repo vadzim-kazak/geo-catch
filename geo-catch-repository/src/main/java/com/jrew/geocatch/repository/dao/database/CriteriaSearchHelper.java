@@ -2,7 +2,7 @@ package com.jrew.geocatch.repository.dao.database;
 
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.model.ViewBounds;
-import com.jrew.geocatch.repository.model.criteria.SearchCriteria;
+import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.Map;

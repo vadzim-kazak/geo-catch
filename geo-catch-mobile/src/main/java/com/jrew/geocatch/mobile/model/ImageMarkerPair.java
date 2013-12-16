@@ -1,6 +1,7 @@
 package com.jrew.geocatch.mobile.model;
 
 import com.google.android.gms.maps.model.Marker;
+import com.jrew.geocatch.web.model.ClientImagePreview;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,14 +15,14 @@ public class ImageMarkerPair {
     private Marker marker;
 
     /** **/
-    private Image image;
+    private ClientImagePreview image;
 
     /**
      *
      * @param image
      * @param marker
      */
-    public ImageMarkerPair(Image image, Marker marker) {
+    public ImageMarkerPair(ClientImagePreview image, Marker marker) {
         this.image = image;
         this.marker = marker;
     }
@@ -46,7 +47,7 @@ public class ImageMarkerPair {
      *
      * @return
      */
-    public Image getImage() {
+    public ClientImagePreview getImage() {
         return image;
     }
 
@@ -54,7 +55,7 @@ public class ImageMarkerPair {
      *
      * @param image
      */
-    public void setImage(Image image) {
+    public void setImage(ClientImagePreview image) {
         this.image = image;
     }
 }

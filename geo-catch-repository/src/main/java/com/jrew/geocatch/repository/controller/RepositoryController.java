@@ -4,10 +4,10 @@ import com.jrew.geocatch.repository.model.ClientImage;
 import com.jrew.geocatch.repository.model.ClientImagePreview;
 import com.jrew.geocatch.repository.model.DomainProperty;
 import com.jrew.geocatch.repository.model.Image;
-import com.jrew.geocatch.repository.model.criteria.SearchCriteria;
 import com.jrew.geocatch.repository.service.DomainPropertyService;
 import com.jrew.geocatch.repository.service.ImageService;
 import com.jrew.geocatch.repository.util.ValidationUtils;
+import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -68,7 +68,7 @@ public class RepositoryController {
         return imageService.getImage(imageId);
     }
 
-    @RequestMapping(value = "images", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/search", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody List<ClientImagePreview> loadImage(@RequestBody SearchCriteria searchCriteria) {
 
         return imageService.getImages(searchCriteria);

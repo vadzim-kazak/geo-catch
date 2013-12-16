@@ -1,26 +1,30 @@
-package com.jrew.geocatch.mobile.model;
+package com.jrew.geocatch.web.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Vadim
- * Date: 11/10/13
- * Time: 7:01 AM
+ * Simplified version of Image dedicated for view image action
  */
-public class Image implements Serializable {
+public class ClientImage implements Serializable {
 
     /**
-     *
+     *  Image privacy level
      */
-    public Image() {}
+    public enum PrivacyLevel {
+
+        /** **/
+        PRIVATE,
+
+        FRIENDS_ONLY,
+
+        /** **/
+        PUBLIC
+    }
 
     /** Image id **/
-    private int id;
-
-    /** **/
-    private int userId;
+    private long id;
 
     /** Description **/
     private String description;
@@ -35,32 +39,34 @@ public class Image implements Serializable {
     private String path;
 
     /** **/
-    private String thumbnailPath;
-
-    /** **/
-    private java.util.Date date;
+    private Date date;
 
     /** **/
     private int rating;
 
+    private List<DomainProperty> domainProperties;
+
     /** **/
-    private boolean isDeleted;
+    private PrivacyLevel privacyLevel;
 
     /**
+     *
      * @return
      */
-    public int getId() {
+    public long getId() {
         return id;
     }
 
     /**
+     *
      * @param id
      */
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     /**
+     *
      * @return
      */
     public String getDescription() {
@@ -68,6 +74,7 @@ public class Image implements Serializable {
     }
 
     /**
+     *
      * @param description
      */
     public void setDescription(String description) {
@@ -75,6 +82,7 @@ public class Image implements Serializable {
     }
 
     /**
+     *
      * @return
      */
     public double getLatitude() {
@@ -82,6 +90,7 @@ public class Image implements Serializable {
     }
 
     /**
+     *
      * @param latitude
      */
     public void setLatitude(double latitude) {
@@ -89,6 +98,7 @@ public class Image implements Serializable {
     }
 
     /**
+     *
      * @return
      */
     public double getLongitude() {
@@ -96,6 +106,7 @@ public class Image implements Serializable {
     }
 
     /**
+     *
      * @param longitude
      */
     public void setLongitude(double longitude) {
@@ -103,20 +114,7 @@ public class Image implements Serializable {
     }
 
     /**
-     * @return
-     */
-    public String getThumbnailPath() {
-        return thumbnailPath;
-    }
-
-    /**
-     * @param thumbnailPath
-     */
-    public void setThumbnailPath(String thumbnailPath) {
-        this.thumbnailPath = thumbnailPath;
-    }
-
-    /**
+     *
      * @return
      */
     public String getPath() {
@@ -124,6 +122,7 @@ public class Image implements Serializable {
     }
 
     /**
+     *
      * @param path
      */
     public void setPath(String path) {
@@ -131,6 +130,7 @@ public class Image implements Serializable {
     }
 
     /**
+     *
      * @return
      */
     public Date getDate() {
@@ -138,6 +138,7 @@ public class Image implements Serializable {
     }
 
     /**
+     *
      * @param date
      */
     public void setDate(Date date) {
@@ -145,6 +146,7 @@ public class Image implements Serializable {
     }
 
     /**
+     *
      * @return
      */
     public int getRating() {
@@ -152,6 +154,7 @@ public class Image implements Serializable {
     }
 
     /**
+     *
      * @param rating
      */
     public void setRating(int rating) {
@@ -159,32 +162,34 @@ public class Image implements Serializable {
     }
 
     /**
+     *
      * @return
      */
-    public int getUserId() {
-        return userId;
-    }
-
-    /**
-     * @param userId
-     */
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    /**
-     * @return
-     */
-    public boolean isDeleted() {
-        return isDeleted;
+    public List<DomainProperty> getDomainProperties() {
+        return domainProperties;
     }
 
     /**
      *
-     * @param deleted
+     * @param domainProperties
      */
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+    public void setDomainProperties(List<DomainProperty> domainProperties) {
+        this.domainProperties = domainProperties;
     }
 
+    /**
+     *
+     * @return
+     */
+    public PrivacyLevel getPrivacyLevel() {
+        return privacyLevel;
+    }
+
+    /**
+     *
+     * @param privacyLevel
+     */
+    public void setPrivacyLevel(PrivacyLevel privacyLevel) {
+        this.privacyLevel = privacyLevel;
+    }
 }

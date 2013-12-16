@@ -2,7 +2,7 @@ package com.jrew.geocatch.mobile.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import com.jrew.geocatch.mobile.model.Image;
+import com.jrew.geocatch.web.model.ClientImagePreview;
 import org.apache.http.HttpResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -71,16 +71,15 @@ public class WebUtil {
      * @return
      * @throws org.json.JSONException
      */
-    public static Image convertToImage(JSONObject jsonObject) throws JSONException {
-        Image image = new Image();
-        image.setId(Integer.parseInt(jsonObject.getString("id")));
+    public static ClientImagePreview convertToImage(JSONObject jsonObject) throws JSONException {
+        ClientImagePreview imagePreview = new ClientImagePreview();
+        imagePreview.setId(Integer.parseInt(jsonObject.getString("id")));
 
-        image.setLatitude(Double.parseDouble(jsonObject.getString("latitude")));
-        image.setLongitude(Double.parseDouble(jsonObject.getString("longitude")));
-        image.setThumbnailPath(jsonObject.getString("thumbnailPath"));
-        image.setPath(jsonObject.getString("path"));
+        imagePreview.setLatitude(Double.parseDouble(jsonObject.getString("latitude")));
+        imagePreview.setLongitude(Double.parseDouble(jsonObject.getString("longitude")));
+        imagePreview.setThumbnailPath(jsonObject.getString("thumbnailPath"));
 
-        return image;
+        return imagePreview;
     }
 
 }

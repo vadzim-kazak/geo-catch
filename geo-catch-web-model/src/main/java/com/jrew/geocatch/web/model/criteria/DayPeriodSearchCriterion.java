@@ -1,4 +1,4 @@
-package com.jrew.geocatch.repository.model.criteria;
+package com.jrew.geocatch.web.model.criteria;
 
 /**
  * Represents day period search criteria

@@ -12,6 +12,7 @@
     <modules>
         <module>geo-catch-repository</module>
         <module>geo-catch-mobile</module>
+        <module>geo-catch-web-model</module>
     </modules>
 
     <properties>

@@ -1,13 +1,13 @@
 package com.jrew.geocatch.repository.dao.database;
 
-import com.jrew.geocatch.repository.model.DomainProperty;
 import com.jrew.geocatch.repository.model.Image;
-import com.jrew.geocatch.repository.model.ViewBounds;
-import com.jrew.geocatch.repository.model.criteria.DayPeriodSearchCriterion;
-import com.jrew.geocatch.repository.model.criteria.MonthPeriodSearchCriterion;
-import com.jrew.geocatch.repository.model.criteria.SearchCriteria;
 import com.jrew.geocatch.repository.model.DomainProperty_;
 import com.jrew.geocatch.repository.model.Image_;
+import com.jrew.geocatch.web.model.DomainProperty;
+import com.jrew.geocatch.web.model.ViewBounds;
+import com.jrew.geocatch.web.model.criteria.DayPeriodSearchCriterion;
+import com.jrew.geocatch.web.model.criteria.MonthPeriodSearchCriterion;
+import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;

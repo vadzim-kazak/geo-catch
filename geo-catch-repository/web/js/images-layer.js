@@ -1,7 +1,7 @@
 var ImageLayer = function(map) {
 
     /** Image provider url prefix **/
-    var imageProviderUrl = "http://${repository.domain.name}/${repository.context.path}/${repository.provider.path}";
+    var imageProviderUrl = "http://${repository.domain.name}/${repository.context.path}/${repository.search.path}";
 
     /** InfoWindow template id for JsRender **/
     var infoWindowTemplateId = 'infoWindowTmpl';
