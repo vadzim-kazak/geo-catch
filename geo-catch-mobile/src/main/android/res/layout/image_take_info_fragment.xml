@@ -39,9 +39,8 @@
                   android:text="Fish type:"
                   android:layout_gravity="left|center_vertical"/>
 
-        <AutoCompleteTextView android:layout_width="wrap_content"
+        <AutoCompleteTextView android:layout_width="match_parent"
                               android:layout_height="wrap_content"
-                              android:text="AutoCompleteTextView"
                               android:id="@+id/fishTypeTextView"
                               android:layout_gravity="center"/>
 
@@ -58,9 +57,8 @@
                   android:id="@+id/fishingToolTextView"
                   android:layout_gravity="left|center_vertical"/>
 
-        <AutoCompleteTextView android:layout_width="wrap_content"
+        <AutoCompleteTextView android:layout_width="match_parent"
                               android:layout_height="wrap_content"
-                              android:text="AutoCompleteTextView"
                               android:id="@+id/autoCompleteTextView2"
                               android:layout_gravity="center"/>
 
@@ -77,9 +75,8 @@
                   android:id="@+id/fishingBaitTextView"
                   android:layout_gravity="left|center_vertical"/>
 
-        <AutoCompleteTextView android:layout_width="wrap_content"
+        <AutoCompleteTextView android:layout_width="match_parent"
                               android:layout_height="wrap_content"
-                              android:text="AutoCompleteTextView"
                               android:id="@+id/autoCompleteTextView3"
                               android:layout_gravity="center"/>
 

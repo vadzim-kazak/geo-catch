@@ -25,9 +25,6 @@ public class DomainProperty implements Serializable {
     /** **/
     private String value;
 
-    /** **/
-    private boolean isDefault;
-
     /**
      *
      * @return
@@ -108,19 +105,8 @@ public class DomainProperty implements Serializable {
         this.value = value;
     }
 
-    /**
-     *
-     * @return
-     */
-    public boolean isDefault() {
-        return isDefault;
-    }
-
-    /**
-     *
-     * @param aDefault
-     */
-    public void setDefault(boolean aDefault) {
-        isDefault = aDefault;
+    @Override
+    public String toString() {
+        return value;
     }
 }

@@ -24,12 +24,15 @@ import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.util.CommonUtils;
 import com.jrew.geocatch.mobile.util.ImageUploadKeys;
+import com.jrew.geocatch.web.model.DomainProperty;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -117,12 +120,15 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 500.0f, this);
 
-        //domainInfoReciever = new DomainInfoServiceResultReceiver()
-
-        String locale = Locale.getDefault().getDisplayLanguage();
-
         //Populate
-        int fishTypeViewId = R.id.fishTypeTextView;
+        AutoCompleteTextView fishTextView = (AutoCompleteTextView) result.findViewById(R.id.fishTypeTextView);
+        loadDomainInfo(fishTextView, DomainInfoService.DomainInfoType.FISH);
+
+        AutoCompleteTextView fishTextView2 = (AutoCompleteTextView) result.findViewById(R.id.autoCompleteTextView2);
+        loadDomainInfo(fishTextView2, DomainInfoService.DomainInfoType.FISHING_TOOL);
+
+        AutoCompleteTextView fishTextView3 = (AutoCompleteTextView) result.findViewById(R.id.autoCompleteTextView3);
+        loadDomainInfo(fishTextView3, DomainInfoService.DomainInfoType.BAIT);
 
         return result;
     }
@@ -161,7 +167,15 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
             imageToUpload.setLatitude(latitude);
 
             // Longitude
-            imageToUpload.setLatitude(longitude);
+            imageToUpload.setLongitude(longitude);
+
+            imageToUpload.setPrivacyLevel(UploadImage.PrivacyLevel.PUBLIC);
+
+            List<DomainProperty> domainProperties = new ArrayList<DomainProperty>();
+            DomainProperty domainProperty = new DomainProperty();
+            domainProperty.setId(1l);
+            domainProperties.add(domainProperty);
+            imageToUpload.setDomainProperties(domainProperties);
 
             // Date
             DateFormat formatter = new SimpleDateFormat(getResources()
@@ -208,13 +222,20 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
 
     /**
      *
-     * @param bundle
      */
-    public void loadDomainInfo(Bundle bundle) {
+    public void loadDomainInfo(AutoCompleteTextView textView, int domainInfoType) {
+
+        Bundle bundle = new Bundle();
+
+        DomainInfoServiceResultReceiver receiver = new DomainInfoServiceResultReceiver(new Handler(), textView);
+
+        String locale = Locale.getDefault().getLanguage();
+        bundle.putString(DomainInfoService.LOCALE_KEY, locale);
+        bundle.putInt(DomainInfoService.DOMAIN_INFO_TYPE_KEY, domainInfoType);
+
         final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), DomainInfoService.class);
-        intent.putExtra(DomainInfoService.RECEIVER_KEY, resultReceiver);
-        intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.UPLOAD_IMAGE);
-        intent.putExtra(ImageService.REQUEST_KEY, bundle);
+        intent.putExtra(DomainInfoService.REQUEST_KEY, bundle);
+        intent.putExtra(DomainInfoService.RECEIVER_KEY, receiver);
         getActivity().startService(intent);
     }
 }

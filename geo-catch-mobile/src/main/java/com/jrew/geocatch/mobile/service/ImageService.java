@@ -81,6 +81,13 @@ public class ImageService extends IntentService {
         super(name);
     }
 
+    /**
+     *
+     */
+    public ImageService() {
+        super(ImageService.class.getName());
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
 

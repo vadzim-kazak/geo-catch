@@ -69,6 +69,13 @@ public class DomainInfoService extends IntentService {
         super(name);
     }
 
+    /**
+     *
+     */
+    public DomainInfoService() {
+        super(DomainInfoService.class.getName());
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
 
@@ -77,13 +84,13 @@ public class DomainInfoService extends IntentService {
 
         try {
 
-            receiver.send(ResultStatus.LOADING_FINISHED,
+            receiver.send(DomainInfoService.ResultStatus.LOADING_FINISHED,
                     RepositoryRestUtil.loadDomainInfo(intent, resources));
 
         } catch (Exception exception) {
             Bundle bundle = new Bundle();
             bundle.putString(Intent.EXTRA_TEXT, exception.toString());
-            receiver.send(ResultStatus.ERROR, bundle);
+            receiver.send(DomainInfoService.ResultStatus.ERROR, bundle);
         }
     }
 }

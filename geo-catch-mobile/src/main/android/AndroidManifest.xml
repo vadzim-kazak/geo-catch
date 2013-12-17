@@ -38,6 +38,7 @@
         </activity>
 
         <service android:enabled="true" android:name=".service.ImageService" />
+        <service android:enabled="true" android:name=".service.DomainInfoService" />
 
     </application>
 </manifest> 

@@ -9,7 +9,7 @@
 
     <item name="repositoryLoadDomainInfoUri" type="config">repo/domain/</item>
 
-    <item name="repositoryUploadImagesUri" type="config">spring/images/upload</item>
+    <item name="repositoryUploadImagesUri" type="config">repo/images</item>
 
     <item name="repositoryUploadImagesDateFormat" type="config">yyDDDHHmmssSSS</item>
 

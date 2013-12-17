@@ -32,12 +32,12 @@ public class DomainAutoCompleteAdapter extends ArrayAdapter<DomainProperty> impl
 
     @Override
     public int getCount() {
-        return initialDomainProperties.size();
+        return filteredDomainProperties.size();
     }
 
     @Override
     public DomainProperty getItem(int index) {
-        return initialDomainProperties.get(index);
+        return filteredDomainProperties.get(index);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class DomainAutoCompleteAdapter extends ArrayAdapter<DomainProperty> impl
             }
 
             @Override
-            protected void publishResults(CharSequence contraint, FilterResults results) {
+            protected void publishResults(CharSequence constraint, FilterResults results) {
 
                 if(results != null && results.count > 0) {
                     notifyDataSetChanged();
@@ -80,9 +80,12 @@ public class DomainAutoCompleteAdapter extends ArrayAdapter<DomainProperty> impl
      * @param constraint
      */
     private void filterDomainProperties(String constraint) {
+
+        String lowerCaseConstraint = constraint.toLowerCase();
+
         filteredDomainProperties.clear();
         for (DomainProperty domainProperty : initialDomainProperties) {
-            if (domainProperty.getValue().startsWith(constraint)) {
+            if (domainProperty.getValue().startsWith(lowerCaseConstraint)) {
                 filteredDomainProperties.add(domainProperty);
             }
         }

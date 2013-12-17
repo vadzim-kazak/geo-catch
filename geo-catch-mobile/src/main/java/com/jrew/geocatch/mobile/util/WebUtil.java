@@ -90,7 +90,6 @@ public class WebUtil {
         domainProperty.setType(jsonObject.getLong("type"));
         domainProperty.setItem(jsonObject.getLong("item"));
         domainProperty.setValue(jsonObject.getString("value"));
-        domainProperty.setDefault(jsonObject.getBoolean("isDefault"));
 
         return domainProperty;
     }

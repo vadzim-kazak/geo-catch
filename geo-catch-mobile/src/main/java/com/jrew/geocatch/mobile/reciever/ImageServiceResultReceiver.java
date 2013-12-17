@@ -34,7 +34,7 @@ public class ImageServiceResultReceiver extends ResultReceiver {
         /**
          *
          */
-        private List<ClientImage> images;
+        private List<ClientImagePreview> images;
 
         /**
          *
@@ -50,7 +50,7 @@ public class ImageServiceResultReceiver extends ResultReceiver {
          *
          * @param images
          */
-        public void loadThumbnails(List<ClientImage> images) {
+        public void loadThumbnails(List<ClientImagePreview> images) {
             this.images = images;
             counter = 0;
             isLoading = true;
@@ -62,7 +62,7 @@ public class ImageServiceResultReceiver extends ResultReceiver {
          */
         public void loadNext() {
             if(counter < images.size()) {
-                ClientImage image = images.get(counter);
+                ClientImagePreview image = images.get(counter);
                 mapFragment.loadThumbnail(image);
                 counter++;
             } else {
@@ -108,8 +108,8 @@ public class ImageServiceResultReceiver extends ResultReceiver {
             // Handle images json loading
             case ImageService.ResultStatus.LOAD_IMAGES_FINISHED:
 
-                List<ClientImage> images =
-                        (List<ClientImage>) resultData.getSerializable(ImageService.RESULT_KEY);
+                List<ClientImagePreview> images =
+                        (List<ClientImagePreview>) resultData.getSerializable(ImageService.RESULT_KEY);
 
                 if (images != null && !images.isEmpty()) {
 
@@ -153,13 +153,13 @@ public class ImageServiceResultReceiver extends ResultReceiver {
      *
      * @param images
      */
-    private void filterDisplayedImages(List<ClientImage> images) {
+    private void filterDisplayedImages(List<ClientImagePreview> images) {
 
         Map<Long, ImageMarkerPair> imageMarkerPairs = mapFragment.getImageMarkerPairs();
 
-        Iterator<ClientImage> imageIterator = images.listIterator();
+        Iterator<ClientImagePreview> imageIterator = images.listIterator();
         while(imageIterator.hasNext()) {
-            ClientImage image = imageIterator.next();
+            ClientImagePreview image = imageIterator.next();
             if(imageMarkerPairs.containsKey(image.getId())) {
                 imageIterator.remove();
             }

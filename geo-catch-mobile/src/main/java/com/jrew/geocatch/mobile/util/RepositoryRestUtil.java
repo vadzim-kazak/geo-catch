@@ -61,7 +61,7 @@ public class RepositoryRestUtil {
                      .append(resources.getString(R.config.repositoryPath))
                      .append(resources.getString(R.config.repositoryLoadImagesUri));
 
-        SearchCriteria searchCriteria = (SearchCriteria) intent.getParcelableExtra(ImageService.REQUEST_KEY);
+        SearchCriteria searchCriteria = (SearchCriteria) intent.getSerializableExtra(ImageService.REQUEST_KEY);
         Gson gson = new Gson();
         String searchCriteriaJson = gson.toJson(searchCriteria);
 
@@ -122,7 +122,7 @@ public class RepositoryRestUtil {
         HttpClient httpClient = new DefaultHttpClient();
         HttpContext localContext = new BasicHttpContext();
 
-        ClientImage clientImage = (ClientImage) intent.getSerializableExtra(ImageService.IMAGE_KEY);
+        ClientImagePreview clientImage = (ClientImagePreview) intent.getSerializableExtra(ImageService.IMAGE_KEY);
 
         StringBuilder loadImageThumbnailUrl = new StringBuilder();
         loadImageThumbnailUrl.append(resources.getString(R.config.repositoryUrl))
@@ -202,7 +202,7 @@ public class RepositoryRestUtil {
 
         Bundle requestBundle = (Bundle) intent.getParcelableExtra(DomainInfoService.REQUEST_KEY);
         String locale = requestBundle.getString(DomainInfoService.LOCALE_KEY);
-        String domainInfoType = requestBundle.getString(DomainInfoService.DOMAIN_INFO_TYPE_KEY);
+        int domainInfoType = requestBundle.getInt(DomainInfoService.DOMAIN_INFO_TYPE_KEY);
 
         StringBuilder loadDomainInfoUrl = new StringBuilder();
         loadDomainInfoUrl.append(resources.getString(R.config.repositoryUrl))

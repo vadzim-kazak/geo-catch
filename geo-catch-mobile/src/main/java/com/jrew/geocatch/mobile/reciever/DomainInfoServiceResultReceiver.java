@@ -1,5 +1,6 @@
 package com.jrew.geocatch.mobile.reciever;
 
+import android.R;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
@@ -32,8 +33,9 @@ public class DomainInfoServiceResultReceiver extends ResultReceiver {
             case DomainInfoService.ResultStatus.LOADING_FINISHED:
 
                 List<DomainProperty> domainProperties = (List<DomainProperty>) resultData.getSerializable(DomainInfoService.RESULT_KEY);
-                DomainAutoCompleteAdapter adapter = new DomainAutoCompleteAdapter(container.getContext(), container.getId(), domainProperties);
+                DomainAutoCompleteAdapter adapter = new DomainAutoCompleteAdapter(container.getContext(), R.layout.simple_dropdown_item_1line, domainProperties);
                 container.setAdapter(adapter);
+                container.setThreshold(1);
                 break;
 
             case DomainInfoService.ResultStatus.ERROR:

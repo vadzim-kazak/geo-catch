@@ -15,6 +15,7 @@ import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.reciever.ImageServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.web.model.ClientImage;
+import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.ViewBounds;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 
@@ -123,7 +124,7 @@ public class MapFragment extends SupportMapFragment {
      *
      * @param image
      */
-    public void loadThumbnail(ClientImage image) {
+    public void loadThumbnail(ClientImagePreview image) {
         final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), ImageService.class);
         intent.putExtra(ImageService.RECEIVER_KEY, imageResultReceiver);
         intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.LOAD_IMAGE_THUMBNAIL);
