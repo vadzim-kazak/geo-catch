@@ -9,25 +9,10 @@ package com.jrew.geocatch.mobile.util;
  */
 public class ImageUploadKeys {
 
-    /** Actualy will be DEVICE_ID **/
-    public static final String USER_ID = "userId";
-
     /** **/
-    public static final String DESCRIPTION = "description";
-
-    /** **/
-    public static final String LATITUDE = "latitude";
-
-    /** **/
-    public static final String LONGITUDE = "longitude";
-
-    /** **/
-    public static final String DATE = "date";
+    public static final String IMAGE = "image";
 
     /** **/
     public static final String FILE = "file";
-
-    /** **/
-    public static final String RATING = "rating";
 
 }

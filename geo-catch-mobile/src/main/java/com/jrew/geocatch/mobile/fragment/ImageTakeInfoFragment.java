@@ -14,13 +14,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.*;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.activity.MainActivity;
+import com.jrew.geocatch.mobile.model.UploadImage;
+import com.jrew.geocatch.mobile.reciever.DomainInfoServiceResultReceiver;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
+import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.util.CommonUtils;
 import com.jrew.geocatch.mobile.util.ImageUploadKeys;
@@ -30,6 +30,7 @@ import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created with IntelliJ IDEA.
@@ -50,7 +51,7 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
     private boolean isLocationDetected;
 
     /** **/
-    public ServiceResultReceiver resultReceiver;
+    private ServiceResultReceiver resultReceiver;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -116,6 +117,13 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 500.0f, this);
 
+        //domainInfoReciever = new DomainInfoServiceResultReceiver()
+
+        String locale = Locale.getDefault().getDisplayLanguage();
+
+        //Populate
+        int fishTypeViewId = R.id.fishTypeTextView;
+
         return result;
     }
 
@@ -133,33 +141,35 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
             }
 
             FileOutputStream out = new FileOutputStream(uploadingImage);
-            image.compress(Bitmap.CompressFormat.PNG, 70, out);
+            image.compress(Bitmap.CompressFormat.JPEG, 70, out);
             out.flush();
             out.close();
             bundle.putString(ImageUploadKeys.FILE, uploadingImage.getAbsolutePath());
 
+            UploadImage imageToUpload = new UploadImage();
 
-            // User Id
+            // Device Id
             String deviceId = Settings.Secure.getString(getActivity().getContentResolver(),
                     Settings.Secure.ANDROID_ID);
-            bundle.putString(ImageUploadKeys.USER_ID, deviceId);
+            imageToUpload.setDeviceId(deviceId);
 
             // Description
-            AutoCompleteTextView autoCompleteTextView =
-                    (AutoCompleteTextView) layout.findViewById(R.id.autoCompleteTextView1);
-            bundle.putString(ImageUploadKeys.DESCRIPTION, autoCompleteTextView.getText().toString());
+            TextView textView = (TextView) layout.findViewById(R.id.uploadImageDescription);
+            imageToUpload.setDescription(textView.getText().toString());
 
             // Latitude
-            bundle.putString(ImageUploadKeys.LATITUDE, Double.toString(latitude));
+            imageToUpload.setLatitude(latitude);
 
             // Longitude
-            bundle.putString(ImageUploadKeys.LONGITUDE, Double.toString(longitude));
+            imageToUpload.setLatitude(longitude);
 
             // Date
             DateFormat formatter = new SimpleDateFormat(getResources()
                     .getString(R.config.repositoryUploadImagesDateFormat));
             Date currentDate = new Date();
-            bundle.putString(ImageUploadKeys.DATE, formatter.format(currentDate));
+            imageToUpload.setDate(formatter.format(currentDate));
+
+            bundle.putSerializable(ImageUploadKeys.IMAGE, imageToUpload);
 
         } catch (Exception exception) {
             Log.e(CommonUtils.getDebugTag(getResources()), exception.getMessage());
@@ -191,6 +201,18 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
     public void uploadImage(Bundle bundle) {
         final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), ImageService.class);
         intent.putExtra(ImageService.RECEIVER_KEY, resultReceiver);
+        intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.UPLOAD_IMAGE);
+        intent.putExtra(ImageService.REQUEST_KEY, bundle);
+        getActivity().startService(intent);
+    }
+
+    /**
+     *
+     * @param bundle
+     */
+    public void loadDomainInfo(Bundle bundle) {
+        final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), DomainInfoService.class);
+        intent.putExtra(DomainInfoService.RECEIVER_KEY, resultReceiver);
         intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.UPLOAD_IMAGE);
         intent.putExtra(ImageService.REQUEST_KEY, bundle);
         getActivity().startService(intent);

@@ -15,6 +15,8 @@ import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.reciever.ImageServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.web.model.ClientImage;
+import com.jrew.geocatch.web.model.ViewBounds;
+import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -100,10 +102,20 @@ public class MapFragment extends SupportMapFragment {
      * @param latLngBounds
      */
     private void loadImages(LatLngBounds latLngBounds) {
+
+        SearchCriteria searchCriteria = new SearchCriteria();
+
+        ViewBounds viewBounds = new ViewBounds(latLngBounds.northeast.latitude,
+                latLngBounds.northeast.longitude,
+                latLngBounds.southwest.latitude,
+                latLngBounds.southwest.longitude);
+
+        searchCriteria.setViewBounds(viewBounds);
+
         final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), ImageService.class);
         intent.putExtra(ImageService.RECEIVER_KEY, imageResultReceiver);
         intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.LOAD_IMAGES);
-        intent.putExtra(ImageService.REQUEST_KEY, latLngBounds);
+        intent.putExtra(ImageService.REQUEST_KEY, searchCriteria);
         getActivity().startService(intent);
     }
 

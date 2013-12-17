@@ -1,9 +1,11 @@
 package com.jrew.geocatch.web.model.criteria;
 
+import java.io.Serializable;
+
 /**
  * Represents day period search criteria
  */
-public class MonthPeriodSearchCriterion {
+public class MonthPeriodSearchCriterion implements Serializable {
 
     /** **/
     private int fromMonth;

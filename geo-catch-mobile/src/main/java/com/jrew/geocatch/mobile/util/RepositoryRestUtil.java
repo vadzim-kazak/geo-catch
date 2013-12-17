@@ -2,16 +2,15 @@ package com.jrew.geocatch.mobile.util;
 
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.gson.Gson;
 import com.jrew.geocatch.mobile.R;
+import com.jrew.geocatch.mobile.model.UploadImage;
+import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.service.ImageService;
-import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.ClientImage;
-import com.jrew.geocatch.web.model.ViewBounds;
+import com.jrew.geocatch.web.model.ClientImagePreview;
+import com.jrew.geocatch.web.model.DomainProperty;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -27,10 +26,8 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.*;
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -40,6 +37,12 @@ import java.util.ArrayList;
  * Time: 3:45 PM
  */
 public class RepositoryRestUtil {
+
+    /** **/
+    private final static String UTF_8_ENCODING = "UTF8";
+
+    /** **/
+    private final static String CONTENT_TYPE_JSON_UTF_8 = "application/json; charset=UTF-8";
 
     /**
      *
@@ -53,28 +56,18 @@ public class RepositoryRestUtil {
         HttpClient httpClient = new DefaultHttpClient();
         HttpContext localContext = new BasicHttpContext();
 
-        LatLngBounds latLngBounds = (LatLngBounds) intent.getParcelableExtra(ImageService.REQUEST_KEY);
-
         StringBuilder loadImagesUrl = new StringBuilder();
         loadImagesUrl.append(resources.getString(R.config.repositoryUrl))
                      .append(resources.getString(R.config.repositoryPath))
                      .append(resources.getString(R.config.repositoryLoadImagesUri));
 
-        SearchCriteria searchCriteria = new SearchCriteria();
-
-        ViewBounds viewBounds = new ViewBounds(latLngBounds.northeast.latitude,
-                                               latLngBounds.northeast.longitude,
-                                               latLngBounds.southwest.latitude,
-                                               latLngBounds.southwest.longitude);
-
-        searchCriteria.setViewBounds(viewBounds);
-
+        SearchCriteria searchCriteria = (SearchCriteria) intent.getParcelableExtra(ImageService.REQUEST_KEY);
         Gson gson = new Gson();
-        String json = gson.toJson(searchCriteria);
+        String searchCriteriaJson = gson.toJson(searchCriteria);
 
         HttpPost httpPost = new HttpPost(loadImagesUrl.toString());
-        httpPost.setEntity(new ByteArrayEntity(json.getBytes("UTF8")));
-        httpPost.setHeader(HTTP.CONTENT_TYPE,"application/json; charset=UTF-8");
+        httpPost.setEntity(new ByteArrayEntity(searchCriteriaJson.getBytes(UTF_8_ENCODING)));
+        httpPost.setHeader(HTTP.CONTENT_TYPE, CONTENT_TYPE_JSON_UTF_8);
         HttpResponse response = httpClient.execute(httpPost, localContext);
 
         Bundle bundle = new Bundle();
@@ -167,69 +160,72 @@ public class RepositoryRestUtil {
                  .append(resources.getString(R.config.repositoryPath))
                  .append(resources.getString(R.config.repositoryUploadImagesUri));
 
-
         MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 
         Bundle imageBundle = (Bundle) intent.getParcelableExtra(ImageService.REQUEST_KEY);
 
-        /**
-         String url = "http://192.168.0.103:8080/fishing/spring/images/upload";
+        UploadImage imageToUpload = (UploadImage) imageBundle.getSerializable(ImageUploadKeys.IMAGE);
+        Gson gson = new Gson();
+        String imageToUploadJson = gson.toJson(imageToUpload);
 
-         request.add(new BasicNameValuePair("userId", "123132"));
-         request.add(new BasicNameValuePair("image", imageName));
-         request.add(new BasicNameValuePair("description", "Test description"));
-         request.add(new BasicNameValuePair("latitude", Float.toString(latitude)));
-         request.add(new BasicNameValuePair("longitude", Float.toString(longitude)));
-         request.add(new BasicNameValuePair("date", "13023121212128"));
-         request.add(new BasicNameValuePair("rating", "130231"));
-
-        **/
-
-//        entity.addPart(ImageUploadKeys.USER_ID,
-//                new StringBody("1"));
-//        entity.addPart(ImageUploadKeys.DESCRIPTION,
-//                new StringBody(imageBundle.getString(ImageUploadKeys.DESCRIPTION)));
-//        entity.addPart(ImageUploadKeys.LATITUDE,
-//                new StringBody(imageBundle.getString(ImageUploadKeys.LATITUDE)));
-//        entity.addPart(ImageUploadKeys.LONGITUDE,
-//                new StringBody(imageBundle.getString(ImageUploadKeys.LONGITUDE)));
-//        entity.addPart(ImageUploadKeys.DATE,
-//                new StringBody(imageBundle.getString(ImageUploadKeys.DATE)));
-//        entity.addPart(ImageUploadKeys.RATING,
-//                new StringBody("0"));
-//        entity.addPart(ImageUploadKeys.FILE,
-//                new StringBody(imageBundle.getString(ImageUploadKeys.FILE)));
-
-
-        entity.addPart(ImageUploadKeys.USER_ID,
-                new StringBody("1"));
-        entity.addPart(ImageUploadKeys.DESCRIPTION,
-                new StringBody(imageBundle.getString(ImageUploadKeys.DESCRIPTION)));
-        entity.addPart(ImageUploadKeys.LATITUDE,
-                new StringBody(imageBundle.getString(ImageUploadKeys.LATITUDE)));
-        entity.addPart(ImageUploadKeys.LONGITUDE,
-                new StringBody(imageBundle.getString(ImageUploadKeys.LONGITUDE)));
-        entity.addPart(ImageUploadKeys.DATE,
-                new StringBody(imageBundle.getString(ImageUploadKeys.DATE)));
-        entity.addPart(ImageUploadKeys.RATING,
-                new StringBody("0"));
+        entity.addPart(ImageUploadKeys.IMAGE,
+                new StringBody(imageToUploadJson));
         entity.addPart(ImageUploadKeys.FILE,
                 new FileBody(new File(imageBundle.getString(ImageUploadKeys.FILE))));
 
-
         HttpPost httpPost = new HttpPost(uploadUrl.toString());
         httpPost.setEntity(entity);
-
         HttpResponse response = httpClient.execute(httpPost, localContext);
 
         Bundle bundle = new Bundle();
-
         int status = response.getStatusLine().getStatusCode();
         if (status == 200) {
             bundle.putBoolean(ImageService.RESULT_KEY, true);
         } else {
             bundle.putBoolean(ImageService.RESULT_KEY, false);
         }
+
+        return bundle;
+    }
+
+    /**
+     *
+     * @param intent
+     * @param resources
+     * @return
+     * @throws Exception
+     */
+    public static Bundle loadDomainInfo(Intent intent, Resources resources) throws Exception {
+
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpContext localContext = new BasicHttpContext();
+
+        Bundle requestBundle = (Bundle) intent.getParcelableExtra(DomainInfoService.REQUEST_KEY);
+        String locale = requestBundle.getString(DomainInfoService.LOCALE_KEY);
+        String domainInfoType = requestBundle.getString(DomainInfoService.DOMAIN_INFO_TYPE_KEY);
+
+        StringBuilder loadDomainInfoUrl = new StringBuilder();
+        loadDomainInfoUrl.append(resources.getString(R.config.repositoryUrl))
+                         .append(resources.getString(R.config.repositoryPath))
+                         .append(resources.getString(R.config.repositoryLoadDomainInfoUri))
+                         .append(domainInfoType)
+                         .append('/')
+                         .append(locale);
+
+        HttpGet httpGet = new HttpGet(loadDomainInfoUrl.toString());
+        HttpResponse response = httpClient.execute(httpGet, localContext);
+
+        // put result to intent bundle
+        JSONArray result = WebUtil.parseHttpResponse(response);
+
+        Bundle bundle = new Bundle();
+
+        ArrayList<DomainProperty> domainProperties = new ArrayList<DomainProperty>();
+        for (int i = 0; i < result.length(); i++) {
+            domainProperties.add(WebUtil.convertToDomainProperty(result.getJSONObject(i)));
+        }
+
+        bundle.putSerializable(DomainInfoService.RESULT_KEY, domainProperties);
 
         return bundle;
     }

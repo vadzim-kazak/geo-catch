@@ -1,12 +1,14 @@
 package com.jrew.geocatch.web.model;
 
+import java.io.Serializable;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Vadim
  * Date: 11/17/13
  * Time: 1:13 PM
  */
-public class DomainProperty {
+public class DomainProperty implements Serializable {
 
     /** **/
     private long id;

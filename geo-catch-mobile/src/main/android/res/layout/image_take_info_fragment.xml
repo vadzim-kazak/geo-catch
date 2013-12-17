@@ -18,14 +18,31 @@
 
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:text="Description:"
+                  android:id="@+id/uploadImageDescriptionLabel"
+                  android:layout_gravity="left|center_vertical"/>
+
+        <EditText android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:text=""
+                  android:id="@+id/uploadImageDescription"/>
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
                   android:text="Fish type:"
-                  android:id="@+id/fishTypeTextView"
                   android:layout_gravity="left|center_vertical"/>
 
         <AutoCompleteTextView android:layout_width="wrap_content"
                               android:layout_height="wrap_content"
                               android:text="AutoCompleteTextView"
-                              android:id="@+id/autoCompleteTextView1"
+                              android:id="@+id/fishTypeTextView"
                               android:layout_gravity="center"/>
 
     </LinearLayout>
@@ -50,6 +67,25 @@
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="Bait:"
+                  android:id="@+id/fishingBaitTextView"
+                  android:layout_gravity="left|center_vertical"/>
+
+        <AutoCompleteTextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:text="AutoCompleteTextView"
+                              android:id="@+id/autoCompleteTextView3"
+                              android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:orientation="vertical"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content">
@@ -69,11 +105,6 @@
                          android:layout_height="wrap_content"
                          android:text="Public"
                          android:checked="true" />
-
-            <RadioButton android:id="@+id/shareFriens"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:text="For friends" />
 
             <RadioButton android:id="@+id/sharePrivate"
                          android:layout_width="wrap_content"

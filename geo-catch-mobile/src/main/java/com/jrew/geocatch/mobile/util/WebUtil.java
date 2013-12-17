@@ -3,6 +3,7 @@ package com.jrew.geocatch.mobile.util;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import com.jrew.geocatch.web.model.ClientImagePreview;
+import com.jrew.geocatch.web.model.DomainProperty;
 import org.apache.http.HttpResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,13 +74,25 @@ public class WebUtil {
      */
     public static ClientImagePreview convertToImage(JSONObject jsonObject) throws JSONException {
         ClientImagePreview imagePreview = new ClientImagePreview();
-        imagePreview.setId(Integer.parseInt(jsonObject.getString("id")));
+        imagePreview.setId(jsonObject.getLong("id"));
 
-        imagePreview.setLatitude(Double.parseDouble(jsonObject.getString("latitude")));
-        imagePreview.setLongitude(Double.parseDouble(jsonObject.getString("longitude")));
+        imagePreview.setLatitude(jsonObject.getDouble("latitude"));
+        imagePreview.setLongitude(jsonObject.getDouble("longitude"));
         imagePreview.setThumbnailPath(jsonObject.getString("thumbnailPath"));
 
         return imagePreview;
+    }
+
+    public static DomainProperty convertToDomainProperty(JSONObject jsonObject) throws JSONException {
+
+        DomainProperty domainProperty = new DomainProperty();
+        domainProperty.setId(jsonObject.getLong("id"));
+        domainProperty.setType(jsonObject.getLong("type"));
+        domainProperty.setItem(jsonObject.getLong("item"));
+        domainProperty.setValue(jsonObject.getString("value"));
+        domainProperty.setDefault(jsonObject.getBoolean("isDefault"));
+
+        return domainProperty;
     }
 
 }

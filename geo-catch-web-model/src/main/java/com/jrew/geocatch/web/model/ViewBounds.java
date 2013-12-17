@@ -1,9 +1,11 @@
 package com.jrew.geocatch.web.model;
 
+import java.io.Serializable;
+
 /**
  * Represents Google Maps Map View Bounds entity
  */
-public class ViewBounds {
+public class ViewBounds implements Serializable {
 
     /** **/
     private double northEastLat;

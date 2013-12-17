@@ -3,12 +3,13 @@ package com.jrew.geocatch.web.model.criteria;
 import com.jrew.geocatch.web.model.DomainProperty;
 import com.jrew.geocatch.web.model.ViewBounds;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Represents images search criteria
  */
-public class SearchCriteria {
+public class SearchCriteria implements Serializable {
 
     /** **/
     public static String OWNER_ANY_VALUE = "any";

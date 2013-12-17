@@ -1,13 +1,19 @@
-package com.jrew.geocatch.web.model;
+package com.jrew.geocatch.mobile.model;
+
+import com.jrew.geocatch.web.model.DomainProperty;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
- * Simplified version of Image dedicated for view image action
+ * Created with IntelliJ IDEA.
+ * User: Vadim
+ * Date: 7/13/13
+ * Time: 12:10 AM
+ * To change this template use File | Settings | File Templates.
  */
-public class ClientImage implements Serializable {
+public class UploadImage implements Serializable {
 
     /**
      *  Image privacy level
@@ -23,8 +29,11 @@ public class ClientImage implements Serializable {
         PUBLIC
     }
 
-    /** Image id **/
-    private long id;
+    /** **/
+    private long userId;
+
+    /** **/
+    private String deviceId;
 
     /** Description **/
     private String description;
@@ -36,13 +45,7 @@ public class ClientImage implements Serializable {
     private double longitude;
 
     /** **/
-    private String path;
-
-    /** **/
-    private Date date;
-
-    /** **/
-    private int rating;
+    private String date;
 
     /** **/
     private List<DomainProperty> domainProperties;
@@ -52,22 +55,10 @@ public class ClientImage implements Serializable {
 
     /**
      *
-     * @return
      */
-    public long getId() {
-        return id;
-    }
+    public UploadImage() {}
 
     /**
-     *
-     * @param id
-     */
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    /**
-     *
      * @return
      */
     public String getDescription() {
@@ -75,11 +66,72 @@ public class ClientImage implements Serializable {
     }
 
     /**
-     *
      * @param description
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    /**
+     * @return
+     */
+    public String getDate() {
+        return date;
+    }
+
+    /**
+     * @param date
+     */
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<DomainProperty> getDomainProperties() {
+        return domainProperties;
+    }
+
+    /**
+     *
+     * @param domainProperties
+     */
+    public void setDomainProperties(List<DomainProperty> domainProperties) {
+        this.domainProperties = domainProperties;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public long getUserId() {
+        return userId;
+    }
+
+    /**
+     *
+     * @param userId
+     */
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    /**
+     *
+     * @param deviceId
+     */
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
     /**
@@ -112,70 +164,6 @@ public class ClientImage implements Serializable {
      */
     public void setLongitude(double longitude) {
         this.longitude = longitude;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getPath() {
-        return path;
-    }
-
-    /**
-     *
-     * @param path
-     */
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Date getDate() {
-        return date;
-    }
-
-    /**
-     *
-     * @param date
-     */
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public int getRating() {
-        return rating;
-    }
-
-    /**
-     *
-     * @param rating
-     */
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public List<DomainProperty> getDomainProperties() {
-        return domainProperties;
-    }
-
-    /**
-     *
-     * @param domainProperties
-     */
-    public void setDomainProperties(List<DomainProperty> domainProperties) {
-        this.domainProperties = domainProperties;
     }
 
     /**

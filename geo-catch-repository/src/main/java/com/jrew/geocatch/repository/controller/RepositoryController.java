@@ -39,7 +39,7 @@ public class RepositoryController {
     @Resource
     private Validator validator;
 
-    @RequestMapping(value = "/images", method = RequestMethod.POST)
+    @RequestMapping(value = "images", method = RequestMethod.POST)
     public String uploadImage(@RequestParam("image") Image image,
                               @RequestPart("file") MultipartFile file) throws IOException {
 
@@ -51,24 +51,24 @@ public class RepositoryController {
         return "imageUpload";
     }
 
-    @RequestMapping(value = "/images/{imageId}", method = RequestMethod.POST)
+    @RequestMapping(value = "images/{imageId}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void updateImage(@RequestBody Image image) {
         imageService.updateImage(image);
     }
 
-    @RequestMapping(value = "/images/{imageId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "images/{imageId}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void deleteImage(@RequestParam("deviceId") String deviceId, @PathVariable("imageId") long imageId) {
        imageService.deleteImage(imageId, deviceId);
     }
 
-    @RequestMapping(value = "/images/{imageId}", method = RequestMethod.GET)
+    @RequestMapping(value = "images/{imageId}", method = RequestMethod.GET)
     public @ResponseBody ClientImage getImage(@PathVariable("imageId") long imageId) {
         return imageService.getImage(imageId);
     }
 
-    @RequestMapping(value = "/search", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "search", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody List<ClientImagePreview> loadImage(@RequestBody SearchCriteria searchCriteria) {
 
         return imageService.getImages(searchCriteria);
