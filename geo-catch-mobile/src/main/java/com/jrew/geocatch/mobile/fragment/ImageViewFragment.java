@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
+import com.jrew.geocatch.web.model.ClientImage;
 
 /**
  * Created with IntelliJ IDEA.
@@ -55,8 +56,8 @@ public class ImageViewFragment extends Fragment {
 
         Bundle fragmentData = getArguments();
         if (fragmentData != null && !fragmentData.isEmpty()) {
-            Image image = (Image) fragmentData.getSerializable(ImageService.IMAGE_KEY);
-            loadImagePicture((Image) image);
+            ClientImage image = (ClientImage) fragmentData.getSerializable(ImageService.IMAGE_KEY);
+            loadImagePicture((ClientImage) image);
             progress.show();
         }
 
@@ -67,7 +68,7 @@ public class ImageViewFragment extends Fragment {
      *
      * @param image
      */
-    private void loadImagePicture(Image image) {
+    private void loadImagePicture(ClientImage image) {
         final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), ImageService.class);
         intent.putExtra(ImageService.RECEIVER_KEY, imageResultReceiver);
         intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.LOAD_IMAGE);

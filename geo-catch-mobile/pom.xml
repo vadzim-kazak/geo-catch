@@ -16,8 +16,8 @@
 
     <dependencies>
         <dependency>
-            <artifactId>geo-catch-web-model</artifactId>
             <groupId>com.jrew.lab</groupId>
+            <artifactId>geo-catch-web-model</artifactId>
             <version>0.5</version>
         </dependency>
         <!-- Apache http components -->

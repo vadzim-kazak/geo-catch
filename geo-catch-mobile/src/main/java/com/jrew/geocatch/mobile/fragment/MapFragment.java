@@ -14,6 +14,7 @@ import com.jrew.geocatch.mobile.listener.MarkerOnClickListener;
 import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.reciever.ImageServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.ImageService;
+import com.jrew.geocatch.web.model.ClientImage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class MapFragment extends SupportMapFragment {
     private GoogleMap googleMap;
 
     /** **/
-    private Map<Integer, ImageMarkerPair> imageMarkerPairs;
+    private Map<Long, ImageMarkerPair> imageMarkerPairs;
 
     /** **/
     public ImageServiceResultReceiver imageResultReceiver;
@@ -48,7 +49,7 @@ public class MapFragment extends SupportMapFragment {
             int mapType = Integer.parseInt(getResources().getString(R.config.mapType));
             googleMap.setMapType(mapType);
 
-            imageMarkerPairs = new HashMap<Integer, ImageMarkerPair>();
+            imageMarkerPairs = new HashMap<Long, ImageMarkerPair>();
 
             final MapFragment fragment = this;
             googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
@@ -83,7 +84,7 @@ public class MapFragment extends SupportMapFragment {
      */
     private void removeInvisibleMarkers(LatLngBounds latLngBounds) {
 
-        for (Map.Entry<Integer, ImageMarkerPair> entry : imageMarkerPairs.entrySet()) {
+        for (Map.Entry<Long, ImageMarkerPair> entry : imageMarkerPairs.entrySet()) {
 //            ImageMarkerPair imageMarkerPair = entry.getValue();
 //            Marker currentMarker = imageMarkerPair.getMarker();
 //            if (latLngBounds.contains(currentMarker.getPosition())) {
@@ -110,7 +111,7 @@ public class MapFragment extends SupportMapFragment {
      *
      * @param image
      */
-    public void loadThumbnail(Image image) {
+    public void loadThumbnail(ClientImage image) {
         final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), ImageService.class);
         intent.putExtra(ImageService.RECEIVER_KEY, imageResultReceiver);
         intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.LOAD_IMAGE_THUMBNAIL);
@@ -122,7 +123,7 @@ public class MapFragment extends SupportMapFragment {
      *
      * @return
      */
-    public Map<Integer, ImageMarkerPair> getImageMarkerPairs() {
+    public Map<Long, ImageMarkerPair> getImageMarkerPairs() {
         return imageMarkerPairs;
     }
 

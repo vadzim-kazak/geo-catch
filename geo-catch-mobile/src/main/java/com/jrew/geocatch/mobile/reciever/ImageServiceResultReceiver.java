@@ -11,6 +11,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.jrew.geocatch.mobile.fragment.MapFragment;
 import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.service.ImageService;
+import com.jrew.geocatch.web.model.ClientImage;
+import com.jrew.geocatch.web.model.ClientImagePreview;
 
 import java.util.Iterator;
 import java.util.List;
@@ -32,7 +34,7 @@ public class ImageServiceResultReceiver extends ResultReceiver {
         /**
          *
          */
-        private List<Image> images;
+        private List<ClientImage> images;
 
         /**
          *
@@ -48,7 +50,7 @@ public class ImageServiceResultReceiver extends ResultReceiver {
          *
          * @param images
          */
-        public void loadThumbnails(List<Image> images) {
+        public void loadThumbnails(List<ClientImage> images) {
             this.images = images;
             counter = 0;
             isLoading = true;
@@ -60,7 +62,7 @@ public class ImageServiceResultReceiver extends ResultReceiver {
          */
         public void loadNext() {
             if(counter < images.size()) {
-                Image image = images.get(counter);
+                ClientImage image = images.get(counter);
                 mapFragment.loadThumbnail(image);
                 counter++;
             } else {
@@ -106,8 +108,8 @@ public class ImageServiceResultReceiver extends ResultReceiver {
             // Handle images json loading
             case ImageService.ResultStatus.LOAD_IMAGES_FINISHED:
 
-                List<Image> images =
-                        (List<Image>) resultData.getSerializable(ImageService.RESULT_KEY);
+                List<ClientImage> images =
+                        (List<ClientImage>) resultData.getSerializable(ImageService.RESULT_KEY);
 
                 if (images != null && !images.isEmpty()) {
 
@@ -121,7 +123,7 @@ public class ImageServiceResultReceiver extends ResultReceiver {
             // Handle thumbnail loading
             case ImageService.ResultStatus.LOAD_THUMBNAIL_FINISHED:
 
-                Image image = (Image) resultData.getSerializable(ImageService.IMAGE_KEY);
+                ClientImagePreview image = (ClientImagePreview) resultData.getSerializable(ImageService.IMAGE_KEY);
                 Bitmap bitmap = (Bitmap) resultData.getParcelable(ImageService.RESULT_KEY);
 
                 MarkerOptions markerOptions = new MarkerOptions();
@@ -151,13 +153,13 @@ public class ImageServiceResultReceiver extends ResultReceiver {
      *
      * @param images
      */
-    private void filterDisplayedImages(List<Image> images) {
+    private void filterDisplayedImages(List<ClientImage> images) {
 
-        Map<Integer, ImageMarkerPair> imageMarkerPairs = mapFragment.getImageMarkerPairs();
+        Map<Long, ImageMarkerPair> imageMarkerPairs = mapFragment.getImageMarkerPairs();
 
-        Iterator<Image> imageIterator = images.listIterator();
+        Iterator<ClientImage> imageIterator = images.listIterator();
         while(imageIterator.hasNext()) {
-            Image image = imageIterator.next();
+            ClientImage image = imageIterator.next();
             if(imageMarkerPairs.containsKey(image.getId())) {
                 imageIterator.remove();
             }
