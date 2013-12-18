@@ -39,10 +39,10 @@
                   android:text="Fish type:"
                   android:layout_gravity="left|center_vertical"/>
 
-        <AutoCompleteTextView android:layout_width="match_parent"
-                              android:layout_height="wrap_content"
-                              android:id="@+id/fishTypeTextView"
-                              android:layout_gravity="center"/>
+        <com.jrew.geocatch.mobile.view.DomainPropertyView android:layout_width="match_parent"
+                                                          android:layout_height="wrap_content"
+                                                          android:id="@+id/fishTypeTextView"
+                                                          android:layout_gravity="center"/>
 
     </LinearLayout>
 
@@ -57,10 +57,10 @@
                   android:id="@+id/fishingToolTextView"
                   android:layout_gravity="left|center_vertical"/>
 
-        <AutoCompleteTextView android:layout_width="match_parent"
-                              android:layout_height="wrap_content"
-                              android:id="@+id/autoCompleteTextView2"
-                              android:layout_gravity="center"/>
+        <com.jrew.geocatch.mobile.view.DomainPropertyView android:layout_width="match_parent"
+                                                          android:layout_height="wrap_content"
+                                                          android:id="@+id/autoCompleteTextView2"
+                                                          android:layout_gravity="center"/>
 
     </LinearLayout>
 
@@ -75,10 +75,10 @@
                   android:id="@+id/fishingBaitTextView"
                   android:layout_gravity="left|center_vertical"/>
 
-        <AutoCompleteTextView android:layout_width="match_parent"
-                              android:layout_height="wrap_content"
-                              android:id="@+id/autoCompleteTextView3"
-                              android:layout_gravity="center"/>
+        <com.jrew.geocatch.mobile.view.DomainPropertyView android:layout_width="match_parent"
+                                                          android:layout_height="wrap_content"
+                                                          android:id="@+id/autoCompleteTextView3"
+                                                          android:layout_gravity="center"/>
 
     </LinearLayout>
 

@@ -24,6 +24,9 @@ public class DomainAutoCompleteAdapter extends ArrayAdapter<DomainProperty> impl
     /** **/
     private List<DomainProperty> filteredDomainProperties;
 
+    /** **/
+    private DomainProperty selectedDomainProperty;
+
     public DomainAutoCompleteAdapter(Context context, int textViewResourceId, List<DomainProperty> domainProperties) {
         super(context, textViewResourceId);
         this.initialDomainProperties = domainProperties;
@@ -89,5 +92,13 @@ public class DomainAutoCompleteAdapter extends ArrayAdapter<DomainProperty> impl
                 filteredDomainProperties.add(domainProperty);
             }
         }
+    }
+
+    /**
+     *
+     * @return
+     */
+    public DomainProperty getSelectedDomainProperty() {
+        return selectedDomainProperty;
     }
 }

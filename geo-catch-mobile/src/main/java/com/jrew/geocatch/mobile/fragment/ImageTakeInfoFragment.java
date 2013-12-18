@@ -24,6 +24,7 @@ import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.util.CommonUtils;
 import com.jrew.geocatch.mobile.util.ImageUploadKeys;
+import com.jrew.geocatch.mobile.view.DomainPropertyView;
 import com.jrew.geocatch.web.model.DomainProperty;
 
 import java.io.File;
@@ -121,13 +122,13 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 500.0f, this);
 
         //Populate
-        AutoCompleteTextView fishTextView = (AutoCompleteTextView) result.findViewById(R.id.fishTypeTextView);
+        DomainPropertyView fishTextView = (DomainPropertyView) result.findViewById(R.id.fishTypeTextView);
         loadDomainInfo(fishTextView, DomainInfoService.DomainInfoType.FISH);
 
-        AutoCompleteTextView fishTextView2 = (AutoCompleteTextView) result.findViewById(R.id.autoCompleteTextView2);
+        DomainPropertyView fishTextView2 = (DomainPropertyView) result.findViewById(R.id.autoCompleteTextView2);
         loadDomainInfo(fishTextView2, DomainInfoService.DomainInfoType.FISHING_TOOL);
 
-        AutoCompleteTextView fishTextView3 = (AutoCompleteTextView) result.findViewById(R.id.autoCompleteTextView3);
+        DomainPropertyView fishTextView3 = (DomainPropertyView) result.findViewById(R.id.autoCompleteTextView3);
         loadDomainInfo(fishTextView3, DomainInfoService.DomainInfoType.BAIT);
 
         return result;
@@ -172,9 +173,22 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
             imageToUpload.setPrivacyLevel(UploadImage.PrivacyLevel.PUBLIC);
 
             List<DomainProperty> domainProperties = new ArrayList<DomainProperty>();
-            DomainProperty domainProperty = new DomainProperty();
-            domainProperty.setId(1l);
-            domainProperties.add(domainProperty);
+
+            DomainPropertyView fishTextView = (DomainPropertyView) layout.findViewById(R.id.fishTypeTextView);
+            if (fishTextView.isDomainPropertySelected()) {
+                domainProperties.add(fishTextView.getSelectedDomainProperty());
+            }
+
+            DomainPropertyView fishTextView2 = (DomainPropertyView) layout.findViewById(R.id.autoCompleteTextView2);
+            if (fishTextView2.isDomainPropertySelected()) {
+                domainProperties.add(fishTextView2.getSelectedDomainProperty());
+            }
+
+            DomainPropertyView fishTextView3 = (DomainPropertyView) layout.findViewById(R.id.autoCompleteTextView3);
+            if (fishTextView3.isDomainPropertySelected()) {
+                domainProperties.add(fishTextView3.getSelectedDomainProperty());
+            }
+
             imageToUpload.setDomainProperties(domainProperties);
 
             // Date
