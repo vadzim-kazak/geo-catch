@@ -10,11 +10,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
 import com.jrew.geocatch.web.model.ClientImage;
 import com.jrew.geocatch.web.model.ClientImagePreview;
+import com.jrew.geocatch.web.model.DomainProperty;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,7 +42,22 @@ public class ImageViewFragment extends Fragment {
 
         View imageViewFragmentLayout = inflater.inflate(R.layout.image_view_fragment, container, false);
 
+        final DateFormat dateFormat = new SimpleDateFormat(getResources().getString(R.config.repositoryUploadImagesDateFormat));
+
         final ImageView imageView = (ImageView) imageViewFragmentLayout.findViewById(R.id.imageView);
+
+        final TextView description = (TextView) imageViewFragmentLayout.findViewById(R.id.imageDescription);
+
+        final TextView date = (TextView) imageViewFragmentLayout.findViewById(R.id.imageDate);
+
+        final LinearLayout fishTypeRow = (LinearLayout) imageViewFragmentLayout.findViewById(R.id.fishTypeRow);
+        final TextView fishType = (TextView) imageViewFragmentLayout.findViewById(R.id.fishTypeDescription);
+
+        final LinearLayout fishingToolRow = (LinearLayout) imageViewFragmentLayout.findViewById(R.id.fishingToolRow);
+        final TextView fishingTool = (TextView) imageViewFragmentLayout.findViewById(R.id.fishingToolDescription);
+
+        final LinearLayout fishingBaitRow = (LinearLayout) imageViewFragmentLayout.findViewById(R.id.fishingBaitRow);
+        final TextView fishingBait = (TextView) imageViewFragmentLayout.findViewById(R.id.fishingBaitDescription);
 
         imageResultReceiver = new ServiceResultReceiver(new Handler());
         imageResultReceiver.setReceiver(new ServiceResultReceiver.Receiver() {
@@ -44,6 +66,38 @@ public class ImageViewFragment extends Fragment {
             public void onReceiveResult(int resultCode, Bundle resultData) {
 
                 switch (resultCode) {
+
+                    case ImageService.ResultStatus.LOAD_IMAGE_DATA_FINISHED:
+                        ClientImage clientImage = (ClientImage) resultData.getSerializable(ImageService.RESULT_KEY);
+
+                        // Populate image data
+                        // description
+                        description.setText(clientImage.getDescription());
+
+                        // date
+                        String dateLabel = date.getText().toString();
+                        date.setText(dateLabel + dateFormat.format(clientImage.getDate()));
+
+                        // domain properties
+                        List<DomainProperty> domainProperties = clientImage.getDomainProperties();
+                        for (DomainProperty domainProperty : domainProperties) {
+                            long domainPropertyType = domainProperty.getType();
+                            if (domainPropertyType == 1) {
+                                fishTypeRow.setVisibility(View.VISIBLE);
+                                fishType.setText(domainProperty.getValue());
+                            } else if (domainPropertyType == 2) {
+                                fishingToolRow.setVisibility(View.VISIBLE);
+                                fishingTool.setText(domainProperty.getValue());
+                            } else if (domainPropertyType == 3) {
+                                fishingBaitRow.setVisibility(View.VISIBLE);
+                                fishingBait.setText(domainProperty.getValue());
+                            }
+                        }
+
+                        // Load image
+                        loadImage(clientImage);
+                        break;
+
                     case ImageService.ResultStatus.LOAD_IMAGE_FINISHED:
                          Bitmap image = (Bitmap) resultData.get(ImageService.RESULT_KEY);
                          imageView.setImageBitmap(image);
@@ -69,6 +123,18 @@ public class ImageViewFragment extends Fragment {
      * @param image
      */
     private void loadClientImage(ClientImagePreview image) {
+        final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), ImageService.class);
+        intent.putExtra(ImageService.RECEIVER_KEY, imageResultReceiver);
+        intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.LOAD_IMAGE_DATA);
+        intent.putExtra(ImageService.REQUEST_KEY, image.getId());
+        getActivity().startService(intent);
+    }
+
+    /**
+     *
+     * @param image
+     */
+    private void loadImage(ClientImage image) {
         final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), ImageService.class);
         intent.putExtra(ImageService.RECEIVER_KEY, imageResultReceiver);
         intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.LOAD_IMAGE);

@@ -26,6 +26,7 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class RepositoryRestUtil {
         StringBuilder loadImagesUrl = new StringBuilder();
         loadImagesUrl.append(resources.getString(R.config.repositoryUrl))
                      .append(resources.getString(R.config.repositoryPath))
-                     .append(resources.getString(R.config.repositoryLoadImagesUri));
+                     .append(resources.getString(R.config.repositorySearchUri));
 
         SearchCriteria searchCriteria = (SearchCriteria) intent.getSerializableExtra(ImageService.REQUEST_KEY);
         Gson gson = new Gson();
@@ -70,16 +71,51 @@ public class RepositoryRestUtil {
         httpPost.setHeader(HTTP.CONTENT_TYPE, CONTENT_TYPE_JSON_UTF_8);
         HttpResponse response = httpClient.execute(httpPost, localContext);
 
-        Bundle bundle = new Bundle();
-
-        // put result to intent bundle
-        JSONArray result = WebUtil.parseHttpResponse(response);
+        // Parse response
+        JSONArray result = WebUtil.parseHttpResponseAsArray(response);
         ArrayList<ClientImagePreview> images = new ArrayList<ClientImagePreview>();
         for (int i = 0; i < result.length(); i++) {
-            images.add(WebUtil.convertToImage(result.getJSONObject(i)));
+            images.add(WebUtil.convertToClientImagePreview(result.getJSONObject(i)));
         }
 
+        // put result to intent bundle
+        Bundle bundle = new Bundle();
         bundle.putSerializable(ImageService.RESULT_KEY, images);
+
+        return bundle;
+    }
+
+    /**
+     *
+     * @param intent
+     * @param resources
+     * @return
+     * @throws Exception
+     */
+    public static Bundle loadImageData(Intent intent, Resources resources) throws Exception {
+
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpContext localContext = new BasicHttpContext();
+
+        long imageId = (Long) intent.getSerializableExtra(ImageService.REQUEST_KEY);
+
+        StringBuilder loadImageUrl = new StringBuilder();
+        loadImageUrl.append(resources.getString(R.config.repositoryUrl))
+                .append(resources.getString(R.config.repositoryPath))
+                .append(resources.getString(R.config.repositoryImagesUri))
+                .append("/")
+                .append(imageId);
+
+        HttpGet httpGet = new HttpGet(loadImageUrl.toString());
+        HttpResponse response = httpClient.execute(httpGet, localContext);
+
+        // Parse response
+        JSONObject result = WebUtil.parseHttpResponseAsObject(response);
+        ClientImage clientImage = WebUtil.convertToClientImage(result, resources);
+
+        // put result to intent bundle
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ImageService.RESULT_KEY, clientImage);
 
         return bundle;
     }
@@ -93,7 +129,10 @@ public class RepositoryRestUtil {
      */
     public static Bundle loadThumbnail(Intent intent, Resources resources) throws Exception  {
         ClientImagePreview imagePreview = (ClientImagePreview) intent.getSerializableExtra(ImageService.IMAGE_KEY);
-        return loadImageFromPath(intent, resources, imagePreview.getThumbnailPath());
+        Bundle bundle = loadImageFromPath(intent, resources, imagePreview.getThumbnailPath());
+        ClientImagePreview clientImagePreview = (ClientImagePreview) intent.getSerializableExtra(ImageService.IMAGE_KEY);
+        bundle.putSerializable(ImageService.IMAGE_KEY, clientImagePreview);
+        return bundle;
     }
 
     /**
@@ -122,8 +161,6 @@ public class RepositoryRestUtil {
         HttpClient httpClient = new DefaultHttpClient();
         HttpContext localContext = new BasicHttpContext();
 
-        ClientImagePreview clientImage = (ClientImagePreview) intent.getSerializableExtra(ImageService.IMAGE_KEY);
-
         StringBuilder loadImageThumbnailUrl = new StringBuilder();
         loadImageThumbnailUrl.append(resources.getString(R.config.repositoryUrl))
                 .append(imagePath);
@@ -137,7 +174,6 @@ public class RepositoryRestUtil {
         Bundle bundle = new Bundle();
 
         // put result to intent bundle
-        bundle.putSerializable(ImageService.IMAGE_KEY, clientImage);
         bundle.putParcelable(ImageService.RESULT_KEY, WebUtil.getImageFromWeb(response));
 
         return bundle;
@@ -158,7 +194,7 @@ public class RepositoryRestUtil {
         StringBuilder uploadUrl = new StringBuilder();
         uploadUrl.append(resources.getString(R.config.repositoryUrl))
                  .append(resources.getString(R.config.repositoryPath))
-                 .append(resources.getString(R.config.repositoryUploadImagesUri));
+                 .append(resources.getString(R.config.repositoryImagesUri));
 
         MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 
@@ -216,7 +252,7 @@ public class RepositoryRestUtil {
         HttpResponse response = httpClient.execute(httpGet, localContext);
 
         // put result to intent bundle
-        JSONArray result = WebUtil.parseHttpResponse(response);
+        JSONArray result = WebUtil.parseHttpResponseAsArray(response);
 
         Bundle bundle = new Bundle();
 

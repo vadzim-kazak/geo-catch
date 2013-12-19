@@ -43,6 +43,9 @@ public class ImageService extends IntentService {
         public static final String LOAD_IMAGE_THUMBNAIL = "loadImageThumbnail";
 
         /** **/
+        public static final String LOAD_IMAGE_DATA = "loadImageData";
+
+        /** **/
         public static final String LOAD_IMAGE = "loadImage";
 
         /** **/
@@ -64,13 +67,16 @@ public class ImageService extends IntentService {
         public static final int LOAD_THUMBNAIL_FINISHED = 3;
 
         /** **/
-        public static final int LOAD_IMAGE_FINISHED = 4;
+        public static final int LOAD_IMAGE_DATA_FINISHED = 4;
 
         /** **/
-        public static final int UPLOAD_IMAGE_FINISHED = 5;
+        public static final int LOAD_IMAGE_FINISHED = 5;
 
         /** **/
-        public static final int ERROR = 6;
+        public static final int UPLOAD_IMAGE_FINISHED = 6;
+
+        /** **/
+        public static final int ERROR = 7;
     }
 
     /**
@@ -105,6 +111,11 @@ public class ImageService extends IntentService {
 
                 receiver.send(ResultStatus.LOAD_THUMBNAIL_FINISHED,
                         RepositoryRestUtil.loadThumbnail(intent, resources));
+
+            } else if (command.equals(Commands.LOAD_IMAGE_DATA)) {
+
+                receiver.send(ResultStatus.LOAD_IMAGE_DATA_FINISHED,
+                        RepositoryRestUtil.loadImageData(intent, resources));
 
             } else if (command.equals(Commands.LOAD_IMAGE)) {
 

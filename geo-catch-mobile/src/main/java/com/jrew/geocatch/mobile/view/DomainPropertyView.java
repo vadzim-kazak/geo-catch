@@ -32,6 +32,7 @@ public class DomainPropertyView extends AutoCompleteTextView {
     public DomainPropertyView(Context context) {
         super(context);
         adapter = new DomainAutoCompleteAdapter(context, R.layout.simple_dropdown_item_1line, null);
+        setAdapter(adapter);
         setThreshold(THRESHOLD_VALUE);
     }
 
@@ -42,6 +43,9 @@ public class DomainPropertyView extends AutoCompleteTextView {
      */
     public DomainPropertyView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        adapter = new DomainAutoCompleteAdapter(context, R.layout.simple_dropdown_item_1line, null);
+        setAdapter(adapter);
+        setThreshold(THRESHOLD_VALUE);
     }
 
     /**

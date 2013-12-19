@@ -33,7 +33,7 @@ public class DomainAutoCompleteAdapter extends ArrayAdapter<DomainProperty> impl
     public DomainAutoCompleteAdapter(Context context, int textViewResourceId, List<DomainProperty> domainProperties) {
         super(context, textViewResourceId);
         this.initialDomainProperties = domainProperties;
-        filteredDomainProperties = new ArrayList<DomainProperty>(initialDomainProperties.size());
+        filteredDomainProperties = new ArrayList<DomainProperty>();
     }
 
     @Override

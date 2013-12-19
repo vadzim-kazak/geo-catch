@@ -14,15 +14,72 @@
 
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:text="New Text"
-              android:id="@+id/textView"
+              android:id="@+id/imageDescription"
               android:layout_gravity="left|center_vertical"/>
 
-    <TextView android:layout_width="wrap_content"
+    <TextView android:id="@+id/imageDate"
+              android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:text="New Text"
-              android:id="@+id/textView1"
+              android:text="Date: "
               android:layout_gravity="left|center_vertical"/>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:id="@+id/fishTypeRow"
+                  android:visibility="invisible"
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="Fish:"
+                  android:layout_gravity="left|center_vertical"/>
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/fishTypeDescription"
+                  android:layout_gravity="left|center_vertical"/>
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:id="@+id/fishingToolRow"
+                  android:visibility="invisible"
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="Fishing tool:"
+                  android:layout_gravity="left|center_vertical"/>
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/fishingToolDescription"
+                  android:layout_gravity="left|center_vertical"/>
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:id="@+id/fishingBaitRow"
+                  android:visibility="invisible"
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="Fishing bait:"
+                  android:layout_gravity="left|center_vertical"/>
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/fishingBaitDescription"
+                  android:layout_gravity="left|center_vertical"/>
+
+    </LinearLayout>
+
 
     <Button android:layout_width="wrap_content"
             android:layout_height="wrap_content"

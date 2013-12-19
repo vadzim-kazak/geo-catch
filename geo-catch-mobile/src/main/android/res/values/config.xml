@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <item name="repositoryUrl" type="config">http://192.168.0.100:8080/</item>
+    <item name="repositoryUrl" type="config">http://192.168.0.100:9000/</item>
 
     <item name="repositoryPath" type="config">fishing/</item>
 
-    <item name="repositoryLoadImagesUri" type="config">repo/search</item>
+    <item name="repositorySearchUri" type="config">repo/search</item>
 
     <item name="repositoryLoadDomainInfoUri" type="config">repo/domain/</item>
 
-    <item name="repositoryUploadImagesUri" type="config">repo/images</item>
+    <item name="repositoryImagesUri" type="config">repo/images</item>
 
     <item name="repositoryUploadImagesDateFormat" type="config">yyDDDHHmmssSSS</item>
 
