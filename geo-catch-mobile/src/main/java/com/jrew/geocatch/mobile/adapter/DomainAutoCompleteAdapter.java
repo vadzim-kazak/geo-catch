@@ -24,9 +24,12 @@ public class DomainAutoCompleteAdapter extends ArrayAdapter<DomainProperty> impl
     /** **/
     private List<DomainProperty> filteredDomainProperties;
 
-    /** **/
-    private DomainProperty selectedDomainProperty;
-
+    /**
+     *
+     * @param context
+     * @param textViewResourceId
+     * @param domainProperties
+     */
     public DomainAutoCompleteAdapter(Context context, int textViewResourceId, List<DomainProperty> domainProperties) {
         super(context, textViewResourceId);
         this.initialDomainProperties = domainProperties;
@@ -96,9 +99,26 @@ public class DomainAutoCompleteAdapter extends ArrayAdapter<DomainProperty> impl
 
     /**
      *
+     * @param value
      * @return
      */
-    public DomainProperty getSelectedDomainProperty() {
-        return selectedDomainProperty;
+    public DomainProperty getDomainPropertyByValue(String value) {
+        if (initialDomainProperties != null) {
+            for (DomainProperty domainProperty : initialDomainProperties) {
+                if (domainProperty.getValue().equalsIgnoreCase(value)) {
+                    return domainProperty;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     *
+     * @param initialDomainProperties
+     */
+    public void setInitialDomainProperties(List<DomainProperty> initialDomainProperties) {
+        this.initialDomainProperties = initialDomainProperties;
     }
 }

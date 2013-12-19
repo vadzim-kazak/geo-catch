@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +21,12 @@ import com.jrew.geocatch.mobile.reciever.DomainInfoServiceResultReceiver;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.service.ImageService;
-import com.jrew.geocatch.mobile.util.CommonUtils;
+import com.jrew.geocatch.mobile.util.FileUtil;
 import com.jrew.geocatch.mobile.util.ImageUploadKeys;
 import com.jrew.geocatch.mobile.view.DomainPropertyView;
 import com.jrew.geocatch.web.model.DomainProperty;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -52,15 +50,13 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
     private double longitude;
 
     /** **/
-    private boolean isLocationDetected;
+    private ServiceResultReceiver resultReceiver;
 
     /** **/
-    private ServiceResultReceiver resultReceiver;
+    private DomainPropertyView fishTypeView, fishingToolView, fishingBaitView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        isLocationDetected = false;
 
         final View result = inflater.inflate(R.layout.image_take_info_fragment, container, false);
 
@@ -78,7 +74,7 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
 
             @Override
             public void onClick(View view) {
-                if (!isLocationDetected) {
+                if (!isLocationDetected()) {
                     Context context = getActivity();
                     CharSequence text = "Wait for location loading...";
                     int duration = Toast.LENGTH_SHORT;
@@ -86,7 +82,7 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
                     toast.show();
                 } else {
                     Bitmap image = (Bitmap) fragmentData.getParcelable("bmp");
-                    Bundle imageBundle = collectInfo(result, image);
+                    Bundle imageBundle = prepareUploadData(result, image);
                     uploadImage(imageBundle);
                 }
             }
@@ -122,88 +118,120 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 500.0f, this);
 
         //Populate
-        DomainPropertyView fishTextView = (DomainPropertyView) result.findViewById(R.id.fishTypeTextView);
-        loadDomainInfo(fishTextView, DomainInfoService.DomainInfoType.FISH);
+        fishTypeView = (DomainPropertyView) result.findViewById(R.id.fishTypeView);
+        loadDomainInfo(fishTypeView, DomainInfoService.DomainInfoType.FISH);
 
-        DomainPropertyView fishTextView2 = (DomainPropertyView) result.findViewById(R.id.autoCompleteTextView2);
-        loadDomainInfo(fishTextView2, DomainInfoService.DomainInfoType.FISHING_TOOL);
+        fishingToolView = (DomainPropertyView) result.findViewById(R.id.fishingToolView);
+        loadDomainInfo(fishingToolView, DomainInfoService.DomainInfoType.FISHING_TOOL);
 
-        DomainPropertyView fishTextView3 = (DomainPropertyView) result.findViewById(R.id.autoCompleteTextView3);
-        loadDomainInfo(fishTextView3, DomainInfoService.DomainInfoType.BAIT);
+        fishingBaitView = (DomainPropertyView) result.findViewById(R.id.fishingBaitView);
+        loadDomainInfo(fishingBaitView, DomainInfoService.DomainInfoType.BAIT);
 
         return result;
     }
 
-    public Bundle collectInfo(View layout, Bitmap image) {
+    /**
+     *
+     * @param layout
+     * @param image
+     * @return
+     */
+    public Bundle prepareUploadData(View layout, Bitmap image) {
 
         Bundle bundle = new Bundle();
 
-        try {
+        File cacheDir = getActivity().getCacheDir();
+        bundle.putString(ImageUploadKeys.FILE, FileUtil.writeBitmapToFileSystem(image, cacheDir, getResources()));
 
-            //Image path
-            File cacheDir = getActivity().getCacheDir();
-            File uploadingImage = new File(cacheDir, "geoCatchUpload.png");
-            if (uploadingImage.exists()) {
-                uploadingImage.delete();
-            }
-
-            FileOutputStream out = new FileOutputStream(uploadingImage);
-            image.compress(Bitmap.CompressFormat.JPEG, 70, out);
-            out.flush();
-            out.close();
-            bundle.putString(ImageUploadKeys.FILE, uploadingImage.getAbsolutePath());
-
-            UploadImage imageToUpload = new UploadImage();
-
-            // Device Id
-            String deviceId = Settings.Secure.getString(getActivity().getContentResolver(),
-                    Settings.Secure.ANDROID_ID);
-            imageToUpload.setDeviceId(deviceId);
-
-            // Description
-            TextView textView = (TextView) layout.findViewById(R.id.uploadImageDescription);
-            imageToUpload.setDescription(textView.getText().toString());
-
-            // Latitude
-            imageToUpload.setLatitude(latitude);
-
-            // Longitude
-            imageToUpload.setLongitude(longitude);
-
-            imageToUpload.setPrivacyLevel(UploadImage.PrivacyLevel.PUBLIC);
-
-            List<DomainProperty> domainProperties = new ArrayList<DomainProperty>();
-
-            DomainPropertyView fishTextView = (DomainPropertyView) layout.findViewById(R.id.fishTypeTextView);
-            if (fishTextView.isDomainPropertySelected()) {
-                domainProperties.add(fishTextView.getSelectedDomainProperty());
-            }
-
-            DomainPropertyView fishTextView2 = (DomainPropertyView) layout.findViewById(R.id.autoCompleteTextView2);
-            if (fishTextView2.isDomainPropertySelected()) {
-                domainProperties.add(fishTextView2.getSelectedDomainProperty());
-            }
-
-            DomainPropertyView fishTextView3 = (DomainPropertyView) layout.findViewById(R.id.autoCompleteTextView3);
-            if (fishTextView3.isDomainPropertySelected()) {
-                domainProperties.add(fishTextView3.getSelectedDomainProperty());
-            }
-
-            imageToUpload.setDomainProperties(domainProperties);
-
-            // Date
-            DateFormat formatter = new SimpleDateFormat(getResources()
-                    .getString(R.config.repositoryUploadImagesDateFormat));
-            Date currentDate = new Date();
-            imageToUpload.setDate(formatter.format(currentDate));
-
-            bundle.putSerializable(ImageUploadKeys.IMAGE, imageToUpload);
-
-        } catch (Exception exception) {
-            Log.e(CommonUtils.getDebugTag(getResources()), exception.getMessage());
-        }
+        UploadImage uploadImage = prepareImageData(layout);
+        bundle.putSerializable(ImageUploadKeys.IMAGE, uploadImage);
 
         return bundle;
+    }
+
+    /**
+     *
+     * @param layout
+     * @return
+     */
+    private UploadImage prepareImageData(View layout) {
+        UploadImage uploadImage = new UploadImage();
+
+        // Device Id
+        String deviceId = Settings.Secure.getString(getActivity().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+        uploadImage.setDeviceId(deviceId);
+
+        // Description
+        TextView textView = (TextView) layout.findViewById(R.id.uploadImageDescription);
+        uploadImage.setDescription(textView.getText().toString());
+
+        // Latitude
+        uploadImage.setLatitude(latitude);
+
+        // Longitude
+        uploadImage.setLongitude(longitude);
+
+        // Privacy level
+        uploadImage.setPrivacyLevel(getSelectedPrivacyLevel(layout));
+
+        // Domain properties
+        uploadImage.setDomainProperties(getPopulatedDomainProperties());
+
+        // Date
+        DateFormat formatter = new SimpleDateFormat(getResources()
+                .getString(R.config.repositoryUploadImagesDateFormat));
+        Date currentDate = new Date();
+        uploadImage.setDate(formatter.format(currentDate));
+
+        return uploadImage;
+    }
+
+    /**
+     *
+     * @param layout
+     * @return
+     */
+    private UploadImage.PrivacyLevel getSelectedPrivacyLevel(View layout) {
+
+        RadioGroup radioGroup = (RadioGroup) layout.findViewById(R.id.privacyLevel);
+        int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
+        RadioButton radioButton = (RadioButton) radioGroup.findViewById(checkedRadioButtonId);
+
+        UploadImage.PrivacyLevel privacyLevel;
+        if (radioButton.getId() == R.id.sharePublic) {
+            privacyLevel = UploadImage.PrivacyLevel.PUBLIC;
+        } else {
+            privacyLevel = UploadImage.PrivacyLevel.PRIVATE;
+        }
+
+        return privacyLevel;
+    }
+
+    /**
+     *
+     * @return
+     */
+    List<DomainProperty> getPopulatedDomainProperties() {
+
+        List<DomainProperty> domainProperties = new ArrayList<DomainProperty>();
+
+        DomainProperty selectedDomainProperty = fishTypeView.getSelectedDomainProperty();
+        if (selectedDomainProperty != null) {
+            domainProperties.add(selectedDomainProperty);
+        }
+
+        selectedDomainProperty = fishingToolView.getSelectedDomainProperty();
+        if (selectedDomainProperty != null) {
+            domainProperties.add(selectedDomainProperty);
+        }
+
+        selectedDomainProperty = fishingBaitView.getSelectedDomainProperty();
+        if (selectedDomainProperty != null) {
+            domainProperties.add(selectedDomainProperty);
+        }
+
+        return domainProperties;
     }
 
     @Override
@@ -219,7 +247,18 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
     public void onLocationChanged(Location location) {
         latitude = location.getLatitude();
         longitude = location.getLongitude();
-        isLocationDetected = true;
+    }
+
+    /**
+     *
+     * @return
+     */
+    private boolean isLocationDetected() {
+        if (latitude != 0 && longitude != 0) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -237,11 +276,11 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
     /**
      *
      */
-    public void loadDomainInfo(AutoCompleteTextView textView, int domainInfoType) {
+    public void loadDomainInfo(DomainPropertyView domainPropertyView, int domainInfoType) {
 
         Bundle bundle = new Bundle();
 
-        DomainInfoServiceResultReceiver receiver = new DomainInfoServiceResultReceiver(new Handler(), textView);
+        DomainInfoServiceResultReceiver receiver = new DomainInfoServiceResultReceiver(new Handler(), domainPropertyView);
 
         String locale = Locale.getDefault().getLanguage();
         bundle.putString(DomainInfoService.LOCALE_KEY, locale);

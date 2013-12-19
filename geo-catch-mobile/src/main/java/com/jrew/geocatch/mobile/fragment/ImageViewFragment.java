@@ -14,6 +14,7 @@ import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
 import com.jrew.geocatch.web.model.ClientImage;
+import com.jrew.geocatch.web.model.ClientImagePreview;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,7 +32,6 @@ public class ImageViewFragment extends Fragment {
 
         final ProgressDialog progress = new ProgressDialog(getActivity());
         progress.setMessage("Loading image...");
-
 
         View imageViewFragmentLayout = inflater.inflate(R.layout.image_view_fragment, container, false);
 
@@ -56,8 +56,8 @@ public class ImageViewFragment extends Fragment {
 
         Bundle fragmentData = getArguments();
         if (fragmentData != null && !fragmentData.isEmpty()) {
-            ClientImage image = (ClientImage) fragmentData.getSerializable(ImageService.IMAGE_KEY);
-            loadImagePicture((ClientImage) image);
+            ClientImagePreview image = (ClientImagePreview) fragmentData.getSerializable(ImageService.IMAGE_KEY);
+            loadClientImage(image);
             progress.show();
         }
 
@@ -68,7 +68,7 @@ public class ImageViewFragment extends Fragment {
      *
      * @param image
      */
-    private void loadImagePicture(ClientImage image) {
+    private void loadClientImage(ClientImagePreview image) {
         final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), ImageService.class);
         intent.putExtra(ImageService.RECEIVER_KEY, imageResultReceiver);
         intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.LOAD_IMAGE);

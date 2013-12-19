@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import com.jrew.geocatch.mobile.adapter.DomainAutoCompleteAdapter;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
+import com.jrew.geocatch.mobile.view.DomainPropertyView;
 import com.jrew.geocatch.web.model.DomainProperty;
 
 import java.util.List;
@@ -18,11 +19,11 @@ import java.util.List;
  */
 public class DomainInfoServiceResultReceiver extends ResultReceiver {
 
-    final AutoCompleteTextView container;
+    private final DomainPropertyView domainPropertyView;
 
-    public DomainInfoServiceResultReceiver(Handler handler, AutoCompleteTextView container) {
+    public DomainInfoServiceResultReceiver(Handler handler, DomainPropertyView domainPropertyView) {
         super(handler);
-        this.container = container;
+        this.domainPropertyView = domainPropertyView;
     }
 
     @Override
@@ -32,14 +33,12 @@ public class DomainInfoServiceResultReceiver extends ResultReceiver {
 
             case DomainInfoService.ResultStatus.LOADING_FINISHED:
 
-                List<DomainProperty> domainProperties = (List<DomainProperty>) resultData.getSerializable(DomainInfoService.RESULT_KEY);
-                DomainAutoCompleteAdapter adapter = new DomainAutoCompleteAdapter(container.getContext(), R.layout.simple_dropdown_item_1line, domainProperties);
-                container.setAdapter(adapter);
-                container.setThreshold(1);
+                List<DomainProperty> domainProperties =
+                        (List<DomainProperty>) resultData.getSerializable(DomainInfoService.RESULT_KEY);
+                domainPropertyView.populateDomainProperties(domainProperties);
                 break;
 
             case DomainInfoService.ResultStatus.ERROR:
-
                 break;
         }
     }

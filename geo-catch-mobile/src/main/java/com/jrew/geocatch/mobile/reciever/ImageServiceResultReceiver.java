@@ -128,7 +128,11 @@ public class ImageServiceResultReceiver extends ResultReceiver {
 
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(new LatLng(image.getLatitude(), image.getLongitude()));
-                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+
+                Double SCALE_FACTOR = 0.3d;
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, (int) (bitmap.getWidth() * SCALE_FACTOR),
+                        (int) (bitmap.getHeight() * SCALE_FACTOR), false);
+                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(scaledBitmap));
 
                 Marker marker = mapFragment.getGoogleMap().addMarker(markerOptions);
                 mapFragment.getImageMarkerPairs().put(image.getId(), new ImageMarkerPair(image, marker));
