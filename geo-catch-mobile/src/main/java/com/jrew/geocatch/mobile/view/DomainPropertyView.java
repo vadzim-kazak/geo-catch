@@ -20,7 +20,7 @@ import java.util.Locale;
 public class DomainPropertyView extends AutoCompleteTextView {
 
     /** **/
-    private static final int THRESHOLD_VALUE = 1;
+    private static final int THRESHOLD_VALUE = 0;
 
     /** **/
     private DomainAutoCompleteAdapter adapter;
