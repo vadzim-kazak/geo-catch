@@ -3,6 +3,7 @@ package com.jrew.geocatch.mobile.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,7 @@ import com.jrew.geocatch.mobile.listener.MarkerOnClickListener;
 import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.reciever.ImageServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.ImageService;
-import com.jrew.geocatch.web.model.ClientImage;
+import com.jrew.geocatch.mobile.util.SearchCriteriaHolder;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.ViewBounds;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
@@ -104,7 +105,12 @@ public class MapFragment extends SupportMapFragment {
      */
     private void loadImages(LatLngBounds latLngBounds) {
 
-        SearchCriteria searchCriteria = new SearchCriteria();
+        SearchCriteria searchCriteria = SearchCriteriaHolder.getSearchCriteria();
+
+        // DeviceId
+        String deviceId = Settings.Secure.getString(getActivity().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+        searchCriteria.setDeviceId(deviceId);
 
         ViewBounds viewBounds = new ViewBounds(latLngBounds.northeast.latitude,
                 latLngBounds.northeast.longitude,

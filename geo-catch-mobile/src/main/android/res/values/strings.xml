@@ -16,4 +16,18 @@
 
     <string name="ownImagesLabel">Own images</string>
 
+    <!-- Time filter strings -->
+    <string name="timeFilterLabel">Time filter: </string>
+
+    <string name="timeFrom">from hour</string>
+
+    <string name="timeTo">to hour</string>
+
+    <!-- Month filter strings -->
+    <string name="monthFilterLabel">Month filter:</string>
+
+    <string name="monthFrom">from month</string>
+
+    <string name="monthTo">to month</string>
+
 </resources>

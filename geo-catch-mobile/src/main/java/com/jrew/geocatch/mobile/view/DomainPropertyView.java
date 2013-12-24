@@ -20,6 +20,15 @@ import java.util.Locale;
 public class DomainPropertyView extends AutoCompleteTextView {
 
     /** **/
+    public static final long FISH_DOMAIN_PROPERTY_TYPE = 1l;
+
+    /** **/
+    public static final long FISHING_TOOL_DOMAIN_PROPERTY_TYPE = 2l;
+
+    /** **/
+    public static final long FISHING_BAIT_DOMAIN_PROPERTY_TYPE = 3l;
+
+    /** **/
     private static final int THRESHOLD_VALUE = 0;
 
     /** **/
@@ -82,6 +91,14 @@ public class DomainPropertyView extends AutoCompleteTextView {
         }
 
         return null;
+    }
+
+    /**
+     *
+     * @param domainProperty
+     */
+    public void setSelectedDomainProperty(DomainProperty domainProperty) {
+        setText(domainProperty.getValue());
     }
 
 }
