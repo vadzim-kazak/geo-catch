@@ -62,10 +62,10 @@ public class MapFragment extends SupportMapFragment {
                 public void onCameraChange(CameraPosition cameraPosition) {
 
                     // Get current view bounds
-                    LatLngBounds latLngBounds = googleMap.getProjection().getVisibleRegion().latLngBounds;
+                    LatLngBounds latLngBounds = getLatLngBounds();
 
                     // Remove invisible markers
-                    removeInvisibleMarkers(latLngBounds);
+                    //removeInvisibleMarkers(latLngBounds);
 
                     // Load new images for view bounds
                     loadImages(latLngBounds);
@@ -77,6 +77,9 @@ public class MapFragment extends SupportMapFragment {
             googleMap.setOnMarkerClickListener(markerOnclickListener);
 
             imageResultReceiver = new ImageServiceResultReceiver(new Handler(), this);
+        } else {
+            clearMarkers();
+            loadImages(getLatLngBounds());
         }
 
         return result;
@@ -88,14 +91,16 @@ public class MapFragment extends SupportMapFragment {
      */
     private void removeInvisibleMarkers(LatLngBounds latLngBounds) {
 
+
+
         for (Map.Entry<Long, ImageMarkerPair> entry : imageMarkerPairs.entrySet()) {
-//            ImageMarkerPair imageMarkerPair = entry.getValue();
-//            Marker currentMarker = imageMarkerPair.getMarker();
-//            if (latLngBounds.contains(currentMarker.getPosition())) {
-//                currentMarker.remove();
-//                Image image = imageMarkerPair.getImage();
-//                imageMarkerPairs.remove(image.getId());
-//            }
+            ImageMarkerPair imageMarkerPair = entry.getValue();
+            Marker currentMarker = imageMarkerPair.getMarker();
+            if (latLngBounds.contains(currentMarker.getPosition())) {
+                currentMarker.remove();
+                ClientImagePreview imagePreview = imageMarkerPair.getImage();
+                imageMarkerPairs.remove(imagePreview.getId());
+            }
         }
     }
 
@@ -140,6 +145,14 @@ public class MapFragment extends SupportMapFragment {
 
     /**
      *
+     */
+    private void clearMarkers() {
+        googleMap.clear();
+        imageMarkerPairs.clear();
+    }
+
+    /**
+     *
      * @return
      */
     public Map<Long, ImageMarkerPair> getImageMarkerPairs() {
@@ -152,5 +165,13 @@ public class MapFragment extends SupportMapFragment {
      */
     public GoogleMap getGoogleMap() {
         return googleMap;
+    }
+
+    /**
+     *
+     * @return
+     */
+    private LatLngBounds getLatLngBounds() {
+        return googleMap.getProjection().getVisibleRegion().latLngBounds;
     }
 }
