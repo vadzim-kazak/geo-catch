@@ -216,17 +216,17 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
 
         List<DomainProperty> domainProperties = new ArrayList<DomainProperty>();
 
-        DomainProperty selectedDomainProperty = fishTypeView.getSelectedDomainProperty();
+        DomainProperty selectedDomainProperty = fishTypeView.getSelectedDomainProperty(true);
         if (selectedDomainProperty != null) {
             domainProperties.add(selectedDomainProperty);
         }
 
-        selectedDomainProperty = fishingToolView.getSelectedDomainProperty();
+        selectedDomainProperty = fishingToolView.getSelectedDomainProperty(true);
         if (selectedDomainProperty != null) {
             domainProperties.add(selectedDomainProperty);
         }
 
-        selectedDomainProperty = fishingBaitView.getSelectedDomainProperty();
+        selectedDomainProperty = fishingBaitView.getSelectedDomainProperty(true);
         if (selectedDomainProperty != null) {
             domainProperties.add(selectedDomainProperty);
         }

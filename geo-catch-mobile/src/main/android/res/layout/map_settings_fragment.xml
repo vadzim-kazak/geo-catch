@@ -15,10 +15,10 @@
                   android:text="Fish type:"
                   android:layout_gravity="left|center_vertical"/>
 
-        <com.jrew.geocatch.mobile.view.DomainPropertyView android:layout_width="match_parent"
-                                                          android:layout_height="wrap_content"
-                                                          android:id="@+id/fishTypeView"
-                                                          android:layout_gravity="center"/>
+        <com.jrew.geocatch.mobile.view.StrictDomainPropertyView android:layout_width="match_parent"
+                                                                android:layout_height="wrap_content"
+                                                                android:id="@+id/fishTypeView"
+                                                                android:layout_gravity="center"/>
 
     </LinearLayout>
 
@@ -33,10 +33,10 @@
                   android:id="@+id/fishingToolTextView"
                   android:layout_gravity="left|center_vertical"/>
 
-        <com.jrew.geocatch.mobile.view.DomainPropertyView android:layout_width="match_parent"
-                                                          android:layout_height="wrap_content"
-                                                          android:id="@+id/fishingToolView"
-                                                          android:layout_gravity="center"/>
+        <com.jrew.geocatch.mobile.view.StrictDomainPropertyView android:layout_width="match_parent"
+                                                                android:layout_height="wrap_content"
+                                                                android:id="@+id/fishingToolView"
+                                                                android:layout_gravity="center"/>
 
     </LinearLayout>
 
@@ -51,10 +51,10 @@
                   android:id="@+id/fishingBaitTextView"
                   android:layout_gravity="left|center_vertical"/>
 
-        <com.jrew.geocatch.mobile.view.DomainPropertyView android:layout_width="match_parent"
-                                                          android:layout_height="wrap_content"
-                                                          android:id="@+id/fishingBaitView"
-                                                          android:layout_gravity="center"/>
+        <com.jrew.geocatch.mobile.view.StrictDomainPropertyView android:layout_width="match_parent"
+                                                                android:layout_height="wrap_content"
+                                                                android:id="@+id/fishingBaitView"
+                                                                android:layout_gravity="center"/>
 
     </LinearLayout>
 
@@ -97,7 +97,6 @@
         <CheckBox android:id="@+id/timeFilterCheckbox"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:text="Time filter:"
                   android:layout_gravity="left|center_vertical"/>
 
     </LinearLayout>
@@ -111,7 +110,6 @@
         <CheckBox android:id="@+id/monthFilterCheckbox"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:text="Month filter:"
                   android:layout_gravity="left|center_vertical"/>
 
     </LinearLayout>

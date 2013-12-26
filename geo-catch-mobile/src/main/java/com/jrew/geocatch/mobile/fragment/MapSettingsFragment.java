@@ -19,6 +19,7 @@ import com.jrew.geocatch.mobile.util.MessageBuilder;
 import com.jrew.geocatch.mobile.util.SearchCriteriaHolder;
 import com.jrew.geocatch.mobile.view.DomainPropertyView;
 import com.jrew.geocatch.mobile.view.RangeSeekBar;
+import com.jrew.geocatch.mobile.view.StrictDomainPropertyView;
 import com.jrew.geocatch.web.model.DomainProperty;
 import com.jrew.geocatch.web.model.criteria.DayPeriodSearchCriterion;
 import com.jrew.geocatch.web.model.criteria.MonthPeriodSearchCriterion;
@@ -38,7 +39,7 @@ import java.util.Locale;
 public class MapSettingsFragment extends Fragment {
 
     /** **/
-    private DomainPropertyView fishTypeView, fishingToolView, fishingBaitView;
+    private StrictDomainPropertyView fishTypeView, fishingToolView, fishingBaitView;
 
     /** **/
     private RadioGroup ownerRadioGroup;
@@ -52,73 +53,63 @@ public class MapSettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        final View result = inflater.inflate(R.layout.map_settings_fragment, container, false);
+        View mapSettingsLayout = inflater.inflate(R.layout.map_settings_fragment, container, false);
 
         //Populate
-        fishTypeView = (DomainPropertyView) result.findViewById(R.id.fishTypeView);
+        fishTypeView = (StrictDomainPropertyView) mapSettingsLayout.findViewById(R.id.fishTypeView);
         loadDomainInfo(fishTypeView, DomainInfoService.DomainInfoType.FISH);
 
-        fishingToolView = (DomainPropertyView) result.findViewById(R.id.fishingToolView);
+        fishingToolView = (StrictDomainPropertyView) mapSettingsLayout.findViewById(R.id.fishingToolView);
         loadDomainInfo(fishingToolView, DomainInfoService.DomainInfoType.FISHING_TOOL);
 
-        fishingBaitView = (DomainPropertyView) result.findViewById(R.id.fishingBaitView);
+        fishingBaitView = (StrictDomainPropertyView) mapSettingsLayout.findViewById(R.id.fishingBaitView);
         loadDomainInfo(fishingBaitView, DomainInfoService.DomainInfoType.BAIT);
 
-        LinearLayout timeFilterRow = (LinearLayout) result.findViewById(R.id.timeFilterRow);
+        LinearLayout timeFilterRow = (LinearLayout) mapSettingsLayout.findViewById(R.id.timeFilterRow);
         timeFilter = new RangeSeekBar<Integer>(0, 24, getActivity());
         timeFilter.setEnabled(false);
         timeFilter.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
             @Override
             public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
-                if (timeFilterCheckbox.isChecked()) {
                     timeFilterCheckbox.setText(MessageBuilder.getDayFilterMessage(timeFilter.getSelectedMinValue(),
                             timeFilter.getSelectedMaxValue(), getResources()));
-                }
             }
         });
 
-        timeFilterCheckbox = (CheckBox) result.findViewById(R.id.timeFilterCheckbox);
+        timeFilterCheckbox = (CheckBox) mapSettingsLayout.findViewById(R.id.timeFilterCheckbox);
         timeFilterCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean isTimeFilterEnabled = timeFilter.isEnabled();
-                // Inverse time filter state
-                isTimeFilterEnabled = !isTimeFilterEnabled;
-                timeFilter.setEnabled(isTimeFilterEnabled);
+                timeFilter.setEnabled(timeFilterCheckbox.isChecked());
             }
         });
         timeFilterRow.addView(timeFilter);
 
-        LinearLayout monthFilterRow = (LinearLayout) result.findViewById(R.id.monthFilterRow);
+        LinearLayout monthFilterRow = (LinearLayout) mapSettingsLayout.findViewById(R.id.monthFilterRow);
         monthFilter = new RangeSeekBar<Integer>(1, 12, getActivity());
         monthFilter.setEnabled(false);
         monthFilter.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
             @Override
             public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
-                if (monthFilterCheckbox.isChecked()) {
                     monthFilterCheckbox.setText(MessageBuilder.getMonthFilterMessage(monthFilter.getSelectedMinValue(),
                             monthFilter.getSelectedMaxValue(), getResources()));
-                }
             }
         });
 
-        monthFilterCheckbox = (CheckBox) result.findViewById(R.id.monthFilterCheckbox);
+        monthFilterCheckbox = (CheckBox) mapSettingsLayout.findViewById(R.id.monthFilterCheckbox);
         monthFilterCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean isMonthFilterEnabled = monthFilter.isEnabled();
-                // Inverse time filter state
-                isMonthFilterEnabled = !isMonthFilterEnabled;
-                monthFilter.setEnabled(isMonthFilterEnabled);
+                monthFilter.setEnabled(monthFilterCheckbox.isChecked());
             }
         });
         monthFilterRow.addView(monthFilter);
 
-        ownerRadioGroup = (RadioGroup) result.findViewById(R.id.ownerRadioGroup);
+        ownerRadioGroup = (RadioGroup) mapSettingsLayout.findViewById(R.id.ownerRadioGroup);
 
         initMapSettings();
 
-        return result;
+        return mapSettingsLayout;
     }
 
     /**
@@ -163,8 +154,8 @@ public class MapSettingsFragment extends Fragment {
             timeFilter.setSelectedMinValue(dayPeriodCriterion.getFromHour());
             timeFilter.setSelectedMaxValue(dayPeriodCriterion.getToHour());
         } else {
-            timeFilterCheckbox.setText(getResources().getString(R.string.timeFilterLabel));
             timeFilterCheckbox.setChecked(false);
+            timeFilterCheckbox.setText(getResources().getString(R.string.timeFilterLabel));
             timeFilter.setEnabled(false);
         }
 
@@ -203,6 +194,13 @@ public class MapSettingsFragment extends Fragment {
         getActivity().startService(intent);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveSearchCriteria();
+        clearSettingViews();
+    }
+
     /**
      *
      * @return
@@ -218,17 +216,17 @@ public class MapSettingsFragment extends Fragment {
 
         // Domain properties
         List<DomainProperty> domainProperties = new ArrayList<DomainProperty>();
-        DomainProperty fishType = fishTypeView.getSelectedDomainProperty();
+        DomainProperty fishType = fishTypeView.getSelectedDomainProperty(false);
         if (fishType != null) {
             domainProperties.add(fishType);
         }
 
-        DomainProperty fishingTool = fishingToolView.getSelectedDomainProperty();
+        DomainProperty fishingTool = fishingToolView.getSelectedDomainProperty(false);
         if (fishingTool != null) {
             domainProperties.add(fishingTool);
         }
 
-        DomainProperty fishingBait = fishingBaitView.getSelectedDomainProperty();
+        DomainProperty fishingBait = fishingBaitView.getSelectedDomainProperty(false);
         if (fishingBait != null) {
             domainProperties.add(fishingBait);
         }
@@ -266,9 +264,17 @@ public class MapSettingsFragment extends Fragment {
         return searchCriteria;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        saveSearchCriteria();
+    /**
+     *
+     */
+    private void clearSettingViews() {
+
+        if (!timeFilterCheckbox.isChecked()) {
+            timeFilterCheckbox.setText(getResources().getString(R.string.timeFilterLabel));
+        }
+
+        if (!monthFilterCheckbox.isChecked()) {
+            monthFilterCheckbox.setText(getResources().getString(R.string.monthFilterLabel));
+        }
     }
 }
