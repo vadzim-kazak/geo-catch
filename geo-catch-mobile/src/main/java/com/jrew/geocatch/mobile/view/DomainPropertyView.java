@@ -68,15 +68,16 @@ public class DomainPropertyView extends AutoCompleteTextView {
     /**
      *
      * @return
+     * @param createIfNotExisted
      */
-    public DomainProperty getSelectedDomainProperty() {
+    public DomainProperty getSelectedDomainProperty(boolean createIfNotExisted) {
 
         // Currently typed value
         String typedValue = getText().toString();
         if (typedValue != null && typedValue.length() > 0) {
 
             DomainProperty selectedDomainProperty = adapter.getDomainPropertyByValue(typedValue);
-            if (selectedDomainProperty == null) {
+            if (selectedDomainProperty == null && createIfNotExisted) {
                 // New value is typed. Create domain property from scratch
                 //Value
                 selectedDomainProperty = new DomainProperty();
