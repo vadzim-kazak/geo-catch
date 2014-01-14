@@ -173,12 +173,13 @@ public class ImageTakeCameraFragment extends Fragment {
                                    int format, int width,
                                    int height) {
             Camera.Parameters parameters = camera.getParameters();
-           // Camera.Size size = getBestPreviewSize(width, height, parameters);
+            Camera.Size size = getBestPreviewSize(width, height, parameters);
 
             parameters.setPictureSize(640, 480);
             parameters.setPreviewSize(640, 480);
 
             camera.setParameters(parameters);
+            camera.setDisplayOrientation(90);
             camera.startPreview();
 
             inPreview = true;
