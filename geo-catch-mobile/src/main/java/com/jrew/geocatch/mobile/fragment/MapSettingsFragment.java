@@ -1,6 +1,7 @@
 package com.jrew.geocatch.mobile.fragment;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -12,9 +13,12 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import com.actionbarsherlock.app.ActionBar;
 import com.jrew.geocatch.mobile.R;
+import com.jrew.geocatch.mobile.menu.MenuHelper;
 import com.jrew.geocatch.mobile.reciever.DomainInfoServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
+import com.jrew.geocatch.mobile.util.ActionBarHolder;
 import com.jrew.geocatch.mobile.util.MessageBuilder;
 import com.jrew.geocatch.mobile.util.SearchCriteriaHolder;
 import com.jrew.geocatch.mobile.view.DomainPropertyView;
@@ -52,6 +56,15 @@ public class MapSettingsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        // Action bar subtitle
+        ActionBar actionBar = ActionBarHolder.getActionBar();
+        actionBar.setSubtitle(getResources().getString(R.string.viewSettingsLabel));
+
+        // Menu selection
+        getActivity().findViewById(R.id.viewSettingsMenuOption).setBackgroundResource(MenuHelper.SELECTED_ACTION_BAR_ITEM_COLOR);
+
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         View mapSettingsLayout = inflater.inflate(R.layout.map_settings_fragment, container, false);
 

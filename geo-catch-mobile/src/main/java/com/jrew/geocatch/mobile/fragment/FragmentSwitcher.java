@@ -43,6 +43,9 @@ public class FragmentSwitcher {
     /** **/
     private FragmentManager fragmentManager;
 
+    /** **/
+    private String displayingFragmentTag;
+
     /**
      *
      * @param fragmentManager
@@ -56,8 +59,11 @@ public class FragmentSwitcher {
      * @param fragmentTag
      */
     private void showFragment(String fragmentTag) {
-
-        showFragment(fragmentTag, null);
+        if (displayingFragmentTag == null || (
+            displayingFragmentTag != null && !displayingFragmentTag.equals(fragmentTag))) {
+            displayingFragmentTag = fragmentTag;
+            showFragment(fragmentTag, null);
+        }
     }
 
     /**
@@ -156,5 +162,22 @@ public class FragmentSwitcher {
      */
     public void showImageTakeInfoFragment(Bundle bundle) {
         showFragment(TAG.IMAGE_TAKE_INFO_FRAGMENT_TAG, bundle);
+    }
+
+    public void handleActivityCreation() {
+        if (displayingFragmentTag != null) {
+            showFragment(displayingFragmentTag);
+        } else {
+            // Display start fragment here
+            showMapFragment();
+        }
+    }
+
+    /**
+     *
+     * @param fragmentManager
+     */
+    public void setFragmentManager(FragmentManager fragmentManager) {
+        this.fragmentManager = fragmentManager;
     }
 }

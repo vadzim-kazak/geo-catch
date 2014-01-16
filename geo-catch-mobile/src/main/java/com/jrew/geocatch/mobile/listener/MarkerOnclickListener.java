@@ -7,6 +7,7 @@ import com.jrew.geocatch.mobile.activity.MainActivity;
 import com.jrew.geocatch.mobile.fragment.MapFragment;
 import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.service.ImageService;
+import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 
 import java.util.Map;
@@ -38,8 +39,7 @@ public class MarkerOnClickListener implements GoogleMap.OnMarkerClickListener {
         if (image != null) {
             Bundle fragmentData = new Bundle();
             fragmentData.putSerializable(ImageService.IMAGE_KEY, image);
-            MainActivity activity = (MainActivity) mapFragment.getActivity();
-            activity.getFragmentSwitcher().showImageViewFragment(fragmentData);
+            FragmentSwitcherHolder.getFragmentSwitcher().showImageViewFragment(fragmentData);
         }
 
         return false;

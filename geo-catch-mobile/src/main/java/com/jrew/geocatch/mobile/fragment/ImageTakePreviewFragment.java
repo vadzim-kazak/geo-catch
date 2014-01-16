@@ -1,5 +1,6 @@
 package com.jrew.geocatch.mobile.fragment;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.activity.MainActivity;
+import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,6 +24,8 @@ public class ImageTakePreviewFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
         View result = inflater.inflate(R.layout.image_take_preview_fragment, container, false);
 
@@ -37,8 +41,7 @@ public class ImageTakePreviewFragment extends Fragment {
         proceedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity activity = (MainActivity) getActivity();
-                activity.getFragmentSwitcher().showImageTakeInfoFragment(new Bundle(fragmentData));
+                FragmentSwitcherHolder.getFragmentSwitcher().showImageTakeInfoFragment(new Bundle(fragmentData));
             }
         });
 

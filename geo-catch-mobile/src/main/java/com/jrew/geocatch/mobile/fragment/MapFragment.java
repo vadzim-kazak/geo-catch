@@ -1,20 +1,25 @@
 package com.jrew.geocatch.mobile.fragment;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.actionbarsherlock.app.ActionBar;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.*;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.listener.MarkerOnClickListener;
+import com.jrew.geocatch.mobile.menu.MenuHelper;
 import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.reciever.ImageServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.ImageService;
+import com.jrew.geocatch.mobile.util.ActionBarHolder;
+import com.jrew.geocatch.mobile.util.MenuHelperHolder;
 import com.jrew.geocatch.mobile.util.SearchCriteriaHolder;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.ViewBounds;
@@ -44,6 +49,12 @@ public class MapFragment extends SupportMapFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        // Action bar subtitle
+        ActionBar actionBar = ActionBarHolder.getActionBar();
+        actionBar.setSubtitle(getResources().getString(R.string.mapLabel));
+
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
         View result = super.onCreateView(inflater, container, savedInstanceState);
 
@@ -82,6 +93,11 @@ public class MapFragment extends SupportMapFragment {
             loadImages(getLatLngBounds());
         }
 
+        MenuHelper menuHelper = MenuHelperHolder.getMenuHelper();
+        if (menuHelper != null) {
+            menuHelper.makeViewSelected(R.id.viewMapMenuOption);
+        }
+
         return result;
     }
 
@@ -90,8 +106,6 @@ public class MapFragment extends SupportMapFragment {
      * @param latLngBounds
      */
     private void removeInvisibleMarkers(LatLngBounds latLngBounds) {
-
-
 
         for (Map.Entry<Long, ImageMarkerPair> entry : imageMarkerPairs.entrySet()) {
             ImageMarkerPair imageMarkerPair = entry.getValue();

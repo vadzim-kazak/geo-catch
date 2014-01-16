@@ -2,6 +2,7 @@ package com.jrew.geocatch.mobile.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
@@ -22,6 +23,7 @@ import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.util.FileUtil;
+import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.ImageUploadKeys;
 import com.jrew.geocatch.mobile.view.DomainPropertyView;
 import com.jrew.geocatch.web.model.DomainProperty;
@@ -57,6 +59,8 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
         final View result = inflater.inflate(R.layout.image_take_info_fragment, container, false);
 
@@ -94,19 +98,17 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
             @Override
             public void onReceiveResult(int resultCode, Bundle resultData) {
 
-                MainActivity activity = (MainActivity) getActivity();
-
                 switch (resultCode) {
                     case ImageService.ResultStatus.UPLOAD_IMAGE_FINISHED:
-                        activity.getFragmentSwitcher().showMapFragment();
+                        FragmentSwitcherHolder.getFragmentSwitcher().showMapFragment();
                         break;
 
                     case ImageService.ResultStatus.ERROR:
                         CharSequence text = "Image uploading error...";
                         int duration = Toast.LENGTH_SHORT;
-                        Toast toast = Toast.makeText(activity, text, duration);
+                        Toast toast = Toast.makeText(getActivity(), text, duration);
                         toast.show();
-                        activity.getFragmentSwitcher().showMapFragment();
+                        FragmentSwitcherHolder.getFragmentSwitcher().showMapFragment();
                     break;
                 }
             }

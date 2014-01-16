@@ -2,6 +2,7 @@ package com.jrew.geocatch.mobile.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,6 +37,8 @@ public class ImageViewFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
         final ProgressDialog progress = new ProgressDialog(getActivity());
         progress.setMessage("Loading image...");

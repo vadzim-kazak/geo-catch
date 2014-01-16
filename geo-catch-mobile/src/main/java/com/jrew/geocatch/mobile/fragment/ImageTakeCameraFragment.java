@@ -1,6 +1,7 @@
 package com.jrew.geocatch.mobile.fragment;
 
 import android.app.ProgressDialog;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
@@ -18,8 +19,13 @@ import android.view.*;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+import com.actionbarsherlock.app.ActionBar;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.activity.MainActivity;
+import com.jrew.geocatch.mobile.menu.MenuHelper;
+import com.jrew.geocatch.mobile.util.ActionBarHolder;
+import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
+import com.jrew.geocatch.mobile.util.MenuHelperHolder;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -66,6 +72,18 @@ public class ImageTakeCameraFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        // Action bar subtitle
+        ActionBar actionBar = ActionBarHolder.getActionBar();
+        actionBar.setSubtitle(getResources().getString(R.string.takeImageLabel));
+
+        // Menu selection
+        MenuHelper menuHelper = MenuHelperHolder.getMenuHelper();
+        if (menuHelper != null) {
+            menuHelper.makeViewSelected(R.id.takeImageMenuOption);
+        }
+
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         View result = inflater.inflate(R.layout.image_take_camera_fragment, container, false);
 
@@ -230,7 +248,7 @@ public class ImageTakeCameraFragment extends Fragment {
         bundle.putParcelable("bmp", mutableBitmap);
 
         MainActivity activity = (MainActivity) getActivity();
-        activity.getFragmentSwitcher().showImageTakePreviewFragment(bundle);
+        FragmentSwitcherHolder.getFragmentSwitcher().showImageTakePreviewFragment(bundle);
 
         dialog.dismiss();
     }
