@@ -2,9 +2,9 @@ package com.jrew.geocatch.mobile.fragment;
 
 import android.app.ProgressDialog;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.PointF;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.media.MediaScannerConnection;
@@ -18,12 +18,11 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.*;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.activity.MainActivity;
-import com.jrew.geocatch.mobile.menu.MenuHelper;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.MenuHelperHolder;
@@ -71,6 +70,9 @@ public class ImageTakeCameraFragment extends Fragment {
     /** **/
     ProgressDialog dialog;
 
+    /** **/
+    private final static double CAMERA_SIDES_RATIO = 4d / 3;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -98,6 +100,8 @@ public class ImageTakeCameraFragment extends Fragment {
 
         Rect displaySize = new Rect();
         windowManager.getDefaultDisplay().getRectSize(displaySize);
+
+       // preview.setLayoutParams(new LinearLayout.LayoutParams(width,height));
 
         previewHolder.setFixedSize(displaySize.width(), displaySize.width());
 
@@ -138,7 +142,35 @@ public class ImageTakeCameraFragment extends Fragment {
      * @param parameters
      * @return
      */
-    private Camera.Size getBestPreviewSize(int width, int height, Camera.Parameters parameters){
+    private Camera.Size getBestPreviewCameraSize(int width, int height, Camera.Parameters parameters){
+
+        Camera.Size result = null;
+        for (Camera.Size size : parameters.getSupportedPreviewSizes()) {
+            if (size.width <= width && size.height <= height && (((double)size.width/size.height ) == CAMERA_SIDES_RATIO)) {
+                if (result == null) {
+                    result = size;
+                }
+                else {
+                    int resultArea = result.width * result.height;
+                    int newArea = size.width * size.height;
+                    if (newArea > resultArea) {
+                        result = size;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @param width
+     * @param height
+     * @param parameters
+     * @return
+     */
+    private Camera.Size getImageTakingCameraSize(int width, int height, Camera.Parameters parameters){
 
         Camera.Size result = null;
         for (Camera.Size size : parameters.getSupportedPreviewSizes()) {
@@ -190,10 +222,15 @@ public class ImageTakeCameraFragment extends Fragment {
                                    int format, int width,
                                    int height) {
             Camera.Parameters parameters = camera.getParameters();
-            Camera.Size size = getBestPreviewSize(width, height, parameters);
+            Camera.Size previewSize = getBestPreviewCameraSize(width, height, parameters);
 
-            parameters.setPictureSize(640, 480);
-            parameters.setPreviewSize(640, 480);
+            parameters.setPreviewSize(previewSize.width, previewSize.height);
+           // parameters.setPictureSize(960, 720);
+
+            PackageManager packageManager = getActivity().getPackageManager();
+            if(packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_AUTOFOCUS)){
+                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+            }
 
             camera.setParameters(parameters);
             camera.setDisplayOrientation(90);
