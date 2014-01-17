@@ -1,11 +1,13 @@
 package com.jrew.geocatch.mobile.menu;
 
 import android.app.Activity;
+import android.os.Handler;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.fragment.FragmentSwitcher;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
+import com.jrew.geocatch.mobile.util.MenuHelperHolder;
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,10 +38,9 @@ public class MenuHelper {
 
     /**
      *
-     * @param menu
+     * @param activity
      */
-    public MenuHelper(Menu menu, Activity activity) {
-        this.menu = menu;
+    public MenuHelper(Activity activity) {
         this.activity = activity;
     }
 
@@ -48,7 +49,6 @@ public class MenuHelper {
      */
     public void init() {
         isReady = true;
-        makeViewSelected(R.id.viewMapMenuOption);
     }
 
     /**
@@ -117,10 +117,45 @@ public class MenuHelper {
     /**
      *
      * @param itemId
+     * @param handler
      */
-    public void makeViewSelected(int itemId) {
-        if (isReady) {
-            activity.findViewById(itemId).setBackgroundResource(MenuHelper.SELECTED_ACTION_BAR_ITEM_COLOR);
-        }
+    public void makeViewSelected(final int itemId, final Handler handler) {
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+
+                // Wait until menu will be initialized
+                MenuHelper menuHelper = MenuHelperHolder.getMenuHelper();
+                while (menuHelper == null || !menuHelper.isReady()){
+                    menuHelper = MenuHelperHolder.getMenuHelper();
+                }
+
+                // Mark menu selection
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.findViewById(itemId).setBackgroundResource(MenuHelper.SELECTED_ACTION_BAR_ITEM_COLOR);
+                    }
+                });
+            }
+        };
+        new Thread(runnable).start();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Menu getMenu() {
+        return menu;
+    }
+
+    /**
+     *
+     * @param menu
+     */
+    public void setMenu(Menu menu) {
+        this.menu = menu;
     }
 }

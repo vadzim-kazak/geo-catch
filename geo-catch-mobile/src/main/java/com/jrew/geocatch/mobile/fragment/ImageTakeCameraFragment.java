@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -78,10 +79,8 @@ public class ImageTakeCameraFragment extends Fragment {
         actionBar.setSubtitle(getResources().getString(R.string.takeImageLabel));
 
         // Menu selection
-        MenuHelper menuHelper = MenuHelperHolder.getMenuHelper();
-        if (menuHelper != null) {
-            menuHelper.makeViewSelected(R.id.takeImageMenuOption);
-        }
+        final Handler handler = new Handler();
+        MenuHelperHolder.getMenuHelper().makeViewSelected(R.id.takeImageMenuOption, handler);
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 

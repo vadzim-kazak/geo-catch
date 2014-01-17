@@ -93,10 +93,9 @@ public class MapFragment extends SupportMapFragment {
             loadImages(getLatLngBounds());
         }
 
-        MenuHelper menuHelper = MenuHelperHolder.getMenuHelper();
-        if (menuHelper != null) {
-            menuHelper.makeViewSelected(R.id.viewMapMenuOption);
-        }
+        // Menu selection
+        final Handler handler = new Handler();
+        MenuHelperHolder.getMenuHelper().makeViewSelected(R.id.viewMapMenuOption, handler);
 
         return result;
     }

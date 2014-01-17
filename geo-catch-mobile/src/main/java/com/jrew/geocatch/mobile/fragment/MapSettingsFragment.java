@@ -19,6 +19,7 @@ import com.jrew.geocatch.mobile.menu.MenuHelper;
 import com.jrew.geocatch.mobile.reciever.DomainInfoServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
+import com.jrew.geocatch.mobile.util.MenuHelperHolder;
 import com.jrew.geocatch.mobile.util.MessageBuilder;
 import com.jrew.geocatch.mobile.util.SearchCriteriaHolder;
 import com.jrew.geocatch.mobile.view.DomainPropertyView;
@@ -62,7 +63,8 @@ public class MapSettingsFragment extends Fragment {
         actionBar.setSubtitle(getResources().getString(R.string.viewSettingsLabel));
 
         // Menu selection
-        getActivity().findViewById(R.id.viewSettingsMenuOption).setBackgroundResource(MenuHelper.SELECTED_ACTION_BAR_ITEM_COLOR);
+        final Handler handler = new Handler();
+        MenuHelperHolder.getMenuHelper().makeViewSelected(R.id.viewSettingsMenuOption, handler);
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 

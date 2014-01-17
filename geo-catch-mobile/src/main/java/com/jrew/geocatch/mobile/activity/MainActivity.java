@@ -26,9 +26,6 @@ public class MainActivity extends SherlockFragmentActivity {
     /** **/
     private static int theme = R.style.Theme_Sherlock_Light;
 
-    /** **/
-    private MenuHelper menuHelper;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(theme);
@@ -45,6 +42,9 @@ public class MainActivity extends SherlockFragmentActivity {
         actionBar.setTitle(resources.getString(R.string.app_name));
 
         FragmentSwitcherHolder.initFragmentSwitcher(getSupportFragmentManager());
+
+        MenuHelperHolder.setMenuHelper(new MenuHelper(this));
+
         // Set default fragment
         FragmentSwitcherHolder.getFragmentSwitcher().handleActivityCreation();
     }
@@ -53,14 +53,13 @@ public class MainActivity extends SherlockFragmentActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getSupportMenuInflater().inflate(R.menu.menu_main, menu);
-        menuHelper = new MenuHelper(menu, this);
+        MenuHelperHolder.getMenuHelper().setMenu(menu);
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                menuHelper.init();
+                MenuHelperHolder.getMenuHelper().init();
             }
         });
-        MenuHelperHolder.setMenuHelper(menuHelper);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -68,7 +67,7 @@ public class MainActivity extends SherlockFragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        menuHelper.onOptionsItemSelected(item);
+        MenuHelperHolder.getMenuHelper().onOptionsItemSelected(item);
         return true;
     }
 }
