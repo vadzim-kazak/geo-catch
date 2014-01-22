@@ -1,20 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:padding="10dip">
 
-    <ImageView android:layout_width="wrap_content"
-               android:layout_height="300dip"
+    <ImageView android:layout_width="fill_parent"
+               android:layout_height="fill_parent"
                android:id="@+id/imagePreview"
                android:layout_gravity="center_horizontal|center_vertical"/>
 
-    <Button android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Proceed"
-            android:id="@+id/imagePreviewProceedButton"
-            android:layout_gravity="center"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_alignParentBottom="true">
 
-</LinearLayout>
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rotate CCW"
+                android:id="@+id/imagePreviewRotateCCW"
+                android:layout_gravity="center"/>
+
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rotate CW"
+                android:id="@+id/imagePreviewRotateCW"
+                android:layout_gravity="center"/>
+
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Proceed"
+                android:id="@+id/imagePreviewProceedButton"
+                android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

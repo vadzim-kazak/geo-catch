@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.media.MediaScannerConnection;
@@ -25,6 +26,7 @@ import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.activity.MainActivity;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
+import com.jrew.geocatch.mobile.util.LayoutUtil;
 import com.jrew.geocatch.mobile.util.MenuHelperHolder;
 
 import java.io.File;
@@ -39,6 +41,18 @@ import java.util.Calendar;
  * To change this template use File | Settings | File Templates.
  */
 public class ImageTakeCameraFragment extends Fragment {
+
+    /** **/
+    private final static double CAMERA_SIDES_RATIO = 4d / 3;
+
+    /** **/
+    private final static int PREVIEW_AREA_MARGIN = 20;
+
+    /** **/
+    private final static int DEFAULT_PICTURE_WIDTH = 640;
+
+    /** **/
+    private final static int DEFAULT_PICTURE_HEIGHT = 480;
 
     /** **/
     private SurfaceView preview;
@@ -70,9 +84,6 @@ public class ImageTakeCameraFragment extends Fragment {
     /** **/
     ProgressDialog dialog;
 
-    /** **/
-    private final static double CAMERA_SIDES_RATIO = 4d / 3;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -100,8 +111,6 @@ public class ImageTakeCameraFragment extends Fragment {
 
         Rect displaySize = new Rect();
         windowManager.getDefaultDisplay().getRectSize(displaySize);
-
-       // preview.setLayoutParams(new LinearLayout.LayoutParams(width,height));
 
         previewHolder.setFixedSize(displaySize.width(), displaySize.width());
 
@@ -133,62 +142,6 @@ public class ImageTakeCameraFragment extends Fragment {
         camera = null;
         inPreview = false;
         super.onPause();
-    }
-
-    /**
-     *
-     * @param width
-     * @param height
-     * @param parameters
-     * @return
-     */
-    private Camera.Size getBestPreviewCameraSize(int width, int height, Camera.Parameters parameters){
-
-        Camera.Size result = null;
-        for (Camera.Size size : parameters.getSupportedPreviewSizes()) {
-            if (size.width <= width && size.height <= height && (((double)size.width/size.height ) == CAMERA_SIDES_RATIO)) {
-                if (result == null) {
-                    result = size;
-                }
-                else {
-                    int resultArea = result.width * result.height;
-                    int newArea = size.width * size.height;
-                    if (newArea > resultArea) {
-                        result = size;
-                    }
-                }
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     *
-     * @param width
-     * @param height
-     * @param parameters
-     * @return
-     */
-    private Camera.Size getImageTakingCameraSize(int width, int height, Camera.Parameters parameters){
-
-        Camera.Size result = null;
-        for (Camera.Size size : parameters.getSupportedPreviewSizes()) {
-            if (size.width <= width && size.height <= height) {
-                if (result == null) {
-                    result = size;
-                }
-                else {
-                    int resultArea = result.width * result.height;
-                    int newArea = size.width * size.height;
-                    if (newArea > resultArea) {
-                        result = size;
-                    }
-                }
-            }
-        }
-
-        return(result);
     }
 
     /**
@@ -225,7 +178,13 @@ public class ImageTakeCameraFragment extends Fragment {
             Camera.Size previewSize = getBestPreviewCameraSize(width, height, parameters);
 
             parameters.setPreviewSize(previewSize.width, previewSize.height);
-           // parameters.setPictureSize(960, 720);
+
+            // Resize surface view
+            double scaleFactor = LayoutUtil.getViewScaleFactor(new Point(width, height), new Point(previewSize.width, previewSize.height), PREVIEW_AREA_MARGIN);
+            preview.setLayoutParams(new LinearLayout.LayoutParams((int)(previewSize.height * scaleFactor),(int)(previewSize.width * scaleFactor)));
+
+            Camera.Size pictureSize = getPictureCameraSize(parameters);
+            parameters.setPictureSize(pictureSize.width, pictureSize.height);
 
             PackageManager packageManager = getActivity().getPackageManager();
             if(packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_AUTOFOCUS)){
@@ -247,6 +206,141 @@ public class ImageTakeCameraFragment extends Fragment {
             // no-op
         }
     };
+
+    /**
+     *
+     * @param width
+     * @param height
+     * @param parameters
+     * @return
+     */
+    private Camera.Size getBestPreviewCameraSize(int width, int height, Camera.Parameters parameters){
+
+        Camera.Size result = null;
+        for (Camera.Size size : parameters.getSupportedPreviewSizes()) {
+            if (size.width <= width && size.height <= height && (((double)size.width/size.height ) == CAMERA_SIDES_RATIO)) {
+                if (result == null) {
+                    result = size;
+                }
+                else {
+                    int resultArea = result.width * result.height;
+                    int newArea = size.width * size.height;
+                    if (newArea > resultArea) {
+                        result = size;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @param parameters
+     * @return
+     */
+    private Camera.Size getPictureCameraSize(Camera.Parameters parameters){
+
+        boolean supportDefaultWidth = false;
+        boolean supportDefaultHeight = false;
+        for (Camera.Size size : parameters.getSupportedPictureSizes()) {
+
+            // Need this for case when camera isn't support default photo size
+            if (size.width == DEFAULT_PICTURE_WIDTH) {
+                supportDefaultWidth = true;
+            }
+
+            // Need this for case when camera isn't support default photo size
+            if (size.height == DEFAULT_PICTURE_HEIGHT) {
+                supportDefaultHeight = true;
+            }
+
+            if (size.width == DEFAULT_PICTURE_WIDTH && size.height == DEFAULT_PICTURE_HEIGHT) {
+                return size;
+            }
+        }
+
+        // Default photo size isn't supported
+        // Try to find some similar to default
+        Camera.Size result = parameters.getSupportedPictureSizes().get(0);
+        if (supportDefaultWidth || supportDefaultHeight) {
+
+            int widthDelta = DEFAULT_PICTURE_WIDTH;
+            int nearestWidth = 0;
+
+            int heightDelta = DEFAULT_PICTURE_HEIGHT;
+            int nearestHeight = 0;
+
+            for (Camera.Size size : parameters.getSupportedPictureSizes()) {
+
+                if (supportDefaultWidth) {
+                    int currentHeightDelta = Math.abs(DEFAULT_PICTURE_HEIGHT - size.height);
+                    if (currentHeightDelta < heightDelta) {
+                        heightDelta = currentHeightDelta;
+                        nearestHeight = size.height;
+                    }
+                }
+
+                if (supportDefaultHeight) {
+                    int currentWidthDelta = Math.abs(DEFAULT_PICTURE_WIDTH - size.width);
+                    if (currentWidthDelta < widthDelta) {
+                        widthDelta = currentWidthDelta;
+                        nearestWidth = size.width;
+                    }
+                }
+            }
+
+            if (supportDefaultWidth) {
+                result.width = DEFAULT_PICTURE_WIDTH;
+                result.height = nearestHeight;
+            }
+
+            if (supportDefaultHeight) {
+                result.width = nearestWidth;
+                result.height = DEFAULT_PICTURE_HEIGHT;
+            }
+
+            return result;
+
+        } else {
+
+            // Get closest to default photo resolution by square
+            int defaultPhotoSquare = DEFAULT_PICTURE_WIDTH * DEFAULT_PICTURE_HEIGHT;
+            int squareDelta = defaultPhotoSquare;
+            for (Camera.Size size : parameters.getSupportedPictureSizes()) {
+                int currentSquareDelta = Math.abs(defaultPhotoSquare - size.width * size.height);
+                if (currentSquareDelta < squareDelta) {
+                    squareDelta = currentSquareDelta;
+                    result = size;
+                }
+            }
+
+            return result;
+        }
+    }
+
+    /**
+     *
+     * @param maxLayoutWidth
+     * @param maxLayoutHeight
+     * @param previewSize
+     * @return
+     */
+    private double getSurfaceViewScaleFactor(int maxLayoutWidth, int maxLayoutHeight, Camera.Size previewSize) {
+
+        int minLayoutSideSize = maxLayoutWidth;
+        if (maxLayoutHeight < maxLayoutWidth) {
+            minLayoutSideSize = maxLayoutHeight;
+        }
+
+        int minPreviewSideSize = previewSize.width;
+        if (previewSize.height < previewSize.width) {
+            minPreviewSideSize = previewSize.height;
+        }
+
+        return  ((double)minLayoutSideSize - 2 * PREVIEW_AREA_MARGIN) / minPreviewSideSize;
+    }
 
 
     /**
@@ -282,6 +376,7 @@ public class ImageTakeCameraFragment extends Fragment {
 
         Bundle bundle = new Bundle();
         bundle.putParcelable("bmp", mutableBitmap);
+        bundle.putBoolean("isRotated", true);
 
         MainActivity activity = (MainActivity) getActivity();
         FragmentSwitcherHolder.getFragmentSwitcher().showImageTakePreviewFragment(bundle);
