@@ -2,6 +2,7 @@ package com.jrew.geocatch.mobile.menu;
 
 import android.app.Activity;
 import android.os.Handler;
+import android.view.View;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
@@ -135,7 +136,10 @@ public class MenuHelper {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        activity.findViewById(itemId).setBackgroundResource(MenuHelper.SELECTED_ACTION_BAR_ITEM_COLOR);
+                        View menuItem = activity.findViewById(itemId);
+                        if (menuItem != null) {
+                            menuItem.setBackgroundResource(MenuHelper.SELECTED_ACTION_BAR_ITEM_COLOR);
+                        }
                     }
                 });
             }

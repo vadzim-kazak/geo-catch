@@ -4,18 +4,10 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="match_parent"
-              android:padding="10dip"
-              android:gravity="center_horizontal">
+              android:gravity="center">
 
     <android.view.SurfaceView android:id="@+id/surface"
                               android:layout_width="wrap_content"
                               android:layout_height="wrap_content"/>
-
-    <Button android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Take photo"
-            android:id="@+id/button1"
-            android:layout_gravity="center"/>
-
 
 </LinearLayout>

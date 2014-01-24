@@ -68,6 +68,6 @@ public class MainActivity extends SherlockFragmentActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         MenuHelperHolder.getMenuHelper().onOptionsItemSelected(item);
-        return true;
+        return false;
     }
 }

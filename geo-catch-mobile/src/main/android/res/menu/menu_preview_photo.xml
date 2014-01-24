@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item android:id="@+id/backMenuOption"
+          android:icon="@drawable/ic_arr_back"
+          android:showAsAction="always">
+    </item>
+
+    <item android:id="@+id/revertCCWMenuOption"
+          android:icon="@drawable/ic_rotate_cww"
+          android:showAsAction="always">
+    </item>
+
+    <item android:id="@+id/revertCWMenuOption"
+          android:icon="@drawable/ic_rotate_cw"
+          android:showAsAction="always">
+    </item>
+
+    <item android:id="@+id/forwardMenuOption"
+          android:icon="@drawable/ic_arr_forward"
+          android:showAsAction="always">
+    </item>
+
+</menu>

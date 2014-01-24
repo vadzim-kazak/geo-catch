@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Geo-Catch</string>
 
     <string name="takePhotoButton">Take a photo</string>
@@ -11,8 +12,6 @@
     <string name="viewSettingsLabel">View settings</string>
 
     <string name="viewImageLabel">View image</string>
-
-    <string name="takeImageLabel">Take a photo</string>
 
     <string name="ownImagesLabel">Own images</string>
 
@@ -29,5 +28,12 @@
     <string name="monthFrom">from month</string>
 
     <string name="monthTo">to month</string>
+
+    <!-- Photo uploading flow -->
+    <string name="takeImageLabel">Take a photo</string>
+
+    <string name="photoPreviewLabel">Photo preview</string>
+
+    <string name="photoInfoLabel">Photo information</string>
 
 </resources>

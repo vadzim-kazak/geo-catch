@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -11,10 +12,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.*;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.activity.MainActivity;
 import com.jrew.geocatch.mobile.model.UploadImage;
@@ -22,10 +29,12 @@ import com.jrew.geocatch.mobile.reciever.DomainInfoServiceResultReceiver;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.service.ImageService;
+import com.jrew.geocatch.mobile.util.ActionBarHolder;
 import com.jrew.geocatch.mobile.util.FileUtil;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.ImageUploadKeys;
 import com.jrew.geocatch.mobile.view.DomainPropertyView;
+import com.jrew.geocatch.mobile.view.PrePopulatedEditText;
 import com.jrew.geocatch.web.model.DomainProperty;
 
 import java.io.File;
@@ -43,7 +52,10 @@ import java.util.Locale;
  * Time: 15:06
  * To change this template use File | Settings | File Templates.
  */
-public class ImageTakeInfoFragment extends Fragment implements LocationListener {
+public class ImageTakeInfoFragment extends SherlockFragment implements LocationListener {
+
+    /** **/
+    private static final Double IMAGE_VIEW_SCALE_SIZE = 0.15d;
 
     /** **/
     private double latitude;
@@ -57,40 +69,42 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
     /** **/
     private DomainPropertyView fishTypeView, fishingToolView, fishingBaitView;
 
+    /** **/
+    private View layout;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+        setHasOptionsMenu(true);
 
-        final View result = inflater.inflate(R.layout.image_take_info_fragment, container, false);
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        ImageView imageThumbnail = (ImageView) result.findViewById(R.id.imageThumbnail);
+        // Action bar subtitle
+        ActionBar actionBar = ActionBarHolder.getActionBar();
+        actionBar.setSubtitle(getResources().getString(R.string.photoInfoLabel));
+
+        layout = inflater.inflate(R.layout.image_take_info_fragment, container, false);
+
+        ImageView imageThumbnail = (ImageView) layout.findViewById(R.id.imageThumbnail);
 
         final Bundle fragmentData = getArguments();
 
         if (fragmentData != null && !fragmentData.isEmpty()) {
             Bitmap image = (Bitmap) fragmentData.getParcelable("bmp");
+
+            // Resize image view
+            WindowManager windowManager = getSherlockActivity().getWindowManager();
+            Rect displaySize = new Rect();
+            windowManager.getDefaultDisplay().getRectSize(displaySize);
+
+            int imageThumbnailViewHeight = (int) (displaySize.height() * IMAGE_VIEW_SCALE_SIZE);
+            int imageThumbnailViewWidth = (int) ((double) image.getWidth() / image.getHeight() * imageThumbnailViewHeight);
+            LinearLayout.LayoutParams layoutParams =
+                    new LinearLayout.LayoutParams(imageThumbnailViewWidth, imageThumbnailViewHeight);
+            imageThumbnail.setLayoutParams(layoutParams);
+
             imageThumbnail.setImageBitmap(image);
         }
-
-        Button uploadButton = (Button) result.findViewById(R.id.uploadButton);
-        uploadButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                if (!isLocationDetected()) {
-                    Context context = getActivity();
-                    CharSequence text = "Wait for location loading...";
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                } else {
-                    Bitmap image = (Bitmap) fragmentData.getParcelable("bmp");
-                    Bundle imageBundle = prepareUploadData(result, image);
-                    uploadImage(imageBundle);
-                }
-            }
-        });
 
         resultReceiver = new ServiceResultReceiver(new Handler());
         resultReceiver.setReceiver(new ServiceResultReceiver.Receiver() {
@@ -120,16 +134,51 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 500.0f, this);
 
         //Populate
-        fishTypeView = (DomainPropertyView) result.findViewById(R.id.fishTypeView);
+        fishTypeView = (DomainPropertyView) layout.findViewById(R.id.fishTypeView);
         loadDomainInfo(fishTypeView, DomainInfoService.DomainInfoType.FISH);
 
-        fishingToolView = (DomainPropertyView) result.findViewById(R.id.fishingToolView);
+        fishingToolView = (DomainPropertyView) layout.findViewById(R.id.fishingToolView);
         loadDomainInfo(fishingToolView, DomainInfoService.DomainInfoType.FISHING_TOOL);
 
-        fishingBaitView = (DomainPropertyView) result.findViewById(R.id.fishingBaitView);
+        fishingBaitView = (DomainPropertyView) layout.findViewById(R.id.fishingBaitView);
         loadDomainInfo(fishingBaitView, DomainInfoService.DomainInfoType.BAIT);
 
-        return result;
+        return layout;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_photo_info, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int pressedMenuItemId = item.getItemId();
+        FragmentSwitcher fragmentSwitcher = FragmentSwitcherHolder.getFragmentSwitcher();
+        switch (pressedMenuItemId) {
+            case R.id.backMenuOption:
+                getSherlockActivity().getSupportFragmentManager().popBackStack();
+                break;
+
+            case R.id.uploadPhotoMenuOption:
+                if (!isLocationDetected()) {
+                    Context context = getActivity();
+                    CharSequence text = "Wait for location loading...";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                } else {
+                    final Bundle fragmentData = getArguments();
+                    Bitmap image = (Bitmap) fragmentData.getParcelable("bmp");
+                    Bundle imageBundle = prepareUploadData(layout, image);
+                    uploadImage(imageBundle);
+                }
+                break;
+        }
+
+        return true;
     }
 
     /**
@@ -165,8 +214,8 @@ public class ImageTakeInfoFragment extends Fragment implements LocationListener 
         uploadImage.setDeviceId(deviceId);
 
         // Description
-        TextView textView = (TextView) layout.findViewById(R.id.uploadImageDescription);
-        uploadImage.setDescription(textView.getText().toString());
+        PrePopulatedEditText descriptionView = (PrePopulatedEditText) layout.findViewById(R.id.uploadImageDescription);
+        uploadImage.setDescription(descriptionView.getValue());
 
         // Latitude
         uploadImage.setLatitude(latitude);

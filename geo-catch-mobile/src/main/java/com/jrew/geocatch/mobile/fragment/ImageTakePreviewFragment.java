@@ -17,6 +17,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.activity.MainActivity;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
@@ -35,10 +39,10 @@ import java.io.IOException;
  * Time: 15:05
  * To change this template use File | Settings | File Templates.
  */
-public class ImageTakePreviewFragment extends Fragment {
+public class ImageTakePreviewFragment extends SherlockFragment {
 
     /** **/
-    private static final int IMAGE_VIEW_MARGIN = 20;
+    private static final int IMAGE_VIEW_MARGIN = 0;
 
     /** **/
     private Bitmap image;
@@ -49,12 +53,15 @@ public class ImageTakePreviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        ActionBarHolder.getActionBar().setDisplayHomeAsUpEnabled(true);
+        setHasOptionsMenu(true);
 
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        // Action bar subtitle
+        ActionBar actionBar = ActionBarHolder.getActionBar();
+        actionBar.setSubtitle(getResources().getString(R.string.photoPreviewLabel));
 
         View result = inflater.inflate(R.layout.image_take_preview_fragment, container, false);
-
         imageView = (ImageView) result.findViewById(R.id.imagePreview);
 
         final Bundle fragmentData = getArguments();
@@ -70,42 +77,49 @@ public class ImageTakePreviewFragment extends Fragment {
             displayImage();
         }
 
+        return result;
+    }
 
-        Button proceedButton = (Button) result.findViewById(R.id.imagePreviewProceedButton);
-        proceedButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (fragmentData != null) {
-                    fragmentData.putParcelable("bmp", image);
-                }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_preview_photo, menu);
+    }
 
-                FragmentSwitcherHolder.getFragmentSwitcher().showImageTakeInfoFragment(new Bundle(fragmentData));
-            }
-        });
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
-        Button rotateCCWButton = (Button) result.findViewById(R.id.imagePreviewRotateCCW);
-        rotateCCWButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        int pressedMenuItemId = item.getItemId();
+        FragmentSwitcher fragmentSwitcher = FragmentSwitcherHolder.getFragmentSwitcher();
+        switch (pressedMenuItemId) {
+            case R.id.backMenuOption:
+                getSherlockActivity().getSupportFragmentManager().popBackStack();
+                break;
+
+            case R.id.revertCCWMenuOption:
                 if (image != null) {
                     rotateImage(-90);
                     displayImage();
                 }
-            }
-        });
+                break;
 
-        Button rotateCWButton = (Button) result.findViewById(R.id.imagePreviewRotateCW);
-        rotateCWButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            case R.id.revertCWMenuOption:
                 if (image != null) {
                     rotateImage(90);
                     displayImage();
                 }
-            }
-        });
+                break;
 
-        return result;
+            case R.id.forwardMenuOption:
+                final Bundle fragmentData = getArguments();
+                if (fragmentData != null) {
+                    fragmentData.putParcelable("bmp", image);
+                }
+                FragmentSwitcherHolder.getFragmentSwitcher().showImageTakeInfoFragment(new Bundle(fragmentData));
+                break;
+        }
+
+        return true;
     }
 
     /**
@@ -128,6 +142,6 @@ public class ImageTakePreviewFragment extends Fragment {
         display.getSize(displaySize);
 
         double scaleFactor = LayoutUtil.getViewWidthScaleFactor(displaySize.x, image.getWidth(), IMAGE_VIEW_MARGIN);
-        imageView.setLayoutParams(new RelativeLayout.LayoutParams((int) (image.getWidth() * scaleFactor), (int) (image.getHeight() * scaleFactor)));
+        imageView.setLayoutParams(new LinearLayout.LayoutParams((int) (image.getWidth() * scaleFactor), (int) (image.getHeight() * scaleFactor)));
     }
 }

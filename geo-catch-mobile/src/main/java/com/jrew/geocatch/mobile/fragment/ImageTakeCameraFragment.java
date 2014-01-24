@@ -18,10 +18,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.*;
+import android.view.MenuInflater;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.*;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.activity.MainActivity;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
@@ -40,13 +46,13 @@ import java.util.Calendar;
  * Time: 13:06
  * To change this template use File | Settings | File Templates.
  */
-public class ImageTakeCameraFragment extends Fragment {
+public class ImageTakeCameraFragment extends SherlockFragment {
 
     /** **/
     private final static double CAMERA_SIDES_RATIO = 4d / 3;
 
     /** **/
-    private final static int PREVIEW_AREA_MARGIN = 20;
+    private final static int PREVIEW_AREA_MARGIN = 0;
 
     /** **/
     private final static int DEFAULT_PICTURE_WIDTH = 640;
@@ -87,6 +93,8 @@ public class ImageTakeCameraFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        setHasOptionsMenu(true);
+
         // Action bar subtitle
         ActionBar actionBar = ActionBarHolder.getActionBar();
         actionBar.setSubtitle(getResources().getString(R.string.takeImageLabel));
@@ -114,17 +122,43 @@ public class ImageTakeCameraFragment extends Fragment {
 
         previewHolder.setFixedSize(displaySize.width(), displaySize.width());
 
-        View button = (Button) result.findViewById(R.id.button1);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                camera.takePicture(null, null, photoCallback);
-                inPreview = false;
-            }
-        });
+//        View button = (Button) result.findViewById(R.id.button1);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                camera.takePicture(null, null, photoCallback);
+//                inPreview = false;
+//            }
+//        });
 
         return result;
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_take_photo, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int pressedMenuItemId = item.getItemId();
+        FragmentSwitcher fragmentSwitcher = FragmentSwitcherHolder.getFragmentSwitcher();
+        switch (pressedMenuItemId) {
+            case R.id.backMenuOption:
+                fragmentSwitcher.showMapFragment();
+                break;
+            case R.id.takePhotoMenuOption:
+                camera.takePicture(null, null, photoCallback);
+                inPreview = false;
+                break;
+        }
+
+        return true;
+    }
+
+
 
     @Override
     public void onResume() {
