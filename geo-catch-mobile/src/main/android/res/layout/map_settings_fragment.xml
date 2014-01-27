@@ -18,6 +18,8 @@
         <com.jrew.geocatch.mobile.view.StrictDomainPropertyView android:layout_width="match_parent"
                                                                 android:layout_height="wrap_content"
                                                                 android:id="@+id/fishTypeView"
+                                                                android:background="@null"
+                                                                android:paddingLeft="20dip"
                                                                 android:layout_gravity="center"/>
 
     </LinearLayout>
@@ -36,6 +38,8 @@
         <com.jrew.geocatch.mobile.view.StrictDomainPropertyView android:layout_width="match_parent"
                                                                 android:layout_height="wrap_content"
                                                                 android:id="@+id/fishingToolView"
+                                                                android:background="@null"
+                                                                android:paddingLeft="20dip"
                                                                 android:layout_gravity="center"/>
 
     </LinearLayout>
@@ -54,6 +58,8 @@
         <com.jrew.geocatch.mobile.view.StrictDomainPropertyView android:layout_width="match_parent"
                                                                 android:layout_height="wrap_content"
                                                                 android:id="@+id/fishingBaitView"
+                                                                android:background="@null"
+                                                                android:paddingLeft="20dip"
                                                                 android:layout_gravity="center"/>
 
     </LinearLayout>

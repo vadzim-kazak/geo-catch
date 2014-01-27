@@ -54,12 +54,12 @@ public class MainActivity extends SherlockFragmentActivity {
 
         getSupportMenuInflater().inflate(R.menu.menu_main, menu);
         MenuHelperHolder.getMenuHelper().setMenu(menu);
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                MenuHelperHolder.getMenuHelper().init();
-            }
-        });
+//        new Handler().post(new Runnable() {
+//            @Override
+//            public void run() {
+//                MenuHelperHolder.getMenuHelper().init();
+//            }
+//        });
 
         return super.onCreateOptionsMenu(menu);
     }

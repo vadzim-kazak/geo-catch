@@ -145,6 +145,7 @@ public class ImageTakeCameraFragment extends SherlockFragment {
 
         int pressedMenuItemId = item.getItemId();
         FragmentSwitcher fragmentSwitcher = FragmentSwitcherHolder.getFragmentSwitcher();
+
         switch (pressedMenuItemId) {
             case R.id.backMenuOption:
                 fragmentSwitcher.showMapFragment();

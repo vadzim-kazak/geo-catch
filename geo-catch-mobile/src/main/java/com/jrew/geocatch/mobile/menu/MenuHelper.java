@@ -122,29 +122,29 @@ public class MenuHelper {
      */
     public void makeViewSelected(final int itemId, final Handler handler) {
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-
-                // Wait until menu will be initialized
-                MenuHelper menuHelper = MenuHelperHolder.getMenuHelper();
-                while (menuHelper == null || !menuHelper.isReady()){
-                    menuHelper = MenuHelperHolder.getMenuHelper();
-                }
-
-                // Mark menu selection
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        View menuItem = activity.findViewById(itemId);
-                        if (menuItem != null) {
-                            menuItem.setBackgroundResource(MenuHelper.SELECTED_ACTION_BAR_ITEM_COLOR);
-                        }
-                    }
-                });
-            }
-        };
-        new Thread(runnable).start();
+//        Runnable runnable = new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                // Wait until menu will be initialized
+//                MenuHelper menuHelper = MenuHelperHolder.getMenuHelper();
+//                while (menuHelper == null || !menuHelper.isReady()){
+//                    menuHelper = MenuHelperHolder.getMenuHelper();
+//                }
+//
+//                // Mark menu selection
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        View menuItem = activity.findViewById(itemId);
+//                        if (menuItem != null) {
+//                            menuItem.setBackgroundResource(MenuHelper.SELECTED_ACTION_BAR_ITEM_COLOR);
+//                        }
+//                    }
+//                });
+//            }
+//        };
+//        new Thread(runnable).start();
     }
 
     /**
