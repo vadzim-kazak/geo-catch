@@ -3,16 +3,9 @@ package com.jrew.geocatch.mobile.fragment;
 import android.app.ProgressDialog;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Point;
-import android.graphics.Rect;
+import android.graphics.*;
 import android.hardware.Camera;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.*;
@@ -28,10 +21,6 @@ import com.jrew.geocatch.mobile.activity.MainActivity;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.LayoutUtil;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.Calendar;
 
 /**
  * Created with IntelliJ IDEA.
@@ -64,22 +53,15 @@ public class ImageTakeCameraFragment extends SherlockFragment {
     private boolean inPreview;
 
     /** **/
-    Bitmap bmp;
+    private Bitmap bmp;
 
     /** **/
-    static Bitmap mutableBitmap;
+    private static Bitmap mutableBitmap;
 
     /** **/
-    File imageFileName;
+    private ProgressDialog dialog;
 
-    /** **/
-    File imageFileFolder;
-
-    /** **/
-    private MediaScannerConnection msConn;
-
-    /** **/
-    ProgressDialog dialog;
+    private FrameLayout parentLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,10 +74,10 @@ public class ImageTakeCameraFragment extends SherlockFragment {
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        View result = inflater.inflate(R.layout.image_take_camera_fragment, container, false);
+        parentLayout = (FrameLayout) inflater.inflate(R.layout.image_take_camera_fragment, container, false);
 
         //image=(ImageView)findViewById(R.id.image);
-        preview = (SurfaceView) result.findViewById(R.id.surface);
+        preview = (SurfaceView) parentLayout.findViewById(R.id.surface);
 
         previewHolder = preview.getHolder();
         previewHolder.addCallback(surfaceCallback);
@@ -109,7 +91,7 @@ public class ImageTakeCameraFragment extends SherlockFragment {
 
         previewHolder.setFixedSize(displaySize.width(), displaySize.width());
 
-        return result;
+        return parentLayout;
     }
 
     @Override
@@ -194,9 +176,12 @@ public class ImageTakeCameraFragment extends SherlockFragment {
 
             // Resize surface view
             double scaleFactor = LayoutUtil.getViewScaleFactor(new Point(width, height), new Point(previewSize.width, previewSize.height), 0);
-            LinearLayout.LayoutParams cameraLayoutParams = new LinearLayout.LayoutParams((int)(previewSize.height * scaleFactor),
+            FrameLayout.LayoutParams cameraLayoutParams = new FrameLayout.LayoutParams((int)(previewSize.height * scaleFactor),
                     (int)(previewSize.width * scaleFactor));
+            cameraLayoutParams.gravity = Gravity.CENTER;
             preview.setLayoutParams(cameraLayoutParams);
+
+            parentLayout.addView(createCameraCover(cameraLayoutParams.width), parentLayout.getWidth(), parentLayout.getHeight());
 
             Camera.Size pictureSize = getPictureCameraSize(parameters);
             parameters.setPictureSize(pictureSize.width, pictureSize.height);
@@ -378,13 +363,36 @@ public class ImageTakeCameraFragment extends SherlockFragment {
 
     /**
      *
-     * @param cameraLayoutParams
+     * @param cameraWidth
      * @return
      */
-    public FrameLayout createCameraBlackout(LinearLayout.LayoutParams cameraLayoutParams) {
+    public LinearLayout createCameraCover(int cameraWidth) {
 
+        int layoutHeight = parentLayout.getHeight();
+        int opaqueLayoutHeight = (layoutHeight - cameraWidth) / 2;
 
+        LinearLayout coverLayout = (LinearLayout) getSherlockActivity().getLayoutInflater().inflate(R.layout.image_take_camera_cover, null);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(parentLayout.getWidth(),
+                parentLayout.getHeight());
+        coverLayout.setLayoutParams(layoutParams);
 
-        return null;
+        LinearLayout topLinearLayout = (LinearLayout) coverLayout.findViewById(R.id.topLayout);
+        topLinearLayout.setBackgroundColor(Color.argb(255, 200, 200, 200));
+        layoutParams = new LinearLayout.LayoutParams(parentLayout.getWidth(),
+                opaqueLayoutHeight);
+        topLinearLayout.setLayoutParams(layoutParams);
+
+        LinearLayout middleLinearLayout = (LinearLayout) coverLayout.findViewById(R.id.middleLayout);
+        layoutParams = new LinearLayout.LayoutParams(parentLayout.getWidth(), cameraWidth);
+        middleLinearLayout.setLayoutParams(layoutParams);
+        middleLinearLayout.setBackgroundColor(Color.TRANSPARENT);
+
+        LinearLayout bottomLinearLayout = (LinearLayout) coverLayout.findViewById(R.id.bottomLayout);
+        bottomLinearLayout.setBackgroundColor(Color.argb(255, 200, 200, 200));
+        layoutParams = new LinearLayout.LayoutParams(parentLayout.getWidth(),
+                opaqueLayoutHeight);
+        bottomLinearLayout.setLayoutParams(layoutParams);
+
+        return coverLayout;
     }
 }
