@@ -40,7 +40,8 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  *
  */
-public class MapFragment extends SupportMapFragment implements Watson.OnCreateOptionsMenuListener, Watson.OnOptionsItemSelectedListener {
+public class MapFragment extends SupportMapFragment implements Watson.OnCreateOptionsMenuListener,
+        Watson.OnOptionsItemSelectedListener {
 
     /** **/
     private GoogleMap googleMap;
@@ -55,6 +56,8 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         setHasOptionsMenu(true);
+
+      //  ActionBarHolder.getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
         // Action bar subtitle
         ActionBar actionBar = ActionBarHolder.getActionBar();

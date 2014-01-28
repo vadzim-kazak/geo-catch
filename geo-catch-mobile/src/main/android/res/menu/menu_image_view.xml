@@ -6,8 +6,8 @@
           android:showAsAction="always">
     </item>
 
-    <item android:id="@+id/resetMapSettingsMenuOption"
-          android:icon="@android:drawable/stat_notify_sync"
+    <item android:id="@+id/viewInfoMenuOption"
+          android:icon="@android:drawable/ic_menu_info_details"
           android:showAsAction="always">
     </item>
 

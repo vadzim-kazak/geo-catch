@@ -42,9 +42,6 @@ import java.io.IOException;
 public class ImageTakePreviewFragment extends SherlockFragment {
 
     /** **/
-    private static final int IMAGE_VIEW_MARGIN = 0;
-
-    /** **/
     private Bitmap image;
 
     /** **/
@@ -135,6 +132,9 @@ public class ImageTakePreviewFragment extends SherlockFragment {
                 matrix, true);
     }
 
+    /**
+     *
+     */
     private void displayImage() {
         imageView.setImageBitmap(image);
 
@@ -142,7 +142,7 @@ public class ImageTakePreviewFragment extends SherlockFragment {
         Point displaySize = new Point();
         display.getSize(displaySize);
 
-        double scaleFactor = LayoutUtil.getViewWidthScaleFactor(displaySize.x, image.getWidth(), IMAGE_VIEW_MARGIN);
+        double scaleFactor = LayoutUtil.getViewWidthScaleFactor(displaySize.x, image.getWidth(), 0);
         imageView.setLayoutParams(new LinearLayout.LayoutParams((int) (image.getWidth() * scaleFactor), (int) (image.getHeight() * scaleFactor)));
     }
 }

@@ -4,18 +4,25 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
+import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
+import com.jrew.geocatch.mobile.util.LayoutUtil;
 import com.jrew.geocatch.web.model.ClientImage;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.DomainProperty;
@@ -30,7 +37,7 @@ import java.util.List;
  * Date: 11/11/13
  * Time: 4:16 PM
  */
-public class ImageViewFragment extends Fragment {
+public class ImageViewFragment extends SherlockFragment {
 
     /** **/
     public ServiceResultReceiver imageResultReceiver;
@@ -39,6 +46,8 @@ public class ImageViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+
+        setHasOptionsMenu(true);
 
         final ProgressDialog progress = new ProgressDialog(getActivity());
         progress.setMessage("Loading image...");
@@ -103,7 +112,17 @@ public class ImageViewFragment extends Fragment {
 
                     case ImageService.ResultStatus.LOAD_IMAGE_FINISHED:
                          Bitmap image = (Bitmap) resultData.get(ImageService.RESULT_KEY);
+
                          imageView.setImageBitmap(image);
+
+                         Display display = getActivity().getWindowManager().getDefaultDisplay();
+                         Point displaySize = new Point();
+                         display.getSize(displaySize);
+
+                         double scaleFactor = LayoutUtil.getViewWidthScaleFactor(displaySize.x, image.getWidth(), 0);
+                         imageView.setLayoutParams(new LinearLayout.LayoutParams((int)
+                                 (image.getWidth() * scaleFactor), (int) (image.getHeight() * scaleFactor)));
+
                          progress.dismiss();
                          break;
                 }
@@ -119,6 +138,28 @@ public class ImageViewFragment extends Fragment {
         }
 
         return imageViewFragmentLayout;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_image_view, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int pressedMenuItemId = item.getItemId();
+
+        FragmentSwitcher fragmentSwitcher = FragmentSwitcherHolder.getFragmentSwitcher();
+        switch (pressedMenuItemId) {
+            case R.id.proceedToMapMenuOption:
+                fragmentSwitcher.showMapFragment();
+                break;
+
+        }
+
+        return true;
     }
 
     /**
