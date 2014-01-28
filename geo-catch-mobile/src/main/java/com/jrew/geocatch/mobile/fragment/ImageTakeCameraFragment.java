@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.*;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
@@ -43,9 +44,6 @@ public class ImageTakeCameraFragment extends SherlockFragment {
 
     /** **/
     private final static double CAMERA_SIDES_RATIO = 4d / 3;
-
-    /** **/
-    private final static int PREVIEW_AREA_MARGIN = 0;
 
     /** **/
     private final static int DEFAULT_PICTURE_WIDTH = 640;
@@ -195,8 +193,10 @@ public class ImageTakeCameraFragment extends SherlockFragment {
             parameters.setPreviewSize(previewSize.width, previewSize.height);
 
             // Resize surface view
-            double scaleFactor = LayoutUtil.getViewScaleFactor(new Point(width, height), new Point(previewSize.width, previewSize.height), PREVIEW_AREA_MARGIN);
-            preview.setLayoutParams(new LinearLayout.LayoutParams((int)(previewSize.height * scaleFactor),(int)(previewSize.width * scaleFactor)));
+            double scaleFactor = LayoutUtil.getViewScaleFactor(new Point(width, height), new Point(previewSize.width, previewSize.height), 0);
+            LinearLayout.LayoutParams cameraLayoutParams = new LinearLayout.LayoutParams((int)(previewSize.height * scaleFactor),
+                    (int)(previewSize.width * scaleFactor));
+            preview.setLayoutParams(cameraLayoutParams);
 
             Camera.Size pictureSize = getPictureCameraSize(parameters);
             parameters.setPictureSize(pictureSize.width, pictureSize.height);
@@ -374,5 +374,17 @@ public class ImageTakeCameraFragment extends SherlockFragment {
         FragmentSwitcherHolder.getFragmentSwitcher().showImageTakePreviewFragment(bundle);
 
         dialog.dismiss();
+    }
+
+    /**
+     *
+     * @param cameraLayoutParams
+     * @return
+     */
+    public FrameLayout createCameraBlackout(LinearLayout.LayoutParams cameraLayoutParams) {
+
+
+
+        return null;
     }
 }
