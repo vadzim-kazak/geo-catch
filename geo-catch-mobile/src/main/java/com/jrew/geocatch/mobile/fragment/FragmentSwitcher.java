@@ -59,11 +59,8 @@ public class FragmentSwitcher {
      * @param fragmentTag
      */
     private void showFragment(String fragmentTag) {
-        if (displayingFragmentTag == null || (
-            displayingFragmentTag != null && !displayingFragmentTag.equals(fragmentTag))) {
-            displayingFragmentTag = fragmentTag;
-            showFragment(fragmentTag, null);
-        }
+        displayingFragmentTag = fragmentTag;
+        showFragment(fragmentTag, null);
     }
 
     /**

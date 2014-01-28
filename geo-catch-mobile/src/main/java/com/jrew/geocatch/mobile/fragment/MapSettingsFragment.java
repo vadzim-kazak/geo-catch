@@ -136,7 +136,7 @@ public class MapSettingsFragment extends SherlockFragment {
         FragmentSwitcher fragmentSwitcher = FragmentSwitcherHolder.getFragmentSwitcher();
         switch (pressedMenuItemId) {
             case R.id.proceedToMapMenuOption:
-                getSherlockActivity().getSupportFragmentManager().popBackStack();
+                fragmentSwitcher.showMapFragment();
                 break;
 
             case R.id.resetMapSettingsMenuOption:
