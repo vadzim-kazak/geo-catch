@@ -111,15 +111,6 @@ public class ImageTakeCameraFragment extends SherlockFragment {
 
         previewHolder.setFixedSize(displaySize.width(), displaySize.width());
 
-//        View button = (Button) result.findViewById(R.id.button1);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                camera.takePicture(null, null, photoCallback);
-//                inPreview = false;
-//            }
-//        });
-
         return result;
     }
 
@@ -346,29 +337,6 @@ public class ImageTakeCameraFragment extends SherlockFragment {
 
     /**
      *
-     * @param maxLayoutWidth
-     * @param maxLayoutHeight
-     * @param previewSize
-     * @return
-     */
-    private double getSurfaceViewScaleFactor(int maxLayoutWidth, int maxLayoutHeight, Camera.Size previewSize) {
-
-        int minLayoutSideSize = maxLayoutWidth;
-        if (maxLayoutHeight < maxLayoutWidth) {
-            minLayoutSideSize = maxLayoutHeight;
-        }
-
-        int minPreviewSideSize = previewSize.width;
-        if (previewSize.height < previewSize.width) {
-            minPreviewSideSize = previewSize.height;
-        }
-
-        return  ((double)minLayoutSideSize - 2 * PREVIEW_AREA_MARGIN) / minPreviewSideSize;
-    }
-
-
-    /**
-     *
      */
     Camera.PictureCallback photoCallback = new Camera.PictureCallback() {
 
@@ -407,103 +375,4 @@ public class ImageTakeCameraFragment extends SherlockFragment {
 
         dialog.dismiss();
     }
-
-    /**
-     *
-     */
-    class SavePhotoTask extends AsyncTask<byte[], String, String> {
-
-        @Override
-        protected String doInBackground(byte[]... jpeg) {
-            File photo=new File(Environment.getExternalStorageDirectory(), "photo.jpg");
-            if (photo.exists()){
-                photo.delete();
-            }
-            try {
-                FileOutputStream fos=new FileOutputStream(photo.getPath());
-                fos.write(jpeg[0]);
-                fos.close();
-            }
-            catch (java.io.IOException e) {
-                Log.e("PictureDemo", "Exception in photoCallback", e);
-            }
-            return(null);
-        }
-    }
-
-    /**
-     *
-     * @param bmp
-     */
-    public void savePhoto(Bitmap bmp) {
-        imageFileFolder = new File(Environment.getExternalStorageDirectory(),"Rotate");
-        imageFileFolder.mkdir();
-        FileOutputStream out = null;
-        Calendar c = Calendar.getInstance();
-        String date = fromInt(c.get(Calendar.MONTH))
-                + fromInt(c.get(Calendar.DAY_OF_MONTH))
-                + fromInt(c.get(Calendar.YEAR))
-                + fromInt(c.get(Calendar.HOUR_OF_DAY))
-                + fromInt(c.get(Calendar.MINUTE))
-                + fromInt(c.get(Calendar.SECOND));
-
-        imageFileName = new File(imageFileFolder, date.toString() + ".jpg");
-        try {
-            out = new FileOutputStream(imageFileName);
-            bmp.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            out.flush();
-            out.close();
-            scanPhoto(imageFileName.toString());
-            out = null;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public String fromInt(int val) {
-        return String.valueOf(val);
-    }
-
-    /**
-     *
-     * @param imageFileName
-     */
-    public void scanPhoto(final String imageFileName)
-    {
-        msConn = new MediaScannerConnection(getActivity(), new MediaScannerConnection.MediaScannerConnectionClient()
-        {
-            public void onMediaScannerConnected()
-            {
-                msConn.scanFile(imageFileName, null);
-                Log.i("msClient obj  in Photo Utility","connection established");
-            }
-            public void onScanCompleted(String path, Uri uri)
-            {
-                msConn.disconnect();
-                Log.i("msClient obj in Photo Utility","scan completed");
-            }
-        });
-        msConn.connect();
-    }
-
-    //@Override
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-
-        if (keyCode == KeyEvent.KEYCODE_MENU&& event.getRepeatCount() == 0) {
-            onBack();
-        }
-
-        //return super.onKeyDown(keyCode, event);
-        return false;
-    }
-
-    /**
-     *
-     */
-    public void onBack(){
-        Log.e("onBack :","yes");
-    }
-
-
-
 }
