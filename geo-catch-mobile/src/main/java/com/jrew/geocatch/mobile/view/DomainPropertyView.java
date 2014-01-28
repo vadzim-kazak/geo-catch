@@ -23,10 +23,10 @@ import java.util.Locale;
 public class DomainPropertyView extends AutoCompleteTextView implements TextWatcher, View.OnFocusChangeListener {
 
     /** **/
-    private static int INITIAL_TEXT_COLOR = Color.GRAY;
+    protected static int INITIAL_TEXT_COLOR = Color.GRAY;
 
     /** **/
-    private static int NORMAL_TEXT_COLOR = Color.BLACK;
+    protected static int NORMAL_TEXT_COLOR = Color.BLACK;
 
     /** **/
     public static final long FISH_DOMAIN_PROPERTY_TYPE = 1l;
@@ -41,10 +41,10 @@ public class DomainPropertyView extends AutoCompleteTextView implements TextWatc
     private static final int THRESHOLD_VALUE = 0;
 
     /** **/
-    private boolean isTextFilled;
+    protected boolean isTextFilled;
 
     /** **/
-    private String initialValue;
+    protected String initialValue;
 
     /** **/
     private DomainAutoCompleteAdapter adapter;

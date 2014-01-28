@@ -84,8 +84,6 @@ public class ImageTakePreviewFragment extends SherlockFragment {
     public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_preview_photo, menu);
-
-        menu.getItem(0).setEnabled(true);
     }
 
     @Override

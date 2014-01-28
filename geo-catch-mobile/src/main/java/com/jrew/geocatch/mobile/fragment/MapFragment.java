@@ -5,21 +5,25 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.support.v4.app.Watson;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.*;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.listener.MarkerOnClickListener;
-import com.jrew.geocatch.mobile.menu.MenuHelper;
 import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.reciever.ImageServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
-import com.jrew.geocatch.mobile.util.MenuHelperHolder;
+import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.SearchCriteriaHolder;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.ViewBounds;
@@ -36,7 +40,7 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  *
  */
-public class MapFragment extends SupportMapFragment {
+public class MapFragment extends SupportMapFragment implements Watson.OnCreateOptionsMenuListener, Watson.OnOptionsItemSelectedListener {
 
     /** **/
     private GoogleMap googleMap;
@@ -49,6 +53,8 @@ public class MapFragment extends SupportMapFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        setHasOptionsMenu(true);
 
         // Action bar subtitle
         ActionBar actionBar = ActionBarHolder.getActionBar();
@@ -93,11 +99,31 @@ public class MapFragment extends SupportMapFragment {
             loadImages(getLatLngBounds());
         }
 
-        // Menu selection
-        final Handler handler = new Handler();
-        MenuHelperHolder.getMenuHelper().makeViewSelected(R.id.viewMapMenuOption, handler);
-
         return result;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_map, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int pressedMenuItemId = item.getItemId();
+
+        FragmentSwitcher fragmentSwitcher = FragmentSwitcherHolder.getFragmentSwitcher();
+        switch (pressedMenuItemId) {
+            case R.id.viewSettingsMenuOption:
+                fragmentSwitcher.showMapSettingsFragment();
+                break;
+
+            case R.id.takeImageMenuOption:
+                fragmentSwitcher.showImageTakeCameraFragment();
+                break;
+        }
+
+        return true;
     }
 
     /**

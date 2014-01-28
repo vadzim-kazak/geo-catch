@@ -2,17 +2,11 @@ package com.jrew.geocatch.mobile.activity;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Handler;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
-import com.jrew.geocatch.mobile.fragment.*;
-import com.jrew.geocatch.mobile.menu.MenuHelper;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
-import com.jrew.geocatch.mobile.util.MenuHelperHolder;
 
 /**
  * Created with IntelliJ IDEA.
@@ -43,31 +37,7 @@ public class MainActivity extends SherlockFragmentActivity {
 
         FragmentSwitcherHolder.initFragmentSwitcher(getSupportFragmentManager());
 
-        MenuHelperHolder.setMenuHelper(new MenuHelper(this));
-
         // Set default fragment
         FragmentSwitcherHolder.getFragmentSwitcher().handleActivityCreation();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        getSupportMenuInflater().inflate(R.menu.menu_main, menu);
-        MenuHelperHolder.getMenuHelper().setMenu(menu);
-//        new Handler().post(new Runnable() {
-//            @Override
-//            public void run() {
-//                MenuHelperHolder.getMenuHelper().init();
-//            }
-//        });
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        MenuHelperHolder.getMenuHelper().onOptionsItemSelected(item);
-        return false;
     }
 }

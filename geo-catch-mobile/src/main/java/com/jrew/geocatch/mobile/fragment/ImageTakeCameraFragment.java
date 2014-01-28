@@ -13,19 +13,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.*;
-import android.view.MenuInflater;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.*;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
@@ -33,7 +27,6 @@ import com.jrew.geocatch.mobile.activity.MainActivity;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.LayoutUtil;
-import com.jrew.geocatch.mobile.util.MenuHelperHolder;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -98,10 +91,6 @@ public class ImageTakeCameraFragment extends SherlockFragment {
         // Action bar subtitle
         ActionBar actionBar = ActionBarHolder.getActionBar();
         actionBar.setSubtitle(getResources().getString(R.string.takeImageLabel));
-
-        // Menu selection
-        final Handler handler = new Handler();
-        MenuHelperHolder.getMenuHelper().makeViewSelected(R.id.takeImageMenuOption, handler);
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 

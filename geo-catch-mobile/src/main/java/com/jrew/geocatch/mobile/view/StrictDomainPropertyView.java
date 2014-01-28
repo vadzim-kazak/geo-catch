@@ -1,8 +1,11 @@
 package com.jrew.geocatch.mobile.view;
 
 import android.content.Context;
+import android.text.Editable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 /**
@@ -12,7 +15,7 @@ import android.widget.Toast;
  * Time: 16:17
  * To change this template use File | Settings | File Templates.
  */
-public class StrictDomainPropertyView extends DomainPropertyView implements View.OnFocusChangeListener {
+public class StrictDomainPropertyView extends DomainPropertyView {
 
     /**
      *
@@ -34,10 +37,21 @@ public class StrictDomainPropertyView extends DomainPropertyView implements View
     }
 
     @Override
-    public void onFocusChange(View view, boolean b) {
-        if (getText().length() > 0 && getSelectedDomainProperty(false) == null) {
-            Toast.makeText(getContext(), "Populated value isn't presented", Toast.LENGTH_SHORT).show();
-            setText("");
+    public void onFocusChange(View view, boolean isFocused) {
+        super.onFocusChange(view, isFocused);
+
+        Editable text = getText();
+        if (text != null && getText().length() > 0 &&
+            !text.toString().equalsIgnoreCase(initialValue) &&
+            getSelectedDomainProperty(false) == null) {
+
+            Toast warning = Toast.makeText(getContext(), "Populated value isn't presented", Toast.LENGTH_SHORT);
+            warning.setGravity(Gravity.CENTER, 0 ,0);
+            warning.show();
+
+            setTextColor(INITIAL_TEXT_COLOR);
+            setText(initialValue);
+            isTextFilled = false;
         }
     }
 }

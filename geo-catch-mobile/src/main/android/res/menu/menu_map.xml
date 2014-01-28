@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <item android:id="@+id/viewMapMenuOption"
+    <!-- item android:id="@+id/viewMapMenuOption"
           android:icon="@android:drawable/ic_menu_mapmode"
           android:showAsAction="always">
-    </item>
+    </item -->
 
     <item android:id="@+id/viewSettingsMenuOption"
           android:icon="@android:drawable/ic_menu_search"
@@ -21,9 +21,9 @@
           android:showAsAction="always">
     </item>
 
-    <item android:id="@+id/ownImagesMenuOption"
+    <!-- item android:id="@+id/ownImagesMenuOption"
           android:icon="@android:drawable/ic_menu_myplaces"
           android:showAsAction="always">
-    </item>
+    </item -->
 
 </menu>

@@ -5,29 +5,26 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
-import com.jrew.geocatch.mobile.menu.MenuHelper;
 import com.jrew.geocatch.mobile.reciever.DomainInfoServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
-import com.jrew.geocatch.mobile.util.MenuHelperHolder;
-import com.jrew.geocatch.mobile.util.MessageBuilder;
+import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.SearchCriteriaHolder;
 import com.jrew.geocatch.mobile.view.DomainPropertyView;
 import com.jrew.geocatch.mobile.view.RangeSeekBar;
 import com.jrew.geocatch.mobile.view.StrictDomainPropertyView;
 import com.jrew.geocatch.web.model.DomainProperty;
-import com.jrew.geocatch.web.model.criteria.DayPeriodSearchCriterion;
-import com.jrew.geocatch.web.model.criteria.MonthPeriodSearchCriterion;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 
 import java.util.ArrayList;
@@ -41,7 +38,7 @@ import java.util.Locale;
  * Time: 16:42
  * To change this template use File | Settings | File Templates.
  */
-public class MapSettingsFragment extends Fragment {
+public class MapSettingsFragment extends SherlockFragment {
 
     /** **/
     private StrictDomainPropertyView fishTypeView, fishingToolView, fishingBaitView;
@@ -58,13 +55,11 @@ public class MapSettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        setHasOptionsMenu(true);
+
         // Action bar subtitle
         ActionBar actionBar = ActionBarHolder.getActionBar();
         actionBar.setSubtitle(getResources().getString(R.string.viewSettingsLabel));
-
-        // Menu selection
-        final Handler handler = new Handler();
-        MenuHelperHolder.getMenuHelper().makeViewSelected(R.id.viewSettingsMenuOption, handler);
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -80,45 +75,45 @@ public class MapSettingsFragment extends Fragment {
         fishingBaitView = (StrictDomainPropertyView) mapSettingsLayout.findViewById(R.id.fishingBaitView);
         loadDomainInfo(fishingBaitView, DomainInfoService.DomainInfoType.BAIT);
 
-        LinearLayout timeFilterRow = (LinearLayout) mapSettingsLayout.findViewById(R.id.timeFilterRow);
-        timeFilter = new RangeSeekBar<Integer>(0, 24, getActivity());
-        timeFilter.setEnabled(false);
-        timeFilter.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
-            @Override
-            public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
-                    timeFilterCheckbox.setText(MessageBuilder.getDayFilterMessage(timeFilter.getSelectedMinValue(),
-                            timeFilter.getSelectedMaxValue(), getResources()));
-            }
-        });
-
-        timeFilterCheckbox = (CheckBox) mapSettingsLayout.findViewById(R.id.timeFilterCheckbox);
-        timeFilterCheckbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                timeFilter.setEnabled(timeFilterCheckbox.isChecked());
-            }
-        });
-        timeFilterRow.addView(timeFilter);
-
-        LinearLayout monthFilterRow = (LinearLayout) mapSettingsLayout.findViewById(R.id.monthFilterRow);
-        monthFilter = new RangeSeekBar<Integer>(1, 12, getActivity());
-        monthFilter.setEnabled(false);
-        monthFilter.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
-            @Override
-            public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
-                    monthFilterCheckbox.setText(MessageBuilder.getMonthFilterMessage(monthFilter.getSelectedMinValue(),
-                            monthFilter.getSelectedMaxValue(), getResources()));
-            }
-        });
-
-        monthFilterCheckbox = (CheckBox) mapSettingsLayout.findViewById(R.id.monthFilterCheckbox);
-        monthFilterCheckbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                monthFilter.setEnabled(monthFilterCheckbox.isChecked());
-            }
-        });
-        monthFilterRow.addView(monthFilter);
+//        LinearLayout timeFilterRow = (LinearLayout) mapSettingsLayout.findViewById(R.id.timeFilterRow);
+//        timeFilter = new RangeSeekBar<Integer>(0, 24, getActivity());
+//        timeFilter.setEnabled(false);
+//        timeFilter.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
+//            @Override
+//            public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
+//                    timeFilterCheckbox.setText(MessageBuilder.getDayFilterMessage(timeFilter.getSelectedMinValue(),
+//                            timeFilter.getSelectedMaxValue(), getResources()));
+//            }
+//        });
+//
+//        timeFilterCheckbox = (CheckBox) mapSettingsLayout.findViewById(R.id.timeFilterCheckbox);
+//        timeFilterCheckbox.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                timeFilter.setEnabled(timeFilterCheckbox.isChecked());
+//            }
+//        });
+//        timeFilterRow.addView(timeFilter);
+//
+//        LinearLayout monthFilterRow = (LinearLayout) mapSettingsLayout.findViewById(R.id.monthFilterRow);
+//        monthFilter = new RangeSeekBar<Integer>(1, 12, getActivity());
+//        monthFilter.setEnabled(false);
+//        monthFilter.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
+//            @Override
+//            public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
+//                    monthFilterCheckbox.setText(MessageBuilder.getMonthFilterMessage(monthFilter.getSelectedMinValue(),
+//                            monthFilter.getSelectedMaxValue(), getResources()));
+//            }
+//        });
+//
+//        monthFilterCheckbox = (CheckBox) mapSettingsLayout.findViewById(R.id.monthFilterCheckbox);
+//        monthFilterCheckbox.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                monthFilter.setEnabled(monthFilterCheckbox.isChecked());
+//            }
+//        });
+//        monthFilterRow.addView(monthFilter);
 
         ownerRadioGroup = (RadioGroup) mapSettingsLayout.findViewById(R.id.ownerRadioGroup);
 
@@ -126,6 +121,31 @@ public class MapSettingsFragment extends Fragment {
 
         return mapSettingsLayout;
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_map_settings, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int pressedMenuItemId = item.getItemId();
+
+        FragmentSwitcher fragmentSwitcher = FragmentSwitcherHolder.getFragmentSwitcher();
+        switch (pressedMenuItemId) {
+            case R.id.proceedToMapMenuOption:
+                getSherlockActivity().getSupportFragmentManager().popBackStack();
+                break;
+
+            case R.id.resetMapSettingsMenuOption:
+                break;
+        }
+
+        return true;
+    }
+
 
     /**
      *
@@ -158,36 +178,36 @@ public class MapSettingsFragment extends Fragment {
             }
         }
 
-        // Init time filter
-        DayPeriodSearchCriterion dayPeriodCriterion = searchCriteria.getDayPeriod();
-        if (dayPeriodCriterion != null) {
-            // Enable checkbox
-            timeFilterCheckbox.setChecked(true);
-            timeFilterCheckbox.setText(MessageBuilder.getDayFilterMessage(dayPeriodCriterion.getFromHour(),
-                    dayPeriodCriterion.getToHour(), getResources()));
-            timeFilter.setEnabled(true);
-            timeFilter.setSelectedMinValue(dayPeriodCriterion.getFromHour());
-            timeFilter.setSelectedMaxValue(dayPeriodCriterion.getToHour());
-        } else {
-            timeFilterCheckbox.setChecked(false);
-            timeFilterCheckbox.setText(getResources().getString(R.string.timeFilterLabel));
-            timeFilter.setEnabled(false);
-        }
-
-        // Init month filter
-        MonthPeriodSearchCriterion monthPeriodCriterion = searchCriteria.getMonthPeriod();
-        if (monthPeriodCriterion != null) {
-            monthFilterCheckbox.setChecked(true);
-            monthFilterCheckbox.setText(MessageBuilder.getMonthFilterMessage(monthPeriodCriterion.getFromMonth(),
-                    monthPeriodCriterion.getToMonth(), getResources()));
-            monthFilter.setEnabled(true);
-            monthFilter.setSelectedMinValue(monthPeriodCriterion.getFromMonth());
-            monthFilter.setSelectedMaxValue(monthPeriodCriterion.getToMonth());
-        } else {
-            monthFilterCheckbox.setText(getResources().getString(R.string.monthFilterLabel));
-            monthFilterCheckbox.setChecked(false);
-            monthFilter.setEnabled(false);
-        }
+//        // Init time filter
+//        DayPeriodSearchCriterion dayPeriodCriterion = searchCriteria.getDayPeriod();
+//        if (dayPeriodCriterion != null) {
+//            // Enable checkbox
+//            timeFilterCheckbox.setChecked(true);
+//            timeFilterCheckbox.setText(MessageBuilder.getDayFilterMessage(dayPeriodCriterion.getFromHour(),
+//                    dayPeriodCriterion.getToHour(), getResources()));
+//            timeFilter.setEnabled(true);
+//            timeFilter.setSelectedMinValue(dayPeriodCriterion.getFromHour());
+//            timeFilter.setSelectedMaxValue(dayPeriodCriterion.getToHour());
+//        } else {
+//            timeFilterCheckbox.setChecked(false);
+//            timeFilterCheckbox.setText(getResources().getString(R.string.timeFilterLabel));
+//            timeFilter.setEnabled(false);
+//        }
+//
+//        // Init month filter
+//        MonthPeriodSearchCriterion monthPeriodCriterion = searchCriteria.getMonthPeriod();
+//        if (monthPeriodCriterion != null) {
+//            monthFilterCheckbox.setChecked(true);
+//            monthFilterCheckbox.setText(MessageBuilder.getMonthFilterMessage(monthPeriodCriterion.getFromMonth(),
+//                    monthPeriodCriterion.getToMonth(), getResources()));
+//            monthFilter.setEnabled(true);
+//            monthFilter.setSelectedMinValue(monthPeriodCriterion.getFromMonth());
+//            monthFilter.setSelectedMaxValue(monthPeriodCriterion.getToMonth());
+//        } else {
+//            monthFilterCheckbox.setText(getResources().getString(R.string.monthFilterLabel));
+//            monthFilterCheckbox.setChecked(false);
+//            monthFilter.setEnabled(false);
+//        }
     }
 
     /**
@@ -213,7 +233,7 @@ public class MapSettingsFragment extends Fragment {
     public void onPause() {
         super.onPause();
         saveSearchCriteria();
-        clearSettingViews();
+        //clearSettingViews();
     }
 
     /**
@@ -256,40 +276,40 @@ public class MapSettingsFragment extends Fragment {
             searchCriteria.setOwner(SearchCriteria.OWNER_SELF_VALUE);
         }
 
-        // Time filter
-        if (timeFilterCheckbox.isChecked()) {
-            DayPeriodSearchCriterion criterion = new DayPeriodSearchCriterion();
-            criterion.setFromHour(timeFilter.getSelectedMinValue());
-            criterion.setToHour(timeFilter.getSelectedMaxValue());
-            searchCriteria.setDayPeriod(criterion);
-        } else {
-            searchCriteria.setDayPeriod(null);
-        }
-
-        // Month filter
-        if (monthFilterCheckbox.isChecked()) {
-            MonthPeriodSearchCriterion criterion = new MonthPeriodSearchCriterion();
-            criterion.setFromMonth(monthFilter.getSelectedMinValue());
-            criterion.setToMonth(monthFilter.getSelectedMaxValue());
-            searchCriteria.setMonthPeriod(criterion);
-        } else {
-            searchCriteria.setMonthPeriod(null);
-        }
+//        // Time filter
+//        if (timeFilterCheckbox.isChecked()) {
+//            DayPeriodSearchCriterion criterion = new DayPeriodSearchCriterion();
+//            criterion.setFromHour(timeFilter.getSelectedMinValue());
+//            criterion.setToHour(timeFilter.getSelectedMaxValue());
+//            searchCriteria.setDayPeriod(criterion);
+//        } else {
+//            searchCriteria.setDayPeriod(null);
+//        }
+//
+//        // Month filter
+//        if (monthFilterCheckbox.isChecked()) {
+//            MonthPeriodSearchCriterion criterion = new MonthPeriodSearchCriterion();
+//            criterion.setFromMonth(monthFilter.getSelectedMinValue());
+//            criterion.setToMonth(monthFilter.getSelectedMaxValue());
+//            searchCriteria.setMonthPeriod(criterion);
+//        } else {
+//            searchCriteria.setMonthPeriod(null);
+//        }
 
         return searchCriteria;
     }
 
-    /**
-     *
-     */
-    private void clearSettingViews() {
-
-        if (!timeFilterCheckbox.isChecked()) {
-            timeFilterCheckbox.setText(getResources().getString(R.string.timeFilterLabel));
-        }
-
-        if (!monthFilterCheckbox.isChecked()) {
-            monthFilterCheckbox.setText(getResources().getString(R.string.monthFilterLabel));
-        }
-    }
+//    /**
+//     *
+//     */
+//    private void clearSettingViews() {
+//
+//        if (!timeFilterCheckbox.isChecked()) {
+//            timeFilterCheckbox.setText(getResources().getString(R.string.timeFilterLabel));
+//        }
+//
+//        if (!monthFilterCheckbox.isChecked()) {
+//            monthFilterCheckbox.setText(getResources().getString(R.string.monthFilterLabel));
+//        }
+//    }
 }

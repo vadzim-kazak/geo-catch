@@ -3,98 +3,115 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:padding="20dip">
+
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="DETAILS"
+              android:textStyle="bold"
+              android:textSize="18dip"
+              android:textColor="@android:color/darker_gray"
+              android:layout_gravity="left|center_vertical"
+              android:layout_marginBottom="5dip"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:orientation="horizontal"
+                  android:background="@drawable/white_bordered_background"
                   android:layout_width="match_parent"
-                  android:layout_height="wrap_content">
-
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="Fish type:"
-                  android:layout_gravity="left|center_vertical"/>
+                  android:layout_height="40dip"
+                  android:layout_marginBottom="10dip"
+                  android:gravity="center_vertical|left">
 
         <com.jrew.geocatch.mobile.view.StrictDomainPropertyView android:layout_width="match_parent"
                                                                 android:layout_height="wrap_content"
+                                                                android:background="@null"
+                                                                android:paddingLeft="20dip"
+                                                                android:text="Fish type..."
                                                                 android:id="@+id/fishTypeView"
-                                                                android:background="@null"
-                                                                android:paddingLeft="20dip"
                                                                 android:layout_gravity="center"/>
 
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:orientation="horizontal"
+                  android:background="@drawable/white_bordered_background"
                   android:layout_width="match_parent"
-                  android:layout_height="wrap_content">
-
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="Fishing tool:"
-                  android:id="@+id/fishingToolTextView"
-                  android:layout_gravity="left|center_vertical"/>
+                  android:layout_height="40dip"
+                  android:layout_marginBottom="10dip"
+                  android:gravity="center_vertical|left">
 
         <com.jrew.geocatch.mobile.view.StrictDomainPropertyView android:layout_width="match_parent"
                                                                 android:layout_height="wrap_content"
+                                                                android:background="@null"
+                                                                android:paddingLeft="20dip"
+                                                                android:text="Fishing tool..."
                                                                 android:id="@+id/fishingToolView"
-                                                                android:background="@null"
-                                                                android:paddingLeft="20dip"
                                                                 android:layout_gravity="center"/>
 
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:orientation="horizontal"
+                  android:background="@drawable/white_bordered_background"
                   android:layout_width="match_parent"
-                  android:layout_height="wrap_content">
-
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="Fishing bait:"
-                  android:id="@+id/fishingBaitTextView"
-                  android:layout_gravity="left|center_vertical"/>
+                  android:layout_height="40dip"
+                  android:layout_marginBottom="30dip"
+                  android:gravity="center_vertical|left">
 
         <com.jrew.geocatch.mobile.view.StrictDomainPropertyView android:layout_width="match_parent"
                                                                 android:layout_height="wrap_content"
-                                                                android:id="@+id/fishingBaitView"
                                                                 android:background="@null"
                                                                 android:paddingLeft="20dip"
+                                                                android:text="Bait..."
+                                                                android:id="@+id/fishingBaitView"
                                                                 android:layout_gravity="center"/>
 
     </LinearLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                             android:orientation="vertical"
-                             android:layout_width="match_parent"
-                             android:layout_height="wrap_content">
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="OWNER"
+              android:textStyle="bold"
+              android:textSize="18dip"
+              android:textColor="@android:color/darker_gray"
+              android:layout_gravity="left|center_vertical"
+              android:layout_marginBottom="5dip"/>
 
-        <TextView android:layout_width="wrap_content"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical"
+                  android:background="@drawable/white_bordered_background"
+                  android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
-                  android:text="Owner:"
-                  android:layout_gravity="left|center_vertical"/>
+                  android:layout_marginBottom="30dip">
+
 
         <RadioGroup android:id="@+id/ownerRadioGroup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:layout_gravity="left|center_vertical">
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
 
             <RadioButton android:id="@+id/anyone"
                          android:layout_width="wrap_content"
                          android:layout_height="wrap_content"
                          android:text="Anyone"
-                         android:checked="true" />
+                         android:textSize="18dip"
+                         android:checked="true"/>
 
             <RadioButton android:id="@+id/self"
                          android:layout_width="wrap_content"
                          android:layout_height="wrap_content"
-                         android:text="My" />
+                         android:layout_marginLeft="80dip"
+                         android:text="My"
+                         android:textSize="18dip"/>
 
         </RadioGroup>
 
     </LinearLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <!-- LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:id="@+id/timeFilterRow"
                   android:orientation="vertical"
                   android:layout_width="match_parent"
@@ -118,7 +135,7 @@
                   android:layout_height="wrap_content"
                   android:layout_gravity="left|center_vertical"/>
 
-    </LinearLayout>
+    </LinearLayout -->
 
 
 
