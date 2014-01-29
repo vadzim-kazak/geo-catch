@@ -64,13 +64,6 @@ public class ImageTakePreviewFragment extends SherlockFragment {
         final Bundle fragmentData = getArguments();
         if (fragmentData != null && !fragmentData.isEmpty()) {
             image = (Bitmap) fragmentData.getParcelable("bmp");
-
-            if(fragmentData.getBoolean("isRotated", false)) {
-                // Initially image rotated to 90 degrees CCW
-                rotateImage(90);
-                fragmentData.putBoolean("isRotated", false);
-            }
-
             displayImage();
         }
 
@@ -92,20 +85,6 @@ public class ImageTakePreviewFragment extends SherlockFragment {
         switch (pressedMenuItemId) {
             case R.id.backMenuOption:
                 getSherlockActivity().getSupportFragmentManager().popBackStack();
-                break;
-
-            case R.id.revertCCWMenuOption:
-                if (image != null) {
-                    rotateImage(-90);
-                    displayImage();
-                }
-                break;
-
-            case R.id.revertCWMenuOption:
-                if (image != null) {
-                    rotateImage(90);
-                    displayImage();
-                }
                 break;
 
             case R.id.forwardMenuOption:

@@ -19,8 +19,11 @@ import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.activity.MainActivity;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
+import com.jrew.geocatch.mobile.util.DialogUtil;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.LayoutUtil;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,13 +35,7 @@ import com.jrew.geocatch.mobile.util.LayoutUtil;
 public class ImageTakeCameraFragment extends SherlockFragment {
 
     /** **/
-    private final static double CAMERA_SIDES_RATIO = 4d / 3;
-
-    /** **/
-    private final static int DEFAULT_PICTURE_WIDTH = 640;
-
-    /** **/
-    private final static int DEFAULT_PICTURE_HEIGHT = 480;
+    private final static int PICTURE_SIDE_SIZE = 600;
 
     /** **/
     private SurfaceView preview;
@@ -53,15 +50,13 @@ public class ImageTakeCameraFragment extends SherlockFragment {
     private boolean inPreview;
 
     /** **/
-    private Bitmap bmp;
-
-    /** **/
-    private static Bitmap mutableBitmap;
-
-    /** **/
     private ProgressDialog dialog;
 
+    /** **/
     private FrameLayout parentLayout;
+
+    /** **/
+    private Camera.Size cameraPreviewSize, cameraSnapshotSize;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,7 +71,6 @@ public class ImageTakeCameraFragment extends SherlockFragment {
 
         parentLayout = (FrameLayout) inflater.inflate(R.layout.image_take_camera_fragment, container, false);
 
-        //image=(ImageView)findViewById(R.id.image);
         preview = (SurfaceView) parentLayout.findViewById(R.id.surface);
 
         previewHolder = preview.getHolder();
@@ -85,7 +79,6 @@ public class ImageTakeCameraFragment extends SherlockFragment {
 
         FragmentActivity activity =  getActivity();
         WindowManager windowManager = activity.getWindowManager();
-
         Rect displaySize = new Rect();
         windowManager.getDefaultDisplay().getRectSize(displaySize);
 
@@ -118,8 +111,6 @@ public class ImageTakeCameraFragment extends SherlockFragment {
 
         return true;
     }
-
-
 
     @Override
     public void onResume() {
@@ -169,33 +160,30 @@ public class ImageTakeCameraFragment extends SherlockFragment {
         public void surfaceChanged(SurfaceHolder holder,
                                    int format, int width,
                                    int height) {
+
             Camera.Parameters parameters = camera.getParameters();
-            Camera.Size previewSize = getBestPreviewCameraSize(width, height, parameters);
+            if (calculateCameraSizes(width, height, parameters)) {
 
-            parameters.setPreviewSize(previewSize.width, previewSize.height);
+                parameters.setPreviewSize(cameraPreviewSize.width, cameraPreviewSize.height);
+                parameters.setPictureSize(cameraSnapshotSize.width, cameraSnapshotSize.height);
 
-            // Resize surface view
-            double scaleFactor = LayoutUtil.getViewScaleFactor(new Point(width, height), new Point(previewSize.width, previewSize.height), 0);
-            FrameLayout.LayoutParams cameraLayoutParams = new FrameLayout.LayoutParams((int)(previewSize.height * scaleFactor),
-                    (int)(previewSize.width * scaleFactor));
-            cameraLayoutParams.gravity = Gravity.CENTER;
-            preview.setLayoutParams(cameraLayoutParams);
+                resizeSurfaceView(width, height);
 
-            parentLayout.addView(createCameraCover(cameraLayoutParams.width), parentLayout.getWidth(), parentLayout.getHeight());
+                // Add cover layout over preview layout in order to take square preview
+                parentLayout.addView(createCameraCover(width), parentLayout.getWidth(), parentLayout.getHeight());
 
-            Camera.Size pictureSize = getPictureCameraSize(parameters);
-            parameters.setPictureSize(pictureSize.width, pictureSize.height);
+                setCameraFocusMode(parameters);
 
-            PackageManager packageManager = getActivity().getPackageManager();
-            if(packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_AUTOFOCUS)){
-                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+                camera.setParameters(parameters);
+                // Initially camera is rotated on 90 degrees. Need to align it
+                camera.setDisplayOrientation(90);
+                camera.startPreview();
+
+                inPreview = true;
+
+            } else {
+                // Currently this camera isn't supported
             }
-
-            camera.setParameters(parameters);
-            camera.setDisplayOrientation(90);
-            camera.startPreview();
-
-            inPreview = true;
         }
 
         /**
@@ -214,109 +202,99 @@ public class ImageTakeCameraFragment extends SherlockFragment {
      * @param parameters
      * @return
      */
-    private Camera.Size getBestPreviewCameraSize(int width, int height, Camera.Parameters parameters){
+    private boolean calculateCameraSizes(int width, int height, Camera.Parameters parameters){
 
-        Camera.Size result = null;
+        int resultArea = 0;
         for (Camera.Size size : parameters.getSupportedPreviewSizes()) {
-            if (size.width <= width && size.height <= height && (((double)size.width/size.height ) == CAMERA_SIDES_RATIO)) {
-                if (result == null) {
-                    result = size;
-                }
-                else {
-                    int resultArea = result.width * result.height;
-                    int newArea = size.width * size.height;
-                    if (newArea > resultArea) {
-                        result = size;
+
+            double currentAspectRatio = getSizeAspectRatio(size);
+            // Check size of preview mode
+            if (size.width <= width && size.height <= height) {
+                // Get max available preview mode by square
+                int newArea = size.width * size.height;
+                if (newArea > resultArea) {
+                    // Looking for camera snapshot size with the same aspect ration
+                    Camera.Size snapshotSize = findCameraShapshotSize(parameters, currentAspectRatio);
+                    if (snapshotSize != null) {
+                        cameraPreviewSize = size;
+                        cameraSnapshotSize = snapshotSize;
                     }
                 }
             }
         }
 
-        return result;
+        if (cameraPreviewSize != null && cameraSnapshotSize != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
      *
      * @param parameters
+     * @param aspectRatio
      * @return
      */
-    private Camera.Size getPictureCameraSize(Camera.Parameters parameters){
+    private Camera.Size findCameraShapshotSize(Camera.Parameters parameters, double aspectRatio) {
 
-        boolean supportDefaultWidth = false;
-        boolean supportDefaultHeight = false;
         for (Camera.Size size : parameters.getSupportedPictureSizes()) {
 
-            // Need this for case when camera isn't support default photo size
-            if (size.width == DEFAULT_PICTURE_WIDTH) {
-                supportDefaultWidth = true;
-            }
+            double currentAspectRatio = getSizeAspectRatio(size);
+            if (size.width >= PICTURE_SIDE_SIZE && size.height >= PICTURE_SIDE_SIZE &&
+                    currentAspectRatio == aspectRatio) {
 
-            // Need this for case when camera isn't support default photo size
-            if (size.height == DEFAULT_PICTURE_HEIGHT) {
-                supportDefaultHeight = true;
-            }
-
-            if (size.width == DEFAULT_PICTURE_WIDTH && size.height == DEFAULT_PICTURE_HEIGHT) {
                 return size;
             }
         }
 
-        // Default photo size isn't supported
-        // Try to find some similar to default
-        Camera.Size result = parameters.getSupportedPictureSizes().get(0);
-        if (supportDefaultWidth || supportDefaultHeight) {
+        return null;
+    }
 
-            int widthDelta = DEFAULT_PICTURE_WIDTH;
-            int nearestWidth = 0;
+    /**
+     *
+     * @return
+     */
+    private double getSizeAspectRatio(Camera.Size size) {
 
-            int heightDelta = DEFAULT_PICTURE_HEIGHT;
-            int nearestHeight = 0;
-
-            for (Camera.Size size : parameters.getSupportedPictureSizes()) {
-
-                if (supportDefaultWidth) {
-                    int currentHeightDelta = Math.abs(DEFAULT_PICTURE_HEIGHT - size.height);
-                    if (currentHeightDelta < heightDelta) {
-                        heightDelta = currentHeightDelta;
-                        nearestHeight = size.height;
-                    }
-                }
-
-                if (supportDefaultHeight) {
-                    int currentWidthDelta = Math.abs(DEFAULT_PICTURE_WIDTH - size.width);
-                    if (currentWidthDelta < widthDelta) {
-                        widthDelta = currentWidthDelta;
-                        nearestWidth = size.width;
-                    }
-                }
-            }
-
-            if (supportDefaultWidth) {
-                result.width = DEFAULT_PICTURE_WIDTH;
-                result.height = nearestHeight;
-            }
-
-            if (supportDefaultHeight) {
-                result.width = nearestWidth;
-                result.height = DEFAULT_PICTURE_HEIGHT;
-            }
-
-            return result;
-
+        if (size.width >= size.height) {
+            return ((double) size.width / size.height);
         } else {
+            return ((double) size.height / size.width);
+        }
+    }
 
-            // Get closest to default photo resolution by square
-            int defaultPhotoSquare = DEFAULT_PICTURE_WIDTH * DEFAULT_PICTURE_HEIGHT;
-            int squareDelta = defaultPhotoSquare;
-            for (Camera.Size size : parameters.getSupportedPictureSizes()) {
-                int currentSquareDelta = Math.abs(defaultPhotoSquare - size.width * size.height);
-                if (currentSquareDelta < squareDelta) {
-                    squareDelta = currentSquareDelta;
-                    result = size;
-                }
+    /**
+     *
+     * @param maxWidth
+     * @param maxHeight
+     */
+    private void resizeSurfaceView(int maxWidth, int maxHeight) {
+
+        double scaleFactor = LayoutUtil.getViewScaleFactor(new Point(maxWidth, maxHeight), new Point(cameraPreviewSize.width,
+                cameraPreviewSize.height), 0);
+        FrameLayout.LayoutParams previewLayoutParams = new FrameLayout.LayoutParams((int)(cameraPreviewSize.height * scaleFactor),
+                (int)(cameraPreviewSize.width * scaleFactor));
+        previewLayoutParams.gravity = Gravity.CENTER;
+
+        preview.setLayoutParams(previewLayoutParams);
+    }
+
+    /**
+     *
+     * @param parameters
+     */
+    private void setCameraFocusMode(Camera.Parameters parameters) {
+
+        PackageManager packageManager = getSherlockActivity().getPackageManager();
+        if(packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_AUTOFOCUS)) {
+
+            List<String> focusModes = parameters.getSupportedFocusModes();
+            if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+            } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
+                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
             }
-
-            return result;
         }
     }
 
@@ -327,7 +305,8 @@ public class ImageTakeCameraFragment extends SherlockFragment {
 
         public void onPictureTaken(final byte[] data, final Camera camera) {
 
-            dialog = ProgressDialog.show(getActivity(), "", "Saving Photo");
+            dialog = DialogUtil.createProgressDialog(getActivity());
+
             new Thread() {
                 public void run() {
                     try {
@@ -348,17 +327,86 @@ public class ImageTakeCameraFragment extends SherlockFragment {
      */
     public void onPictureTake(byte[] data, Camera camera){
 
-        bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
-        mutableBitmap = bmp.copy(Bitmap.Config.ARGB_8888, true);
+        Bitmap shapshot = BitmapFactory.decodeByteArray(data, 0, data.length);
+        shapshot = cropImage(shapshot);
 
         Bundle bundle = new Bundle();
-        bundle.putParcelable("bmp", mutableBitmap);
-        bundle.putBoolean("isRotated", true);
-
+        bundle.putParcelable("bmp", shapshot);
         MainActivity activity = (MainActivity) getActivity();
         FragmentSwitcherHolder.getFragmentSwitcher().showImageTakePreviewFragment(bundle);
 
         dialog.dismiss();
+    }
+
+    /**
+     *
+     * @param snapshot
+     * @return
+     */
+    private Bitmap cropImage(Bitmap snapshot) {
+
+        int snapshotWidth = snapshot.getWidth();
+        int shapshotHeight = snapshot.getHeight();
+
+        //1) Scale image: smaller image size must be equals to PICTURE_SIDE_SIZE
+        final BitmapFactory.Options bitmapOptions=new BitmapFactory.Options();
+        bitmapOptions.inDensity = snapshot.getDensity();
+        bitmapOptions.inTargetDensity = 1;
+
+        Bitmap scaledBitmap = null;
+        if (snapshotWidth >= shapshotHeight) {
+            double scaleFactor = ((double) snapshotWidth) / shapshotHeight;
+            //scaledBitmap = Bitmap.createScaledBitmap (snapshot, (int)(PICTURE_SIDE_SIZE * scaleFactor), PICTURE_SIDE_SIZE, false);
+            scaledBitmap = scaleBitmap(snapshot, (int)(PICTURE_SIDE_SIZE * scaleFactor), PICTURE_SIDE_SIZE);
+        } else {
+            double scaleFactor = ((double) shapshotHeight) / snapshotWidth;
+            //scaledBitmap = Bitmap.createScaledBitmap(snapshot, PICTURE_SIDE_SIZE, (int)(PICTURE_SIDE_SIZE * scaleFactor), false);
+            scaledBitmap = scaleBitmap(snapshot, PICTURE_SIDE_SIZE, (int)(PICTURE_SIDE_SIZE * scaleFactor));
+        }
+
+        //2) Crop scaled bitmap: leave middle image size with height equal to width
+        Bitmap croppedBitmap = null;
+        if (snapshotWidth >= shapshotHeight) {
+            int cropMarginWidth = (scaledBitmap.getWidth() - PICTURE_SIDE_SIZE) / 2;
+            croppedBitmap = Bitmap.createBitmap(scaledBitmap, cropMarginWidth, 0, PICTURE_SIDE_SIZE, PICTURE_SIDE_SIZE);
+        } else {
+            int cropMarginHeight = (scaledBitmap.getHeight() - PICTURE_SIDE_SIZE) / 2;
+            croppedBitmap = Bitmap.createBitmap(scaledBitmap, 0, cropMarginHeight, PICTURE_SIDE_SIZE, PICTURE_SIDE_SIZE);
+        }
+
+        //3) Rotate image on 90 degree
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        Bitmap result = Bitmap.createBitmap(croppedBitmap, 0, 0, croppedBitmap.getWidth(), croppedBitmap.getHeight(),
+                matrix, true);
+
+        return result;
+    }
+
+    /**
+     *
+     * @param source
+     * @param newWidth
+     * @param newHeight
+     * @return
+     */
+    private Bitmap scaleBitmap(Bitmap source, int newWidth, int newHeight) {
+
+        Bitmap scaledBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888);
+
+        float ratioX = newWidth / (float) source.getWidth();
+        float ratioY = newHeight / (float) source.getHeight();
+        float middleX = newWidth / 2.0f;
+        float middleY = newHeight / 2.0f;
+
+        Matrix scaleMatrix = new Matrix();
+        scaleMatrix.setScale(ratioX, ratioY, middleX, middleY);
+
+        Canvas canvas = new Canvas(scaledBitmap);
+        canvas.setMatrix(scaleMatrix);
+        canvas.drawBitmap(source, middleX - source.getWidth() / 2, middleY - source.getHeight() / 2, new Paint(Paint.FILTER_BITMAP_FLAG));
+
+        return scaledBitmap;
     }
 
     /**
@@ -377,7 +425,6 @@ public class ImageTakeCameraFragment extends SherlockFragment {
         coverLayout.setLayoutParams(layoutParams);
 
         LinearLayout topLinearLayout = (LinearLayout) coverLayout.findViewById(R.id.topLayout);
-        topLinearLayout.setBackgroundColor(Color.argb(255, 200, 200, 200));
         layoutParams = new LinearLayout.LayoutParams(parentLayout.getWidth(),
                 opaqueLayoutHeight);
         topLinearLayout.setLayoutParams(layoutParams);
@@ -388,7 +435,6 @@ public class ImageTakeCameraFragment extends SherlockFragment {
         middleLinearLayout.setBackgroundColor(Color.TRANSPARENT);
 
         LinearLayout bottomLinearLayout = (LinearLayout) coverLayout.findViewById(R.id.bottomLayout);
-        bottomLinearLayout.setBackgroundColor(Color.argb(255, 200, 200, 200));
         layoutParams = new LinearLayout.LayoutParams(parentLayout.getWidth(),
                 opaqueLayoutHeight);
         bottomLinearLayout.setLayoutParams(layoutParams);

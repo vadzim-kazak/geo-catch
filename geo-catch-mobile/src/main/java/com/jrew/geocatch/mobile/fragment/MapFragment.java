@@ -70,33 +70,37 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
         if (googleMap == null) {
 
             googleMap = getMap();
-            int mapType = Integer.parseInt(getResources().getString(R.config.mapType));
-            googleMap.setMapType(mapType);
 
-            imageMarkerPairs = new HashMap<Long, ImageMarkerPair>();
+            if (googleMap != null) {
+                int mapType = Integer.parseInt(getResources().getString(R.config.mapType));
+                googleMap.setMapType(mapType);
 
-            final MapFragment fragment = this;
-            googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                imageMarkerPairs = new HashMap<Long, ImageMarkerPair>();
 
-                @Override
-                public void onCameraChange(CameraPosition cameraPosition) {
+                final MapFragment fragment = this;
+                googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
-                    // Get current view bounds
-                    LatLngBounds latLngBounds = getLatLngBounds();
+                    @Override
+                    public void onCameraChange(CameraPosition cameraPosition) {
 
-                    // Remove invisible markers
-                    //removeInvisibleMarkers(latLngBounds);
+                        // Get current view bounds
+                        LatLngBounds latLngBounds = getLatLngBounds();
 
-                    // Load new images for view bounds
-                    loadImages(latLngBounds);
-                }
-            });
+                        // Remove invisible markers
+                        //removeInvisibleMarkers(latLngBounds);
 
-            /** Set custom on marker click listener  **/
-            MarkerOnClickListener markerOnclickListener = new MarkerOnClickListener(imageMarkerPairs, this);
-            googleMap.setOnMarkerClickListener(markerOnclickListener);
+                        // Load new images for view bounds
+                        loadImages(latLngBounds);
+                    }
+                });
 
-            imageResultReceiver = new ImageServiceResultReceiver(new Handler(), this);
+                /** Set custom on marker click listener  **/
+                MarkerOnClickListener markerOnclickListener = new MarkerOnClickListener(imageMarkerPairs, this);
+                googleMap.setOnMarkerClickListener(markerOnclickListener);
+
+                imageResultReceiver = new ImageServiceResultReceiver(new Handler(), this);
+            }
+
         } else {
             clearMarkers();
             loadImages(getLatLngBounds());

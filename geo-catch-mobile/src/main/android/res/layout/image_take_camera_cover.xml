@@ -6,7 +6,7 @@
               android:layout_height="fill_parent">
 
     <LinearLayout android:id="@+id/topLayout"
-                  android:background="@drawable/abs__item_background_holo_light"
+                  android:background="@color/abs__background_holo_light"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content" />
 
@@ -17,7 +17,7 @@
                   android:background="@android:color/transparent"/>
 
     <LinearLayout android:id="@+id/bottomLayout"
-                  android:background="@drawable/abs__item_background_holo_light"
+                  android:background="@color/abs__background_holo_light"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content" />
 

@@ -6,16 +6,6 @@
           android:showAsAction="always">
     </item>
 
-    <item android:id="@+id/revertCCWMenuOption"
-          android:icon="@drawable/ic_rotate_cww"
-          android:showAsAction="always">
-    </item>
-
-    <item android:id="@+id/revertCWMenuOption"
-          android:icon="@drawable/ic_rotate_cw"
-          android:showAsAction="always">
-    </item>
-
     <item android:id="@+id/forwardMenuOption"
           android:icon="@drawable/ic_arr_forward"
           android:showAsAction="always">
