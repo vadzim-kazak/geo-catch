@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.*;
 import android.hardware.Camera;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -79,10 +80,7 @@ public class ImageTakeCameraFragment extends SherlockFragment {
 
         FragmentActivity activity =  getActivity();
         WindowManager windowManager = activity.getWindowManager();
-        Rect displaySize = new Rect();
-        windowManager.getDefaultDisplay().getRectSize(displaySize);
-
-        previewHolder.setFixedSize(displaySize.width(), displaySize.width());
+        previewHolder.setFixedSize(windowManager.getDefaultDisplay().getWidth(), windowManager.getDefaultDisplay().getWidth());
 
         return parentLayout;
     }
@@ -177,9 +175,13 @@ public class ImageTakeCameraFragment extends SherlockFragment {
 
                     camera.setParameters(parameters);
                     // Initially camera is rotated on 90 degrees. Need to align it
-                    camera.setDisplayOrientation(90);
-                    camera.startPreview();
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
+                        parameters.setRotation(90);
+                    } else {
+                        camera.setDisplayOrientation(90);
+                    }
 
+                    camera.startPreview();
                     inPreview = true;
 
                 } else {
@@ -216,7 +218,7 @@ public class ImageTakeCameraFragment extends SherlockFragment {
                 int newArea = size.width * size.height;
                 if (newArea > resultArea) {
                     // Looking for camera snapshot size with the same aspect ration
-                    Camera.Size snapshotSize = findCameraShapshotSize(parameters, currentAspectRatio);
+                    Camera.Size snapshotSize = findCameraSnapshotSize(parameters, currentAspectRatio);
                     if (snapshotSize != null) {
                         cameraPreviewSize = size;
                         cameraSnapshotSize = snapshotSize;
@@ -238,19 +240,26 @@ public class ImageTakeCameraFragment extends SherlockFragment {
      * @param aspectRatio
      * @return
      */
-    private Camera.Size findCameraShapshotSize(Camera.Parameters parameters, double aspectRatio) {
+    private Camera.Size findCameraSnapshotSize(Camera.Parameters parameters, double aspectRatio) {
+
+        int resultArea = Integer.MAX_VALUE;
+        Camera.Size smallerCameraSnapshotSize = null;
 
         for (Camera.Size size : parameters.getSupportedPictureSizes()) {
 
             double currentAspectRatio = getSizeAspectRatio(size);
             if (size.width >= PICTURE_SIDE_SIZE && size.height >= PICTURE_SIDE_SIZE &&
-                    currentAspectRatio == aspectRatio) {
+                    currentAspectRatio <= aspectRatio ) {
 
-                return size;
+                int snapshotArea = size.width * size.height;
+                if (snapshotArea < resultArea) {
+                    resultArea = snapshotArea;
+                    smallerCameraSnapshotSize = size;
+                }
             }
         }
 
-        return null;
+        return smallerCameraSnapshotSize;
     }
 
     /**
@@ -342,33 +351,45 @@ public class ImageTakeCameraFragment extends SherlockFragment {
 
     /**
      *
-     * @param snapshot
+     * @param originalSnapshot
      * @return
      */
-    private Bitmap cropImage(Bitmap snapshot) {
+    private Bitmap cropImage(Bitmap originalSnapshot) {
+
+        Bitmap snapshot = originalSnapshot.copy(Bitmap.Config.ARGB_8888, true);
 
         int snapshotWidth = snapshot.getWidth();
-        int shapshotHeight = snapshot.getHeight();
+        int snapshotHeight = snapshot.getHeight();
 
-        //1) Scale image: smaller image size must be equals to PICTURE_SIDE_SIZE
-        final BitmapFactory.Options bitmapOptions=new BitmapFactory.Options();
-        bitmapOptions.inDensity = snapshot.getDensity();
-        bitmapOptions.inTargetDensity = 1;
+        // 1) Crop snapshot to preview aspect ratio in case when it has some other aspect ratio
+        double cameraPreviewAspectRatio = getSizeAspectRatio(cameraPreviewSize);
+        if (cameraPreviewAspectRatio != getSizeAspectRatio(cameraSnapshotSize)) {
+            if (snapshotWidth >= snapshotHeight) {
+                int newSnapshotHeight = (int) (snapshotWidth / cameraPreviewAspectRatio);
+                snapshot = Bitmap.createBitmap(snapshot, 0, (snapshotHeight - newSnapshotHeight) / 2, snapshotWidth, newSnapshotHeight);
+            } else {
+                int newSnapshotWidth = (int) (snapshotHeight / cameraPreviewAspectRatio);
+                snapshot  = Bitmap.createBitmap(snapshot, (snapshotWidth - newSnapshotWidth) / 2, 0, newSnapshotWidth, snapshotHeight);
+            }
+        }
 
+        //2) Scale image: smaller image size must be equals to PICTURE_SIDE_SIZE
+        snapshotWidth = snapshot.getWidth();
+        snapshotHeight = snapshot.getHeight();
         Bitmap scaledBitmap = null;
-        if (snapshotWidth >= shapshotHeight) {
-            double scaleFactor = ((double) snapshotWidth) / shapshotHeight;
+        if (snapshotWidth >= snapshotHeight) {
+            double scaleFactor = ((double) snapshotWidth) / snapshotHeight;
             //scaledBitmap = Bitmap.createScaledBitmap (snapshot, (int)(PICTURE_SIDE_SIZE * scaleFactor), PICTURE_SIDE_SIZE, false);
             scaledBitmap = scaleBitmap(snapshot, (int)(PICTURE_SIDE_SIZE * scaleFactor), PICTURE_SIDE_SIZE);
         } else {
-            double scaleFactor = ((double) shapshotHeight) / snapshotWidth;
+            double scaleFactor = ((double) snapshotHeight) / snapshotWidth;
             //scaledBitmap = Bitmap.createScaledBitmap(snapshot, PICTURE_SIDE_SIZE, (int)(PICTURE_SIDE_SIZE * scaleFactor), false);
             scaledBitmap = scaleBitmap(snapshot, PICTURE_SIDE_SIZE, (int)(PICTURE_SIDE_SIZE * scaleFactor));
         }
 
-        //2) Crop scaled bitmap: leave middle image size with height equal to width
+        //3) Crop scaled bitmap: leave middle image size with height equal to width
         Bitmap croppedBitmap = null;
-        if (snapshotWidth >= shapshotHeight) {
+        if (snapshotWidth >= snapshotHeight) {
             int cropMarginWidth = (scaledBitmap.getWidth() - PICTURE_SIDE_SIZE) / 2;
             croppedBitmap = Bitmap.createBitmap(scaledBitmap, cropMarginWidth, 0, PICTURE_SIDE_SIZE, PICTURE_SIDE_SIZE);
         } else {
@@ -376,7 +397,7 @@ public class ImageTakeCameraFragment extends SherlockFragment {
             croppedBitmap = Bitmap.createBitmap(scaledBitmap, 0, cropMarginHeight, PICTURE_SIDE_SIZE, PICTURE_SIDE_SIZE);
         }
 
-        //3) Rotate image on 90 degree
+        //4) Rotate image on 90 degree
         Matrix matrix = new Matrix();
         matrix.postRotate(90);
         Bitmap result = Bitmap.createBitmap(croppedBitmap, 0, 0, croppedBitmap.getWidth(), croppedBitmap.getHeight(),
@@ -406,7 +427,8 @@ public class ImageTakeCameraFragment extends SherlockFragment {
 
         Canvas canvas = new Canvas(scaledBitmap);
         canvas.setMatrix(scaleMatrix);
-        canvas.drawBitmap(source, middleX - source.getWidth() / 2, middleY - source.getHeight() / 2, new Paint(Paint.FILTER_BITMAP_FLAG));
+        canvas.drawBitmap(source, middleX - source.getWidth() / 2, middleY - source.getHeight() / 2,
+                new Paint(Paint.FILTER_BITMAP_FLAG));
 
         return scaledBitmap;
     }

@@ -8,7 +8,7 @@
     <LinearLayout android:id="@+id/topLayout"
                   android:background="@color/abs__background_holo_light"
                   android:layout_width="fill_parent"
-                  android:layout_height="wrap_content" />
+                  android:layout_height="fill_parent" />
 
     <LinearLayout android:id="@+id/middleLayout"
                   android:orientation="vertical"
@@ -19,6 +19,6 @@
     <LinearLayout android:id="@+id/bottomLayout"
                   android:background="@color/abs__background_holo_light"
                   android:layout_width="fill_parent"
-                  android:layout_height="wrap_content" />
+                  android:layout_height="fill_parent" />
 
 </LinearLayout>

@@ -118,10 +118,8 @@ public class ImageTakePreviewFragment extends SherlockFragment {
         imageView.setImageBitmap(image);
 
         Display display = getActivity().getWindowManager().getDefaultDisplay();
-        Point displaySize = new Point();
-        display.getSize(displaySize);
 
-        double scaleFactor = LayoutUtil.getViewWidthScaleFactor(displaySize.x, image.getWidth(), 0);
+        double scaleFactor = LayoutUtil.getViewWidthScaleFactor(display.getWidth(), image.getWidth(), 0);
         imageView.setLayoutParams(new LinearLayout.LayoutParams((int) (image.getWidth() * scaleFactor), (int) (image.getHeight() * scaleFactor)));
     }
 }
