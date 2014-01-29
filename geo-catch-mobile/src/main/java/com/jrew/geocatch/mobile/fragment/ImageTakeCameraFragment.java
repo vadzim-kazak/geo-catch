@@ -161,28 +161,30 @@ public class ImageTakeCameraFragment extends SherlockFragment {
                                    int format, int width,
                                    int height) {
 
-            Camera.Parameters parameters = camera.getParameters();
-            if (calculateCameraSizes(width, height, parameters)) {
+            if (camera != null) {
+                Camera.Parameters parameters = camera.getParameters();
+                if (calculateCameraSizes(width, height, parameters)) {
 
-                parameters.setPreviewSize(cameraPreviewSize.width, cameraPreviewSize.height);
-                parameters.setPictureSize(cameraSnapshotSize.width, cameraSnapshotSize.height);
+                    parameters.setPreviewSize(cameraPreviewSize.width, cameraPreviewSize.height);
+                    parameters.setPictureSize(cameraSnapshotSize.width, cameraSnapshotSize.height);
 
-                resizeSurfaceView(width, height);
+                    resizeSurfaceView(width, height);
 
-                // Add cover layout over preview layout in order to take square preview
-                parentLayout.addView(createCameraCover(width), parentLayout.getWidth(), parentLayout.getHeight());
+                    // Add cover layout over preview layout in order to take square preview
+                    parentLayout.addView(createCameraCover(width), parentLayout.getWidth(), parentLayout.getHeight());
 
-                setCameraFocusMode(parameters);
+                    setCameraFocusMode(parameters);
 
-                camera.setParameters(parameters);
-                // Initially camera is rotated on 90 degrees. Need to align it
-                camera.setDisplayOrientation(90);
-                camera.startPreview();
+                    camera.setParameters(parameters);
+                    // Initially camera is rotated on 90 degrees. Need to align it
+                    camera.setDisplayOrientation(90);
+                    camera.startPreview();
 
-                inPreview = true;
+                    inPreview = true;
 
-            } else {
-                // Currently this camera isn't supported
+                } else {
+                    // Currently this camera isn't supported
+                }
             }
         }
 

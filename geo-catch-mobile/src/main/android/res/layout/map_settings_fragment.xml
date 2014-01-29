@@ -24,11 +24,17 @@
                   android:layout_marginBottom="10dip"
                   android:gravity="center_vertical|left">
 
+        <ImageView android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/fish"
+                   android:paddingLeft="5dip"
+                   android:layout_gravity="center_vertical|left"/>
+
         <com.jrew.geocatch.mobile.view.StrictDomainPropertyView android:layout_width="match_parent"
                                                                 android:layout_height="wrap_content"
                                                                 android:background="@null"
-                                                                android:paddingLeft="20dip"
                                                                 android:text="Fish type..."
+                                                                android:paddingLeft="5dip"
                                                                 android:id="@+id/fishTypeView"
                                                                 android:layout_gravity="center"/>
 
@@ -42,10 +48,16 @@
                   android:layout_marginBottom="10dip"
                   android:gravity="center_vertical|left">
 
+        <ImageView android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/fish"
+                   android:paddingLeft="5dip"
+                   android:layout_gravity="center_vertical|left"/>
+
         <com.jrew.geocatch.mobile.view.StrictDomainPropertyView android:layout_width="match_parent"
                                                                 android:layout_height="wrap_content"
                                                                 android:background="@null"
-                                                                android:paddingLeft="20dip"
+                                                                android:paddingLeft="5dip"
                                                                 android:text="Fishing tool..."
                                                                 android:id="@+id/fishingToolView"
                                                                 android:layout_gravity="center"/>
@@ -60,10 +72,16 @@
                   android:layout_marginBottom="30dip"
                   android:gravity="center_vertical|left">
 
+        <ImageView android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/fish"
+                   android:paddingLeft="5dip"
+                   android:layout_gravity="center_vertical|left"/>
+
         <com.jrew.geocatch.mobile.view.StrictDomainPropertyView android:layout_width="match_parent"
                                                                 android:layout_height="wrap_content"
                                                                 android:background="@null"
-                                                                android:paddingLeft="20dip"
+                                                                android:paddingLeft="5dip"
                                                                 android:text="Bait..."
                                                                 android:id="@+id/fishingBaitView"
                                                                 android:layout_gravity="center"/>

@@ -21,6 +21,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
+import com.jrew.geocatch.mobile.util.DialogUtil;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.LayoutUtil;
 import com.jrew.geocatch.web.model.ClientImage;
@@ -40,17 +41,18 @@ import java.util.List;
 public class ImageViewFragment extends SherlockFragment {
 
     /** **/
-    public ServiceResultReceiver imageResultReceiver;
+    private ServiceResultReceiver imageResultReceiver;
+
+    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         setHasOptionsMenu(true);
 
-        final ProgressDialog progress = new ProgressDialog(getActivity());
-        progress.setMessage("Loading image...");
+        progressDialog = DialogUtil.createProgressDialog(getActivity());
 
         View imageViewFragmentLayout = inflater.inflate(R.layout.image_view_fragment, container, false);
 
@@ -60,16 +62,16 @@ public class ImageViewFragment extends SherlockFragment {
 
         final TextView description = (TextView) imageViewFragmentLayout.findViewById(R.id.imageDescription);
 
-        final TextView date = (TextView) imageViewFragmentLayout.findViewById(R.id.imageDate);
-
-        final LinearLayout fishTypeRow = (LinearLayout) imageViewFragmentLayout.findViewById(R.id.fishTypeRow);
-        final TextView fishType = (TextView) imageViewFragmentLayout.findViewById(R.id.fishTypeDescription);
-
-        final LinearLayout fishingToolRow = (LinearLayout) imageViewFragmentLayout.findViewById(R.id.fishingToolRow);
-        final TextView fishingTool = (TextView) imageViewFragmentLayout.findViewById(R.id.fishingToolDescription);
-
-        final LinearLayout fishingBaitRow = (LinearLayout) imageViewFragmentLayout.findViewById(R.id.fishingBaitRow);
-        final TextView fishingBait = (TextView) imageViewFragmentLayout.findViewById(R.id.fishingBaitDescription);
+//        final TextView date = (TextView) imageViewFragmentLayout.findViewById(R.id.imageDate);
+//
+//        final LinearLayout fishTypeRow = (LinearLayout) imageViewFragmentLayout.findViewById(R.id.fishTypeRow);
+//        final TextView fishType = (TextView) imageViewFragmentLayout.findViewById(R.id.fishTypeDescription);
+//
+//        final LinearLayout fishingToolRow = (LinearLayout) imageViewFragmentLayout.findViewById(R.id.fishingToolRow);
+//        final TextView fishingTool = (TextView) imageViewFragmentLayout.findViewById(R.id.fishingToolDescription);
+//
+//        final LinearLayout fishingBaitRow = (LinearLayout) imageViewFragmentLayout.findViewById(R.id.fishingBaitRow);
+//        final TextView fishingBait = (TextView) imageViewFragmentLayout.findViewById(R.id.fishingBaitDescription);
 
         imageResultReceiver = new ServiceResultReceiver(new Handler());
         imageResultReceiver.setReceiver(new ServiceResultReceiver.Receiver() {
@@ -80,6 +82,7 @@ public class ImageViewFragment extends SherlockFragment {
                 switch (resultCode) {
 
                     case ImageService.ResultStatus.LOAD_IMAGE_DATA_FINISHED:
+
                         ClientImage clientImage = (ClientImage) resultData.getSerializable(ImageService.RESULT_KEY);
 
                         // Populate image data
@@ -87,22 +90,22 @@ public class ImageViewFragment extends SherlockFragment {
                         description.setText(clientImage.getDescription());
 
                         // date
-                        String dateLabel = date.getText().toString();
-                        date.setText(dateLabel + dateFormat.format(clientImage.getDate()));
+//                        String dateLabel = date.getText().toString();
+//                        date.setText(dateLabel + dateFormat.format(clientImage.getDate()));
 
                         // domain properties
                         List<DomainProperty> domainProperties = clientImage.getDomainProperties();
                         for (DomainProperty domainProperty : domainProperties) {
                             long domainPropertyType = domainProperty.getType();
                             if (domainPropertyType == 1) {
-                                fishTypeRow.setVisibility(View.VISIBLE);
-                                fishType.setText(domainProperty.getValue());
-                            } else if (domainPropertyType == 2) {
-                                fishingToolRow.setVisibility(View.VISIBLE);
-                                fishingTool.setText(domainProperty.getValue());
-                            } else if (domainPropertyType == 3) {
-                                fishingBaitRow.setVisibility(View.VISIBLE);
-                                fishingBait.setText(domainProperty.getValue());
+//                                fishTypeRow.setVisibility(View.VISIBLE);
+//                                fishType.setText(domainProperty.getValue());
+//                            } else if (domainPropertyType == 2) {
+//                                fishingToolRow.setVisibility(View.VISIBLE);
+//                                fishingTool.setText(domainProperty.getValue());
+//                            } else if (domainPropertyType == 3) {
+//                                fishingBaitRow.setVisibility(View.VISIBLE);
+//                                fishingBait.setText(domainProperty.getValue());
                             }
                         }
 
@@ -123,7 +126,7 @@ public class ImageViewFragment extends SherlockFragment {
                          imageView.setLayoutParams(new LinearLayout.LayoutParams((int)
                                  (image.getWidth() * scaleFactor), (int) (image.getHeight() * scaleFactor)));
 
-                         progress.dismiss();
+                        progressDialog.dismiss();
                          break;
                 }
             }
@@ -134,7 +137,6 @@ public class ImageViewFragment extends SherlockFragment {
         if (fragmentData != null && !fragmentData.isEmpty()) {
             ClientImagePreview image = (ClientImagePreview) fragmentData.getSerializable(ImageService.IMAGE_KEY);
             loadClientImage(image);
-            progress.show();
         }
 
         return imageViewFragmentLayout;
