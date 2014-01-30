@@ -58,7 +58,7 @@
         <com.jrew.geocatch.mobile.view.DomainPropertyView android:layout_width="match_parent"
                                                           android:layout_height="wrap_content"
                                                           android:background="@null"
-                                                          android:text="Fish type..."
+                                                          android:text="Fish..."
                                                           android:paddingLeft="5dip"
                                                           android:id="@+id/fishTypeView"
                                                           android:layout_gravity="center"/>
@@ -75,14 +75,14 @@
 
         <ImageView android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:src="@drawable/fish"
+                   android:src="@drawable/rod"
                    android:paddingLeft="5dip"
                    android:layout_gravity="center_vertical|left"/>
 
         <com.jrew.geocatch.mobile.view.DomainPropertyView android:layout_width="match_parent"
                                                           android:layout_height="wrap_content"
                                                           android:background="@null"
-                                                          android:text="Fishing tool..."
+                                                          android:text="Tool..."
                                                           android:paddingLeft="5dip"
                                                           android:id="@+id/fishingToolView"
                                                           android:layout_gravity="center"/>
@@ -99,7 +99,7 @@
 
         <ImageView android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:src="@drawable/fish"
+                   android:src="@drawable/hook"
                    android:paddingLeft="5dip"
                    android:layout_gravity="center_vertical|left"/>
 
