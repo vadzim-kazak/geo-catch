@@ -3,27 +3,110 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-              android:orientation="vertical"
-              android:padding="20dip">
+              android:orientation="vertical">
 
     <!-- Domain properties layout -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:id="@+id/domainPropertiesView"
                   android:orientation="horizontal"
-                  android:background="@drawable/white_bordered_background"
                   android:layout_width="match_parent"
-                  android:layout_height="40dip"
-                  android:layout_marginBottom="10dip"
+                  android:layout_height="wrap_content"
+                  android:layout_marginRight="5dip"
+                  android:layout_marginLeft="5dip"
+                  android:layout_marginBottom="5dip"
+                  android:layout_marginTop="5dip"
                   android:gravity="center_vertical|left">
 
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:id="@+id/domainPropertiesView"
+                      android:orientation="horizontal"
+                      android:layout_width="wrap_content"
+                      android:layout_height="30dip"
+                      android:paddingRight="15dip"
+                      android:paddingLeft="5dip"
+                      android:background="@drawable/white_bordered_background"
+                      android:gravity="center_vertical">
 
+            <!-- Fish domain property value -->
+            <ImageView android:id="@+id/fishIcon"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/fish"
+                       android:layout_gravity="center_vertical|left"/>
+
+            <TextView android:id="@+id/fishTextView"
+                      android:layout_width="wrap_content"
+                      android:layout_height="match_parent"
+                      android:paddingLeft="5dip"
+                      android:gravity="center"
+                      android:text="pike"
+                      android:textSize="16dip"/>
+
+        </LinearLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:id="@+id/domainPropertiesView"
+                      android:orientation="horizontal"
+                      android:layout_width="wrap_content"
+                      android:layout_height="30dip"
+                      android:paddingRight="15dip"
+                      android:paddingLeft="5dip"
+                      android:layout_marginLeft="5dip"
+                      android:background="@drawable/white_bordered_background"
+                      android:gravity="center_vertical|left">
+
+        <!-- Tool domain property value -->
+        <ImageView android:id="@+id/fishIcon"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/rod"
+                   android:layout_gravity="center_vertical|left"/>
+
+        <TextView android:id="@+id/fishTextView"
+                  android:layout_width="wrap_content"
+                  android:layout_height="match_parent"
+                  android:paddingLeft="5dip"
+                  android:gravity="center"
+                  android:text="spinning"
+                  android:textSize="16dip"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:id="@+id/domainPropertiesView"
+                      android:orientation="horizontal"
+                      android:layout_width="wrap_content"
+                      android:layout_height="30dip"
+                      android:paddingRight="15dip"
+                      android:paddingLeft="5dip"
+                      android:layout_marginLeft="5dip"
+                      android:background="@drawable/white_bordered_background"
+                      android:gravity="center_vertical|left">
+
+        <!-- Bait domain property value -->
+        <ImageView android:id="@+id/fishIcon"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/hook"
+                   android:layout_gravity="center_vertical|left"/>
+
+        <TextView android:id="@+id/fishTextView"
+                  android:layout_width="wrap_content"
+                  android:layout_height="match_parent"
+                  android:paddingLeft="5dip"
+                  android:gravity="center"
+                  android:text="worm"
+                  android:textSize="16dip"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
     <!-- Image view layout -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:orientation="horizontal"
-                  android:background="@drawable/white_bordered_background"
+                  android:background="@android:color/white"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
                   android:layout_marginBottom="10dip"
@@ -32,23 +115,55 @@
         <ImageView android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:id="@+id/imageView"
+                   android:padding="5dip"
                    android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+    <!-- Uploading time -->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="horizontal"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="10dip"
+                  android:layout_marginRight="10dip"
+                  android:layout_marginBottom="5dip"
+                  android:gravity="center_vertical|left">
+
+        <ImageView android:layout_width="25dip"
+                   android:layout_height="25dip"
+                   android:src="@drawable/clock"
+                   android:layout_gravity="center_vertical|left"/>
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:paddingLeft="5dip"
+                  android:layout_gravity="left|top"
+                  android:textSize="16dip"
+                  android:text="28 Jun 15:34" />
 
     </LinearLayout>
 
     <!-- Image description -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:orientation="horizontal"
-                  android:background="@drawable/white_bordered_background"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
-                  android:layout_marginBottom="10dip"
+                  android:layout_marginLeft="10dip"
+                  android:layout_marginRight="10dip"
                   android:gravity="center_vertical|left">
+
+        <ImageView android:layout_width="25dip"
+                   android:layout_height="25dip"
+                   android:src="@drawable/chat"
+                   android:layout_gravity="center_vertical|left"/>
 
         <TextView android:id="@+id/imageDescription"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:layout_gravity="left|center_vertical"/>
+                  android:paddingLeft="5dip"
+                  android:layout_gravity="left|top"
+                  android:textSize="16dip"/>
 
     </LinearLayout>
 
