@@ -1,6 +1,9 @@
 package com.jrew.geocatch.mobile.reciever;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
@@ -25,6 +28,12 @@ import java.util.Map;
  * Time: 7:17 AM
  */
 public class ImageServiceResultReceiver extends ResultReceiver {
+
+    /** **/
+    private Paint iconPaint;
+
+    /** **/
+    private Paint thumbnailPaint;
 
     /**
      * Implements thumbnails loading
@@ -96,6 +105,12 @@ public class ImageServiceResultReceiver extends ResultReceiver {
         super(handler);
         this.mapFragment = mapFragment;
         thumbnailLoader = new ThumbnailLoader();
+
+        iconPaint = new Paint();
+        iconPaint.setColor(Color.WHITE);
+        iconPaint.setStyle(Paint.Style.FILL);
+
+        thumbnailPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
     }
 
     @Override
@@ -129,10 +144,8 @@ public class ImageServiceResultReceiver extends ResultReceiver {
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(new LatLng(image.getLatitude(), image.getLongitude()));
 
-                Double SCALE_FACTOR = 0.3d;
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, (int) (bitmap.getWidth() * SCALE_FACTOR),
-                        (int) (bitmap.getHeight() * SCALE_FACTOR), false);
-                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(scaledBitmap));
+                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(createIconWithBorder(bitmap)));
+
 
                 Marker marker = mapFragment.getGoogleMap().addMarker(markerOptions);
                 mapFragment.getImageMarkerPairs().put(image.getId(), new ImageMarkerPair(image, marker));
@@ -152,6 +165,36 @@ public class ImageServiceResultReceiver extends ResultReceiver {
                 break;
         }
     }
+
+    /**
+     *
+     * @param thumbnail
+     * @return
+     */
+    private Bitmap createIconWithBorder(Bitmap thumbnail) {
+
+       int BORDER_SIZE = 2;
+       double SCALE_FACTOR = 0.35d;
+
+       int newWidth = (int) (thumbnail.getWidth() * SCALE_FACTOR);
+       int newHeight = (int) (thumbnail.getHeight() * SCALE_FACTOR);
+
+       int iconWidth = newWidth + BORDER_SIZE * 2;
+       int iconHeight = newHeight + BORDER_SIZE * 2;
+
+       Bitmap icon = Bitmap.createBitmap(iconWidth, iconHeight, Bitmap.Config.RGB_565);
+
+       Canvas canvas = new Canvas(icon);
+       canvas.drawRect(0, 0, iconWidth, iconHeight, iconPaint);
+
+       Bitmap scaledThumbnail = Bitmap.createScaledBitmap(thumbnail, (int) (thumbnail.getWidth() * SCALE_FACTOR),
+               (int) (thumbnail.getHeight() * SCALE_FACTOR), false);
+
+       // Draw scaled thumbnail on bitmap
+       canvas.drawBitmap(scaledThumbnail, BORDER_SIZE, BORDER_SIZE,  thumbnailPaint);
+
+       return icon;
+   }
 
     /**
      *
