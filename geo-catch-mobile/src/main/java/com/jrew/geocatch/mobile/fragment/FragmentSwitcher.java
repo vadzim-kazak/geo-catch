@@ -104,13 +104,13 @@ public class FragmentSwitcher {
         } else if (TAG.MAP_SETTINGS_FRAGMENT_TAG.equals(fragmentTag)) {
             return new MapSettingsFragment();
         } else if (TAG.IMAGE_VIEW_FRAGMENT_TAG.equals(fragmentTag)) {
-            return new ImageViewFragment();
+            return new PhotoBrowsingFragment();
         } else if (TAG.IMAGE_TAKE_CAMERA_FRAGMENT_TAG.equals(fragmentTag)) {
-            return new ImageTakeCameraFragment();
+            return new GetPhotoFragment();
         } else if (TAG.IMAGE_TAKE_PREVIEW_FRAGMENT_TAG.equals(fragmentTag)) {
-            return new ImageTakePreviewFragment();
+            return new PreviewPhotoFragment();
         } else if (TAG.IMAGE_TAKE_INFO_FRAGMENT_TAG.equals(fragmentTag)) {
-            return new ImageTakeInfoFragment();
+            return new PopulatePhotoInfoFragment();
         }
 
         return null;

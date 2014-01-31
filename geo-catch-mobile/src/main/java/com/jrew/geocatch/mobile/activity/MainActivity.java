@@ -32,8 +32,8 @@ public class MainActivity extends SherlockFragmentActivity {
         Resources resources = getResources();
 
         // Set app icon and name to action bar
-        actionBar.setIcon(resources.getDrawable(R.drawable.ic_action_location));
-        actionBar.setTitle(resources.getString(R.string.app_name));
+        actionBar.setIcon(resources.getDrawable(R.drawable.icon));
+        actionBar.setTitle(resources.getString(R.string.appName));
 
         FragmentSwitcherHolder.initFragmentSwitcher(getSupportFragmentManager());
 

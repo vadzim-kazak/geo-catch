@@ -18,13 +18,12 @@
                    android:layout_height="wrap_content"
                    android:id="@+id/imageThumbnail"
                    android:background="@android:color/darker_gray"
-                   android:src="@android:drawable/ic_menu_compass"
                    android:padding="1dip"
                    android:layout_gravity="center_vertical|left"/>
 
         <com.jrew.geocatch.mobile.view.PrePopulatedEditText android:layout_width="fill_parent"
                                                             android:layout_height="fill_parent"
-                                                            android:text="Add description here..."
+                                                            android:text="@string/photoDescriptionInitialLabel"
                                                             android:background="@null"
                                                             android:id="@+id/uploadImageDescription"
                                                             android:paddingLeft="10dip"
@@ -34,7 +33,7 @@
 
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:text="DETAILS"
+              android:text="@string/domainPropertiesSectionLabel"
               android:textStyle="bold"
               android:textSize="18dip"
               android:textColor="@android:color/darker_gray"
@@ -58,7 +57,7 @@
         <com.jrew.geocatch.mobile.view.DomainPropertyView android:layout_width="match_parent"
                                                           android:layout_height="wrap_content"
                                                           android:background="@null"
-                                                          android:text="Fish..."
+                                                          android:text="@string/fishDomainPropertyInitialLabel"
                                                           android:paddingLeft="5dip"
                                                           android:id="@+id/fishTypeView"
                                                           android:layout_gravity="center"/>
@@ -82,7 +81,7 @@
         <com.jrew.geocatch.mobile.view.DomainPropertyView android:layout_width="match_parent"
                                                           android:layout_height="wrap_content"
                                                           android:background="@null"
-                                                          android:text="Tool..."
+                                                          android:text="@string/toolDomainPropertyInitialLabel"
                                                           android:paddingLeft="5dip"
                                                           android:id="@+id/fishingToolView"
                                                           android:layout_gravity="center"/>
@@ -108,7 +107,7 @@
                                                           android:background="@null"
                                                           android:layout_gravity="center"
                                                           android:paddingLeft="5dip"
-                                                          android:text="Bait..."
+                                                          android:text="@string/baitDomainPropertyInitialLabel"
                                                           android:id="@+id/fishingBaitView"/>
 
     </LinearLayout>
@@ -116,7 +115,7 @@
 
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:text="SHARE"
+              android:text="@string/shareSectionLabel"
               android:textStyle="bold"
               android:textSize="18dip"
               android:textColor="@android:color/darker_gray"
@@ -140,7 +139,7 @@
                 <RadioButton android:id="@+id/sharePublic"
                              android:layout_width="wrap_content"
                              android:layout_height="wrap_content"
-                             android:text="Public"
+                             android:text="@string/sharePublicOptionLabel"
                              android:textSize="18dip"
                              android:checked="true"/>
 
@@ -148,7 +147,7 @@
                              android:layout_width="wrap_content"
                              android:layout_height="wrap_content"
                              android:layout_marginLeft="80dip"
-                             android:text="Private"
+                             android:text="@string/sharePrivateOptionLabel"
                              android:textSize="18dip"/>
 
         </RadioGroup>

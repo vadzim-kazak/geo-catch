@@ -13,6 +13,7 @@
 
     <item name="repositoryUploadImagesDateFormat" type="config">yyDDDHHmmssSSS</item>
 
+    <item name="browsingPhotoDateFormat" type="config">MMM d, HH:mm</item>
     <!--
         Possible values:
             MAP_TYPE_NONE = 0;

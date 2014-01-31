@@ -11,8 +11,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +21,6 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
-import com.jrew.geocatch.mobile.activity.MainActivity;
 import com.jrew.geocatch.mobile.model.UploadImage;
 import com.jrew.geocatch.mobile.reciever.DomainInfoServiceResultReceiver;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
@@ -52,7 +49,7 @@ import java.util.Locale;
  * Time: 15:06
  * To change this template use File | Settings | File Templates.
  */
-public class ImageTakeInfoFragment extends SherlockFragment implements LocationListener {
+public class PopulatePhotoInfoFragment extends SherlockFragment implements LocationListener {
 
     /** **/
     private static final Double IMAGE_VIEW_SCALE_SIZE = 0.15d;
@@ -81,9 +78,9 @@ public class ImageTakeInfoFragment extends SherlockFragment implements LocationL
 
         // Action bar subtitle
         ActionBar actionBar = ActionBarHolder.getActionBar();
-        actionBar.setSubtitle(getResources().getString(R.string.photoInfoLabel));
+        actionBar.setSubtitle(getResources().getString(R.string.populatePhotoInfoFragmentLabel));
 
-        layout = inflater.inflate(R.layout.image_take_info_fragment, container, false);
+        layout = inflater.inflate(R.layout.populate_photo_info_fragment, container, false);
 
         ImageView imageThumbnail = (ImageView) layout.findViewById(R.id.imageThumbnail);
 
@@ -118,7 +115,7 @@ public class ImageTakeInfoFragment extends SherlockFragment implements LocationL
                         break;
 
                     case ImageService.ResultStatus.ERROR:
-                        CharSequence text = "Image uploading error...";
+                        CharSequence text = getResources().getString(R.string.imageUploadingError);
                         int duration = Toast.LENGTH_SHORT;
                         Toast toast = Toast.makeText(getActivity(), text, duration);
                         toast.show();
@@ -165,7 +162,7 @@ public class ImageTakeInfoFragment extends SherlockFragment implements LocationL
             case R.id.uploadPhotoMenuOption:
                 if (!isLocationDetected()) {
                     Context context = getActivity();
-                    CharSequence text = "Wait for location loading...";
+                    CharSequence text = getResources().getString(R.string.locationLoadingWarning);
                     int duration = Toast.LENGTH_SHORT;
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();

@@ -1,39 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Geo-Catch</string>
+    <string name="appName">Geo-Catch</string>
 
-    <string name="takePhotoButton">Take a photo</string>
+    <!-- Map fragment -->
+    <string name="mapFragmentLabel">Map</string>
 
-    <string name="uploadPhotoButton">Upload a photo</string>
+    <!-- Get photo fragment -->
+    <string name="getPhotoFragmentLabel">Take a photo</string>
 
-    <string name="mapLabel">Map</string>
+    <!-- Preview photo fragment -->
+    <string name="previewPhotoFragmentLabel">Photo preview</string>
 
-    <string name="viewSettingsLabel">View settings</string>
+    <!-- Populate photo info fragment (some strings are also used in map settings fragment)-->
+    <string name="populatePhotoInfoFragmentLabel">Photo information</string>
 
-    <string name="viewImageLabel">View image</string>
+    <string name="photoDescriptionInitialLabel">Add description here...</string>
 
-    <string name="ownImagesLabel">Own images</string>
+    <string name="domainPropertiesSectionLabel">DETAILS</string>
 
-    <!-- Time filter strings -->
-    <string name="timeFilterLabel">Time filter: </string>
+    <string name="fishDomainPropertyInitialLabel">Fish...</string>
 
-    <string name="timeFrom">from hour</string>
+    <string name="toolDomainPropertyInitialLabel">Tool...</string>
 
-    <string name="timeTo">to hour</string>
+    <string name="baitDomainPropertyInitialLabel">Bait...</string>
 
-    <!-- Month filter strings -->
-    <string name="monthFilterLabel">Month filter:</string>
+    <string name="shareSectionLabel">SHARE</string>
 
-    <string name="monthFrom">from month</string>
+    <string name="sharePublicOptionLabel">Public</string>
 
-    <string name="monthTo">to month</string>
+    <string name="sharePrivateOptionLabel">Private</string>
 
-    <!-- Photo uploading flow -->
-    <string name="takeImageLabel">Take a photo</string>
+    <string name="locationLoadingWarning">Wait for location loading...</string>
 
-    <string name="photoPreviewLabel">Photo preview</string>
+    <string name="imageUploadingError">Image uploading error...</string>
 
-    <string name="photoInfoLabel">Photo information</string>
+    <!-- Map settings fragment -->
+    <string name="mapSettingsFragmentLabel">Map settings</string>
+
+    <string name="photoOwnerSectionLabel">Owner</string>
+
+    <string name="photoOwnerAnyoneOptionLabel">Anyone</string>
+
+    <string name="photoOwnerMeOptionLabel">Me</string>
+
+    <!-- Photo browsing fragment -->
+    <string name="photoBrowsingFragmentLabel">View photo</string>
+
+
+    <!--<string name="takePhotoButton">Take a photo</string>-->
+
+    <!--<string name="uploadPhotoButton">Upload a photo</string>-->
+
+    <!--<string name="mapLabel">Map</string>-->
+
+    <!--<string name="viewSettingsLabel">View settings</string>-->
+
+    <!--<string name="viewImageLabel">View image</string>-->
+
+    <!--<string name="ownImagesLabel">Own images</string>-->
+
+    <!--&lt;!&ndash; Time filter strings &ndash;&gt;-->
+    <!--<string name="timeFilterLabel">Time filter: </string>-->
+
+    <!--<string name="timeFrom">from hour</string>-->
+
+    <!--<string name="timeTo">to hour</string>-->
+
+    <!--&lt;!&ndash; Month filter strings &ndash;&gt;-->
+    <!--<string name="monthFilterLabel">Month filter:</string>-->
+
+    <!--<string name="monthFrom">from month</string>-->
+
+    <!--<string name="monthTo">to month</string>-->
+
+    <!--&lt;!&ndash; Photo uploading flow &ndash;&gt;-->
+    <!--<string name="takeImageLabel">Take a photo</string>-->
+
+    <!--<string name="photoPreviewLabel">Photo preview</string>-->
+
+    <!--<string name="photoInfoLabel">Photo information</string>-->
 
 </resources>

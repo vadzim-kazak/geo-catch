@@ -9,7 +9,7 @@
 
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:text="DETAILS"
+              android:text="@string/domainPropertiesSectionLabel"
               android:textStyle="bold"
               android:textSize="18dip"
               android:textColor="@android:color/darker_gray"
@@ -33,7 +33,7 @@
         <com.jrew.geocatch.mobile.view.StrictDomainPropertyView android:layout_width="match_parent"
                                                                 android:layout_height="wrap_content"
                                                                 android:background="@null"
-                                                                android:text="Fish..."
+                                                                android:text="@string/fishDomainPropertyInitialLabel"
                                                                 android:paddingLeft="5dip"
                                                                 android:id="@+id/fishTypeView"
                                                                 android:layout_gravity="center"/>
@@ -58,7 +58,7 @@
                                                                 android:layout_height="wrap_content"
                                                                 android:background="@null"
                                                                 android:paddingLeft="5dip"
-                                                                android:text="Tool..."
+                                                                android:text="@string/toolDomainPropertyInitialLabel"
                                                                 android:id="@+id/fishingToolView"
                                                                 android:layout_gravity="center"/>
 
@@ -82,7 +82,7 @@
                                                                 android:layout_height="wrap_content"
                                                                 android:background="@null"
                                                                 android:paddingLeft="5dip"
-                                                                android:text="Bait..."
+                                                                android:text="@string/baitDomainPropertyInitialLabel"
                                                                 android:id="@+id/fishingBaitView"
                                                                 android:layout_gravity="center"/>
 
@@ -90,7 +90,7 @@
 
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:text="OWNER"
+              android:text="@string/photoOwnerSectionLabel"
               android:textStyle="bold"
               android:textSize="18dip"
               android:textColor="@android:color/darker_gray"
@@ -114,7 +114,7 @@
             <RadioButton android:id="@+id/anyone"
                          android:layout_width="wrap_content"
                          android:layout_height="wrap_content"
-                         android:text="Anyone"
+                         android:text="@string/photoOwnerAnyoneOptionLabel"
                          android:textSize="18dip"
                          android:checked="true"/>
 
@@ -122,7 +122,7 @@
                          android:layout_width="wrap_content"
                          android:layout_height="wrap_content"
                          android:layout_marginLeft="80dip"
-                         android:text="My"
+                         android:text="@string/photoOwnerMeOptionLabel"
                          android:textSize="18dip"/>
 
         </RadioGroup>
@@ -154,7 +154,5 @@
                   android:layout_gravity="left|center_vertical"/>
 
     </LinearLayout -->
-
-
 
 </LinearLayout>

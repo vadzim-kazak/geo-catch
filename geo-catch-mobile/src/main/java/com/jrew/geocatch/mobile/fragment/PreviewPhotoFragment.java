@@ -2,35 +2,22 @@ package com.jrew.geocatch.mobile.fragment;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.Point;
-import android.media.ExifInterface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
-import com.jrew.geocatch.mobile.activity.MainActivity;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.LayoutUtil;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -39,7 +26,7 @@ import java.io.IOException;
  * Time: 15:05
  * To change this template use File | Settings | File Templates.
  */
-public class ImageTakePreviewFragment extends SherlockFragment {
+public class PreviewPhotoFragment extends SherlockFragment {
 
     /** **/
     private Bitmap image;
@@ -56,9 +43,9 @@ public class ImageTakePreviewFragment extends SherlockFragment {
 
         // Action bar subtitle
         ActionBar actionBar = ActionBarHolder.getActionBar();
-        actionBar.setSubtitle(getResources().getString(R.string.photoPreviewLabel));
+        actionBar.setSubtitle(getResources().getString(R.string.previewPhotoFragmentLabel));
 
-        View result = inflater.inflate(R.layout.image_take_preview_fragment, container, false);
+        View result = inflater.inflate(R.layout.preview_photo_fragment, container, false);
         imageView = (ImageView) result.findViewById(R.id.imagePreview);
 
         final Bundle fragmentData = getArguments();

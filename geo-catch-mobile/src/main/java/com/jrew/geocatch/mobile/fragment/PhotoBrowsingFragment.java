@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +14,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
+import com.jrew.geocatch.mobile.util.ActionBarHolder;
 import com.jrew.geocatch.mobile.util.DialogUtil;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.LayoutUtil;
@@ -38,40 +39,52 @@ import java.util.List;
  * Date: 11/11/13
  * Time: 4:16 PM
  */
-public class ImageViewFragment extends SherlockFragment {
+public class PhotoBrowsingFragment extends SherlockFragment {
 
     /** **/
     private ServiceResultReceiver imageResultReceiver;
 
+    /** **/
     private ProgressDialog progressDialog;
+
+    /** **/
+    private ClientImage clientImage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        // Action bar subtitle
+        ActionBar actionBar = ActionBarHolder.getActionBar();
+        actionBar.setSubtitle(getResources().getString(R.string.photoBrowsingFragmentLabel));
+
         setHasOptionsMenu(true);
 
         progressDialog = DialogUtil.createProgressDialog(getActivity());
 
-        View imageViewFragmentLayout = inflater.inflate(R.layout.image_view_fragment, container, false);
+        View photoBrowsingLayout = inflater.inflate(R.layout.photo_browsing_fragment, container, false);
 
-        final DateFormat dateFormat = new SimpleDateFormat(getResources().getString(R.config.repositoryUploadImagesDateFormat));
+        final ImageView imageView = (ImageView) photoBrowsingLayout.findViewById(R.id.imageView);
 
-        final ImageView imageView = (ImageView) imageViewFragmentLayout.findViewById(R.id.imageView);
+        // Uploading photo date
+        final LinearLayout uploadingDateLayout = (LinearLayout) photoBrowsingLayout.findViewById(R.id.uploadingDateLayout);
+        final TextView date = (TextView) photoBrowsingLayout.findViewById(R.id.uploadingDateTextView);
+        final DateFormat browsingDateFormat = new SimpleDateFormat(getResources().getString(R.config.browsingPhotoDateFormat));
 
-        final TextView description = (TextView) imageViewFragmentLayout.findViewById(R.id.imageDescription);
+        // Photo description
+        final LinearLayout descriptionLayout = (LinearLayout) photoBrowsingLayout.findViewById(R.id.descriptionLayout);
+        final TextView description = (TextView) photoBrowsingLayout.findViewById(R.id.photoDescription);
 
-//        final TextView date = (TextView) imageViewFragmentLayout.findViewById(R.id.imageDate);
-//
-//        final LinearLayout fishTypeRow = (LinearLayout) imageViewFragmentLayout.findViewById(R.id.fishTypeRow);
-//        final TextView fishType = (TextView) imageViewFragmentLayout.findViewById(R.id.fishTypeDescription);
-//
-//        final LinearLayout fishingToolRow = (LinearLayout) imageViewFragmentLayout.findViewById(R.id.fishingToolRow);
-//        final TextView fishingTool = (TextView) imageViewFragmentLayout.findViewById(R.id.fishingToolDescription);
-//
-//        final LinearLayout fishingBaitRow = (LinearLayout) imageViewFragmentLayout.findViewById(R.id.fishingBaitRow);
-//        final TextView fishingBait = (TextView) imageViewFragmentLayout.findViewById(R.id.fishingBaitDescription);
+
+        final LinearLayout fishDomainPropertyTag = (LinearLayout) photoBrowsingLayout.findViewById(R.id.fishDomainPropertyTag);
+        final TextView fishTextView = (TextView) photoBrowsingLayout.findViewById(R.id.fishTextView);
+
+        final LinearLayout toolDomainPropertyTag = (LinearLayout) photoBrowsingLayout.findViewById(R.id.toolDomainPropertyTag);
+        final TextView toolTextView = (TextView) photoBrowsingLayout.findViewById(R.id.toolTextView);
+
+        final LinearLayout baitDomainPropertyTag = (LinearLayout) photoBrowsingLayout.findViewById(R.id.baitDomainPropertiesView);
+        final TextView baitTextView = (TextView) photoBrowsingLayout.findViewById(R.id.baitTextView);
 
         imageResultReceiver = new ServiceResultReceiver(new Handler());
         imageResultReceiver.setReceiver(new ServiceResultReceiver.Receiver() {
@@ -83,51 +96,50 @@ public class ImageViewFragment extends SherlockFragment {
 
                     case ImageService.ResultStatus.LOAD_IMAGE_DATA_FINISHED:
 
-                        ClientImage clientImage = (ClientImage) resultData.getSerializable(ImageService.RESULT_KEY);
-
-                        // Populate image data
-                        // description
-                        description.setText(clientImage.getDescription());
-
-                        // date
-//                        String dateLabel = date.getText().toString();
-//                        date.setText(dateLabel + dateFormat.format(clientImage.getDate()));
-
-                        // domain properties
-                        List<DomainProperty> domainProperties = clientImage.getDomainProperties();
-                        for (DomainProperty domainProperty : domainProperties) {
-                            long domainPropertyType = domainProperty.getType();
-                            if (domainPropertyType == 1) {
-//                                fishTypeRow.setVisibility(View.VISIBLE);
-//                                fishType.setText(domainProperty.getValue());
-//                            } else if (domainPropertyType == 2) {
-//                                fishingToolRow.setVisibility(View.VISIBLE);
-//                                fishingTool.setText(domainProperty.getValue());
-//                            } else if (domainPropertyType == 3) {
-//                                fishingBaitRow.setVisibility(View.VISIBLE);
-//                                fishingBait.setText(domainProperty.getValue());
-                            }
-                        }
+                        clientImage = (ClientImage) resultData.getSerializable(ImageService.RESULT_KEY);
 
                         // Load image
                         loadImage(clientImage);
                         break;
 
                     case ImageService.ResultStatus.LOAD_IMAGE_FINISHED:
-                         Bitmap image = (Bitmap) resultData.get(ImageService.RESULT_KEY);
 
-                         imageView.setImageBitmap(image);
+                        // domain properties
+                        List<DomainProperty> domainProperties = clientImage.getDomainProperties();
+                        for (DomainProperty domainProperty : domainProperties) {
+                            long domainPropertyType = domainProperty.getType();
+                            if (domainPropertyType == 1) {
+                                fishDomainPropertyTag.setVisibility(View.VISIBLE);
+                                fishTextView.setText(domainProperty.getValue());
+                            } else if (domainPropertyType == 2) {
+                                toolDomainPropertyTag.setVisibility(View.VISIBLE);
+                                toolTextView.setText(domainProperty.getValue());
+                            } else if (domainPropertyType == 3) {
+                                baitDomainPropertyTag.setVisibility(View.VISIBLE);
+                                baitTextView.setText(domainProperty.getValue());
+                            }
+                        }
 
-                         Display display = getActivity().getWindowManager().getDefaultDisplay();
-                         Point displaySize = new Point();
-                         display.getSize(displaySize);
 
-                         double scaleFactor = LayoutUtil.getViewWidthScaleFactor(displaySize.x, image.getWidth(), 0);
-                         imageView.setLayoutParams(new LinearLayout.LayoutParams((int)
-                                 (image.getWidth() * scaleFactor), (int) (image.getHeight() * scaleFactor)));
+                        // Photo
+                        Bitmap image = (Bitmap) resultData.get(ImageService.RESULT_KEY);
+                        imageView.setImageBitmap(image);
+
+                        Display display = getActivity().getWindowManager().getDefaultDisplay();
+                        double scaleFactor = LayoutUtil.getViewWidthScaleFactor(display.getWidth(), display.getWidth(), 0);
+                        imageView.setLayoutParams(new LinearLayout.LayoutParams((int)
+                            (image.getWidth() * scaleFactor), (int) (image.getHeight() * scaleFactor)));
+
+                        // date
+                        date.setText(browsingDateFormat.format(clientImage.getDate()));
+                        uploadingDateLayout.setVisibility(View.VISIBLE);
+
+                        // description
+                        description.setText(clientImage.getDescription());
+                        descriptionLayout.setVisibility(View.VISIBLE);
 
                         progressDialog.dismiss();
-                         break;
+                        break;
                 }
             }
 
@@ -139,7 +151,7 @@ public class ImageViewFragment extends SherlockFragment {
             loadClientImage(image);
         }
 
-        return imageViewFragmentLayout;
+        return photoBrowsingLayout;
     }
 
     @Override

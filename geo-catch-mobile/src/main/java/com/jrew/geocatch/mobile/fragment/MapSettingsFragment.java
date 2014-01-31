@@ -59,7 +59,7 @@ public class MapSettingsFragment extends SherlockFragment {
 
         // Action bar subtitle
         ActionBar actionBar = ActionBarHolder.getActionBar();
-        actionBar.setSubtitle(getResources().getString(R.string.viewSettingsLabel));
+        actionBar.setSubtitle(getResources().getString(R.string.mapSettingsFragmentLabel));
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 

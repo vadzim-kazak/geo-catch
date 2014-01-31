@@ -61,7 +61,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
         // Action bar subtitle
         ActionBar actionBar = ActionBarHolder.getActionBar();
-        actionBar.setSubtitle(getResources().getString(R.string.mapLabel));
+        actionBar.setSubtitle(getResources().getString(R.string.mapFragmentLabel));
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 

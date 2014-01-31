@@ -33,7 +33,7 @@ import java.util.List;
  * Time: 13:06
  * To change this template use File | Settings | File Templates.
  */
-public class ImageTakeCameraFragment extends SherlockFragment {
+public class GetPhotoFragment extends SherlockFragment {
 
     /** **/
     private final static int PICTURE_SIDE_SIZE = 600;
@@ -66,11 +66,11 @@ public class ImageTakeCameraFragment extends SherlockFragment {
 
         // Action bar subtitle
         ActionBar actionBar = ActionBarHolder.getActionBar();
-        actionBar.setSubtitle(getResources().getString(R.string.takeImageLabel));
+        actionBar.setSubtitle(getResources().getString(R.string.getPhotoFragmentLabel));
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        parentLayout = (FrameLayout) inflater.inflate(R.layout.image_take_camera_fragment, container, false);
+        parentLayout = (FrameLayout) inflater.inflate(R.layout.get_photo_fragment, container, false);
 
         preview = (SurfaceView) parentLayout.findViewById(R.id.surface);
 
@@ -380,11 +380,11 @@ public class ImageTakeCameraFragment extends SherlockFragment {
         if (snapshotWidth >= snapshotHeight) {
             double scaleFactor = ((double) snapshotWidth) / snapshotHeight;
             //scaledBitmap = Bitmap.createScaledBitmap (snapshot, (int)(PICTURE_SIDE_SIZE * scaleFactor), PICTURE_SIDE_SIZE, false);
-            scaledBitmap = scaleBitmap(snapshot, (int)(PICTURE_SIDE_SIZE * scaleFactor), PICTURE_SIDE_SIZE);
+            scaledBitmap = scaleBitmap(snapshot, (int) (PICTURE_SIDE_SIZE * scaleFactor), PICTURE_SIDE_SIZE);
         } else {
             double scaleFactor = ((double) snapshotHeight) / snapshotWidth;
             //scaledBitmap = Bitmap.createScaledBitmap(snapshot, PICTURE_SIDE_SIZE, (int)(PICTURE_SIDE_SIZE * scaleFactor), false);
-            scaledBitmap = scaleBitmap(snapshot, PICTURE_SIDE_SIZE, (int)(PICTURE_SIDE_SIZE * scaleFactor));
+            scaledBitmap = scaleBitmap(snapshot, PICTURE_SIDE_SIZE, (int) (PICTURE_SIDE_SIZE * scaleFactor));
         }
 
         //3) Crop scaled bitmap: leave middle image size with height equal to width
@@ -443,7 +443,7 @@ public class ImageTakeCameraFragment extends SherlockFragment {
         int layoutHeight = parentLayout.getHeight();
         int opaqueLayoutHeight = (layoutHeight - cameraWidth) / 2;
 
-        LinearLayout coverLayout = (LinearLayout) getSherlockActivity().getLayoutInflater().inflate(R.layout.image_take_camera_cover, null);
+        LinearLayout coverLayout = (LinearLayout) getSherlockActivity().getLayoutInflater().inflate(R.layout.get_photo_fragment_camera_cover, null);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(parentLayout.getWidth(),
                 parentLayout.getHeight());
         coverLayout.setLayoutParams(layoutParams);
