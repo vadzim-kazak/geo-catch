@@ -46,12 +46,6 @@ public class MapSettingsFragment extends SherlockFragment {
     /** **/
     private RadioGroup ownerRadioGroup;
 
-    /** **/
-    private CheckBox timeFilterCheckbox, monthFilterCheckbox;
-
-    /** **/
-    private RangeSeekBar<Integer> timeFilter, monthFilter;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -67,53 +61,13 @@ public class MapSettingsFragment extends SherlockFragment {
 
         //Populate
         fishTypeView = (StrictDomainPropertyView) mapSettingsLayout.findViewById(R.id.fishTypeView);
-        loadDomainInfo(fishTypeView, DomainInfoService.DomainInfoType.FISH);
+        fishTypeView.loadDomainProperties(DomainInfoService.DomainInfoType.FISH);
 
         fishingToolView = (StrictDomainPropertyView) mapSettingsLayout.findViewById(R.id.fishingToolView);
-        loadDomainInfo(fishingToolView, DomainInfoService.DomainInfoType.FISHING_TOOL);
+        fishingToolView.loadDomainProperties(DomainInfoService.DomainInfoType.FISHING_TOOL);
 
         fishingBaitView = (StrictDomainPropertyView) mapSettingsLayout.findViewById(R.id.fishingBaitView);
-        loadDomainInfo(fishingBaitView, DomainInfoService.DomainInfoType.BAIT);
-
-//        LinearLayout timeFilterRow = (LinearLayout) mapSettingsLayout.findViewById(R.id.timeFilterRow);
-//        timeFilter = new RangeSeekBar<Integer>(0, 24, getActivity());
-//        timeFilter.setEnabled(false);
-//        timeFilter.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
-//            @Override
-//            public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
-//                    timeFilterCheckbox.setText(MessageBuilder.getDayFilterMessage(timeFilter.getSelectedMinValue(),
-//                            timeFilter.getSelectedMaxValue(), getResources()));
-//            }
-//        });
-//
-//        timeFilterCheckbox = (CheckBox) mapSettingsLayout.findViewById(R.id.timeFilterCheckbox);
-//        timeFilterCheckbox.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                timeFilter.setEnabled(timeFilterCheckbox.isChecked());
-//            }
-//        });
-//        timeFilterRow.addView(timeFilter);
-//
-//        LinearLayout monthFilterRow = (LinearLayout) mapSettingsLayout.findViewById(R.id.monthFilterRow);
-//        monthFilter = new RangeSeekBar<Integer>(1, 12, getActivity());
-//        monthFilter.setEnabled(false);
-//        monthFilter.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
-//            @Override
-//            public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
-//                    monthFilterCheckbox.setText(MessageBuilder.getMonthFilterMessage(monthFilter.getSelectedMinValue(),
-//                            monthFilter.getSelectedMaxValue(), getResources()));
-//            }
-//        });
-//
-//        monthFilterCheckbox = (CheckBox) mapSettingsLayout.findViewById(R.id.monthFilterCheckbox);
-//        monthFilterCheckbox.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                monthFilter.setEnabled(monthFilterCheckbox.isChecked());
-//            }
-//        });
-//        monthFilterRow.addView(monthFilter);
+        fishingBaitView.loadDomainProperties(DomainInfoService.DomainInfoType.BAIT);
 
         ownerRadioGroup = (RadioGroup) mapSettingsLayout.findViewById(R.id.ownerRadioGroup);
 
@@ -177,56 +131,6 @@ public class MapSettingsFragment extends SherlockFragment {
                 ownerRadioGroup.findViewById(R.id.self).setSelected(true);
             }
         }
-
-//        // Init time filter
-//        DayPeriodSearchCriterion dayPeriodCriterion = searchCriteria.getDayPeriod();
-//        if (dayPeriodCriterion != null) {
-//            // Enable checkbox
-//            timeFilterCheckbox.setChecked(true);
-//            timeFilterCheckbox.setText(MessageBuilder.getDayFilterMessage(dayPeriodCriterion.getFromHour(),
-//                    dayPeriodCriterion.getToHour(), getResources()));
-//            timeFilter.setEnabled(true);
-//            timeFilter.setSelectedMinValue(dayPeriodCriterion.getFromHour());
-//            timeFilter.setSelectedMaxValue(dayPeriodCriterion.getToHour());
-//        } else {
-//            timeFilterCheckbox.setChecked(false);
-//            timeFilterCheckbox.setText(getResources().getString(R.string.timeFilterLabel));
-//            timeFilter.setEnabled(false);
-//        }
-//
-//        // Init month filter
-//        MonthPeriodSearchCriterion monthPeriodCriterion = searchCriteria.getMonthPeriod();
-//        if (monthPeriodCriterion != null) {
-//            monthFilterCheckbox.setChecked(true);
-//            monthFilterCheckbox.setText(MessageBuilder.getMonthFilterMessage(monthPeriodCriterion.getFromMonth(),
-//                    monthPeriodCriterion.getToMonth(), getResources()));
-//            monthFilter.setEnabled(true);
-//            monthFilter.setSelectedMinValue(monthPeriodCriterion.getFromMonth());
-//            monthFilter.setSelectedMaxValue(monthPeriodCriterion.getToMonth());
-//        } else {
-//            monthFilterCheckbox.setText(getResources().getString(R.string.monthFilterLabel));
-//            monthFilterCheckbox.setChecked(false);
-//            monthFilter.setEnabled(false);
-//        }
-    }
-
-    /**
-     *
-     */
-    public void loadDomainInfo(DomainPropertyView domainPropertyView, int domainInfoType) {
-
-        Bundle bundle = new Bundle();
-
-        DomainInfoServiceResultReceiver receiver = new DomainInfoServiceResultReceiver(new Handler(), domainPropertyView);
-
-        String locale = Locale.getDefault().getLanguage();
-        bundle.putString(DomainInfoService.LOCALE_KEY, locale);
-        bundle.putInt(DomainInfoService.DOMAIN_INFO_TYPE_KEY, domainInfoType);
-
-        final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), DomainInfoService.class);
-        intent.putExtra(DomainInfoService.REQUEST_KEY, bundle);
-        intent.putExtra(DomainInfoService.RECEIVER_KEY, receiver);
-        getActivity().startService(intent);
     }
 
     @Override
@@ -276,40 +180,6 @@ public class MapSettingsFragment extends SherlockFragment {
             searchCriteria.setOwner(SearchCriteria.OWNER_SELF_VALUE);
         }
 
-//        // Time filter
-//        if (timeFilterCheckbox.isChecked()) {
-//            DayPeriodSearchCriterion criterion = new DayPeriodSearchCriterion();
-//            criterion.setFromHour(timeFilter.getSelectedMinValue());
-//            criterion.setToHour(timeFilter.getSelectedMaxValue());
-//            searchCriteria.setDayPeriod(criterion);
-//        } else {
-//            searchCriteria.setDayPeriod(null);
-//        }
-//
-//        // Month filter
-//        if (monthFilterCheckbox.isChecked()) {
-//            MonthPeriodSearchCriterion criterion = new MonthPeriodSearchCriterion();
-//            criterion.setFromMonth(monthFilter.getSelectedMinValue());
-//            criterion.setToMonth(monthFilter.getSelectedMaxValue());
-//            searchCriteria.setMonthPeriod(criterion);
-//        } else {
-//            searchCriteria.setMonthPeriod(null);
-//        }
-
         return searchCriteria;
     }
-
-//    /**
-//     *
-//     */
-//    private void clearSettingViews() {
-//
-//        if (!timeFilterCheckbox.isChecked()) {
-//            timeFilterCheckbox.setText(getResources().getString(R.string.timeFilterLabel));
-//        }
-//
-//        if (!monthFilterCheckbox.isChecked()) {
-//            monthFilterCheckbox.setText(getResources().getString(R.string.monthFilterLabel));
-//        }
-//    }
 }

@@ -177,6 +177,7 @@ public class WebUtil {
         domainProperty.setId(jsonObject.getLong("id"));
         domainProperty.setType(jsonObject.getLong("type"));
         domainProperty.setItem(jsonObject.getLong("item"));
+        domainProperty.setLocale(jsonObject.getString("locale"));
         domainProperty.setValue(jsonObject.getString("value"));
 
         return domainProperty;

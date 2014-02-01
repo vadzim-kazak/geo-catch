@@ -6,6 +6,8 @@
     <!-- Map fragment -->
     <string name="mapFragmentLabel">Map</string>
 
+    <string name="syncError">Couldn\'t load application data...</string>
+
     <!-- Get photo fragment -->
     <string name="getPhotoFragmentLabel">Take a photo</string>
 

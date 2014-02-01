@@ -11,12 +11,10 @@ public interface DomainPropertyService {
 
     /**
      *
-     *
-     * @param type
      * @param locale
      * @return
      */
-    public List<DomainProperty> loadDomainProperties(long type, String locale);
+    public List<DomainProperty> loadDomainProperties(String locale);
 
     /**
      *

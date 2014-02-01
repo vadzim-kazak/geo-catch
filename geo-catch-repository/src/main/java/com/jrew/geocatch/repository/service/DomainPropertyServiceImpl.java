@@ -25,8 +25,8 @@ public class DomainPropertyServiceImpl implements DomainPropertyService {
     }
 
     @Override
-    public List<DomainProperty> loadDomainProperties(long type, String locale) {
-        return dbManager.loadDomainProperties(type, locale);
+    public List<DomainProperty> loadDomainProperties(String locale) {
+        return dbManager.loadDomainProperties(locale);
     }
 
     @Override

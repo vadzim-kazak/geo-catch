@@ -11,11 +11,18 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Filterable;
 import android.widget.ListAdapter;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.jrew.geocatch.mobile.adapter.DomainAutoCompleteAdapter;
+import com.jrew.geocatch.mobile.dao.DatabaseHelper;
+import com.jrew.geocatch.mobile.dao.DatabaseManager;
 import com.jrew.geocatch.web.model.DomainProperty;
 
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Domain Property AutoComplete view
@@ -82,10 +89,15 @@ public class DomainPropertyView extends AutoCompleteTextView implements TextWatc
 
     /**
      *
-     * @param domainProperties
+     * @param domainPropertyType
      */
-    public void populateDomainProperties(List<DomainProperty> domainProperties) {
-        adapter.setInitialDomainProperties(domainProperties);
+    public void loadDomainProperties(long domainPropertyType) {
+
+        List<DomainProperty> domainProperties = DatabaseManager.loadDomainProperties(domainPropertyType,
+                getContext());
+        if (domainProperties != null && domainProperties.size() > 0) {
+            adapter.setInitialDomainProperties(domainProperties);
+        }
     }
 
     /**

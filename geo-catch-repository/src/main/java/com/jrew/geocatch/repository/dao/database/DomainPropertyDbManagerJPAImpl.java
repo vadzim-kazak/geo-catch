@@ -52,11 +52,10 @@ public class DomainPropertyDBManagerJPAImpl implements DomainPropertyDBManager {
     }
 
     @Override
-    public List<DomainProperty> loadDomainProperties(long type, String locale) {
+    public List<DomainProperty> loadDomainProperties(String locale) {
 
         TypedQuery<DomainProperty> query = entityManager.createQuery(loadDomainPropertiesQuery, DomainProperty.class);
-        query.setParameter(1, type);
-        query.setParameter(2, locale);
+        query.setParameter(1, locale);
 
         return query.getResultList();
     }

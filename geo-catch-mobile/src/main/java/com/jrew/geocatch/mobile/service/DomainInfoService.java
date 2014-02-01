@@ -17,7 +17,7 @@ import com.jrew.geocatch.mobile.util.RepositoryRestUtil;
 public class DomainInfoService extends IntentService {
 
     /**  **/
-    public static final String RECEIVER_KEY = "reciever";
+    public static final String RECEIVER_KEY = "receiver";
 
     /**   **/
     public static final String REQUEST_KEY = "request";
@@ -52,13 +52,13 @@ public class DomainInfoService extends IntentService {
     public interface DomainInfoType {
 
         /** **/
-        public static final int FISH = 1;
+        public static final long FISH = 1;
 
         /** **/
-        public static final int FISHING_TOOL = 2;
+        public static final long FISHING_TOOL = 2;
 
         /** **/
-        public static final int BAIT = 3;
+        public static final long BAIT = 3;
     }
 
     /**
@@ -81,7 +81,7 @@ public class DomainInfoService extends IntentService {
 
         final ResultReceiver receiver = intent.getParcelableExtra(RECEIVER_KEY);
         Resources resources = getResources();
-
+        receiver.send(DomainInfoService.ResultStatus.LOADING, null);
         try {
 
             receiver.send(DomainInfoService.ResultStatus.LOADING_FINISHED,

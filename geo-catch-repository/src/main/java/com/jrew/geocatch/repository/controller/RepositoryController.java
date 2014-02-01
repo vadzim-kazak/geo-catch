@@ -74,11 +74,9 @@ public class RepositoryController {
         return imageService.getImages(searchCriteria);
     }
 
-    @RequestMapping(value = "domain/{type}/{locale}",
+    @RequestMapping(value = "domain/{locale}",
                     method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody List<DomainProperty> loadDomainInfo(@PathVariable("type") Long type,
-                                               @PathVariable("locale") String locale) {
-        return domainPropertyService.loadDomainProperties(type, locale);
+    public @ResponseBody List<DomainProperty> loadDomainsInfo(@PathVariable("locale") String locale) {
+        return domainPropertyService.loadDomainProperties(locale);
     }
-
 }

@@ -1,12 +1,27 @@
 package com.jrew.geocatch.mobile.activity;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.jrew.geocatch.mobile.R;
+import com.jrew.geocatch.mobile.reciever.DomainInfoServiceResultReceiver;
+import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
+import com.jrew.geocatch.mobile.util.CommonUtils;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
+import com.jrew.geocatch.mobile.util.SharedPreferencesHelper;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,6 +34,9 @@ public class MainActivity extends SherlockFragmentActivity {
 
     /** **/
     private static int theme = R.style.Theme_Sherlock_Light;
+
+    /** **/
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +55,50 @@ public class MainActivity extends SherlockFragmentActivity {
 
         FragmentSwitcherHolder.initFragmentSwitcher(getSupportFragmentManager());
 
+        syncDomainsInfo();
+
         // Set default fragment
         FragmentSwitcherHolder.getFragmentSwitcher().handleActivityCreation();
+    }
+
+    /**
+     *
+     * @return
+     */
+    private void syncDomainsInfo() {
+
+        Date lastSyncDate = SharedPreferencesHelper.getLastSyncDate(this);
+        if (lastSyncDate != null) {
+
+            String syncPeriodConfig = getResources().getString(R.config.domainInfoSyncPeriodInHours);
+            int syncPeriod = Integer.parseInt(syncPeriodConfig);
+
+            Date currentDate = new Date();
+            if ((currentDate.getTime() - syncPeriod * 60 * 60 * 1000) <=  lastSyncDate.getTime()) {
+                // It's time to perform sync
+                processSyncDomainsInfo();
+            }
+
+        }
+
+        // LastSyncDate isn't set. Probably this is first app launch
+        processSyncDomainsInfo();
+    }
+
+    /**
+     *
+     */
+    private void processSyncDomainsInfo() {
+
+        Bundle bundle = new Bundle();
+
+        String locale = Locale.getDefault().getLanguage();
+        bundle.putString(DomainInfoService.LOCALE_KEY, locale);
+        bundle.putInt(DomainInfoService.DOMAIN_INFO_TYPE_KEY, 1);
+
+        final Intent intent = new Intent(Intent.ACTION_SYNC, null, this, DomainInfoService.class);
+        intent.putExtra(DomainInfoService.REQUEST_KEY, bundle);
+        intent.putExtra(DomainInfoService.RECEIVER_KEY, new DomainInfoServiceResultReceiver(new Handler(), this));
+        startService(intent);
     }
 }

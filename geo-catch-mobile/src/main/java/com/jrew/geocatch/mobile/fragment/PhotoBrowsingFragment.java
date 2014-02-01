@@ -70,7 +70,7 @@ public class PhotoBrowsingFragment extends SherlockFragment {
         // Uploading photo date
         final LinearLayout uploadingDateLayout = (LinearLayout) photoBrowsingLayout.findViewById(R.id.uploadingDateLayout);
         final TextView date = (TextView) photoBrowsingLayout.findViewById(R.id.uploadingDateTextView);
-        final DateFormat browsingDateFormat = new SimpleDateFormat(getResources().getString(R.config.browsingPhotoDateFormat));
+        final DateFormat browsingDateFormat = new SimpleDateFormat(getResources().getString(R.config.mobileDateFormat));
 
         // Photo description
         final LinearLayout descriptionLayout = (LinearLayout) photoBrowsingLayout.findViewById(R.id.descriptionLayout);
@@ -126,7 +126,7 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                         imageView.setImageBitmap(image);
 
                         Display display = getActivity().getWindowManager().getDefaultDisplay();
-                        double scaleFactor = LayoutUtil.getViewWidthScaleFactor(display.getWidth(), display.getWidth(), 0);
+                        double scaleFactor = LayoutUtil.getViewWidthScaleFactor(display.getWidth(), image.getWidth(), 0);
                         imageView.setLayoutParams(new LinearLayout.LayoutParams((int)
                             (image.getWidth() * scaleFactor), (int) (image.getHeight() * scaleFactor)));
 
@@ -135,8 +135,11 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                         uploadingDateLayout.setVisibility(View.VISIBLE);
 
                         // description
-                        description.setText(clientImage.getDescription());
-                        descriptionLayout.setVisibility(View.VISIBLE);
+                        String desctiption = clientImage.getDescription();
+                        if (desctiption != null && description.length() > 0) {
+                            description.setText(desctiption);
+                            descriptionLayout.setVisibility(View.VISIBLE);
+                        }
 
                         progressDialog.dismiss();
                         break;

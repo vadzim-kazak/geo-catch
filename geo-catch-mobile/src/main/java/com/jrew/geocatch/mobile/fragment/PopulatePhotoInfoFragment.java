@@ -132,13 +132,13 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
 
         //Populate
         fishTypeView = (DomainPropertyView) layout.findViewById(R.id.fishTypeView);
-        loadDomainInfo(fishTypeView, DomainInfoService.DomainInfoType.FISH);
+        fishTypeView.loadDomainProperties(DomainInfoService.DomainInfoType.FISH);
 
         fishingToolView = (DomainPropertyView) layout.findViewById(R.id.fishingToolView);
-        loadDomainInfo(fishingToolView, DomainInfoService.DomainInfoType.FISHING_TOOL);
+        fishingToolView.loadDomainProperties(DomainInfoService.DomainInfoType.FISHING_TOOL);
 
         fishingBaitView = (DomainPropertyView) layout.findViewById(R.id.fishingBaitView);
-        loadDomainInfo(fishingBaitView, DomainInfoService.DomainInfoType.BAIT);
+        fishingBaitView.loadDomainProperties(DomainInfoService.DomainInfoType.BAIT);
 
         return layout;
     }
@@ -318,25 +318,6 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
         intent.putExtra(ImageService.RECEIVER_KEY, resultReceiver);
         intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.UPLOAD_IMAGE);
         intent.putExtra(ImageService.REQUEST_KEY, bundle);
-        getActivity().startService(intent);
-    }
-
-    /**
-     *
-     */
-    public void loadDomainInfo(DomainPropertyView domainPropertyView, int domainInfoType) {
-
-        Bundle bundle = new Bundle();
-
-        DomainInfoServiceResultReceiver receiver = new DomainInfoServiceResultReceiver(new Handler(), domainPropertyView);
-
-        String locale = Locale.getDefault().getLanguage();
-        bundle.putString(DomainInfoService.LOCALE_KEY, locale);
-        bundle.putInt(DomainInfoService.DOMAIN_INFO_TYPE_KEY, domainInfoType);
-
-        final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), DomainInfoService.class);
-        intent.putExtra(DomainInfoService.REQUEST_KEY, bundle);
-        intent.putExtra(DomainInfoService.RECEIVER_KEY, receiver);
         getActivity().startService(intent);
     }
 }
