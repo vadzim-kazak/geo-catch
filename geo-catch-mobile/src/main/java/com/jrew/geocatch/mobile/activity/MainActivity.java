@@ -74,7 +74,7 @@ public class MainActivity extends SherlockFragmentActivity {
             int syncPeriod = Integer.parseInt(syncPeriodConfig);
 
             Date currentDate = new Date();
-            if ((currentDate.getTime() - syncPeriod * 60 * 60 * 1000) <=  lastSyncDate.getTime()) {
+            if (currentDate.getTime() - lastSyncDate.getTime() >= syncPeriod * 60 * 60 * 1000 ) {
                 // It's time to perform sync
                 processSyncDomainsInfo();
             }
