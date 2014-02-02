@@ -94,7 +94,6 @@ public class MainActivity extends SherlockFragmentActivity {
 
         String locale = Locale.getDefault().getLanguage();
         bundle.putString(DomainInfoService.LOCALE_KEY, locale);
-        bundle.putInt(DomainInfoService.DOMAIN_INFO_TYPE_KEY, 1);
 
         final Intent intent = new Intent(Intent.ACTION_SYNC, null, this, DomainInfoService.class);
         intent.putExtra(DomainInfoService.REQUEST_KEY, bundle);

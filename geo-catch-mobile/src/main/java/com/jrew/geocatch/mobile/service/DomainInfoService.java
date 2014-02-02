@@ -25,9 +25,6 @@ public class DomainInfoService extends IntentService {
     /**   **/
     public static final String LOCALE_KEY = "locale";
 
-    /**   **/
-    public static final String DOMAIN_INFO_TYPE_KEY = "domainInfoTypeKey";
-
     /** **/
     public static final String RESULT_KEY = "result";
 

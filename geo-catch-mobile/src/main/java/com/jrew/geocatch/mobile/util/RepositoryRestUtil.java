@@ -238,14 +238,11 @@ public class RepositoryRestUtil {
 
         Bundle requestBundle = (Bundle) intent.getParcelableExtra(DomainInfoService.REQUEST_KEY);
         String locale = requestBundle.getString(DomainInfoService.LOCALE_KEY);
-        int domainInfoType = requestBundle.getInt(DomainInfoService.DOMAIN_INFO_TYPE_KEY);
 
         StringBuilder loadDomainInfoUrl = new StringBuilder();
         loadDomainInfoUrl.append(resources.getString(R.config.repositoryUrl))
                          .append(resources.getString(R.config.repositoryPath))
                          .append(resources.getString(R.config.repositoryLoadDomainInfoUri))
-                         .append(domainInfoType)
-                         .append('/')
                          .append(locale);
 
         HttpGet httpGet = new HttpGet(loadDomainInfoUrl.toString());
