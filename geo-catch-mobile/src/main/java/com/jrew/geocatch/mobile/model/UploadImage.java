@@ -53,6 +53,9 @@ public class UploadImage implements Serializable {
     /** **/
     private PrivacyLevel privacyLevel;
 
+    /** **/
+    private String file;
+
     /**
      *
      */
@@ -180,5 +183,21 @@ public class UploadImage implements Serializable {
      */
     public void setPrivacyLevel(PrivacyLevel privacyLevel) {
         this.privacyLevel = privacyLevel;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getFile() {
+        return file;
+    }
+
+    /**
+     *
+     * @param file
+     */
+    public void setFile(String file) {
+        this.file = file;
     }
 }

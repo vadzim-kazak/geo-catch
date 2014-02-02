@@ -19,13 +19,13 @@ public interface FileSystemManager {
     /**
      * Saves provided image on file system.
      *
+     *
      * @param image
-     * @param file
      * @return full path to saved image.
      * @throws IOException
      * @throws IllegalArgumentException
      */
-    public void saveImage(Image image, MultipartFile file) throws IOException, IllegalArgumentException;
+    public void saveImage(Image image) throws IOException, IllegalArgumentException;
 
     /**
      * Performs image deletion on file system.

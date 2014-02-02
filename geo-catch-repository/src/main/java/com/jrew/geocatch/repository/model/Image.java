@@ -29,6 +29,7 @@ public class Image {
         /** **/
         PRIVATE,
 
+        /** **/
         FRIENDS_ONLY,
 
         /** **/
@@ -68,7 +69,6 @@ public class Image {
     /** **/
     @Column(columnDefinition = "DATETIME")
     @NotNull
-    @Past(message = "Invalid date")
     private Date date;
 
     /** **/
@@ -83,6 +83,10 @@ public class Image {
     /** **/
     @Enumerated(EnumType.ORDINAL)
     private PrivacyLevel privacyLevel;
+
+    /** **/
+    @Transient
+    private String file;
 
     /**
      *
@@ -267,6 +271,22 @@ public class Image {
      */
     public void setPrivacyLevel(PrivacyLevel privacyLevel) {
         this.privacyLevel = privacyLevel;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getFile() {
+        return file;
+    }
+
+    /**
+     *
+     * @param file
+     */
+    public void setFile(String file) {
+        this.file = file;
     }
 
     @Override

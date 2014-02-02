@@ -30,7 +30,7 @@ public class FileUtil {
 
         try {
             FileOutputStream out = new FileOutputStream(bitmapFile);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.flush();
             out.close();
             return bitmapFile.getAbsolutePath();

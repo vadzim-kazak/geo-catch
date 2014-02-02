@@ -36,11 +36,11 @@ public interface ImageService {
 
     /**
      *
+     *
      * @param image
-     * @param file
      * @throws IOException
      */
-    public void uploadImage(Image image, MultipartFile file) throws IOException;
+    public void uploadImage(Image image) throws IOException;
 
     /**
      *

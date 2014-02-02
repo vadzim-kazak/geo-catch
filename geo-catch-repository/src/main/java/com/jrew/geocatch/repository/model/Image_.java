@@ -53,9 +53,6 @@ public class Image_ {
     public static volatile SingularAttribute<Image, Integer> rating;
 
     /** **/
-    public static volatile SingularAttribute<Image, Boolean> isDeleted;
-
-    /** **/
     public static volatile ListAttribute<Image, DomainProperty> domainProperties;
 
     /** **/

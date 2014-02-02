@@ -1,9 +1,7 @@
 package com.jrew.geocatch.repository.service.generator;
 
 import com.jrew.geocatch.repository.model.Image;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -32,6 +30,10 @@ public class GeoTimeFileNameGeneratorImpl implements FileNameGenerator {
     @Value("#{configProperties['fileNameGenerator.degreeFraction']}")
     private int degreeFraction = 0;
 
+    /**  **/
+    @Value("#{configProperties['imageFileExtension']}")
+    private String fileExtension;
+
     /** **/
     private DecimalFormat decimalFormat;
 
@@ -44,7 +46,7 @@ public class GeoTimeFileNameGeneratorImpl implements FileNameGenerator {
     public GeoTimeFileNameGeneratorImpl() {}
 
     @Override
-    public String generate(Image image, MultipartFile file) throws IllegalArgumentException {
+    public String generate(Image image) throws IllegalArgumentException {
 
         if (decimalFormat == null) {
             decimalFormat = new DecimalFormat();
@@ -55,15 +57,8 @@ public class GeoTimeFileNameGeneratorImpl implements FileNameGenerator {
             simpleDateFormat = new SimpleDateFormat(dateFormatPattern);
         }
 
-
-        if (file == null) {
-            throw new IllegalArgumentException("Provided image file is empty.");
-        }
-
-        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-
         return decimalFormat.format(image.getLatitude()) + fileNameSeparator +
                decimalFormat.format(image.getLongitude()) + fileNameSeparator +
-               simpleDateFormat.format(new Date()) + "." + extension;
+               simpleDateFormat.format(new Date()) + "." + fileExtension;
     }
 }

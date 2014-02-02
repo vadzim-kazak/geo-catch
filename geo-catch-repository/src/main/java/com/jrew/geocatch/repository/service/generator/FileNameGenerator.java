@@ -15,12 +15,9 @@ public interface FileNameGenerator {
 
     /**
      *
-     *
-     *
      * @param image
-     * @param file
      * @return
      */
-    public String generate(Image image, MultipartFile file) throws IllegalArgumentException;
+    public String generate(Image image) throws IllegalArgumentException;
 
 }

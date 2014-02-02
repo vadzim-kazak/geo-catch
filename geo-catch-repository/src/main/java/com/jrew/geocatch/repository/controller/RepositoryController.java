@@ -6,16 +6,13 @@ import com.jrew.geocatch.repository.model.DomainProperty;
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.service.DomainPropertyService;
 import com.jrew.geocatch.repository.service.ImageService;
-import com.jrew.geocatch.repository.util.ValidationUtils;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
-import javax.validation.Validator;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -36,19 +33,12 @@ public class RepositoryController {
     @Autowired
     DomainPropertyService domainPropertyService;
 
-    @Resource
-    private Validator validator;
-
     @RequestMapping(value = "images", method = RequestMethod.POST)
-    public String uploadImage(@RequestParam("image") Image image,
-                              @RequestPart("file") MultipartFile file) throws IOException {
-
-        ValidationUtils.validate(image, validator);
+    @ResponseStatus(HttpStatus.OK)
+    public void uploadImage(@RequestBody @Valid Image image) throws IOException {
 
         domainPropertyService.processDomainProperties(image.getDomainProperties());
-        imageService.uploadImage(image, file);
-
-        return "imageUpload";
+        imageService.uploadImage(image);
     }
 
     @RequestMapping(value = "images/{imageId}", method = RequestMethod.POST)

@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,25 +23,24 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.model.UploadImage;
-import com.jrew.geocatch.mobile.reciever.DomainInfoServiceResultReceiver;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
-import com.jrew.geocatch.mobile.util.FileUtil;
+import com.jrew.geocatch.mobile.util.CommonUtils;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
-import com.jrew.geocatch.mobile.util.ImageUploadKeys;
 import com.jrew.geocatch.mobile.view.DomainPropertyView;
 import com.jrew.geocatch.mobile.view.PrePopulatedEditText;
 import com.jrew.geocatch.web.model.DomainProperty;
+import org.apache.commons.codec.binary.Base64;
 
-import java.io.File;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created with IntelliJ IDEA.
@@ -188,11 +188,16 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
 
         Bundle bundle = new Bundle();
 
-        File cacheDir = getActivity().getCacheDir();
-        bundle.putString(ImageUploadKeys.FILE, FileUtil.writeBitmapToFileSystem(image, cacheDir, getResources()));
-
         UploadImage uploadImage = prepareImageData(layout);
-        bundle.putSerializable(ImageUploadKeys.IMAGE, uploadImage);
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+        byte[] fileData = stream.toByteArray();
+
+        String file = new String(Base64.encodeBase64(fileData));//.encodeToString(, Base64.URL_SAFE);
+        uploadImage.setFile(file);
+
+        bundle.putSerializable(ImageService.IMAGE_KEY, uploadImage);
 
         return bundle;
     }

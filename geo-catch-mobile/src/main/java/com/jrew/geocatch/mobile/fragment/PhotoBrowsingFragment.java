@@ -74,8 +74,7 @@ public class PhotoBrowsingFragment extends SherlockFragment {
 
         // Photo description
         final LinearLayout descriptionLayout = (LinearLayout) photoBrowsingLayout.findViewById(R.id.descriptionLayout);
-        final TextView description = (TextView) photoBrowsingLayout.findViewById(R.id.photoDescription);
-
+        final TextView descriptionView = (TextView) photoBrowsingLayout.findViewById(R.id.photoDescription);
 
         final LinearLayout fishDomainPropertyTag = (LinearLayout) photoBrowsingLayout.findViewById(R.id.fishDomainPropertyTag);
         final TextView fishTextView = (TextView) photoBrowsingLayout.findViewById(R.id.fishTextView);
@@ -135,9 +134,9 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                         uploadingDateLayout.setVisibility(View.VISIBLE);
 
                         // description
-                        String desctiption = clientImage.getDescription();
-                        if (desctiption != null && description.length() > 0) {
-                            description.setText(desctiption);
+                        String description = clientImage.getDescription();
+                        if (description != null && description.length() > 0) {
+                            descriptionView.setText(description);
                             descriptionLayout.setVisibility(View.VISIBLE);
                         }
 

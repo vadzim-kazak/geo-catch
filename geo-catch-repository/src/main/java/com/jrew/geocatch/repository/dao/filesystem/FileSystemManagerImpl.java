@@ -4,9 +4,8 @@ import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.service.generator.FileNameGenerator;
 import com.jrew.geocatch.repository.service.thumbnail.ThumbnailFactory;
 import com.jrew.geocatch.repository.util.FolderUtils;
-import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -38,17 +37,19 @@ public class FileSystemManagerImpl implements FileSystemManager {
     @Value("#{configProperties['fileSystemManager.rootRelativePath']}")
     private String rootRelativePath;
 
-    @Override
-    public void saveImage(Image image, MultipartFile file) throws IOException, IllegalArgumentException {
+    /**  **/
+    @Value("#{configProperties['imageFileExtension']}")
+    private String fileExtension;
 
-        checkInputParameters(file);
+    @Override
+    public void saveImage(Image image) throws IOException, IllegalArgumentException {
 
         // 1) Save image
         String imageFolderPath = folderLocator.getFolderAbsolutePath(image.getLatitude(), image.getLongitude());
         FolderUtils.checkOrCreateFoldersStructure(imageFolderPath);
 
-        String imageAbsolutePath = imageFolderPath  + File.separator + fileNameGenerator.generate(image, file);
-        writeImageToFolder(file, imageAbsolutePath);
+        String imageAbsolutePath = imageFolderPath  + File.separator + fileNameGenerator.generate(image);
+        writeImageToFolder(image, imageAbsolutePath);
         // Set to image relative to image file path
         image.setPath(getImageRelativePath(imageAbsolutePath));
 
@@ -75,31 +76,28 @@ public class FileSystemManagerImpl implements FileSystemManager {
     }
 
     /**
-     * Checks input image parameters
-     *
-     * @param file
-     * @throws IllegalArgumentException in case if some image parameters isn't valid
-     */
-    private void checkInputParameters(MultipartFile file) throws IllegalArgumentException{
-        if (file == null || file.isEmpty()) {
-            throw new IllegalArgumentException("Uploaded image file is empty.");
-        }
-    }
-
-    /**
      * Writes provided image to folder in case if file doesn't exist.
      *
-     * @param imageFile
+     *
+     * @param image
      * @param fullImagePath
      * @throws IOException
      */
-    private void writeImageToFolder(MultipartFile imageFile, String fullImagePath) throws IOException {
+    private void writeImageToFolder(Image image, String fullImagePath) throws IOException {
 
-        BufferedImage src = ImageIO.read(new ByteArrayInputStream(imageFile.getBytes()));
-        String extension = FilenameUtils.getExtension(imageFile.getOriginalFilename());
+        byte[] inputFile  = image.getFile().getBytes();
+        if (inputFile == null || inputFile.length == 0) {
+            throw new IllegalArgumentException("Uploaded image file is empty.");
+        }
+
+        if (Base64.isArrayByteBase64(inputFile)) {
+            inputFile = Base64.decodeBase64(inputFile);
+        }
+
+        BufferedImage src = ImageIO.read(new ByteArrayInputStream(inputFile));
         File destination = new File(fullImagePath);
         if (!destination.exists()) {
-            ImageIO.write(src, extension, destination);
+            ImageIO.write(src, fileExtension, destination);
         }
     }
 

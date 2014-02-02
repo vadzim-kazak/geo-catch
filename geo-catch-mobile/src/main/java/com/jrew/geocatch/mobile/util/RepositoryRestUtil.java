@@ -17,6 +17,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.FormBodyPart;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
@@ -28,7 +30,9 @@ import org.apache.http.protocol.HttpContext;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 
 /**
@@ -196,21 +200,18 @@ public class RepositoryRestUtil {
                  .append(resources.getString(R.config.repositoryPath))
                  .append(resources.getString(R.config.repositoryImagesUri));
 
-        MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-
         Bundle imageBundle = (Bundle) intent.getParcelableExtra(ImageService.REQUEST_KEY);
 
-        UploadImage imageToUpload = (UploadImage) imageBundle.getSerializable(ImageUploadKeys.IMAGE);
+        UploadImage imageToUpload = (UploadImage) imageBundle.getSerializable(ImageService.IMAGE_KEY);
+
         Gson gson = new Gson();
         String imageToUploadJson = gson.toJson(imageToUpload);
 
-        entity.addPart(ImageUploadKeys.IMAGE,
-                new StringBody(imageToUploadJson));
-        entity.addPart(ImageUploadKeys.FILE,
-                new FileBody(new File(imageBundle.getString(ImageUploadKeys.FILE))));
+        StringEntity jsonRequest = new StringEntity(imageToUploadJson, "UTF8");
 
         HttpPost httpPost = new HttpPost(uploadUrl.toString());
-        httpPost.setEntity(entity);
+        httpPost.setHeader("Content-type", "application/json");
+        httpPost.setEntity(jsonRequest);
         HttpResponse response = httpClient.execute(httpPost, localContext);
 
         Bundle bundle = new Bundle();
