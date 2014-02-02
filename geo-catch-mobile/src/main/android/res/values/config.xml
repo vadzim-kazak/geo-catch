@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <item name="repositoryUrl" type="config">http://192.168.0.103:8080/</item>
+    <item name="repositoryUrl" type="config">http://192.168.0.100:9000/</item>
 
     <item name="repositoryPath" type="config">fishing/</item>
 
@@ -14,6 +14,12 @@
     <item name="repositoryUploadImagesDateFormat" type="config">yyDDDHHmmssSSS</item>
 
     <item name="mobileDateFormat" type="config">MMM d, HH:mm</item>
+
+    <!-- Image thumbnail size scale factor related to larger display size -->
+    <item name="thumbnailSizeScaleFactor" type="config">0.045</item>
+
+    <!-- Image thumbnail border size scale factor related to thumbnail size -->
+    <item name="thumbnailBorderSizeScaleFactor" type="config">0.04</item>
 
     <!-- In hours -->
     <item name="domainInfoSyncPeriodInHours" type="config">120</item>

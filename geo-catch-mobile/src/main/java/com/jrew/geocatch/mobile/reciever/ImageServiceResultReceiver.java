@@ -7,10 +7,12 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
+import android.view.Display;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.fragment.MapFragment;
 import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.service.ImageService;
@@ -173,25 +175,30 @@ public class ImageServiceResultReceiver extends ResultReceiver {
      */
     private Bitmap createIconWithBorder(Bitmap thumbnail) {
 
-       int BORDER_SIZE = 2;
-       double SCALE_FACTOR = 0.35d;
+       double SCALE_FACTOR = Double.parseDouble(mapFragment.getResources().getString(R.config.thumbnailSizeScaleFactor));
+       double BORDER_SIZE_FACTOR = Double.parseDouble(mapFragment.getResources().getString(R.config.thumbnailBorderSizeScaleFactor));
 
-       int newWidth = (int) (thumbnail.getWidth() * SCALE_FACTOR);
-       int newHeight = (int) (thumbnail.getHeight() * SCALE_FACTOR);
+       Display display = mapFragment.getActivity().getWindowManager().getDefaultDisplay();
+       // get larger display size
+       int largerSide = display.getWidth();
+       if (display.getHeight() > largerSide) {
+           largerSide = display.getHeight();
+       }
 
-       int iconWidth = newWidth + BORDER_SIZE * 2;
-       int iconHeight = newHeight + BORDER_SIZE * 2;
+       int thumbnailSize = (int) (largerSide * SCALE_FACTOR);
+       int borderSize = (int)(thumbnailSize * BORDER_SIZE_FACTOR);
 
-       Bitmap icon = Bitmap.createBitmap(iconWidth, iconHeight, Bitmap.Config.RGB_565);
+       int iconSize = thumbnailSize + borderSize * 2;
+
+       Bitmap icon = Bitmap.createBitmap(iconSize, iconSize, Bitmap.Config.RGB_565);
 
        Canvas canvas = new Canvas(icon);
-       canvas.drawRect(0, 0, iconWidth, iconHeight, iconPaint);
+       canvas.drawRect(0, 0, iconSize, iconSize, iconPaint);
 
-       Bitmap scaledThumbnail = Bitmap.createScaledBitmap(thumbnail, (int) (thumbnail.getWidth() * SCALE_FACTOR),
-               (int) (thumbnail.getHeight() * SCALE_FACTOR), false);
+       Bitmap scaledThumbnail = Bitmap.createScaledBitmap(thumbnail, thumbnailSize, thumbnailSize, false);
 
        // Draw scaled thumbnail on bitmap
-       canvas.drawBitmap(scaledThumbnail, BORDER_SIZE, BORDER_SIZE,  thumbnailPaint);
+       canvas.drawBitmap(scaledThumbnail, borderSize, borderSize, thumbnailPaint);
 
        return icon;
    }
