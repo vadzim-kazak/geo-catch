@@ -2,6 +2,7 @@ package com.jrew.geocatch.mobile.fragment;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -12,12 +13,17 @@ import android.view.ViewGroup;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.jrew.geocatch.mobile.R;
+import com.jrew.geocatch.mobile.activity.MainActivity;
 import com.jrew.geocatch.mobile.listener.MarkerOnClickListener;
 import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.reciever.ImageServiceResultReceiver;
@@ -74,6 +80,22 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
             if (googleMap != null) {
                 int mapType = Integer.parseInt(getResources().getString(R.config.mapType));
                 googleMap.setMapType(mapType);
+
+                MainActivity parentActivity = (MainActivity) getActivity();
+                Location currentLocation = parentActivity.getCurrentLocation();
+                if (currentLocation != null) {
+
+                    CameraUpdate center =  CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(),
+                            currentLocation.getLongitude()));
+
+                    CameraUpdate zoom = CameraUpdateFactory.zoomTo(
+                            Integer.parseInt(getResources().getString(R.config.cameraInitialZoom)));
+
+                    googleMap.moveCamera(center);
+                    googleMap.animateCamera(zoom);
+                }
+
+
 
                 imageMarkerPairs = new HashMap<Long, ImageMarkerPair>();
 

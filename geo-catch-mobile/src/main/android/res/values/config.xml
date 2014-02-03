@@ -23,6 +23,7 @@
 
     <!-- In hours -->
     <item name="domainInfoSyncPeriodInHours" type="config">120</item>
+
     <!--
         Possible values:
             MAP_TYPE_NONE = 0;
@@ -32,6 +33,8 @@
             MAP_TYPE_HYBRID = 4;
     -->
     <item name="mapType" type="config">3</item>
+
+    <item name="cameraInitialZoom" type="config">8</item>
 
     <item name="debugTag" type="config">geoCatch</item>
 

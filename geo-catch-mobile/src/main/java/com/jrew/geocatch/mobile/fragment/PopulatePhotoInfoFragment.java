@@ -21,6 +21,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
+import com.jrew.geocatch.mobile.activity.MainActivity;
 import com.jrew.geocatch.mobile.model.UploadImage;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
@@ -46,16 +47,10 @@ import java.util.List;
  * Time: 15:06
  * To change this template use File | Settings | File Templates.
  */
-public class PopulatePhotoInfoFragment extends SherlockFragment implements LocationListener {
+public class PopulatePhotoInfoFragment extends SherlockFragment {
 
     /** **/
     private static final Double IMAGE_VIEW_SCALE_SIZE = 0.15d;
-
-    /** **/
-    private double latitude;
-
-    /** **/
-    private double longitude;
 
     /** **/
     private ServiceResultReceiver resultReceiver;
@@ -65,6 +60,9 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
 
     /** **/
     private View layout;
+
+    /** **/
+    private Location currentLocation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -123,10 +121,6 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
 
         });
 
-        // Acquire a reference to the system Location Manager
-        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 500.0f, this);
-
         //Populate
         fishTypeView = (DomainPropertyView) layout.findViewById(R.id.fishTypeView);
         fishTypeView.loadDomainProperties(DomainInfoService.DomainInfoType.FISH);
@@ -136,6 +130,9 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
 
         fishingBaitView = (DomainPropertyView) layout.findViewById(R.id.fishingBaitView);
         fishingBaitView.loadDomainProperties(DomainInfoService.DomainInfoType.BAIT);
+
+        MainActivity parentActivity = (MainActivity) getActivity();
+        currentLocation = parentActivity.getCurrentLocation();
 
         return layout;
     }
@@ -157,7 +154,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
                 break;
 
             case R.id.uploadPhotoMenuOption:
-                if (!isLocationDetected()) {
+                if (currentLocation == null) {
                     Context context = getActivity();
                     CharSequence text = getResources().getString(R.string.locationLoadingWarning);
                     int duration = Toast.LENGTH_SHORT;
@@ -217,10 +214,10 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
         uploadImage.setDescription(descriptionView.getValue());
 
         // Latitude
-        uploadImage.setLatitude(latitude);
+        uploadImage.setLatitude(currentLocation.getLatitude());
 
         // Longitude
-        uploadImage.setLongitude(longitude);
+        uploadImage.setLongitude(currentLocation.getLongitude());
 
         // Privacy level
         uploadImage.setPrivacyLevel(getSelectedPrivacyLevel(layout));
@@ -282,33 +279,6 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
         }
 
         return domainProperties;
-    }
-
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {}
-
-    @Override
-    public void onProviderEnabled(String s) {}
-
-    @Override
-    public void onProviderDisabled(String s) {}
-
-    @Override
-    public void onLocationChanged(Location location) {
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-    }
-
-    /**
-     *
-     * @return
-     */
-    private boolean isLocationDetected() {
-        if (latitude != 0 && longitude != 0) {
-            return true;
-        }
-
-        return false;
     }
 
     /**
