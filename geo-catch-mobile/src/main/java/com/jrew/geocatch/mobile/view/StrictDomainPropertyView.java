@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.jrew.geocatch.mobile.R;
 
 /**
  * Created with IntelliJ IDEA.
@@ -45,13 +46,21 @@ public class StrictDomainPropertyView extends DomainPropertyView {
             !text.toString().equalsIgnoreCase(initialValue) &&
             getSelectedDomainProperty(false) == null) {
 
-            Toast warning = Toast.makeText(getContext(), "Populated value isn't presented", Toast.LENGTH_SHORT);
+            Toast warning = Toast.makeText(getContext(), getResources().getString(R.string.domainPropertyNotPresented), Toast.LENGTH_SHORT);
             warning.setGravity(Gravity.CENTER, 0 ,0);
             warning.show();
 
             setTextColor(INITIAL_TEXT_COLOR);
             setText(initialValue);
             isTextFilled = false;
+        }
+    }
+
+    @Override
+    public void loadDomainProperties(long domainPropertyType) {
+        super.loadDomainProperties(domainPropertyType);
+        if (adapter.getCount() == 0) {
+            setEnabled(false);
         }
     }
 }

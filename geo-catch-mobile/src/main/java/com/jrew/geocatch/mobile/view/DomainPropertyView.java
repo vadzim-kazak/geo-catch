@@ -54,7 +54,7 @@ public class DomainPropertyView extends AutoCompleteTextView implements TextWatc
     protected String initialValue;
 
     /** **/
-    private DomainAutoCompleteAdapter adapter;
+    protected DomainAutoCompleteAdapter adapter;
 
     /**
      *

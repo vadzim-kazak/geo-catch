@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Display;
@@ -159,7 +158,7 @@ public class PhotoBrowsingFragment extends SherlockFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.menu_image_view, menu);
+        inflater.inflate(R.menu.menu_photo_browsing, menu);
     }
 
     @Override

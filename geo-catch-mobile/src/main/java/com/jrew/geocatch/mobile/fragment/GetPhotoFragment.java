@@ -88,7 +88,7 @@ public class GetPhotoFragment extends SherlockFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.menu_take_photo, menu);
+        inflater.inflate(R.menu.menu_get_photo, menu);
     }
 
     @Override

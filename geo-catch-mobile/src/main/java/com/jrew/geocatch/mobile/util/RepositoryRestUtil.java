@@ -13,26 +13,23 @@ import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.DomainProperty;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.entity.mime.FormBodyPart;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.ArrayList;
 
 /**
@@ -49,6 +46,9 @@ public class RepositoryRestUtil {
     /** **/
     private final static String CONTENT_TYPE_JSON_UTF_8 = "application/json; charset=UTF-8";
 
+    /** **/
+    private static final int CONNECTION_TIMEOUT = 5000;
+
     /**
      *
      * @param intent
@@ -58,7 +58,9 @@ public class RepositoryRestUtil {
      */
     public static Bundle loadImages(Intent intent, Resources resources) throws Exception{
 
-        HttpClient httpClient = new DefaultHttpClient();
+      //
+
+        HttpClient httpClient = createHttpClient();
         HttpContext localContext = new BasicHttpContext();
 
         StringBuilder loadImagesUrl = new StringBuilder();
@@ -98,7 +100,7 @@ public class RepositoryRestUtil {
      */
     public static Bundle loadImageData(Intent intent, Resources resources) throws Exception {
 
-        HttpClient httpClient = new DefaultHttpClient();
+        HttpClient httpClient = createHttpClient();
         HttpContext localContext = new BasicHttpContext();
 
         long imageId = (Long) intent.getSerializableExtra(ImageService.REQUEST_KEY);
@@ -162,7 +164,7 @@ public class RepositoryRestUtil {
      */
     public static Bundle loadImageFromPath(Intent intent, Resources resources, String imagePath) throws Exception {
 
-        HttpClient httpClient = new DefaultHttpClient();
+        HttpClient httpClient = createHttpClient();
         HttpContext localContext = new BasicHttpContext();
 
         StringBuilder loadImageThumbnailUrl = new StringBuilder();
@@ -192,7 +194,7 @@ public class RepositoryRestUtil {
      */
     public static Bundle uploadImage(Intent intent, Resources resources) throws Exception {
 
-        HttpClient httpClient = new DefaultHttpClient();
+        HttpClient httpClient = createHttpClient();
         HttpContext localContext = new BasicHttpContext();
 
         StringBuilder uploadUrl = new StringBuilder();
@@ -234,7 +236,7 @@ public class RepositoryRestUtil {
      */
     public static Bundle loadDomainInfo(Intent intent, Resources resources) throws Exception {
 
-        HttpClient httpClient = new DefaultHttpClient();
+        HttpClient httpClient = createHttpClient();
         HttpContext localContext = new BasicHttpContext();
 
         Bundle requestBundle = (Bundle) intent.getParcelableExtra(DomainInfoService.REQUEST_KEY);
@@ -262,5 +264,25 @@ public class RepositoryRestUtil {
         bundle.putSerializable(DomainInfoService.RESULT_KEY, domainProperties);
 
         return bundle;
+    }
+
+    /**
+     *
+     * @return
+     */
+    private static HttpClient createHttpClient() {
+
+        HttpParams params = new BasicHttpParams();
+        HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
+        HttpConnectionParams.setConnectionTimeout(params, CONNECTION_TIMEOUT);
+
+//        SchemeRegistry registry = new SchemeRegistry();
+//        registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+//        registry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
+//
+//        ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
+
+        return new DefaultHttpClient(params);
     }
 }

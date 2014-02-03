@@ -46,6 +46,8 @@
 
     <string name="photoOwnerMeOptionLabel">Me</string>
 
+    <string name="domainPropertyNotPresented">Populated value isn\'t presented</string>
+
     <!-- Photo browsing fragment -->
     <string name="photoBrowsingFragmentLabel">View photo</string>
 
