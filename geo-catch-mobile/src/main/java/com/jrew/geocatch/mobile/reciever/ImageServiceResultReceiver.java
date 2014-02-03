@@ -156,6 +156,9 @@ public class ImageServiceResultReceiver extends ResultReceiver {
                 thumbnailLoader.loadNext();
                 break;
 
+            case ImageService.ResultStatus.UPLOAD_IMAGE_STARTED:
+
+
             // Handle service error;
             case ImageService.ResultStatus.ERROR:
 

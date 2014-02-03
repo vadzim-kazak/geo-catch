@@ -77,6 +77,9 @@ public class ImageService extends IntentService {
 
         /** **/
         public static final int ERROR = 7;
+
+        /** **/
+        public static final int UPLOAD_IMAGE_STARTED = 8;
     }
 
     /**
@@ -123,6 +126,8 @@ public class ImageService extends IntentService {
                         RepositoryRestUtil.loadImage(intent, resources));
 
             } else if (command.equals(Commands.UPLOAD_IMAGE)) {
+
+                receiver.send(ResultStatus.UPLOAD_IMAGE_STARTED, null);
 
                 receiver.send(ResultStatus.UPLOAD_IMAGE_FINISHED,
                         RepositoryRestUtil.uploadImage(intent, resources));

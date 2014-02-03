@@ -1,5 +1,6 @@
 package com.jrew.geocatch.mobile.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -27,6 +28,7 @@ import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
+import com.jrew.geocatch.mobile.util.DialogUtil;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.view.DomainPropertyView;
 import com.jrew.geocatch.mobile.view.PrePopulatedEditText;
@@ -63,6 +65,9 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
 
     /** **/
     private Location currentLocation;
+
+    /** **/
+    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -105,16 +110,23 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
             public void onReceiveResult(int resultCode, Bundle resultData) {
 
                 switch (resultCode) {
+                    case ImageService.ResultStatus.UPLOAD_IMAGE_STARTED:
+                        progressDialog = DialogUtil.createProgressDialog(getActivity());
+                        progressDialog.show();
+                        break;
+
                     case ImageService.ResultStatus.UPLOAD_IMAGE_FINISHED:
+                        progressDialog.hide();
                         FragmentSwitcherHolder.getFragmentSwitcher().showMapFragment();
                         break;
 
                     case ImageService.ResultStatus.ERROR:
+                        progressDialog.hide();
                         CharSequence text = getResources().getString(R.string.imageUploadingError);
                         int duration = Toast.LENGTH_SHORT;
                         Toast toast = Toast.makeText(getActivity(), text, duration);
                         toast.show();
-                        FragmentSwitcherHolder.getFragmentSwitcher().showMapFragment();
+                        //FragmentSwitcherHolder.getFragmentSwitcher().showMapFragment();
                     break;
                 }
             }
