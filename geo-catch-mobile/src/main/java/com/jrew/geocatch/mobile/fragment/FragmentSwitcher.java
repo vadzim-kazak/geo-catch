@@ -111,6 +111,8 @@ public class FragmentSwitcher {
             return new PreviewPhotoFragment();
         } else if (TAG.IMAGE_TAKE_INFO_FRAGMENT_TAG.equals(fragmentTag)) {
             return new PopulatePhotoInfoFragment();
+        } else if (TAG.OWN_IMAGES_FRAGMENT_TAG.equals(fragmentTag)) {
+            return new OwnPhotosFragment();
         }
 
         return null;
@@ -161,6 +163,16 @@ public class FragmentSwitcher {
         showFragment(TAG.IMAGE_TAKE_INFO_FRAGMENT_TAG, bundle);
     }
 
+    /**
+     *
+     */
+    public void showOwnPhotosFragment() {
+        showFragment(TAG.OWN_IMAGES_FRAGMENT_TAG);
+    }
+
+    /**
+     *
+     */
     public void handleActivityCreation() {
         if (displayingFragmentTag != null) {
             showFragment(displayingFragmentTag);

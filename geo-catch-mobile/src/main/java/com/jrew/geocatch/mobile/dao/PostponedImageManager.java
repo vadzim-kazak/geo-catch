@@ -6,6 +6,7 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.jrew.geocatch.mobile.model.PostponedImage;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,17 +32,16 @@ public class PostponedImageManager {
     public synchronized static List<PostponedImage> loadPostponedImages(Context context) {
 
         PostponedImageDatabaseHelper helper = getHelper(context);
-        List<PostponedImage> postponedImages = null;
         try {
-
             return helper.getDao().queryForAll();
-
         } catch (SQLException exception) {
-            Log.e(LOG_NAME, "Couldn't load canned bundles.", exception);
+            Log.e(LOG_NAME, "Couldn't load postponed images.", exception);
         }
 
-        return null;
+        return new ArrayList<PostponedImage>();
     }
+
+
 
     /**
      *
@@ -54,7 +54,22 @@ public class PostponedImageManager {
         try {
             helper.getDao().create(postponedImage);
         } catch (SQLException exception) {
-            Log.e(LOG_NAME, "Couldn't persist canned bundle.", exception);
+            Log.e(LOG_NAME, "Couldn't persist postponed image.", exception);
+        }
+    }
+
+    /**
+     *
+     * @param context
+     * @param postponedImage
+     */
+    public synchronized static void deletePostponedImage(Context context, PostponedImage postponedImage) {
+
+        PostponedImageDatabaseHelper helper = getHelper(context);
+        try {
+            helper.getDao().delete(postponedImage);
+        } catch (SQLException exception) {
+            Log.e(LOG_NAME, "Couldn't delete postponed image.", exception);
         }
     }
 

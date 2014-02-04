@@ -152,9 +152,8 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                 break;
 
             case R.id.ownImagesMenuOption:
-
+                fragmentSwitcher.showOwnPhotosFragment();
                 break;
-
         }
 
         return true;

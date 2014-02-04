@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center_vertical">
+
+    <!-- Image thumbnail -->
+    <ImageView android:id="@+id/photoThumbnail"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:padding="3dip"
+               android:layout_gravity="left"/>
+
+    <!-- Image description >
+    <TextView android:id="@+id/photoDescription"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:paddingLeft="5dip"
+              android:gravity="center"
+              android:textSize="16dip"/ -->
+
+    <!-- Retry image upload -->
+    <ImageView android:id="@+id/retryUpload"
+               android:background="@android:drawable/ic_menu_send"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:clickable="true"
+               android:layout_marginRight="10dip"
+               android:layout_alignParentRight="false"
+               android:layout_toLeftOf="@+id/cancelUpload"/>
+
+    <!-- Cancel image upload -->
+    <ImageView android:id="@+id/cancelUpload"
+               android:background="@android:drawable/ic_menu_close_clear_cancel"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:clickable="true"
+               android:layout_marginRight="5dip"
+               android:layout_alignParentRight="true"/>
+
+</RelativeLayout>

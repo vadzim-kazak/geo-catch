@@ -12,10 +12,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.view.*;
 import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
@@ -102,10 +99,9 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
 
             // Resize bitmap view
             WindowManager windowManager = getSherlockActivity().getWindowManager();
-            Rect displaySize = new Rect();
-            windowManager.getDefaultDisplay().getRectSize(displaySize);
+            Display display = windowManager.getDefaultDisplay();
 
-            int imageThumbnailViewHeight = (int) (displaySize.height() * IMAGE_VIEW_SCALE_SIZE);
+            int imageThumbnailViewHeight = (int) (display.getHeight() * IMAGE_VIEW_SCALE_SIZE);
             int imageThumbnailViewWidth = (int) ((double) bitmap.getWidth() / bitmap.getHeight() * imageThumbnailViewHeight);
             LinearLayout.LayoutParams layoutParams =
                     new LinearLayout.LayoutParams(imageThumbnailViewWidth, imageThumbnailViewHeight);
@@ -128,7 +124,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
 
                     case ImageService.ResultStatus.UPLOAD_IMAGE_FINISHED:
                         progressDialog.hide();
-                        FragmentSwitcherHolder.getFragmentSwitcher().showMapFragment();
+                        FragmentSwitcherHolder.getFragmentSwitcher().showOwnPhotosFragment();
                         break;
 
                     case ImageService.ResultStatus.ERROR:
@@ -335,7 +331,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
                 postponedImage.setBitmap(bitmap);
                 postponedImage.setUploadImage(uploadImage);
                 PostponedImageManager.persistPostponedImage(getActivity(), postponedImage);
-                FragmentSwitcherHolder.getFragmentSwitcher().showMapFragment();
+                FragmentSwitcherHolder.getFragmentSwitcher().showOwnPhotosFragment();
             }
         });
 

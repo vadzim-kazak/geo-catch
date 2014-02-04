@@ -1,6 +1,9 @@
 package com.jrew.geocatch.mobile.util;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
+import android.view.Display;
 import com.jrew.geocatch.mobile.R;
 
 /**
@@ -19,6 +22,21 @@ public class CommonUtils {
      */
     public static String getDebugTag(Resources resources) {
         return resources.getString(R.config.debugTag);
+    }
+
+    /**
+     *
+     * @param activity
+     * @return
+     */
+    public static int getDisplayLargerSideSize(Activity activity) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        int largerSide = display.getWidth();
+        if (display.getHeight() > largerSide) {
+            largerSide = display.getHeight();
+        }
+
+        return largerSide;
     }
 
 }

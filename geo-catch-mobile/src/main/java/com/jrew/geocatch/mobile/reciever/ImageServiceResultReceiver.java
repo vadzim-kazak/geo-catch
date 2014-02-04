@@ -16,6 +16,7 @@ import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.fragment.MapFragment;
 import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.service.ImageService;
+import com.jrew.geocatch.mobile.util.CommonUtils;
 import com.jrew.geocatch.web.model.ClientImage;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 
@@ -178,18 +179,14 @@ public class ImageServiceResultReceiver extends ResultReceiver {
      */
     private Bitmap createIconWithBorder(Bitmap thumbnail) {
 
-       double SCALE_FACTOR = Double.parseDouble(mapFragment.getResources().getString(R.config.thumbnailSizeScaleFactor));
-       double BORDER_SIZE_FACTOR = Double.parseDouble(mapFragment.getResources().getString(R.config.thumbnailBorderSizeScaleFactor));
+       double scaleFactor = Double.parseDouble(mapFragment.getResources().getString(R.config.thumbnailSizeScaleFactor));
+       double borderSizeFactor = Double.parseDouble(mapFragment.getResources().getString(R.config.thumbnailBorderSizeScaleFactor));
 
-       Display display = mapFragment.getActivity().getWindowManager().getDefaultDisplay();
        // get larger display size
-       int largerSide = display.getWidth();
-       if (display.getHeight() > largerSide) {
-           largerSide = display.getHeight();
-       }
+       int largerSide = CommonUtils.getDisplayLargerSideSize(mapFragment.getActivity());
 
-       int thumbnailSize = (int) (largerSide * SCALE_FACTOR);
-       int borderSize = (int)(thumbnailSize * BORDER_SIZE_FACTOR);
+       int thumbnailSize = (int) (largerSide * scaleFactor);
+       int borderSize = (int)(thumbnailSize * borderSizeFactor);
 
        int iconSize = thumbnailSize + borderSize * 2;
 

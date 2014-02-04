@@ -24,6 +24,8 @@
     <!-- In hours -->
     <item name="domainInfoSyncPeriodInHours" type="config">120</item>
 
+    <item name="postponedPhotosThumbnailSizeScaleFactor" type="config">0.08</item>
+
     <!--
         Possible values:
             MAP_TYPE_NONE = 0;
