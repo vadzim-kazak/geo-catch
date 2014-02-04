@@ -21,9 +21,9 @@
           android:showAsAction="always">
     </item>
 
-    <!-- item android:id="@+id/ownImagesMenuOption"
+    <item android:id="@+id/ownImagesMenuOption"
           android:icon="@android:drawable/ic_menu_myplaces"
           android:showAsAction="always">
-    </item -->
+    </item>
 
 </menu>
