@@ -23,28 +23,21 @@ public class PostponedImageManager {
     /** **/
     private static PostponedImageDatabaseHelper helper;
 
-    /** **/
-    private static Boolean isBusy = false;
-
     /**
      *
      * @param context
      * @return
      */
-    public static List<PostponedImage> loadPostponedImages(Context context) {
+    public synchronized static List<PostponedImage> loadPostponedImages(Context context) {
 
         PostponedImageDatabaseHelper helper = getHelper(context);
-        if (helper != null) {
-            List<PostponedImage> postponedImages = null;
-            try {
+        List<PostponedImage> postponedImages = null;
+        try {
 
-                return helper.getDao().queryForAll();
+            return helper.getDao().queryForAll();
 
-            } catch (SQLException exception) {
-                Log.e(LOG_NAME, "Couldn't load canned bundles.", exception);
-            } finally {
-              releaseHelper();
-            }
+        } catch (SQLException exception) {
+            Log.e(LOG_NAME, "Couldn't load canned bundles.", exception);
         }
 
         return null;
@@ -55,17 +48,13 @@ public class PostponedImageManager {
      * @param context
      * @param postponedImage
      */
-    public static void persistPostponedImage(Context context, PostponedImage postponedImage) {
+    public synchronized static void persistPostponedImage(Context context, PostponedImage postponedImage) {
 
         PostponedImageDatabaseHelper helper = getHelper(context);
-        if (helper != null) {
-            try {
-                helper.getDao().create(postponedImage);
-            } catch (SQLException exception) {
-                Log.e(LOG_NAME, "Couldn't persist canned bundle.", exception);
-            }finally {
-                releaseHelper();
-            }
+        try {
+            helper.getDao().create(postponedImage);
+        } catch (SQLException exception) {
+            Log.e(LOG_NAME, "Couldn't persist canned bundle.", exception);
         }
     }
 
@@ -76,35 +65,21 @@ public class PostponedImageManager {
      */
     private static synchronized PostponedImageDatabaseHelper getHelper(Context context) {
 
-        if (!isBusy) {
-
-            if (helper == null) {
-                helper = new PostponedImageDatabaseHelper(context);
-            }
-
-            isBusy = true;
-            return helper;
+        if (helper == null) {
+            helper = new PostponedImageDatabaseHelper(context);
         }
 
-        return null;
+        return helper;
     }
 
     /**
      *
      */
-    private synchronized static void releaseHelper() {
-         isBusy = false;
-    }
-
-    /**
-     *
-     */
-    public static void close() {
+    public synchronized static void close() {
         if (helper != null) {
             helper.close();
             helper = null;
         }
-        isBusy = false;
     }
 
 }
