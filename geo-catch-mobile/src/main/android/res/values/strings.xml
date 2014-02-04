@@ -35,7 +35,11 @@
 
     <string name="locationLoadingWarning">Wait for location loading...</string>
 
-    <string name="imageUploadingError">Image uploading error...</string>
+    <string name="imageUploadingError">Photo uploading error</string>
+
+    <string name="imageUploadingRetry">Retry</string>
+
+    <string name="imageUploadingLater">Upload later</string>
 
     <!-- Map settings fragment -->
     <string name="mapSettingsFragmentLabel">Map settings</string>

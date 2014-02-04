@@ -13,6 +13,8 @@ import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.jrew.geocatch.mobile.R;
+import com.jrew.geocatch.mobile.dao.DomainDatabaseManager;
+import com.jrew.geocatch.mobile.dao.PostponedImageManager;
 import com.jrew.geocatch.mobile.reciever.DomainInfoServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
@@ -69,6 +71,8 @@ public class MainActivity extends SherlockFragmentActivity implements
             locationClient = new LocationClient(this, this, this);
 
         }
+
+        DomainDatabaseManager.loadDomainProperties(this);
     }
 
     /**
@@ -165,11 +169,15 @@ public class MainActivity extends SherlockFragmentActivity implements
         // Check that Google Play services is available
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (ConnectionResult.SUCCESS == resultCode) {
-
             return true;
-
         }
 
         return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        PostponedImageManager.close();
+        super.onDestroy();
     }
 }

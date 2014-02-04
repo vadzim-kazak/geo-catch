@@ -2,32 +2,20 @@ package com.jrew.geocatch.mobile.reciever;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
-import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.jrew.geocatch.mobile.R;
-import com.jrew.geocatch.mobile.adapter.DomainAutoCompleteAdapter;
-import com.jrew.geocatch.mobile.dao.DatabaseHelper;
-import com.jrew.geocatch.mobile.dao.DatabaseManager;
+import com.jrew.geocatch.mobile.dao.DomainDatabaseManager;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.util.DialogUtil;
 import com.jrew.geocatch.mobile.util.SharedPreferencesHelper;
 import com.jrew.geocatch.mobile.util.StringUtil;
-import com.jrew.geocatch.mobile.view.DomainPropertyView;
 import com.jrew.geocatch.web.model.DomainProperty;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 /**
  *
@@ -89,7 +77,7 @@ public class DomainInfoServiceResultReceiver extends ResultReceiver {
      */
     private void synchronizeDomainProperties(List<DomainProperty> serverDomainProperties) {
         // Get domain properties from current db
-        List<DomainProperty> localDomainProperties = DatabaseManager.loadDomainProperties(activity);
+        List<DomainProperty> localDomainProperties = DomainDatabaseManager.loadDomainProperties(activity);
 
         final List<DomainProperty> domainPropertiesToCreate = new ArrayList<DomainProperty>();
         final List<DomainProperty> domainPropertiesToUpdate = new ArrayList<DomainProperty>();
@@ -113,7 +101,7 @@ public class DomainInfoServiceResultReceiver extends ResultReceiver {
             }
         }
 
-        DatabaseManager.persistDomainProperties(activity, domainPropertiesToCreate, domainPropertiesToUpdate);
+        DomainDatabaseManager.persistDomainProperties(activity, domainPropertiesToCreate, domainPropertiesToUpdate);
     }
 
     /**

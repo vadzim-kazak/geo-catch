@@ -23,16 +23,13 @@ import java.util.*;
  * Date: 2/1/14
  * Time: 11:01 AM
  */
-public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
+public class DomainDatabaseHelper extends AbstractDatabaseHelper<DomainProperty> {
 
     /** **/
-    private static final String DATABASE_NAME = "DomainProperty.db";
+    protected static final String DATABASE_NAME = "DomainProperty.db";
 
     /** **/
-    private static final int DATABASE_VERSION = 1;
-
-    /** **/
-    private final String LOG_NAME = getClass().getName();
+    protected static final int DATABASE_VERSION = 1;
 
     /** **/
     private Dao<DomainProperty, Integer> domainPropertyDao;
@@ -41,35 +38,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
      *
      * @param context
      */
-    public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
-        try {
-            TableUtils.createTable(connectionSource, DomainProperty.class);
-        } catch (SQLException e) {
-            Log.e(LOG_NAME, "Could not create new table for DomainProperty class.", e);
-        }
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int oldVersion,
-                          int newVersion) {
-        try {
-            TableUtils.dropTable(connectionSource, DomainProperty.class, true);
-            onCreate(sqLiteDatabase, connectionSource);
-        } catch (SQLException e) {
-            Log.e(LOG_NAME, "Could not upgrade the table for Thing", e);
-        }
+    public DomainDatabaseHelper(Context context) {
+        super(context, DomainProperty.class, DATABASE_NAME, DATABASE_VERSION);
     }
 
     /**
      *
      * @return
      */
-    public Dao<DomainProperty, Integer> getDomainPropertyDao() throws SQLException {
+    public Dao<DomainProperty, Integer> getDao() throws SQLException {
 
         if (domainPropertyDao == null) {
 

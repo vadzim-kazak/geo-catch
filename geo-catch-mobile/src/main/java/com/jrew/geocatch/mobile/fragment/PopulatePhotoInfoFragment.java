@@ -1,14 +1,14 @@
 package com.jrew.geocatch.mobile.fragment;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -23,11 +23,14 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.activity.MainActivity;
+import com.jrew.geocatch.mobile.dao.PostponedImageManager;
+import com.jrew.geocatch.mobile.model.PostponedImage;
 import com.jrew.geocatch.mobile.model.UploadImage;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
+import com.jrew.geocatch.mobile.util.ConversionUtil;
 import com.jrew.geocatch.mobile.util.DialogUtil;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.view.DomainPropertyView;
@@ -35,7 +38,6 @@ import com.jrew.geocatch.mobile.view.PrePopulatedEditText;
 import com.jrew.geocatch.web.model.DomainProperty;
 import org.apache.commons.codec.binary.Base64;
 
-import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -69,6 +71,15 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
     /** **/
     private ProgressDialog progressDialog;
 
+    /** **/
+    private Bundle imageBundle;
+
+    /** **/
+    private Bitmap bitmap;
+
+    /** **/
+    private UploadImage uploadImage;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -87,20 +98,20 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
         final Bundle fragmentData = getArguments();
 
         if (fragmentData != null && !fragmentData.isEmpty()) {
-            Bitmap image = (Bitmap) fragmentData.getParcelable("bmp");
+            bitmap = (Bitmap) fragmentData.getParcelable("bmp");
 
-            // Resize image view
+            // Resize bitmap view
             WindowManager windowManager = getSherlockActivity().getWindowManager();
             Rect displaySize = new Rect();
             windowManager.getDefaultDisplay().getRectSize(displaySize);
 
             int imageThumbnailViewHeight = (int) (displaySize.height() * IMAGE_VIEW_SCALE_SIZE);
-            int imageThumbnailViewWidth = (int) ((double) image.getWidth() / image.getHeight() * imageThumbnailViewHeight);
+            int imageThumbnailViewWidth = (int) ((double) bitmap.getWidth() / bitmap.getHeight() * imageThumbnailViewHeight);
             LinearLayout.LayoutParams layoutParams =
                     new LinearLayout.LayoutParams(imageThumbnailViewWidth, imageThumbnailViewHeight);
             imageThumbnail.setLayoutParams(layoutParams);
 
-            imageThumbnail.setImageBitmap(image);
+            imageThumbnail.setImageBitmap(bitmap);
         }
 
         resultReceiver = new ServiceResultReceiver(new Handler());
@@ -122,12 +133,9 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
 
                     case ImageService.ResultStatus.ERROR:
                         progressDialog.hide();
-                        CharSequence text = getResources().getString(R.string.imageUploadingError);
-                        int duration = Toast.LENGTH_SHORT;
-                        Toast toast = Toast.makeText(getActivity(), text, duration);
-                        toast.show();
-                        //FragmentSwitcherHolder.getFragmentSwitcher().showMapFragment();
-                    break;
+                        AlertDialog alert = buildUploadingErrorAlert();
+                        alert.show();
+                        break;
                 }
             }
 
@@ -173,9 +181,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
                 } else {
-                    final Bundle fragmentData = getArguments();
-                    Bitmap image = (Bitmap) fragmentData.getParcelable("bmp");
-                    Bundle imageBundle = prepareUploadData(layout, image);
+                    imageBundle = prepareUploadData(layout, bitmap);
                     uploadImage(imageBundle);
                 }
                 break;
@@ -194,11 +200,9 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
 
         Bundle bundle = new Bundle();
 
-        UploadImage uploadImage = prepareImageData(layout);
+        uploadImage = prepareImageData(layout);
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 90, stream);
-        byte[] fileData = stream.toByteArray();
+        byte[] fileData = ConversionUtil.marshallBitmap(image);
 
         String file = new String(Base64.encodeBase64(fileData));//.encodeToString(, Base64.URL_SAFE);
         uploadImage.setFile(file);
@@ -303,5 +307,38 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
         intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.UPLOAD_IMAGE);
         intent.putExtra(ImageService.REQUEST_KEY, bundle);
         getActivity().startService(intent);
+    }
+
+    /**
+     *
+     * @return
+     */
+    private AlertDialog buildUploadingErrorAlert() {
+
+        // 1. Instantiate an AlertDialog.Builder with its constructor
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        // 2. Chain together various setter methods to set the dialog characteristics
+        builder.setIcon(R.drawable.emo_im_sad)
+                .setTitle(R.string.imageUploadingError);
+
+        // Add the buttons
+        builder.setNegativeButton(R.string.imageUploadingRetry, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                uploadImage(imageBundle);
+            }
+        });
+
+        builder.setPositiveButton(R.string.imageUploadingLater, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                PostponedImage postponedImage = new PostponedImage();
+                postponedImage.setBitmap(bitmap);
+                postponedImage.setUploadImage(uploadImage);
+                PostponedImageManager.persistPostponedImage(getActivity(), postponedImage);
+                FragmentSwitcherHolder.getFragmentSwitcher().showMapFragment();
+            }
+        });
+
+        return  builder.create();
     }
 }
