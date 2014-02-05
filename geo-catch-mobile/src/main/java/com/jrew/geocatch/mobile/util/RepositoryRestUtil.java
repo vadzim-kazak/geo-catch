@@ -58,8 +58,6 @@ public class RepositoryRestUtil {
      */
     public static Bundle loadImages(Intent intent, Resources resources) throws Exception{
 
-      //
-
         HttpClient httpClient = createHttpClient();
         HttpContext localContext = new BasicHttpContext();
 
@@ -135,7 +133,7 @@ public class RepositoryRestUtil {
      */
     public static Bundle loadThumbnail(Intent intent, Resources resources) throws Exception  {
         ClientImagePreview imagePreview = (ClientImagePreview) intent.getSerializableExtra(ImageService.IMAGE_KEY);
-        Bundle bundle = loadImageFromPath(intent, resources, imagePreview.getThumbnailPath());
+        Bundle bundle = loadImageFromPath(resources, imagePreview.getThumbnailPath());
         ClientImagePreview clientImagePreview = (ClientImagePreview) intent.getSerializableExtra(ImageService.IMAGE_KEY);
         bundle.putSerializable(ImageService.IMAGE_KEY, clientImagePreview);
         return bundle;
@@ -150,19 +148,18 @@ public class RepositoryRestUtil {
      */
     public static Bundle loadImage(Intent intent, Resources resources) throws Exception  {
         ClientImage image = (ClientImage) intent.getSerializableExtra(ImageService.IMAGE_KEY);
-        return loadImageFromPath(intent, resources, image.getPath());
+        return loadImageFromPath(resources, image.getPath());
     }
 
 
     /**
      *
-     * @param intent
      * @param resources
      * @param imagePath
      * @return
      * @throws Exception
      */
-    public static Bundle loadImageFromPath(Intent intent, Resources resources, String imagePath) throws Exception {
+    public static Bundle loadImageFromPath(Resources resources, String imagePath) throws Exception {
 
         HttpClient httpClient = createHttpClient();
         HttpContext localContext = new BasicHttpContext();

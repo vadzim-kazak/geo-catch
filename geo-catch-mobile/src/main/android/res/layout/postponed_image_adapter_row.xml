@@ -28,8 +28,8 @@
                android:layout_height="wrap_content"
                android:clickable="true"
                android:layout_marginRight="10dip"
-               android:layout_alignParentRight="false"
-               android:layout_toLeftOf="@+id/cancelUpload"/>
+               android:layout_toLeftOf="@+id/cancelUpload"
+               android:layout_centerVertical="true"/>
 
     <!-- Cancel image upload -->
     <ImageView android:id="@+id/cancelUpload"
@@ -38,6 +38,7 @@
                android:layout_height="wrap_content"
                android:clickable="true"
                android:layout_marginRight="5dip"
-               android:layout_alignParentRight="true"/>
+               android:layout_alignParentRight="true"
+               android:layout_centerVertical="true"/>
 
 </RelativeLayout>

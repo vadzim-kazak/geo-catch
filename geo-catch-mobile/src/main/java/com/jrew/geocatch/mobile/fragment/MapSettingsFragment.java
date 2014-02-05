@@ -19,6 +19,7 @@ import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.reciever.DomainInfoServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
+import com.jrew.geocatch.mobile.util.CommonUtils;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.SearchCriteriaHolder;
 import com.jrew.geocatch.mobile.view.DomainPropertyView;
@@ -149,9 +150,7 @@ public class MapSettingsFragment extends SherlockFragment {
         SearchCriteria searchCriteria = SearchCriteriaHolder.getSearchCriteria();
 
         // Device Id
-        String deviceId = Settings.Secure.getString(getActivity().getContentResolver(),
-                Settings.Secure.ANDROID_ID);
-        searchCriteria.setDeviceId(deviceId);
+        searchCriteria.setDeviceId(CommonUtils.getDeviceId(getActivity()));
 
         // Domain properties
         List<DomainProperty> domainProperties = new ArrayList<DomainProperty>();

@@ -11,4 +11,9 @@
           android:showAsAction="always">
     </item>
 
+    <item android:id="@+id/postponePhotoUploadMenuOption"
+          android:icon="@drawable/clock"
+          android:showAsAction="always">
+    </item>
+
 </menu>

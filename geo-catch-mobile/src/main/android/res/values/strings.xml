@@ -58,4 +58,8 @@
     <!-- Own photos fragment -->
     <string name="ownPhotosFragmentLabel">My photos</string>
 
+    <string name="ownPhotosLoadingError">Photos loading error</string>
+
+    <string name="postponedPhotosSectionLabel">POSTPONED PHOTOS</string>
+
 </resources>

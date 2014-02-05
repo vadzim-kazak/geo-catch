@@ -176,6 +176,11 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
                     ServiceUtil.callUploadImageService(imageBundle, resultReceiver, getActivity());
                 }
                 break;
+
+            case R.id.postponePhotoUploadMenuOption:
+                postponePhotoUpload();
+                FragmentSwitcherHolder.getFragmentSwitcher().showOwnPhotosFragment();
+                break;
         }
 
         return true;
@@ -304,20 +309,24 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
         // Add the buttons
         builder.setNegativeButton(R.string.imageUploadingRetry, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                ServiceUtil.callUploadImageService(imageBundle, resultReceiver, getActivity());
+             ServiceUtil.callUploadImageService(imageBundle, resultReceiver, getActivity());
             }
         });
 
         builder.setPositiveButton(R.string.imageUploadingLater, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                PostponedImage postponedImage = new PostponedImage();
-                postponedImage.setBitmap(bitmap);
-                postponedImage.setUploadImage(uploadImage);
-                PostponedImageManager.persistPostponedImage(getActivity(), postponedImage);
+                postponePhotoUpload();
                 FragmentSwitcherHolder.getFragmentSwitcher().showOwnPhotosFragment();
             }
         });
 
         return  builder.create();
+    }
+
+    private void postponePhotoUpload() {
+        PostponedImage postponedImage = new PostponedImage();
+        postponedImage.setBitmap(bitmap);
+        postponedImage.setUploadImage(uploadImage);
+        PostponedImageManager.persistPostponedImage(getActivity(), postponedImage);
     }
 }
