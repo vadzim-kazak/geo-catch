@@ -23,9 +23,11 @@ public class DialogUtil {
         ProgressDialog dialog = new ProgressDialog(mContext);
         try {
             dialog.show();
+            dialog.hide();
         } catch (WindowManager.BadTokenException e) {
 
         }
+
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.progress_dialog);
         return dialog;

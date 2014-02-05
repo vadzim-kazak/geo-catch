@@ -30,10 +30,6 @@ public class ImageService extends IntentService {
     /** **/
     public static final String IMAGE_KEY = "image";
 
-    /** **/
-    public static final String BITMAP_KEY = "bmp";
-
-
     /**
      *
      */

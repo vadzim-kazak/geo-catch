@@ -24,7 +24,7 @@
     <!-- In hours -->
     <item name="domainInfoSyncPeriodInHours" type="config">120</item>
 
-    <item name="postponedPhotosThumbnailSizeScaleFactor" type="config">0.08</item>
+    <item name="postponedPhotosThumbnailSizeScaleFactor" type="config">0.3</item>
 
     <!--
         Possible values:

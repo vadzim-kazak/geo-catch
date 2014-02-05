@@ -17,10 +17,10 @@ public class PostponedImageDescComparator implements Comparator<PostponedImage> 
     private static final int GREATER = 1;
 
     /** **/
-    private static final int LOWER = 1;
+    private static final int LOWER = -1;
 
     /** **/
-    private static final int EQUAL = 1;
+    private static final int EQUAL = 0;
 
     @Override
     public int compare(PostponedImage first, PostponedImage second) {

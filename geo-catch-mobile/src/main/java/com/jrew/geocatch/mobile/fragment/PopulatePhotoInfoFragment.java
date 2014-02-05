@@ -4,10 +4,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,10 +24,7 @@ import com.jrew.geocatch.mobile.model.UploadImage;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.service.ImageService;
-import com.jrew.geocatch.mobile.util.ActionBarHolder;
-import com.jrew.geocatch.mobile.util.ConversionUtil;
-import com.jrew.geocatch.mobile.util.DialogUtil;
-import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
+import com.jrew.geocatch.mobile.util.*;
 import com.jrew.geocatch.mobile.view.DomainPropertyView;
 import com.jrew.geocatch.mobile.view.PrePopulatedEditText;
 import com.jrew.geocatch.web.model.DomainProperty;
@@ -178,7 +173,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
                     toast.show();
                 } else {
                     imageBundle = prepareUploadData(layout, bitmap);
-                    uploadImage(imageBundle);
+                    ServiceUtil.callUploadImageService(imageBundle, resultReceiver, getActivity());
                 }
                 break;
         }
@@ -295,18 +290,6 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
 
     /**
      *
-     * @param bundle
-     */
-    public void uploadImage(Bundle bundle) {
-        final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), ImageService.class);
-        intent.putExtra(ImageService.RECEIVER_KEY, resultReceiver);
-        intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.UPLOAD_IMAGE);
-        intent.putExtra(ImageService.REQUEST_KEY, bundle);
-        getActivity().startService(intent);
-    }
-
-    /**
-     *
      * @return
      */
     private AlertDialog buildUploadingErrorAlert() {
@@ -321,7 +304,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
         // Add the buttons
         builder.setNegativeButton(R.string.imageUploadingRetry, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                uploadImage(imageBundle);
+                ServiceUtil.callUploadImageService(imageBundle, resultReceiver, getActivity());
             }
         });
 

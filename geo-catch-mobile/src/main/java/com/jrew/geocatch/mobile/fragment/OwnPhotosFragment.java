@@ -1,7 +1,11 @@
 package com.jrew.geocatch.mobile.fragment;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +16,10 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.adapter.PostponedImageAdapter;
+import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
+import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
+import com.jrew.geocatch.mobile.util.DialogUtil;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 
 /**
@@ -22,6 +29,8 @@ import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
  * Time: 1:25 PM
  */
 public class OwnPhotosFragment extends SherlockFragment {
+
+    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,6 +47,8 @@ public class OwnPhotosFragment extends SherlockFragment {
 
         ListView postponedPhotos = (ListView) layout.findViewById(R.id.postponedPhotosListView);
         postponedPhotos.setAdapter(new PostponedImageAdapter(getActivity()));
+
+        progressDialog = DialogUtil.createProgressDialog(getActivity());
 
         return layout;
     }

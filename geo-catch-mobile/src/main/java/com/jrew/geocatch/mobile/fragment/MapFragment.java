@@ -31,6 +31,7 @@ import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.SearchCriteriaHolder;
+import com.jrew.geocatch.mobile.util.ServiceUtil;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.ViewBounds;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
@@ -196,11 +197,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
         searchCriteria.setViewBounds(viewBounds);
 
-        final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), ImageService.class);
-        intent.putExtra(ImageService.RECEIVER_KEY, imageResultReceiver);
-        intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.LOAD_IMAGES);
-        intent.putExtra(ImageService.REQUEST_KEY, searchCriteria);
-        getActivity().startService(intent);
+        ServiceUtil.callLoadImagesService(searchCriteria, imageResultReceiver, getActivity());
     }
 
     /**
