@@ -35,7 +35,9 @@
 
     <GridView android:id="@+id/photosGridView"
               android:layout_width="fill_parent"
-              android:layout_height="wrap_content"/>
+              android:layout_height="wrap_content"
+              android:numColumns="4"
+              android:gravity="center"/>
 
 
 </LinearLayout>

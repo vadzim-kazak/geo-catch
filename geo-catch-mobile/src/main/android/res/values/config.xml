@@ -26,7 +26,7 @@
 
     <item name="postponedPhotosThumbnailSizeScaleFactor" type="config">0.1</item>
 
-    <item name="gridPhotosThumbnailSizeScaleFactor" type="config">0.2</item>
+    <item name="gridPhotosThumbnailSizeScaleFactor" type="config">0.13</item>
 
     <!--
         Possible values:

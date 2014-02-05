@@ -52,7 +52,7 @@ public class ReloadImageTask extends AsyncTask<String, Void, Bundle> {
         if (bundle != null) {
             Bitmap bitmap = bundle.getParcelable(ImageService.RESULT_KEY);
             thumbnail.setImageBitmap(bitmap);
-            adapter.notifyDataSetChanged();
+           // adapter.notifyDataSetChanged();
         }
     }
 }

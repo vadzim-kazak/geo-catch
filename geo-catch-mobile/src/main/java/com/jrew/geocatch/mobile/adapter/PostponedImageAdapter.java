@@ -47,9 +47,9 @@ public class PostponedImageAdapter extends BaseAdapter {
     /** **/
     private ServiceResultReceiver resultReceiver;
 
-    public PostponedImageAdapter(Context context) {
+    public PostponedImageAdapter(Context appContext) {
         super();
-        this.context = context;
+        this.context = appContext;
 
         postponedImages = PostponedImageManager.loadPostponedImages(context);
         // Sort in desc order by id
@@ -72,6 +72,9 @@ public class PostponedImageAdapter extends BaseAdapter {
 
                     case ImageService.ResultStatus.UPLOAD_IMAGE_FINISHED:
                         dialog.hide();
+//                        PostponedImageManager.deletePostponedImage(context, postponedImage);
+//                        postponedImages.remove(postponedImage);
+//                        adapter.notifyDataSetChanged();
                         //FragmentSwitcherHolder.getFragmentSwitcher().showOwnPhotosFragment();
                         break;
 

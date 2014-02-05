@@ -94,7 +94,7 @@ public class PhotosGridViewAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         if (images != null) {
-            images.size();
+           return images.size();
         }
         return 0;
     }
@@ -122,6 +122,7 @@ public class PhotosGridViewAdapter extends BaseAdapter {
         View row = inflater.inflate(R.layout.photo_grid_view_cell, null);
 
         ImageView thumbnailImageView = (ImageView) row.findViewById(R.id.thumbnailImageView);
+        thumbnailImageView.setImageResource(R.drawable.chat);
 
         int displaySize = CommonUtils.getDisplayLargerSideSize((Activity) context);
         int thumbnailSize = (int) (displaySize * thumbnailScaleFactor);
