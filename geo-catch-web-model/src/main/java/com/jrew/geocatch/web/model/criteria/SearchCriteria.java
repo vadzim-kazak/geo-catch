@@ -24,6 +24,9 @@ public class SearchCriteria implements Serializable {
     private String deviceId;
 
     /** **/
+    private boolean loadOwnImages;
+
+    /** **/
     private String owner;
 
     /** **/
@@ -129,5 +132,21 @@ public class SearchCriteria implements Serializable {
      */
     public void setMonthPeriod(MonthPeriodSearchCriterion monthPeriod) {
         this.monthPeriod = monthPeriod;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isLoadOwnImages() {
+        return loadOwnImages;
+    }
+
+    /**
+     *
+     * @param loadOwnImages
+     */
+    public void setLoadOwnImages(boolean loadOwnImages) {
+        this.loadOwnImages = loadOwnImages;
     }
 }

@@ -45,29 +45,41 @@ public class CriteriaSearchHelperJPAImpl implements CriteriaSearchHelper {
 
         List<Predicate> predicates = new ArrayList<Predicate>();
 
-        // Add view bound predicate
-        predicates.add(createViewBoundsCriterion(criteriaBuilder, image, searchCriteria));
+        if (searchCriteria.isLoadOwnImages()) {
+            // Own photos view mode
+            predicates.add(createOwnPhotosCriterion(criteriaBuilder, image, searchCriteria));
+        } else {
+            // Map view mode
 
-        // Add owner predicate
-        predicates.add(createOwnerCriterion(criteriaBuilder, image, searchCriteria));
+            // Add view bound predicate
+            Predicate viewBoundCriterion = createViewBoundsCriterion(criteriaBuilder, image, searchCriteria);
+            if (viewBoundCriterion != null) {
+                predicates.add(viewBoundCriterion);
+            }
 
-        // Add domainProperties predicate
-        Predicate domainPropertiesCriterion = createDomainInfoCriterion(criteriaBuilder, image, searchCriteria);
-        if (domainPropertiesCriterion != null) {
-            predicates.add(domainPropertiesCriterion);
+            // Add owner predicate
+            predicates.add(createOwnerCriterion(criteriaBuilder, image, searchCriteria));
+
+            // Add domainProperties predicate
+            Predicate domainPropertiesCriterion = createDomainInfoCriterion(criteriaBuilder, image, searchCriteria);
+            if (domainPropertiesCriterion != null) {
+                predicates.add(domainPropertiesCriterion);
+            }
+
+            // Add day period predicate
+            Predicate dayPeriodCriterion = createDayPeriodCriterion(criteriaBuilder, image, searchCriteria);
+            if (dayPeriodCriterion != null) {
+                predicates.add(dayPeriodCriterion);
+            }
+
+            // Add month period predicate
+            Predicate monthPeriodCriterion = createMonthPeriodCriterion(criteriaBuilder, image, searchCriteria);
+            if (monthPeriodCriterion != null) {
+                predicates.add(monthPeriodCriterion);
+            }
         }
 
-        // Add day period predicate
-        Predicate dayPeriodCriterion = createDayPeriodCriterion(criteriaBuilder, image, searchCriteria);
-        if (dayPeriodCriterion != null) {
-            predicates.add(dayPeriodCriterion);
-        }
 
-        // Add month period predicate
-        Predicate monthPeriodCriterion = createMonthPeriodCriterion(criteriaBuilder, image, searchCriteria);
-        if (monthPeriodCriterion != null) {
-            predicates.add(monthPeriodCriterion);
-        }
 
         Predicate[] predicatesArray = predicates.toArray(new Predicate[predicates.size()]);
         criteriaQuery.where(criteriaBuilder.and(predicatesArray));
@@ -88,15 +100,19 @@ public class CriteriaSearchHelperJPAImpl implements CriteriaSearchHelper {
 
         ViewBounds viewBounds = searchCriteria.getViewBounds();
 
-        // Latitude predicate
-        Predicate latitudePredicate = criteriaBuilder.between(image.get(Image_.latitude),
-                viewBounds.getSouthWestLat(), viewBounds.getNorthEastLat());
+        if (viewBounds != null) {
+            // Latitude predicate
+            Predicate latitudePredicate = criteriaBuilder.between(image.get(Image_.latitude),
+                    viewBounds.getSouthWestLat(), viewBounds.getNorthEastLat());
 
-        // Longitude predicate
-        Predicate longitudePredicate = criteriaBuilder.between(image.get(Image_.longitude),
-                viewBounds.getSouthWestLng(), viewBounds.getNorthEastLng());
+            // Longitude predicate
+            Predicate longitudePredicate = criteriaBuilder.between(image.get(Image_.longitude),
+                    viewBounds.getSouthWestLng(), viewBounds.getNorthEastLng());
 
-        return criteriaBuilder.and(latitudePredicate, longitudePredicate);
+            return criteriaBuilder.and(latitudePredicate, longitudePredicate);
+        }
+
+        return null;
     }
 
     /**
@@ -108,7 +124,6 @@ public class CriteriaSearchHelperJPAImpl implements CriteriaSearchHelper {
      */
     private Predicate createOwnerCriterion(CriteriaBuilder criteriaBuilder,
                                            Root<Image> image, SearchCriteria searchCriteria) {
-        //searchCriteria.put(DEVICE_ID, "1");
 
         // Provided deviceId
         String deviceId = searchCriteria.getDeviceId();
@@ -146,6 +161,25 @@ public class CriteriaSearchHelperJPAImpl implements CriteriaSearchHelper {
              */
              return criteriaBuilder.equal(image.get(Image_.deviceId), deviceId);
         }
+    }
+
+    /**
+     *
+     * @param criteriaBuilder
+     * @param image
+     * @param searchCriteria
+     * @return
+     */
+    private Predicate createOwnPhotosCriterion(CriteriaBuilder criteriaBuilder,
+                                           Root<Image> image, SearchCriteria searchCriteria) {
+
+        // Provided deviceId
+        String deviceId = searchCriteria.getDeviceId();
+        if (!StringUtils.isEmpty(deviceId)) {
+            return criteriaBuilder.equal(image.get(Image_.deviceId), deviceId);
+        }
+
+        throw new RuntimeException("DeviceId for own photos isn't provided.");
     }
 
     /**
