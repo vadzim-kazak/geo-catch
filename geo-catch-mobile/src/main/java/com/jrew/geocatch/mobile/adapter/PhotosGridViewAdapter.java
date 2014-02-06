@@ -18,6 +18,7 @@ import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.service.ReloadImageTask;
 import com.jrew.geocatch.mobile.util.CommonUtils;
 import com.jrew.geocatch.mobile.util.DialogUtil;
+import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.ServiceUtil;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
@@ -50,14 +51,15 @@ public class PhotosGridViewAdapter extends BaseAdapter {
 
     /**
      *
-     * @param appContext
+     * @param context
      */
-    public PhotosGridViewAdapter(Context appContext) {
+    public PhotosGridViewAdapter(Context context) {
+
         super();
 
-        context = appContext;
+        this.context = context;
 
-        dialog = DialogUtil.createProgressDialog(context);
+        dialog = DialogUtil.createProgressDialog(this.context);
         dialog.show();
 
         resultReceiver = new ServiceResultReceiver(new Handler());
@@ -75,9 +77,9 @@ public class PhotosGridViewAdapter extends BaseAdapter {
 
                     case ImageService.ResultStatus.ERROR:
                         dialog.hide();
-                        CharSequence text = context.getResources().getString(R.string.ownPhotosLoadingError);
+                        CharSequence text = PhotosGridViewAdapter.this.context.getResources().getString(R.string.ownPhotosLoadingError);
                         int duration = Toast.LENGTH_SHORT;
-                        Toast toast = Toast.makeText(context, text, duration);
+                        Toast toast = Toast.makeText(PhotosGridViewAdapter.this.context, text, duration);
                         toast.show();
                         break;
                 }
@@ -86,7 +88,7 @@ public class PhotosGridViewAdapter extends BaseAdapter {
         });
 
         thumbnailScaleFactor = Double.parseDouble(
-                context.getResources().getString(R.config.gridPhotosThumbnailSizeScaleFactor));
+                this.context.getResources().getString(R.config.gridPhotosThumbnailSizeScaleFactor));
 
         loadImagesServiceCall();
     }
@@ -128,7 +130,19 @@ public class PhotosGridViewAdapter extends BaseAdapter {
         int thumbnailSize = (int) (displaySize * thumbnailScaleFactor);
         thumbnailImageView.setLayoutParams(new LinearLayout.LayoutParams(thumbnailSize, thumbnailSize));
 
-        new ReloadImageTask(thumbnailImageView, this, context).execute(images.get(i).getThumbnailPath());
+        final ClientImagePreview clientImagePreview = images.get(i);
+
+        // Load thumbnail image
+        new ReloadImageTask(thumbnailImageView, this, context).execute(clientImagePreview.getThumbnailPath());
+
+        thumbnailImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(ImageService.IMAGE_KEY, clientImagePreview);
+                FragmentSwitcherHolder.getFragmentSwitcher().showPhotoBrowsingFragment(bundle);
+            }
+        });
 
         return row;
     }

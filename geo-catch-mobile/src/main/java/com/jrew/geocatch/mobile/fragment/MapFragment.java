@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -149,7 +148,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                 break;
 
             case R.id.takeImageMenuOption:
-                fragmentSwitcher.showImageTakeCameraFragment();
+                fragmentSwitcher.showGetPhotoFragment();
                 break;
 
             case R.id.ownImagesMenuOption:

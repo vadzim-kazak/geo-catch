@@ -118,7 +118,6 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                             }
                         }
 
-
                         // Photo
                         Bitmap image = (Bitmap) resultData.get(ImageService.RESULT_KEY);
                         imageView.setImageBitmap(image);

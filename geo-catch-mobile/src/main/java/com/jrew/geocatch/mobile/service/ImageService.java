@@ -30,6 +30,9 @@ public class ImageService extends IntentService {
     /** **/
     public static final String IMAGE_KEY = "image";
 
+    /** **/
+    public static final String POSTPONED_IMAGE_ID_KEY = "postopenImageId";
+
     /**
      *
      */

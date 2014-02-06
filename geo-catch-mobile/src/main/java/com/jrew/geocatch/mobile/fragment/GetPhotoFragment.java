@@ -344,7 +344,7 @@ public class GetPhotoFragment extends SherlockFragment {
         Bundle bundle = new Bundle();
         bundle.putParcelable("bmp", shapshot);
         MainActivity activity = (MainActivity) getActivity();
-        FragmentSwitcherHolder.getFragmentSwitcher().showImageTakePreviewFragment(bundle);
+        FragmentSwitcherHolder.getFragmentSwitcher().showPreviewPhotoFragment(bundle);
 
         dialog.dismiss();
     }

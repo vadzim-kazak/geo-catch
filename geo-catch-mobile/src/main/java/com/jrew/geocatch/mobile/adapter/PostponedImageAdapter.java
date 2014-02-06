@@ -47,18 +47,20 @@ public class PostponedImageAdapter extends BaseAdapter {
     /** **/
     private ServiceResultReceiver resultReceiver;
 
-    public PostponedImageAdapter(Context appContext) {
-        super();
-        this.context = appContext;
+    public PostponedImageAdapter(Context context) {
 
-        postponedImages = PostponedImageManager.loadPostponedImages(context);
+        super();
+
+        this.context = context;
+
+        postponedImages = PostponedImageManager.loadPostponedImages(this.context);
         // Sort in desc order by id
         Collections.sort(postponedImages, new PostponedImageDescComparator());
 
         thumbnailScaleFactor = Double.parseDouble(
-                context.getResources().getString(R.config.postponedPhotosThumbnailSizeScaleFactor));
+                this.context.getResources().getString(R.config.postponedPhotosThumbnailSizeScaleFactor));
 
-        dialog = DialogUtil.createProgressDialog(context);
+        dialog = DialogUtil.createProgressDialog(this.context);
 
         resultReceiver = new ServiceResultReceiver(new Handler());
         resultReceiver.setReceiver(new ServiceResultReceiver.Receiver() {
@@ -72,10 +74,9 @@ public class PostponedImageAdapter extends BaseAdapter {
 
                     case ImageService.ResultStatus.UPLOAD_IMAGE_FINISHED:
                         dialog.hide();
-//                        PostponedImageManager.deletePostponedImage(context, postponedImage);
-//                        postponedImages.remove(postponedImage);
-//                        adapter.notifyDataSetChanged();
-                        //FragmentSwitcherHolder.getFragmentSwitcher().showOwnPhotosFragment();
+                        long uploadedPostponedId = resultData.getLong(ImageService.POSTPONED_IMAGE_ID_KEY);
+                        removePostponedImage(uploadedPostponedId);
+                        PostponedImageAdapter.this.notifyDataSetChanged();
                         break;
 
                     case ImageService.ResultStatus.ERROR:
@@ -129,11 +130,10 @@ public class PostponedImageAdapter extends BaseAdapter {
 
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(ImageService.IMAGE_KEY, postponedImage.getUploadImage());
+                bundle.putLong(ImageService.POSTPONED_IMAGE_ID_KEY, postponedImage.getId());
                 ServiceUtil.callUploadImageService(bundle, resultReceiver, (Activity) context);
             }
         });
-
-        final PostponedImageAdapter adapter = this;
 
         ImageView cancelUpload = (ImageView) row.findViewById(R.id.cancelUpload);
         cancelUpload.setOnClickListener(new View.OnClickListener() {
@@ -144,12 +144,27 @@ public class PostponedImageAdapter extends BaseAdapter {
 
                 PostponedImageManager.deletePostponedImage(context, postponedImage);
                 postponedImages.remove(postponedImage);
-                adapter.notifyDataSetChanged();
+                PostponedImageAdapter.this.notifyDataSetChanged();
 
                 dialog.hide();
             }
         });
 
         return row;
+    }
+
+    /**
+     *
+     * @param postponedImageId
+     */
+    private void removePostponedImage(long postponedImageId) {
+
+        for (PostponedImage postponedImage : postponedImages) {
+            if (postponedImage.getId() == postponedImageId) {
+                PostponedImageManager.deletePostponedImage(PostponedImageAdapter.this.context, postponedImage);
+                postponedImages.remove(postponedImage);
+
+            }
+        }
     }
 }

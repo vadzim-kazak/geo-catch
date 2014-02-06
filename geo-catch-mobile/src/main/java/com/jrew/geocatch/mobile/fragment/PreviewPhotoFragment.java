@@ -79,7 +79,7 @@ public class PreviewPhotoFragment extends SherlockFragment {
                 if (fragmentData != null) {
                     fragmentData.putParcelable("bmp", image);
                 }
-                FragmentSwitcherHolder.getFragmentSwitcher().showImageTakeInfoFragment(new Bundle(fragmentData));
+                FragmentSwitcherHolder.getFragmentSwitcher().showPopulatePhotoInfoFragment(new Bundle(fragmentData));
                 break;
         }
 

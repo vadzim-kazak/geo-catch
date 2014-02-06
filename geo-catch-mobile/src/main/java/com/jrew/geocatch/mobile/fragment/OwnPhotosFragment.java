@@ -71,7 +71,7 @@ public class OwnPhotosFragment extends SherlockFragment {
                 break;
 
             case R.id.takeImageMenuOption:
-                fragmentSwitcher.showImageTakeCameraFragment();
+                fragmentSwitcher.showGetPhotoFragment();
                 break;
         }
 

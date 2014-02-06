@@ -24,19 +24,19 @@ public class FragmentSwitcher {
         String MAP_SETTINGS_FRAGMENT_TAG = "mapSettingsFragmentTag";
 
         /** **/
-        String IMAGE_VIEW_FRAGMENT_TAG = "viewImageFragmentTag";
+        String PHOTO_BROWSING_FRAGMENT_TAG = "photoBrowsingFragmentTag";
 
         /** **/
-        String IMAGE_TAKE_CAMERA_FRAGMENT_TAG = "takeImageCameraFragmentTag";
+        String GET_PHOTO_FRAGMENT_TAG = "getPhotoFragmentTag";
 
         /** **/
-        String IMAGE_TAKE_PREVIEW_FRAGMENT_TAG = "takeImagePreviewFragmentTag";
+        String PREVIEW_PHOTO_FRAGMENT_TAG = "previewPhotoFragmentTag";
 
         /** **/
-        String IMAGE_TAKE_INFO_FRAGMENT_TAG = "takeImageInfoFragmentTag";
+        String POPULATE_PHOTO_INFO_FRAGMENT_TAG = "populatePhotoInfoFragmentTag";
 
         /** **/
-        String OWN_IMAGES_FRAGMENT_TAG = "ownImagesFragmentTag";
+        String OWN_PHOTOS_FRAGMENT_TAG = "ownPhotosFragmentTag";
     }
 
 
@@ -103,15 +103,15 @@ public class FragmentSwitcher {
             return new MapFragment();
         } else if (TAG.MAP_SETTINGS_FRAGMENT_TAG.equals(fragmentTag)) {
             return new MapSettingsFragment();
-        } else if (TAG.IMAGE_VIEW_FRAGMENT_TAG.equals(fragmentTag)) {
+        } else if (TAG.PHOTO_BROWSING_FRAGMENT_TAG.equals(fragmentTag)) {
             return new PhotoBrowsingFragment();
-        } else if (TAG.IMAGE_TAKE_CAMERA_FRAGMENT_TAG.equals(fragmentTag)) {
+        } else if (TAG.GET_PHOTO_FRAGMENT_TAG.equals(fragmentTag)) {
             return new GetPhotoFragment();
-        } else if (TAG.IMAGE_TAKE_PREVIEW_FRAGMENT_TAG.equals(fragmentTag)) {
+        } else if (TAG.PREVIEW_PHOTO_FRAGMENT_TAG.equals(fragmentTag)) {
             return new PreviewPhotoFragment();
-        } else if (TAG.IMAGE_TAKE_INFO_FRAGMENT_TAG.equals(fragmentTag)) {
+        } else if (TAG.POPULATE_PHOTO_INFO_FRAGMENT_TAG.equals(fragmentTag)) {
             return new PopulatePhotoInfoFragment();
-        } else if (TAG.OWN_IMAGES_FRAGMENT_TAG.equals(fragmentTag)) {
+        } else if (TAG.OWN_PHOTOS_FRAGMENT_TAG.equals(fragmentTag)) {
             return new OwnPhotosFragment();
         }
 
@@ -136,38 +136,38 @@ public class FragmentSwitcher {
      *
      * @param bundle
      */
-    public void showImageViewFragment(Bundle bundle) {
-        showFragment(TAG.IMAGE_VIEW_FRAGMENT_TAG, bundle);
+    public void showPhotoBrowsingFragment(Bundle bundle) {
+        showFragment(TAG.PHOTO_BROWSING_FRAGMENT_TAG, bundle);
     }
 
     /**
      *
      */
-    public void showImageTakeCameraFragment() {
-        showFragment(TAG.IMAGE_TAKE_CAMERA_FRAGMENT_TAG);
-    }
-
-    /**
-     *
-     * @param bundle
-     */
-    public void showImageTakePreviewFragment(Bundle bundle) {
-        showFragment(TAG.IMAGE_TAKE_PREVIEW_FRAGMENT_TAG, bundle);
+    public void showGetPhotoFragment() {
+        showFragment(TAG.GET_PHOTO_FRAGMENT_TAG);
     }
 
     /**
      *
      * @param bundle
      */
-    public void showImageTakeInfoFragment(Bundle bundle) {
-        showFragment(TAG.IMAGE_TAKE_INFO_FRAGMENT_TAG, bundle);
+    public void showPreviewPhotoFragment(Bundle bundle) {
+        showFragment(TAG.PREVIEW_PHOTO_FRAGMENT_TAG, bundle);
+    }
+
+    /**
+     *
+     * @param bundle
+     */
+    public void showPopulatePhotoInfoFragment(Bundle bundle) {
+        showFragment(TAG.POPULATE_PHOTO_INFO_FRAGMENT_TAG, bundle);
     }
 
     /**
      *
      */
     public void showOwnPhotosFragment() {
-        showFragment(TAG.OWN_IMAGES_FRAGMENT_TAG);
+        showFragment(TAG.OWN_PHOTOS_FRAGMENT_TAG);
     }
 
     /**
