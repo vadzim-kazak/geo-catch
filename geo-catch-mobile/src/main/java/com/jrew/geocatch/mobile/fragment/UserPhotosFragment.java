@@ -8,6 +8,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.dao.PostponedImageManager;
+import com.jrew.geocatch.mobile.listener.UserPhotoTabListener;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 
@@ -17,22 +18,17 @@ import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
  * Date: 2/4/14
  * Time: 1:25 PM
  */
-public abstract class UserPhotosFragment extends SherlockFragment implements ActionBar.TabListener {
+public class UserPhotosFragment extends SherlockFragment {
 
     /**
      *
      */
-    protected enum TabTag {
+    public enum TabTag {
 
         UPLOADED_PHOTOS_TAB,
 
         POSTPONED_PHOTOS_TAB
     }
-
-    /**
-     *
-     */
-    protected abstract TabTag getTabTag();
 
     /**
      *
@@ -43,7 +39,6 @@ public abstract class UserPhotosFragment extends SherlockFragment implements Act
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        // Action bar subtitle
         ActionBar actionBar = ActionBarHolder.getActionBar();
 
         //Init fragment in tab mode if there are postponed images presented
@@ -56,29 +51,21 @@ public abstract class UserPhotosFragment extends SherlockFragment implements Act
             int tabCount = actionBar.getTabCount();
             ActionBar.Tab uploadedPhotosTab, postponedPhotosTab;
             if (tabCount == 0) {
+
+                UserPhotoTabListener tabListener = new UserPhotoTabListener();
+
                 // Init tabs
                 uploadedPhotosTab = actionBar.newTab();
                 uploadedPhotosTab.setIcon(android.R.drawable.ic_menu_gallery);
                 uploadedPhotosTab.setTag(TabTag.UPLOADED_PHOTOS_TAB);
-                uploadedPhotosTab.setTabListener(this);
+                uploadedPhotosTab.setTabListener(tabListener);
                 actionBar.addTab(uploadedPhotosTab, false);
 
                 postponedPhotosTab = actionBar.newTab();
                 postponedPhotosTab.setIcon(R.drawable.clock);
                 postponedPhotosTab.setTag(TabTag.POSTPONED_PHOTOS_TAB);
-                postponedPhotosTab.setTabListener(this);
+                postponedPhotosTab.setTabListener(tabListener);
                 actionBar.addTab(postponedPhotosTab, false);
-            } else {
-                uploadedPhotosTab = getTabByTag(TabTag.UPLOADED_PHOTOS_TAB, actionBar);
-                postponedPhotosTab = getTabByTag(TabTag.POSTPONED_PHOTOS_TAB, actionBar);
-            }
-
-            TabTag currentTabTag = getTabTag();
-            ActionBar.Tab selectedTab = actionBar.getSelectedTab();
-            if (currentTabTag == TabTag.UPLOADED_PHOTOS_TAB) {
-                uploadedPhotosTab.select();
-            } else if (currentTabTag == TabTag.POSTPONED_PHOTOS_TAB) {
-                postponedPhotosTab.select();
             }
         }
     }
@@ -89,7 +76,7 @@ public abstract class UserPhotosFragment extends SherlockFragment implements Act
      * @param actionBar
      * @return
      */
-    private ActionBar.Tab getTabByTag(TabTag tag, ActionBar actionBar) {
+    protected ActionBar.Tab getTabByTag(TabTag tag, ActionBar actionBar) {
         for (int i = 0; i < actionBar.getTabCount(); i++) {
             ActionBar.Tab currentTab = actionBar.getTabAt(i);
             TabTag currentTabTag = (TabTag) currentTab.getTag();
@@ -125,30 +112,15 @@ public abstract class UserPhotosFragment extends SherlockFragment implements Act
         return true;
     }
 
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction transaction) {
-
-    }
-
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction transaction) {
-
-    }
-
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction transaction) {}
-
     /**
      *
-     * @param tab
+     * @param tabTag
      */
-    protected void proceedTabSelection(ActionBar.Tab tab) {
-        TabTag newTabTag = (TabTag) tab.getTag();
-        FragmentSwitcher fragmentSwitcher = FragmentSwitcherHolder.getFragmentSwitcher();
-        if (newTabTag == TabTag.UPLOADED_PHOTOS_TAB) {
-            fragmentSwitcher.showUploadedPhotosFragment();
-        } else if (newTabTag == TabTag.POSTPONED_PHOTOS_TAB) {
-            fragmentSwitcher.showPostponedPhotosFragment();
+    public void selectTabByTag(TabTag tabTag) {
+        ActionBar actionBar = ActionBarHolder.getActionBar();
+        ActionBar.Tab tab = getTabByTag(tabTag, actionBar);
+        if (tab != null) {
+            tab.select();
         }
     }
 }

@@ -168,7 +168,7 @@ public class PhotoBrowsingFragment extends SherlockFragment {
         FragmentSwitcher fragmentSwitcher = FragmentSwitcherHolder.getFragmentSwitcher();
         switch (pressedMenuItemId) {
             case R.id.proceedToMapMenuOption:
-                fragmentSwitcher.showMapFragment();
+                getSherlockActivity().getSupportFragmentManager().popBackStack();
                 break;
 
         }

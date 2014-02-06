@@ -42,7 +42,6 @@ public class FragmentSwitcher {
         String UPLOADED_PHOTOS_FRAGMENT_TAG = "uploadedPhotosFragmentTag";
     }
 
-
     /** **/
     private FragmentManager fragmentManager;
 
@@ -73,10 +72,7 @@ public class FragmentSwitcher {
      */
     private void showFragment(String fragmentTag, Bundle fragmentData) {
 
-        Fragment fragment = fragmentManager.findFragmentByTag(fragmentTag);
-        if (fragment == null) {
-            fragment = createFragment(fragmentTag);
-        }
+        Fragment fragment = getFragment(fragmentTag);
 
         if (fragmentData != null) {
             Bundle bundle = fragment.getArguments();
@@ -94,6 +90,19 @@ public class FragmentSwitcher {
         transaction.commit();
     }
 
+    /**
+     *
+     * @param fragmentTag
+     * @return
+     */
+    private Fragment getFragment(String fragmentTag) {
+        Fragment fragment = fragmentManager.findFragmentByTag(fragmentTag);
+        if (fragment == null) {
+            fragment = createFragment(fragmentTag);
+        }
+
+        return fragment;
+    }
 
     /**
      *
@@ -172,14 +181,38 @@ public class FragmentSwitcher {
      *
      */
     public void showPostponedPhotosFragment() {
+        showPostponedPhotosFragment(true);
+    }
+
+    /**
+     *
+     * @param selectTab
+     */
+    public void showPostponedPhotosFragment(boolean selectTab) {
         showFragment(TAG.POSTPONED_PHOTOS_FRAGMENT_TAG);
+        if (selectTab) {
+            UserPhotosFragment fragment = (UserPhotosFragment) getFragment(TAG.POSTPONED_PHOTOS_FRAGMENT_TAG);
+            fragment.selectTabByTag(UserPhotosFragment.TabTag.POSTPONED_PHOTOS_TAB);
+        }
     }
 
     /**
      *
      */
     public void showUploadedPhotosFragment() {
+        showUploadedPhotosFragment(true);
+    }
+
+    /**
+     *
+     * @param selectTab
+     */
+    public void showUploadedPhotosFragment(boolean selectTab) {
         showFragment(TAG.UPLOADED_PHOTOS_FRAGMENT_TAG);
+        if (selectTab) {
+            UserPhotosFragment fragment = (UserPhotosFragment) getFragment(TAG.UPLOADED_PHOTOS_FRAGMENT_TAG);
+            fragment.selectTabByTag(UserPhotosFragment.TabTag.UPLOADED_PHOTOS_TAB);
+        }
     }
 
     /**

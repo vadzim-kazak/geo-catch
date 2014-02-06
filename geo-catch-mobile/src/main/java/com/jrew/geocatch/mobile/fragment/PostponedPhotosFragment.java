@@ -1,6 +1,7 @@
 package com.jrew.geocatch.mobile.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,10 +35,5 @@ public class PostponedPhotosFragment extends UserPhotosFragment {
         postponedPhotos.setAdapter(new PostponedImageAdapter(getActivity()));
 
         return layout;
-    }
-
-    @Override
-    protected TabTag getTabTag() {
-        return TabTag.POSTPONED_PHOTOS_TAB;
     }
 }

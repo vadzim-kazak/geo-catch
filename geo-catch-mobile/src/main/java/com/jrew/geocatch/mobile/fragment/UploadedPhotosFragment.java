@@ -1,6 +1,7 @@
 package com.jrew.geocatch.mobile.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +37,4 @@ public class UploadedPhotosFragment extends UserPhotosFragment {
         return layout;
     }
 
-    @Override
-    protected TabTag getTabTag() {
-        return TabTag.UPLOADED_PHOTOS_TAB;
-    }
 }
