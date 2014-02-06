@@ -4,9 +4,11 @@ import android.content.Context;
 import android.util.Log;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.jrew.geocatch.mobile.model.PostponedImage;
+import com.jrew.geocatch.mobile.util.PostponedImageDescComparator;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -24,6 +26,9 @@ public class PostponedImageManager {
     /** **/
     private static PostponedImageDatabaseHelper helper;
 
+    /** **/
+    private static PostponedImageDescComparator comparator = new PostponedImageDescComparator();
+
     /**
      *
      * @param context
@@ -33,7 +38,12 @@ public class PostponedImageManager {
 
         PostponedImageDatabaseHelper helper = getHelper(context);
         try {
-            return helper.getDao().queryForAll();
+
+            List<PostponedImage> result = helper.getDao().queryForAll();
+            // Sort in desc order by id
+            Collections.sort(result, comparator);
+            return result;
+
         } catch (SQLException exception) {
             Log.e(LOG_NAME, "Couldn't load postponed images.", exception);
         }

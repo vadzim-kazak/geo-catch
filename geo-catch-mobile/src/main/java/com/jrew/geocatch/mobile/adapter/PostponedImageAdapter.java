@@ -54,8 +54,6 @@ public class PostponedImageAdapter extends BaseAdapter {
         this.context = context;
 
         postponedImages = PostponedImageManager.loadPostponedImages(this.context);
-        // Sort in desc order by id
-        Collections.sort(postponedImages, new PostponedImageDescComparator());
 
         thumbnailScaleFactor = Double.parseDouble(
                 this.context.getResources().getString(R.config.postponedPhotosThumbnailSizeScaleFactor));

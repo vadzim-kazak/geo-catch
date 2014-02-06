@@ -79,11 +79,14 @@ public class CriteriaSearchHelperJPAImpl implements CriteriaSearchHelper {
             }
         }
 
-
-
         Predicate[] predicatesArray = predicates.toArray(new Predicate[predicates.size()]);
         criteriaQuery.where(criteriaBuilder.and(predicatesArray));
         criteriaQuery.select(image);
+
+        // In case of load images for own images view sort result descending by date
+        if (searchCriteria.isLoadOwnImages()) {
+            criteriaQuery.orderBy(criteriaBuilder.desc(image.get(Image_.date)));
+        }
 
         return criteriaQuery;
     }
