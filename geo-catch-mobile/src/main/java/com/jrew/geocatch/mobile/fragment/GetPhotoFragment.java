@@ -67,6 +67,7 @@ public class GetPhotoFragment extends SherlockFragment {
         // Action bar subtitle
         ActionBar actionBar = ActionBarHolder.getActionBar();
         actionBar.setSubtitle(getResources().getString(R.string.getPhotoFragmentLabel));
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 

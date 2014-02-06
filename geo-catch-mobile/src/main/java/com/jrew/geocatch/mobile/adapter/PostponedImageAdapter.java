@@ -53,12 +53,12 @@ public class PostponedImageAdapter extends BaseAdapter {
 
         this.context = context;
 
+        dialog = DialogUtil.createProgressDialog(this.context);
+
         postponedImages = PostponedImageManager.loadPostponedImages(this.context);
 
         thumbnailScaleFactor = Double.parseDouble(
                 this.context.getResources().getString(R.config.postponedPhotosThumbnailSizeScaleFactor));
-
-        dialog = DialogUtil.createProgressDialog(this.context);
 
         resultReceiver = new ServiceResultReceiver(new Handler());
         resultReceiver.setReceiver(new ServiceResultReceiver.Receiver() {
@@ -84,6 +84,8 @@ public class PostponedImageAdapter extends BaseAdapter {
             }
 
         });
+
+        dialog.hide();
     }
 
     @Override
@@ -104,6 +106,10 @@ public class PostponedImageAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
 
+        if (i == 0) {
+            dialog.show();
+        }
+
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(R.layout.postponed_image_adapter_row, null);
         row.setClickable(false);
@@ -115,8 +121,9 @@ public class PostponedImageAdapter extends BaseAdapter {
 
         int displaySize = CommonUtils.getDisplayLargerSideSize((Activity) context);
         int thumbnailSize = (int) (displaySize * thumbnailScaleFactor);
-        photoThumbnail.setLayoutParams(new RelativeLayout.LayoutParams(thumbnailSize, thumbnailSize));
-
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(thumbnailSize, thumbnailSize);
+        //params.addRule(RelativeLayout.RIGHT_OF, R.id.retryUpload);
+        photoThumbnail.setLayoutParams(params);
 
         ImageView retryUpload = (ImageView) row.findViewById(R.id.retryUpload);
 
@@ -148,6 +155,10 @@ public class PostponedImageAdapter extends BaseAdapter {
             }
         });
 
+        if (i == postponedImages.size() - 1) {
+            dialog.hide();
+        }
+
         return row;
     }
 
@@ -161,7 +172,6 @@ public class PostponedImageAdapter extends BaseAdapter {
             if (postponedImage.getId() == postponedImageId) {
                 PostponedImageManager.deletePostponedImage(PostponedImageAdapter.this.context, postponedImage);
                 postponedImages.remove(postponedImage);
-
             }
         }
     }

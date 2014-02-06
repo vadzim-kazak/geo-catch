@@ -119,7 +119,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
 
                     case ImageService.ResultStatus.UPLOAD_IMAGE_FINISHED:
                         progressDialog.hide();
-                        FragmentSwitcherHolder.getFragmentSwitcher().showOwnPhotosFragment();
+                        FragmentSwitcherHolder.getFragmentSwitcher().showUploadedPhotosFragment();
                         break;
 
                     case ImageService.ResultStatus.ERROR:
@@ -166,11 +166,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
 
             case R.id.uploadPhotoMenuOption:
                 if (currentLocation == null) {
-                    Context context = getActivity();
-                    CharSequence text = getResources().getString(R.string.locationLoadingWarning);
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
+                    showNoLocationDetectedWarning();
                 } else {
                     imageBundle = prepareUploadData(layout, bitmap);
                     ServiceUtil.callUploadImageService(imageBundle, resultReceiver, getActivity());
@@ -178,8 +174,12 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
                 break;
 
             case R.id.postponePhotoUploadMenuOption:
-                postponePhotoUpload();
-                FragmentSwitcherHolder.getFragmentSwitcher().showOwnPhotosFragment();
+                if (currentLocation == null) {
+                    showNoLocationDetectedWarning();
+                } else {
+                    postponePhotoUpload();
+                    FragmentSwitcherHolder.getFragmentSwitcher().showPostponedPhotosFragment();
+                }
                 break;
         }
 
@@ -316,17 +316,31 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
         builder.setPositiveButton(R.string.imageUploadingLater, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 postponePhotoUpload();
-                FragmentSwitcherHolder.getFragmentSwitcher().showOwnPhotosFragment();
+                FragmentSwitcherHolder.getFragmentSwitcher().showPostponedPhotosFragment();
             }
         });
 
         return  builder.create();
     }
 
+    /**
+     *
+     */
     private void postponePhotoUpload() {
         PostponedImage postponedImage = new PostponedImage();
         postponedImage.setBitmap(bitmap);
         postponedImage.setUploadImage(uploadImage);
         PostponedImageManager.persistPostponedImage(getActivity(), postponedImage);
+    }
+
+    /**
+     *
+     */
+    private void showNoLocationDetectedWarning() {
+        Context context = getActivity();
+        CharSequence text = getResources().getString(R.string.locationLoadingWarning);
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
     }
 }

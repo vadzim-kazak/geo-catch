@@ -68,6 +68,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
         // Action bar subtitle
         ActionBar actionBar = ActionBarHolder.getActionBar();
         actionBar.setSubtitle(getResources().getString(R.string.mapFragmentLabel));
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
@@ -152,7 +153,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                 break;
 
             case R.id.ownImagesMenuOption:
-                fragmentSwitcher.showOwnPhotosFragment();
+                fragmentSwitcher.showUploadedPhotosFragment();
                 break;
         }
 

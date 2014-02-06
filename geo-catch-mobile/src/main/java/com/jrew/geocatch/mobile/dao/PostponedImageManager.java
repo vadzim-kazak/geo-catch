@@ -1,6 +1,7 @@
 package com.jrew.geocatch.mobile.dao;
 
 import android.content.Context;
+import android.database.DatabaseUtils;
 import android.util.Log;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.jrew.geocatch.mobile.model.PostponedImage;
@@ -34,11 +35,29 @@ public class PostponedImageManager {
      * @param context
      * @return
      */
+    public static synchronized boolean isPostponedImagesPresented(Context context) {
+
+        PostponedImageDatabaseHelper helper = getHelper(context);
+        try {
+            if (helper.getDao().countOf() > 0) {
+                return true;
+            }
+        } catch (SQLException exception) {
+            Log.e(LOG_NAME, "Couldn't count postponed images number.", exception);
+        }
+
+        return false;
+    }
+
+    /**
+     *
+     * @param context
+     * @return
+     */
     public synchronized static List<PostponedImage> loadPostponedImages(Context context) {
 
         PostponedImageDatabaseHelper helper = getHelper(context);
         try {
-
             List<PostponedImage> result = helper.getDao().queryForAll();
             // Sort in desc order by id
             Collections.sort(result, comparator);
@@ -50,8 +69,6 @@ public class PostponedImageManager {
 
         return new ArrayList<PostponedImage>();
     }
-
-
 
     /**
      *

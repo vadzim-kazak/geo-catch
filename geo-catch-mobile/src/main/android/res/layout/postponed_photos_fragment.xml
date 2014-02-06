@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:background="@drawable/white_bordered_background"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:paddingLeft="10dip"
+              android:paddingRight="10dip"
+              android:layout_marginBottom="30dip" >
+
+        <ListView android:id="@+id/postponedPhotosListView"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content" />
+
+</LinearLayout>

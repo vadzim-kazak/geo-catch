@@ -55,11 +55,14 @@
     <!-- Photo browsing fragment -->
     <string name="photoBrowsingFragmentLabel">View photo</string>
 
-    <!-- Own photos fragment -->
-    <string name="ownPhotosFragmentLabel">My photos</string>
+    <!-- Uploaded photos fragment -->
+    <string name="uploadedPhotosFragmentLabel">My photos</string>
 
-    <string name="ownPhotosLoadingError">Photos loading error</string>
+    <string name="uploadedPhotosLoadingError">Photos loading error</string>
 
-    <string name="postponedPhotosSectionLabel">POSTPONED PHOTOS</string>
+    <!-- Postponed photos fragment -->
+    <string name="postponedPhotosFragmentLabel">Postponed photos</string>
+
+    <string name="uploadedPhotosLoadingError">Photos loading error</string>
 
 </resources>
