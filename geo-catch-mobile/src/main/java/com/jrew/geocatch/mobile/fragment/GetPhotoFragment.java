@@ -100,7 +100,7 @@ public class GetPhotoFragment extends SherlockFragment {
 
         switch (pressedMenuItemId) {
             case R.id.backMenuOption:
-                fragmentSwitcher.showMapFragment();
+                getSherlockActivity().getSupportFragmentManager().popBackStack();
                 break;
             case R.id.takePhotoMenuOption:
                 camera.takePicture(null, null, photoCallback);

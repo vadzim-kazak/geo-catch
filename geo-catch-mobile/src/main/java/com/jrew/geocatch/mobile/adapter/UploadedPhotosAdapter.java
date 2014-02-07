@@ -32,7 +32,7 @@ import java.util.List;
  * Time: 16:11
  * To change this template use File | Settings | File Templates.
  */
-public class UploadedPhotosGridViewAdapter extends BaseAdapter {
+public class UploadedPhotosAdapter extends BaseAdapter {
 
     /** **/
     private List<ClientImagePreview> images;
@@ -53,7 +53,7 @@ public class UploadedPhotosGridViewAdapter extends BaseAdapter {
      *
      * @param context
      */
-    public UploadedPhotosGridViewAdapter(Context context) {
+    public UploadedPhotosAdapter(Context context) {
 
         super();
 
@@ -77,9 +77,9 @@ public class UploadedPhotosGridViewAdapter extends BaseAdapter {
 
                     case ImageService.ResultStatus.ERROR:
                         dialog.hide();
-                        CharSequence text = UploadedPhotosGridViewAdapter.this.context.getResources().getString(R.string.uploadedPhotosLoadingError);
+                        CharSequence text = UploadedPhotosAdapter.this.context.getResources().getString(R.string.uploadedPhotosLoadingError);
                         int duration = Toast.LENGTH_SHORT;
-                        Toast toast = Toast.makeText(UploadedPhotosGridViewAdapter.this.context, text, duration);
+                        Toast toast = Toast.makeText(UploadedPhotosAdapter.this.context, text, duration);
                         toast.show();
                         break;
                 }

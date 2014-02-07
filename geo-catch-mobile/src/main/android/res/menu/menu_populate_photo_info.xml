@@ -12,7 +12,7 @@
     </item>
 
     <item android:id="@+id/postponePhotoUploadMenuOption"
-          android:icon="@drawable/clock"
+          android:icon="@android:drawable/ic_menu_recent_history"
           android:showAsAction="always">
     </item>
 

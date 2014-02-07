@@ -1,14 +1,13 @@
 package com.jrew.geocatch.mobile.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import com.actionbarsherlock.app.ActionBar;
 import com.jrew.geocatch.mobile.R;
-import com.jrew.geocatch.mobile.adapter.UploadedPhotosGridViewAdapter;
+import com.jrew.geocatch.mobile.adapter.UploadedPhotosAdapter;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
 
 /**
@@ -32,7 +31,7 @@ public class UploadedPhotosFragment extends UserPhotosFragment {
         View layout = inflater.inflate(R.layout.uploaded_photos_fragment, container, false);
 
         GridView photosGridView = (GridView) layout.findViewById(R.id.photosGridView);
-        photosGridView.setAdapter(new UploadedPhotosGridViewAdapter(getActivity()));
+        photosGridView.setAdapter(new UploadedPhotosAdapter(getActivity()));
 
         return layout;
     }

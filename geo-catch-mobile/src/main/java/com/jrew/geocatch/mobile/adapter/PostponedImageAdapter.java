@@ -16,10 +16,7 @@ import com.jrew.geocatch.mobile.dao.PostponedImageManager;
 import com.jrew.geocatch.mobile.model.PostponedImage;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.ImageService;
-import com.jrew.geocatch.mobile.util.CommonUtils;
-import com.jrew.geocatch.mobile.util.DialogUtil;
-import com.jrew.geocatch.mobile.util.PostponedImageDescComparator;
-import com.jrew.geocatch.mobile.util.ServiceUtil;
+import com.jrew.geocatch.mobile.util.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -74,7 +71,11 @@ public class PostponedImageAdapter extends BaseAdapter {
                         dialog.hide();
                         long uploadedPostponedId = resultData.getLong(ImageService.POSTPONED_IMAGE_ID_KEY);
                         removePostponedImage(uploadedPostponedId);
-                        PostponedImageAdapter.this.notifyDataSetChanged();
+                        if (PostponedImageManager.isPostponedImagesPresented(PostponedImageAdapter.this.context)) {
+                            PostponedImageAdapter.this.notifyDataSetChanged();
+                        } else {
+                            FragmentSwitcherHolder.getFragmentSwitcher().showUploadedPhotosFragment();
+                        }
                         break;
 
                     case ImageService.ResultStatus.ERROR:
@@ -122,7 +123,6 @@ public class PostponedImageAdapter extends BaseAdapter {
         int displaySize = CommonUtils.getDisplayLargerSideSize((Activity) context);
         int thumbnailSize = (int) (displaySize * thumbnailScaleFactor);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(thumbnailSize, thumbnailSize);
-        //params.addRule(RelativeLayout.RIGHT_OF, R.id.retryUpload);
         photoThumbnail.setLayoutParams(params);
 
         ImageView retryUpload = (ImageView) row.findViewById(R.id.retryUpload);
@@ -145,13 +145,14 @@ public class PostponedImageAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
 
-                dialog.show();
-
                 PostponedImageManager.deletePostponedImage(context, postponedImage);
                 postponedImages.remove(postponedImage);
-                PostponedImageAdapter.this.notifyDataSetChanged();
 
-                dialog.hide();
+                if (PostponedImageManager.isPostponedImagesPresented(context)) {
+                    PostponedImageAdapter.this.notifyDataSetChanged();
+                } else {
+                    FragmentSwitcherHolder.getFragmentSwitcher().showUploadedPhotosFragment();
+                }
             }
         });
 
@@ -175,4 +176,5 @@ public class PostponedImageAdapter extends BaseAdapter {
             }
         }
     }
+
 }

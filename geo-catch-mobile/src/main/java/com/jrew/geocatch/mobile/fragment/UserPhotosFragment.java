@@ -62,11 +62,13 @@ public class UserPhotosFragment extends SherlockFragment {
                 actionBar.addTab(uploadedPhotosTab, false);
 
                 postponedPhotosTab = actionBar.newTab();
-                postponedPhotosTab.setIcon(R.drawable.clock);
+                postponedPhotosTab.setIcon(android.R.drawable.ic_menu_recent_history);
                 postponedPhotosTab.setTag(TabTag.POSTPONED_PHOTOS_TAB);
                 postponedPhotosTab.setTabListener(tabListener);
                 actionBar.addTab(postponedPhotosTab, false);
             }
+        } else {
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         }
     }
 

@@ -22,7 +22,7 @@
     </item>
 
     <item android:id="@+id/ownImagesMenuOption"
-          android:icon="@android:drawable/ic_menu_myplaces"
+          android:icon="@drawable/ic_menu_cc"
           android:showAsAction="always">
     </item>
 
