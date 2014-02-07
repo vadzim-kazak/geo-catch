@@ -32,11 +32,20 @@ import java.util.Locale;
  */
 public class MapSettingsFragment extends SherlockFragment {
 
+    private interface OwnerValuePositions {
+
+        /** **/
+        public static final int OWNER_ANY_VALUE_POSITION = 0;
+
+        /** **/
+        public static final int OWNER_SELF_VALUE_POSITION = 1;
+    }
+
     /** **/
     private StrictDomainPropertyView fishTypeView, fishingToolView, fishingBaitView;
 
     /** **/
-    private RadioGroup ownerRadioGroup;
+    private Spinner ownerSpinner;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,7 +70,12 @@ public class MapSettingsFragment extends SherlockFragment {
         fishingBaitView = (StrictDomainPropertyView) mapSettingsLayout.findViewById(R.id.fishingBaitView);
         fishingBaitView.loadDomainProperties(DomainInfoService.DomainInfoType.BAIT);
 
-        ownerRadioGroup = (RadioGroup) mapSettingsLayout.findViewById(R.id.ownerRadioGroup);
+        ownerSpinner = (Spinner) mapSettingsLayout.findViewById(R.id.ownerSpinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                R.layout.spinner_item, getResources().getStringArray(R.array.photo_owner_array));
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ownerSpinner.setAdapter(adapter);
+
 
         LanguageSpinner languageSpinner = (LanguageSpinner) mapSettingsLayout.findViewById(R.id.languageSpinner);
         languageSpinner.setActivity(getActivity());
@@ -121,9 +135,9 @@ public class MapSettingsFragment extends SherlockFragment {
         String owner = searchCriteria.getOwner();
         if (owner != null && owner.length() > 0) {
             if (SearchCriteria.OWNER_ANY_VALUE.equalsIgnoreCase(owner)) {
-                ownerRadioGroup.findViewById(R.id.anyone).setSelected(true);
+                ownerSpinner.setSelection(OwnerValuePositions.OWNER_ANY_VALUE_POSITION);
             } else if (SearchCriteria.OWNER_SELF_VALUE.equalsIgnoreCase((owner))) {
-                ownerRadioGroup.findViewById(R.id.self).setSelected(true);
+                ownerSpinner.setSelection(OwnerValuePositions.OWNER_SELF_VALUE_POSITION);
             }
         }
     }
@@ -164,10 +178,7 @@ public class MapSettingsFragment extends SherlockFragment {
         }
         searchCriteria.setDomainProperties(domainProperties);
 
-        // Owner
-        int checkedRadioButtonId = ownerRadioGroup.getCheckedRadioButtonId();
-        RadioButton radioButton = (RadioButton) ownerRadioGroup.findViewById(checkedRadioButtonId);
-        if (radioButton.getId() == R.id.anyone) {
+        if (ownerSpinner.getSelectedItemPosition() == OwnerValuePositions.OWNER_ANY_VALUE_POSITION) {
             searchCriteria.setOwner(SearchCriteria.OWNER_ANY_VALUE);
         } else {
             searchCriteria.setOwner(SearchCriteria.OWNER_SELF_VALUE);

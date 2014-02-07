@@ -46,9 +46,9 @@
 
     <string name="photoOwnerSectionLabel">OWNER</string>
 
-    <string name="photoOwnerAnyoneOptionLabel">Anyone</string>
+    <!--string name="photoOwnerAnyoneOptionLabel">Anyone</string>
 
-    <string name="photoOwnerMeOptionLabel">Me</string>
+    <string name="photoOwnerMeOptionLabel">Me</string-->
 
     <string name="domainPropertyNotPresented">Populated value isn\'t presented</string>
 
@@ -65,6 +65,10 @@
 
     <string name="uploadedPhotosLoadingError">Photos loading error</string>
 
+    <string-array name="photo_owner_array">
+        <item>Anyone</item>
+        <item>Me</item>
+    </string-array>
 
     <!-- Supported languages array -->
     <string-array name="languages_array">

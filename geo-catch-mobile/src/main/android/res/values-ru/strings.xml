@@ -46,9 +46,9 @@
 
     <string name="photoOwnerSectionLabel">АВТОР</string>
 
-    <string name="photoOwnerAnyoneOptionLabel">Любой</string>
+    <!-- string name="photoOwnerAnyoneOptionLabel">Любой</string>
 
-    <string name="photoOwnerMeOptionLabel">Я</string>
+    <string name="photoOwnerMeOptionLabel">Я</string-->
 
     <string name="domainPropertyNotPresented">Введенное значение не существует</string>
 
@@ -64,6 +64,11 @@
     <string name="postponedPhotosFragmentLabel">Отложенные фотографии</string>
 
     <string name="uploadedPhotosLoadingError">Ошибка загрузки фотографий</string>
+
+    <string-array name="photo_owner_array">
+        <item>Любой</item>
+        <item>Я</item>
+    </string-array>
 
     <!-- Supported languages array -->
     <string-array name="languages_array">
