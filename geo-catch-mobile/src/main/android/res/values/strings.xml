@@ -44,7 +44,7 @@
     <!-- Map settings fragment -->
     <string name="mapSettingsFragmentLabel">Map settings</string>
 
-    <string name="photoOwnerSectionLabel">Owner</string>
+    <string name="photoOwnerSectionLabel">OWNER</string>
 
     <string name="photoOwnerAnyoneOptionLabel">Anyone</string>
 
@@ -64,5 +64,17 @@
     <string name="postponedPhotosFragmentLabel">Postponed photos</string>
 
     <string name="uploadedPhotosLoadingError">Photos loading error</string>
+
+
+    <!-- Supported languages array -->
+    <string-array name="languages_array">
+        <item>English</item>
+        <item>Russian</item>
+    </string-array>
+
+    <string-array name="locales_array">
+        <item>en</item>
+        <item>ru</item>
+    </string-array>
 
 </resources>

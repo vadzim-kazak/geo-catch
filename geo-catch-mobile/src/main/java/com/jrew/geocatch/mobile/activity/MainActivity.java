@@ -1,6 +1,5 @@
 package com.jrew.geocatch.mobile.activity;
 
-import android.content.Intent;
 import android.content.res.Resources;
 import android.location.Location;
 import android.os.Bundle;
@@ -17,10 +16,7 @@ import com.jrew.geocatch.mobile.dao.DomainDatabaseManager;
 import com.jrew.geocatch.mobile.dao.PostponedImageManager;
 import com.jrew.geocatch.mobile.reciever.DomainInfoServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
-import com.jrew.geocatch.mobile.util.ActionBarHolder;
-import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
-import com.jrew.geocatch.mobile.util.ServiceUtil;
-import com.jrew.geocatch.mobile.util.SharedPreferencesHelper;
+import com.jrew.geocatch.mobile.util.*;
 
 import java.util.Date;
 import java.util.Locale;
@@ -47,6 +43,12 @@ public class MainActivity extends SherlockFragmentActivity implements
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
+
+        // Update app locale
+        String appLocale = SharedPreferencesHelper.loadLocale(this);
+        if (appLocale.length() > 0) {
+            LocalizationUtil.switchToLocale(appLocale, this);
+        }
 
         ActionBar actionBar = getSupportActionBar();
         ActionBarHolder.setActionBar(actionBar);
@@ -82,7 +84,7 @@ public class MainActivity extends SherlockFragmentActivity implements
      */
     private void syncDomainsInfo() {
 
-        Date lastSyncDate = SharedPreferencesHelper.getLastSyncDate(this);
+        Date lastSyncDate = SharedPreferencesHelper.loadLastSyncDate(this);
         if (lastSyncDate != null) {
 
             String syncPeriodConfig = getResources().getString(R.config.domainInfoSyncPeriodInHours);

@@ -25,12 +25,15 @@ public class SharedPreferencesHelper {
     /** **/
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
+    /** **/
+    private static final String APP_LOCALE_KEY = "locale";
+
     /**
      *
      * @param activity
      * @return
      */
-    public static Date getLastSyncDate(Activity activity) {
+    public static Date loadLastSyncDate(Activity activity) {
 
         SharedPreferences preferences = activity.getPreferences(Activity.MODE_PRIVATE);
         String lastSyncDateRecord = preferences.getString(LAST_SYNC_DATE_PROPERTY, "");
@@ -51,7 +54,7 @@ public class SharedPreferencesHelper {
      *
      * @param activity
      */
-    public static void setLastSyncDate(Activity activity) {
+    public static void saveLastSyncDate(Activity activity) {
 
         SharedPreferences preferences = activity.getPreferences(Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -59,6 +62,32 @@ public class SharedPreferencesHelper {
         DateFormat dateFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
         Date now = new Date();
         editor.putString(LAST_SYNC_DATE_PROPERTY, dateFormat.format(now));
+        editor.commit();
+    }
+
+
+    /**
+     *
+     * @param activity
+     * @return
+     */
+    public static String loadLocale(Activity activity) {
+
+        SharedPreferences preferences = activity.getPreferences(Activity.MODE_PRIVATE);
+        return preferences.getString(APP_LOCALE_KEY, "");
+    }
+
+    /**
+     *
+     * @param locale
+     * @param activity
+     */
+    public static void saveLocale(String locale, Activity activity) {
+
+        SharedPreferences preferences = activity.getPreferences(Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putString(APP_LOCALE_KEY, locale);
         editor.commit();
     }
 

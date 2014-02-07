@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="appName">Geo-Catch</string>
+
+    <!-- Map fragment -->
+    <string name="mapFragmentLabel">Карта</string>
+
+    <string name="syncError">Не удалось подгрузить данные с сервера...</string>
+
+    <!-- Get photo fragment -->
+    <string name="getPhotoFragmentLabel">Сделать фото</string>
+
+    <!-- Preview photo fragment -->
+    <string name="previewPhotoFragmentLabel">Предпросмотр фото</string>
+
+    <!-- Populate photo info fragment (some strings are also used in map settings fragment)-->
+    <string name="populatePhotoInfoFragmentLabel">Фото инфо</string>
+
+    <string name="photoDescriptionInitialLabel">Добавьте здесь описание...</string>
+
+    <string name="domainPropertiesSectionLabel">ДЕТАЛИ</string>
+
+    <string name="fishDomainPropertyInitialLabel">Рыба...</string>
+
+    <string name="toolDomainPropertyInitialLabel">Снасть...</string>
+
+    <string name="baitDomainPropertyInitialLabel">Приманка...</string>
+
+    <string name="shareSectionLabel">ОТКРЫТОСТЬ</string>
+
+    <string name="sharePublicOptionLabel">Публичный</string>
+
+    <string name="sharePrivateOptionLabel">Частный</string>
+
+    <string name="locationLoadingWarning">Ожидание подгрузки локации...</string>
+
+    <string name="imageUploadingError">Ошибка загрузки фотографии</string>
+
+    <string name="imageUploadingRetry">Повторить</string>
+
+    <string name="imageUploadingLater">Загрузить позже</string>
+
+    <!-- Map settings fragment -->
+    <string name="mapSettingsFragmentLabel">Настройки карты</string>
+
+    <string name="photoOwnerSectionLabel">АВТОР</string>
+
+    <string name="photoOwnerAnyoneOptionLabel">Любой</string>
+
+    <string name="photoOwnerMeOptionLabel">Я</string>
+
+    <string name="domainPropertyNotPresented">Введенное значение не существует</string>
+
+    <!-- Photo browsing fragment -->
+    <string name="photoBrowsingFragmentLabel">Просмотр фото</string>
+
+    <!-- Uploaded photos fragment -->
+    <string name="uploadedPhotosFragmentLabel">Мои фотографии</string>
+
+    <string name="uploadedPhotosLoadingError">Ошибка загрузки фотографий</string>
+
+    <!-- Postponed photos fragment -->
+    <string name="postponedPhotosFragmentLabel">Отложенные фотографии</string>
+
+    <string name="uploadedPhotosLoadingError">Ошибка загрузки фотографий</string>
+
+    <!-- Supported languages array -->
+    <string-array name="languages_array">
+        <item>Английский</item>
+        <item>Русский</item>
+    </string-array>
+
+</resources>

@@ -53,7 +53,7 @@ public class DomainInfoServiceResultReceiver extends ResultReceiver {
                         (List<DomainProperty>) resultData.getSerializable(DomainInfoService.RESULT_KEY);
                 if (domainProperties != null && domainProperties.size() > 0) {
                     synchronizeDomainProperties(domainProperties);
-                    SharedPreferencesHelper.setLastSyncDate(activity);
+                    SharedPreferencesHelper.saveLastSyncDate(activity);
                     dialog.hide();
                 } else {
                     dialog.hide();

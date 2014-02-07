@@ -1,29 +1,20 @@
 package com.jrew.geocatch.mobile.fragment;
 
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
-import com.jrew.geocatch.mobile.reciever.DomainInfoServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
-import com.jrew.geocatch.mobile.util.ActionBarHolder;
-import com.jrew.geocatch.mobile.util.CommonUtils;
-import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
-import com.jrew.geocatch.mobile.util.SearchCriteriaHolder;
+import com.jrew.geocatch.mobile.util.*;
 import com.jrew.geocatch.mobile.view.DomainPropertyView;
-import com.jrew.geocatch.mobile.view.RangeSeekBar;
+import com.jrew.geocatch.mobile.view.LanguageSpinner;
 import com.jrew.geocatch.mobile.view.StrictDomainPropertyView;
 import com.jrew.geocatch.web.model.DomainProperty;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
@@ -71,6 +62,9 @@ public class MapSettingsFragment extends SherlockFragment {
         fishingBaitView.loadDomainProperties(DomainInfoService.DomainInfoType.BAIT);
 
         ownerRadioGroup = (RadioGroup) mapSettingsLayout.findViewById(R.id.ownerRadioGroup);
+
+        LanguageSpinner languageSpinner = (LanguageSpinner) mapSettingsLayout.findViewById(R.id.languageSpinner);
+        languageSpinner.setActivity(getActivity());
 
         initMapSettings();
 
