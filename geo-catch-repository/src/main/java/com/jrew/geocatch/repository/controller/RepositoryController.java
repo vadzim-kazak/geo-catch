@@ -47,9 +47,9 @@ public class RepositoryController {
         imageService.updateImage(image);
     }
 
-    @RequestMapping(value = "images/{imageId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "images/{imageId}/{deviceId}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
-    public void deleteImage(@RequestParam("deviceId") String deviceId, @PathVariable("imageId") long imageId) {
+    public void deleteImage(@PathVariable("imageId") long imageId, @PathVariable("deviceId") String deviceId) {
        imageService.deleteImage(imageId, deviceId);
     }
 

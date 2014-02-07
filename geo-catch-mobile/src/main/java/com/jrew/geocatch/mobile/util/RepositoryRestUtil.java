@@ -15,6 +15,7 @@ import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
@@ -217,6 +218,7 @@ public class RepositoryRestUtil {
         if (imageBundle.containsKey(ImageService.POSTPONED_IMAGE_ID_KEY)) {
             bundle.putLong(ImageService.POSTPONED_IMAGE_ID_KEY, imageBundle.getLong(ImageService.POSTPONED_IMAGE_ID_KEY));
         }
+
         int status = response.getStatusLine().getStatusCode();
         if (status == 200) {
             bundle.putBoolean(ImageService.RESULT_KEY, true);
@@ -262,6 +264,46 @@ public class RepositoryRestUtil {
         }
 
         bundle.putSerializable(DomainInfoService.RESULT_KEY, domainProperties);
+
+        return bundle;
+    }
+
+    /**
+     *
+     * @param intent
+     * @param resources
+     * @return
+     * @throws Exception
+     */
+    public static Bundle deleteImage(Intent intent, Resources resources) throws Exception {
+
+        HttpClient httpClient = createHttpClient();
+        HttpContext localContext = new BasicHttpContext();
+
+        Bundle bundle = (Bundle) intent.getParcelableExtra(ImageService.REQUEST_KEY);
+
+        long imageId = bundle.getLong(ImageService.IMAGE_ID_KEY);
+        String deviceId = bundle.getString(ImageService.DEVICE_ID_KEY);
+
+        StringBuilder deleteImageUrl = new StringBuilder();
+        deleteImageUrl.append(resources.getString(R.config.repositoryUrl))
+                .append(resources.getString(R.config.repositoryPath))
+                .append(resources.getString(R.config.repositoryImagesUri))
+                .append("/")
+                .append(imageId)
+                .append("/")
+                .append(deviceId);
+
+        HttpDelete httpDelete = new HttpDelete(deleteImageUrl.toString());
+        HttpResponse response = httpClient.execute(httpDelete, localContext);
+
+        bundle.clear();
+        int status = response.getStatusLine().getStatusCode();
+        if (status == 200) {
+            bundle.putBoolean(ImageService.RESULT_KEY, true);
+        } else {
+            bundle.putBoolean(ImageService.RESULT_KEY, false);
+        }
 
         return bundle;
     }

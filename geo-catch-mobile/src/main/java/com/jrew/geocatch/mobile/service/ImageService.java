@@ -15,8 +15,8 @@ import com.jrew.geocatch.mobile.util.RepositoryRestUtil;
  */
 public class ImageService extends IntentService {
 
-    /** Reciever intent key  **/
-    public static final String RECEIVER_KEY = "reciever";
+    /** Receiver intent key  **/
+    public static final String RECEIVER_KEY = "receiver";
 
     /** **/
     public static final String COMMAND_KEY = "command";
@@ -31,7 +31,13 @@ public class ImageService extends IntentService {
     public static final String IMAGE_KEY = "image";
 
     /** **/
-    public static final String POSTPONED_IMAGE_ID_KEY = "postopenImageId";
+    public static final String POSTPONED_IMAGE_ID_KEY = "postponedImageId";
+
+    /** **/
+    public static final String IMAGE_ID_KEY = "imageId";
+
+    /** **/
+    public static final String DEVICE_ID_KEY = "deviceId";
 
     /**
      *
@@ -52,6 +58,9 @@ public class ImageService extends IntentService {
 
         /** **/
         public static final String UPLOAD_IMAGE = "uploadImage";
+
+        /** **/
+        public static final String DELETE_IMAGE = "deleteImage";
     }
 
     /**
@@ -82,6 +91,9 @@ public class ImageService extends IntentService {
 
         /** **/
         public static final int UPLOAD_IMAGE_STARTED = 8;
+
+        /** **/
+        public static final int DELETE_IMAGE_FINISHED = 9;
     }
 
     /**
@@ -133,6 +145,10 @@ public class ImageService extends IntentService {
 
                 receiver.send(ResultStatus.UPLOAD_IMAGE_FINISHED,
                         RepositoryRestUtil.uploadImage(intent, resources));
+            } else if (command.equals(Commands.DELETE_IMAGE)) {
+
+                receiver.send(ResultStatus.DELETE_IMAGE_FINISHED,
+                        RepositoryRestUtil.deleteImage(intent, resources));
             }
 
         } catch(Exception exception) {

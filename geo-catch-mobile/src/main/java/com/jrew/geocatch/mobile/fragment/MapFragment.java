@@ -202,18 +202,6 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
     /**
      *
-     * @param image
-     */
-    public void loadThumbnail(ClientImagePreview image) {
-        final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), ImageService.class);
-        intent.putExtra(ImageService.RECEIVER_KEY, imageResultReceiver);
-        intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.LOAD_IMAGE_THUMBNAIL);
-        intent.putExtra(ImageService.IMAGE_KEY, image);
-        getActivity().startService(intent);
-    }
-
-    /**
-     *
      */
     private void clearMarkers() {
         googleMap.clear();

@@ -17,6 +17,7 @@ import com.jrew.geocatch.mobile.fragment.MapFragment;
 import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.util.CommonUtils;
+import com.jrew.geocatch.mobile.util.ServiceUtil;
 import com.jrew.geocatch.web.model.ClientImage;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 
@@ -75,7 +76,7 @@ public class ImageServiceResultReceiver extends ResultReceiver {
         public void loadNext() {
             if(counter < images.size()) {
                 ClientImagePreview image = images.get(counter);
-                mapFragment.loadThumbnail(image);
+                ServiceUtil.callLoadImageThumbnailService(image, ImageServiceResultReceiver.this, mapFragment.getActivity());
                 counter++;
             } else {
                 isLoading = false;

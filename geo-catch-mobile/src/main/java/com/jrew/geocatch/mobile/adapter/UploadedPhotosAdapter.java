@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.jrew.geocatch.mobile.R;
+import com.jrew.geocatch.mobile.fragment.PhotoBrowsingFragment;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.service.ReloadImageTask;
@@ -140,6 +141,7 @@ public class UploadedPhotosAdapter extends BaseAdapter {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(ImageService.IMAGE_KEY, clientImagePreview);
+                bundle.putBoolean(PhotoBrowsingFragment.BrowsingMode.OWN_PHOTO_BROWSING.toString(), true);
                 FragmentSwitcherHolder.getFragmentSwitcher().showPhotoBrowsingFragment(bundle);
             }
         });

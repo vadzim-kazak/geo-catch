@@ -20,10 +20,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
-import com.jrew.geocatch.mobile.util.ActionBarHolder;
-import com.jrew.geocatch.mobile.util.DialogUtil;
-import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
-import com.jrew.geocatch.mobile.util.LayoutUtil;
+import com.jrew.geocatch.mobile.util.*;
 import com.jrew.geocatch.web.model.ClientImage;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.DomainProperty;
@@ -40,6 +37,18 @@ import java.util.List;
  */
 public class PhotoBrowsingFragment extends SherlockFragment {
 
+    /**
+     *
+     */
+    public enum BrowsingMode {
+
+       /** **/
+       FOREIGN_PHOTO_BROWSING,
+
+       /** **/
+       OWN_PHOTO_BROWSING
+    }
+
     /** **/
     private ServiceResultReceiver imageResultReceiver;
 
@@ -48,6 +57,9 @@ public class PhotoBrowsingFragment extends SherlockFragment {
 
     /** **/
     private ClientImage clientImage;
+
+    /** **/
+    private BrowsingMode browsingMode = BrowsingMode.FOREIGN_PHOTO_BROWSING;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -97,7 +109,7 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                         clientImage = (ClientImage) resultData.getSerializable(ImageService.RESULT_KEY);
 
                         // Load image
-                        loadImage(clientImage);
+                        ServiceUtil.callLoadImageService(clientImage, imageResultReceiver, getActivity());
                         break;
 
                     case ImageService.ResultStatus.LOAD_IMAGE_FINISHED:
@@ -125,7 +137,7 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                         Display display = getActivity().getWindowManager().getDefaultDisplay();
                         double scaleFactor = LayoutUtil.getViewWidthScaleFactor(display.getWidth(), image.getWidth(), 0);
                         imageView.setLayoutParams(new LinearLayout.LayoutParams((int)
-                            (image.getWidth() * scaleFactor), (int) (image.getHeight() * scaleFactor)));
+                                (image.getWidth() * scaleFactor), (int) (image.getHeight() * scaleFactor)));
 
                         // date
                         date.setText(browsingDateFormat.format(clientImage.getDate()));
@@ -140,6 +152,15 @@ public class PhotoBrowsingFragment extends SherlockFragment {
 
                         progressDialog.dismiss();
                         break;
+
+                    case ImageService.ResultStatus.DELETE_IMAGE_FINISHED:
+                        progressDialog.hide();
+                        FragmentSwitcherHolder.getFragmentSwitcher().showUploadedPhotosFragment();
+                        break;
+
+                    case ImageService.ResultStatus.ERROR:
+                        progressDialog.hide();
+                        break;
                 }
             }
 
@@ -147,8 +168,13 @@ public class PhotoBrowsingFragment extends SherlockFragment {
 
         Bundle fragmentData = getArguments();
         if (fragmentData != null && !fragmentData.isEmpty()) {
+
+            if (fragmentData.containsKey(BrowsingMode.OWN_PHOTO_BROWSING.toString())) {
+                browsingMode = BrowsingMode.OWN_PHOTO_BROWSING;
+            }
+
             ClientImagePreview image = (ClientImagePreview) fragmentData.getSerializable(ImageService.IMAGE_KEY);
-            loadClientImage(image);
+            ServiceUtil.callLoadImageDataService(image, imageResultReceiver, getActivity());
         }
 
         return photoBrowsingLayout;
@@ -158,6 +184,19 @@ public class PhotoBrowsingFragment extends SherlockFragment {
     public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_photo_browsing, menu);
+
+        switch (browsingMode) {
+            case FOREIGN_PHOTO_BROWSING:
+                // Remove delete photo menu option
+                menu.removeItem(R.id.deleteImageMenuOption);
+                break;
+
+            case  OWN_PHOTO_BROWSING:
+                // Remove report photo menu option
+                menu.removeItem(R.id.reportImageMenuOption);
+                break;
+        }
+
     }
 
     @Override
@@ -167,36 +206,26 @@ public class PhotoBrowsingFragment extends SherlockFragment {
 
         FragmentSwitcher fragmentSwitcher = FragmentSwitcherHolder.getFragmentSwitcher();
         switch (pressedMenuItemId) {
-            case R.id.proceedToMapMenuOption:
+            case R.id.backMenuOption:
                 getSherlockActivity().getSupportFragmentManager().popBackStack();
                 break;
 
+            case R.id.deleteImageMenuOption:
+                if (clientImage != null) {
+                    progressDialog.show();
+
+                    Bundle requestBundle = new Bundle();
+                    requestBundle.putLong(ImageService.IMAGE_ID_KEY, clientImage.getId());
+                    requestBundle.putString(ImageService.DEVICE_ID_KEY, CommonUtils.getDeviceId(getActivity()));
+                    ServiceUtil.callDeleteImageService(requestBundle, imageResultReceiver, getActivity());
+                }
+                break;
+
+            case R.id.reportImageMenuOption:
+
+                break;
         }
 
         return true;
-    }
-
-    /**
-     *
-     * @param image
-     */
-    private void loadClientImage(ClientImagePreview image) {
-        final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), ImageService.class);
-        intent.putExtra(ImageService.RECEIVER_KEY, imageResultReceiver);
-        intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.LOAD_IMAGE_DATA);
-        intent.putExtra(ImageService.REQUEST_KEY, image.getId());
-        getActivity().startService(intent);
-    }
-
-    /**
-     *
-     * @param image
-     */
-    private void loadImage(ClientImage image) {
-        final Intent intent = new Intent(Intent.ACTION_SYNC, null, getActivity(), ImageService.class);
-        intent.putExtra(ImageService.RECEIVER_KEY, imageResultReceiver);
-        intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.LOAD_IMAGE);
-        intent.putExtra(ImageService.IMAGE_KEY, image);
-        getActivity().startService(intent);
     }
 }

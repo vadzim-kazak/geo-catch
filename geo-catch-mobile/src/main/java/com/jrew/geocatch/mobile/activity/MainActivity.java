@@ -19,6 +19,7 @@ import com.jrew.geocatch.mobile.reciever.DomainInfoServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
+import com.jrew.geocatch.mobile.util.ServiceUtil;
 import com.jrew.geocatch.mobile.util.SharedPreferencesHelper;
 
 import java.util.Date;
@@ -109,10 +110,7 @@ public class MainActivity extends SherlockFragmentActivity implements
         String locale = Locale.getDefault().getLanguage();
         bundle.putString(DomainInfoService.LOCALE_KEY, locale);
 
-        final Intent intent = new Intent(Intent.ACTION_SYNC, null, this, DomainInfoService.class);
-        intent.putExtra(DomainInfoService.REQUEST_KEY, bundle);
-        intent.putExtra(DomainInfoService.RECEIVER_KEY, new DomainInfoServiceResultReceiver(new Handler(), this));
-        startService(intent);
+        ServiceUtil.callLoadDomainInfoService(bundle, new DomainInfoServiceResultReceiver(new Handler(), this), this);
     }
 
     @Override
