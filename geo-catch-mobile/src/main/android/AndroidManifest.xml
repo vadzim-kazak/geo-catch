@@ -30,7 +30,8 @@
                    android:value="@integer/google_play_services_version" />
 
         <activity android:name="com.jrew.geocatch.mobile.activity.MainActivity"
-                  android:uiOptions="splitActionBarWhenNarrow">
+                  android:uiOptions="splitActionBarWhenNarrow"
+                  android:theme="@style/Theme.Styled">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

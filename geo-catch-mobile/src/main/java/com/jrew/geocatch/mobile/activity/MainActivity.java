@@ -32,7 +32,7 @@ public class MainActivity extends SherlockFragmentActivity implements
         GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
 
     /** **/
-    private static int theme = R.style.Theme_Sherlock_Light;
+    private static int theme = R.style.Theme_Styled;
 
     /** **/
     private LocationClient locationClient;

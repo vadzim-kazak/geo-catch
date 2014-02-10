@@ -1,7 +1,9 @@
 package com.jrew.geocatch.mobile.fragment;
 
 import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
@@ -43,6 +45,7 @@ public class UserPhotosFragment extends SherlockFragment {
 
         //Init fragment in tab mode if there are postponed images presented
         if (PostponedImageManager.isPostponedImagesPresented(getActivity())) {
+
             int currentNavigationMode = actionBar.getNavigationMode();
             if (currentNavigationMode != ActionBar.NAVIGATION_MODE_TABS) {
                 actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -66,6 +69,7 @@ public class UserPhotosFragment extends SherlockFragment {
                 postponedPhotosTab.setTag(TabTag.POSTPONED_PHOTOS_TAB);
                 postponedPhotosTab.setTabListener(tabListener);
                 actionBar.addTab(postponedPhotosTab, false);
+
             }
         } else {
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);

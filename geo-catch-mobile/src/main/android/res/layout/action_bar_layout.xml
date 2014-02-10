@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingLeft="5dip"
+                android:paddingRight="0dip">
+
+    <ImageView android:layout_width="35dip"
+               android:layout_height="35dip"
+               android:id="@+id/imageView"
+               android:src="@drawable/icon"
+               android:layout_gravity="center_vertical|left"
+               android:layout_alignParentLeft="true"
+               android:layout_centerVertical="true"/>
+
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_toRightOf="@+id/imageView"
+                  android:layout_centerVertical="true"
+                  android:layout_marginLeft="5dip"
+                  android:layout_marginBottom="5dip">
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="Geo-Catch"
+                  android:textSize="18dip"
+                  android:id="@+id/textView1"
+                  android:layout_gravity="left"/>
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="Subtitle ..."
+                  android:textSize="14dip"
+                  android:id="@+id/textView"
+                  android:layout_gravity="left"/>
+
+    </LinearLayout>
+
+    <ImageView android:layout_width="@dimen/abs__action_bar_default_height"
+               android:layout_height="@dimen/abs__action_bar_default_height"
+               android:id="@+id/imageView1"
+               android:src="@android:drawable/ic_menu_more"
+               android:scaleType="center"
+               android:layout_gravity="right"
+               android:layout_alignParentRight="true"
+               android:layout_centerVertical="true"
+               android:clickable="true"
+               android:background="@drawable/abs__item_background_holo_light" />
+
+
+</RelativeLayout>

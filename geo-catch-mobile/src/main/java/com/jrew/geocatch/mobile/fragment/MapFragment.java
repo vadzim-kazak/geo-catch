@@ -1,8 +1,9 @@
 package com.jrew.geocatch.mobile.fragment;
 
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.TypedArray;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -26,7 +27,6 @@ import com.jrew.geocatch.mobile.activity.MainActivity;
 import com.jrew.geocatch.mobile.listener.MarkerOnClickListener;
 import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.reciever.ImageServiceResultReceiver;
-import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.SearchCriteriaHolder;
@@ -67,8 +67,21 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
         // Action bar subtitle
         ActionBar actionBar = ActionBarHolder.getActionBar();
-        actionBar.setSubtitle(getResources().getString(R.string.mapFragmentLabel));
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        //actionBar.setSubtitle(getResources().getString(R.string.mapFragmentLabel));
+        //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+
+
+        View view = View.inflate(getActivity(), R.layout.action_bar_layout, null);
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setIcon(android.R.color.transparent);
+        actionBar.setCustomView(view);
+
+        actionBar.setLogo(null);
+        View homeIcon = getActivity().findViewById(
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ?
+                        android.R.id.home : R.id.abs__home);
+        ((View) homeIcon.getParent()).setVisibility(View.GONE);
+        ((View) homeIcon).setVisibility(View.GONE);
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
