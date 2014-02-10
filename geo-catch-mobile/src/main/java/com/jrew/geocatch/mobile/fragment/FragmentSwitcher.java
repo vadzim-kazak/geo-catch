@@ -40,6 +40,9 @@ public class FragmentSwitcher {
 
         /** **/
         String UPLOADED_PHOTOS_FRAGMENT_TAG = "uploadedPhotosFragmentTag";
+
+        /** **/
+        String SETTINGS_FRAGMENT_TAG = "settingsFragmentTag";
     }
 
     /** **/
@@ -127,6 +130,8 @@ public class FragmentSwitcher {
             return new PostponedPhotosFragment();
         } else if (TAG.UPLOADED_PHOTOS_FRAGMENT_TAG.equals(fragmentTag)) {
             return new UploadedPhotosFragment();
+        } else if (TAG.SETTINGS_FRAGMENT_TAG.equals(fragmentTag)) {
+            return new SettingsFragment();
         }
 
         return null;
@@ -182,6 +187,13 @@ public class FragmentSwitcher {
      */
     public void showPostponedPhotosFragment() {
         showPostponedPhotosFragment(true);
+    }
+
+    /**
+     *
+     */
+    public void showSettingsFragment() {
+        showFragment(TAG.SETTINGS_FRAGMENT_TAG);
     }
 
     /**

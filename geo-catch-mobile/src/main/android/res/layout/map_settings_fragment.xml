@@ -111,31 +111,6 @@
 
     </LinearLayout>
 
-
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="LANGUAGE"
-              android:textStyle="bold"
-              android:textSize="18dip"
-              android:textColor="@android:color/darker_gray"
-              android:layout_marginBottom="5dip"
-              android:layout_gravity="left|center_vertical"/>
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="horizontal"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:background="@drawable/white_bordered_background"
-                  android:layout_marginBottom="30dip"
-                  android:layout_gravity="left|center_vertical">
-
-        <com.jrew.geocatch.mobile.view.LanguageSpinner android:id="@+id/languageSpinner"
-                                                       android:layout_width="fill_parent"
-                                                       android:layout_height="wrap_content"
-                                                       android:layout_marginLeft="10dip"/>
-
-    </LinearLayout>
-
     <!-- LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:id="@+id/timeFilterRow"
                   android:orientation="vertical"

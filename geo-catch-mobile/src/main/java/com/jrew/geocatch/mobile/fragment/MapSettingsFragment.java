@@ -76,10 +76,6 @@ public class MapSettingsFragment extends SherlockFragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ownerSpinner.setAdapter(adapter);
 
-
-        LanguageSpinner languageSpinner = (LanguageSpinner) mapSettingsLayout.findViewById(R.id.languageSpinner);
-        languageSpinner.setActivity(getActivity());
-
         initMapSettings();
 
         return mapSettingsLayout;

@@ -11,6 +11,7 @@ import android.support.v4.app.Watson;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -63,18 +64,33 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
         setHasOptionsMenu(true);
 
-      //  ActionBarHolder.getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-
         // Action bar subtitle
         ActionBar actionBar = ActionBarHolder.getActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
         //actionBar.setSubtitle(getResources().getString(R.string.mapFragmentLabel));
         //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 
+        if (actionBar.getNavigationMode() != ActionBar.NAVIGATION_MODE_STANDARD) {
+            ActionBarHolder.getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        }
 
-        View view = View.inflate(getActivity(), R.layout.action_bar_layout, null);
+        View actionBarView = View.inflate(getActivity(), R.layout.action_bar_layout, null);
         actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setIcon(android.R.color.transparent);
-        actionBar.setCustomView(view);
+        actionBar.setCustomView(actionBarView);
+
+        ImageView settingImageView = (ImageView) actionBarView.findViewById(R.id.settingImageView);
+
+        if (settingImageView.getVisibility() == View.GONE) {
+            settingImageView.setVisibility(View.VISIBLE);
+        }
+
+        settingImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentSwitcherHolder.getFragmentSwitcher().showSettingsFragment();
+            }
+        });
+
 
         actionBar.setLogo(null);
         View homeIcon = getActivity().findViewById(
@@ -108,8 +124,6 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                     googleMap.moveCamera(center);
                     googleMap.animateCamera(zoom);
                 }
-
-
 
                 imageMarkerPairs = new HashMap<Long, ImageMarkerPair>();
 
