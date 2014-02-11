@@ -55,6 +55,7 @@ public class MapSettingsFragment extends SherlockFragment {
         ActionBarUtil.initActionBar(ActionBar.NAVIGATION_MODE_STANDARD, getActivity());
         ActionBarUtil.setActionBarSubtitle(R.string.mapSettingsFragmentLabel, getActivity());
 
+        LayoutUtil.showFragmentContainer(getActivity());
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         View mapSettingsLayout = inflater.inflate(R.layout.map_settings_fragment, container, false);

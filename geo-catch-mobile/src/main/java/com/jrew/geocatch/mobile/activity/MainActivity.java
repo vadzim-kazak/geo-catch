@@ -56,21 +56,22 @@ public class MainActivity extends SherlockFragmentActivity implements
         if (isGooglePlayServicesInstalled()) {
 
             FragmentSwitcherHolder.initFragmentSwitcher(getSupportFragmentManager());
-
-            syncDomainsInfo();
-
-            // Set default fragment
             FragmentSwitcherHolder.getFragmentSwitcher().handleActivityCreation();
 
-        /*
-         * Create a new location client, using the enclosing class to
-         * handle callbacks.
-         */
-            locationClient = new LocationClient(this, this, this);
 
+            if (WebUtil.isNetworkAvailable(this)) {
+                syncDomainsInfo();
+
+                /*
+                 * Create a new location client, using the enclosing class to
+                 * handle callbacks.
+                 */
+                locationClient = new LocationClient(this, this, this);
+
+                DomainDatabaseManager.loadDomainProperties(this);
+            }
         }
 
-        DomainDatabaseManager.loadDomainProperties(this);
     }
 
     /**
@@ -129,7 +130,9 @@ public class MainActivity extends SherlockFragmentActivity implements
     protected void onStart() {
         super.onStart();
         // Connect the client.
-        locationClient.connect();
+        if(locationClient != null) {
+            locationClient.connect();
+        }
     }
 
     /*
@@ -138,7 +141,9 @@ public class MainActivity extends SherlockFragmentActivity implements
     @Override
     protected void onStop() {
         // Disconnecting the client invalidates it.
-        locationClient.disconnect();
+        if (locationClient != null) {
+            locationClient.disconnect();
+        }
         super.onStop();
     }
 

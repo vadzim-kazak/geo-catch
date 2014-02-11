@@ -1,12 +1,24 @@
 package com.jrew.geocatch.mobile.util;
 
+import android.app.Activity;
 import android.graphics.Point;
 import android.hardware.Camera;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+import com.jrew.geocatch.mobile.R;
 
 /**
  *
  */
 public class LayoutUtil {
+
+    /** **/
+    public static final String REFRESH_FRAGMENT_FLAG = "refreshFragmentFlag";
 
     /**
      *
@@ -46,4 +58,57 @@ public class LayoutUtil {
         return  ((double) layoutWidth - 2 * margin) / viewWidth;
     }
 
+    /**
+     *
+     * @param activity
+     */
+    public static void showNoConnectionLayout(Activity activity, Fragment fragment) {
+
+        FrameLayout fragmentContainer = (FrameLayout) activity.findViewById(R.id.fragmentContainer);
+        if (fragmentContainer != null && fragmentContainer.getVisibility() != View.GONE) {
+            fragmentContainer.setVisibility(View.GONE);
+        }
+
+        LinearLayout noNetworkConnectionLayout = (LinearLayout) activity.findViewById(R.id.noNetworkConnectionLayout);
+        if (noNetworkConnectionLayout != null) {
+            if (noNetworkConnectionLayout.getVisibility() != View.VISIBLE) {
+                noNetworkConnectionLayout.setVisibility(View.VISIBLE);
+            }
+
+            //        noNetworkConnectionLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+            //        LinearLayout.LayoutParams.MATCH_PARENT));
+
+            ImageView refreshImageView = (ImageView) noNetworkConnectionLayout.findViewById(R.id.refreshNetworkImageView);
+            refreshImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FragmentSwitcherHolder.getFragmentSwitcher().refreshCurrentFragment();
+                }
+            });
+
+        }
+
+        Bundle bundle = fragment.getArguments();
+        if (bundle != null && bundle.containsKey(REFRESH_FRAGMENT_FLAG)) {
+            Toast.makeText(activity, activity.getResources().getString(R.string.noNetworkConnectionError),
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     *
+     * @param activity
+     */
+    public static void showFragmentContainer(Activity activity) {
+
+        LinearLayout noNetworkConnectionLayout = (LinearLayout) activity.findViewById(R.id.noNetworkConnectionLayout);
+        if (noNetworkConnectionLayout != null && noNetworkConnectionLayout.getVisibility() != View.GONE) {
+            noNetworkConnectionLayout.setVisibility(View.GONE);
+        }
+
+        FrameLayout fragmentContainer = (FrameLayout) activity.findViewById(R.id.fragmentContainer);
+        if (fragmentContainer != null && fragmentContainer.getVisibility() != View.VISIBLE) {
+            fragmentContainer.setVisibility(View.VISIBLE);
+        }
+    }
 }

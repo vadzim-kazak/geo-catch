@@ -1,8 +1,12 @@
 package com.jrew.geocatch.mobile.util;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.web.model.ClientImage;
 import com.jrew.geocatch.web.model.ClientImagePreview;
@@ -31,6 +35,22 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class WebUtil {
+
+    /**
+     *
+     * @param activity
+     * @return
+     */
+    public static boolean isNetworkAvailable(Activity activity) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      *

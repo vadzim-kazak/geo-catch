@@ -44,6 +44,7 @@ public class PreviewPhotoFragment extends SherlockFragment {
         ActionBarUtil.initActionBar(ActionBar.NAVIGATION_MODE_STANDARD, getActivity());
         ActionBarUtil.setActionBarSubtitle(R.string.previewPhotoFragmentLabel, getActivity());
 
+        LayoutUtil.showFragmentContainer(getActivity());
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         View result = inflater.inflate(R.layout.preview_photo_fragment, container, false);

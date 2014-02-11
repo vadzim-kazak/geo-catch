@@ -70,6 +70,8 @@
 
     <string name="uploadedPhotosLoadingError">Ошибка загрузки фотографий</string>
 
+    <string name="noNetworkConnectionError">Нет доступа к интернету</string>
+
     <string-array name="photo_owner_array">
         <item>Любой</item>
         <item>Я</item>

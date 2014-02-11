@@ -10,6 +10,8 @@ import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.adapter.UploadedPhotosAdapter;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
 import com.jrew.geocatch.mobile.util.ActionBarUtil;
+import com.jrew.geocatch.mobile.util.LayoutUtil;
+import com.jrew.geocatch.mobile.util.WebUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,10 +30,19 @@ public class UploadedPhotosFragment extends UserPhotosFragment {
         // Action bar subtitle
         ActionBarUtil.setActionBarSubtitle(R.string.uploadedPhotosFragmentLabel, getActivity());
 
-        View layout = inflater.inflate(R.layout.uploaded_photos_fragment, container, false);
+        View layout = null;
+        if (WebUtil.isNetworkAvailable(getActivity())) {
 
-        GridView photosGridView = (GridView) layout.findViewById(R.id.photosGridView);
-        photosGridView.setAdapter(new UploadedPhotosAdapter(getActivity()));
+            LayoutUtil.showFragmentContainer(getActivity());
+
+            layout = inflater.inflate(R.layout.uploaded_photos_fragment, container, false);
+            GridView photosGridView = (GridView) layout.findViewById(R.id.photosGridView);
+            photosGridView.setAdapter(new UploadedPhotosAdapter(getActivity()));
+
+        } else {
+
+            LayoutUtil.showNoConnectionLayout(getActivity(), this);
+        }
 
         return layout;
     }

@@ -15,6 +15,7 @@ import com.jrew.geocatch.mobile.listener.UserPhotoTabListener;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
 import com.jrew.geocatch.mobile.util.ActionBarUtil;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
+import com.jrew.geocatch.mobile.util.LayoutUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -129,7 +130,7 @@ public class UserPhotosFragment extends SherlockFragment {
      *
      * @param tabTag
      */
-    public void selectTabByTag(TabTag tabTag) {
+    private void selectTabByTag(TabTag tabTag) {
         ActionBar actionBar = ActionBarHolder.getActionBar();
         ActionBar.Tab tab = getTabByTag(tabTag, actionBar);
         if (tab != null) {

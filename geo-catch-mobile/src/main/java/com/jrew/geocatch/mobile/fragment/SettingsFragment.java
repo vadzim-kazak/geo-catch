@@ -14,6 +14,7 @@ import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
 import com.jrew.geocatch.mobile.util.ActionBarUtil;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
+import com.jrew.geocatch.mobile.util.LayoutUtil;
 import com.jrew.geocatch.mobile.view.LanguageSpinner;
 
 /**
@@ -27,12 +28,12 @@ public class SettingsFragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
-
         setHasOptionsMenu(true);
 
         ActionBarUtil.initActionBar(ActionBar.NAVIGATION_MODE_STANDARD, false, getActivity());
         ActionBarUtil.setActionBarSubtitle(R.string.settingsFragmentLabel, getActivity());
+
+        LayoutUtil.showFragmentContainer(getActivity());
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 

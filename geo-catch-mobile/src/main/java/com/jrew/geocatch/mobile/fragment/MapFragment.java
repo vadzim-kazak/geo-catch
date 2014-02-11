@@ -11,7 +11,9 @@ import android.support.v4.app.Watson;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -68,57 +70,63 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
         View result = super.onCreateView(inflater, container, savedInstanceState);
 
-        if (googleMap == null) {
+        if (WebUtil.isNetworkAvailable(getActivity())) {
 
-            googleMap = getMap();
+            LayoutUtil.showFragmentContainer(getActivity());
 
-            if (googleMap != null) {
-                int mapType = Integer.parseInt(getResources().getString(R.config.mapType));
-                googleMap.setMapType(mapType);
+            if (googleMap == null) {
 
-                MainActivity parentActivity = (MainActivity) getActivity();
-                Location currentLocation = parentActivity.getCurrentLocation();
-                if (currentLocation != null) {
+                googleMap = getMap();
 
-                    CameraUpdate center =  CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(),
-                            currentLocation.getLongitude()));
+                if (googleMap != null) {
+                    int mapType = Integer.parseInt(getResources().getString(R.config.mapType));
+                    googleMap.setMapType(mapType);
 
-                    CameraUpdate zoom = CameraUpdateFactory.zoomTo(
-                            Integer.parseInt(getResources().getString(R.config.cameraInitialZoom)));
+                    MainActivity parentActivity = (MainActivity) getActivity();
+                    Location currentLocation = parentActivity.getCurrentLocation();
+                    if (currentLocation != null) {
 
-                    googleMap.moveCamera(center);
-                    googleMap.animateCamera(zoom);
+                        CameraUpdate center =  CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(),
+                                currentLocation.getLongitude()));
+
+                        CameraUpdate zoom = CameraUpdateFactory.zoomTo(
+                                Integer.parseInt(getResources().getString(R.config.cameraInitialZoom)));
+
+                        googleMap.moveCamera(center);
+                        googleMap.animateCamera(zoom);
+                    }
+
+                    imageMarkerPairs = new HashMap<Long, ImageMarkerPair>();
+
+                    googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+
+                        @Override
+                        public void onCameraChange(CameraPosition cameraPosition) {
+
+                            // Get current view bounds
+                            LatLngBounds latLngBounds = getLatLngBounds();
+
+                            // Remove invisible markers
+                            //removeInvisibleMarkers(latLngBounds);
+
+                            // Load new images for view bounds
+                            loadImages(latLngBounds);
+                        }
+                    });
+
+                    /** Set custom on marker click listener  **/
+                    MarkerOnClickListener markerOnclickListener = new MarkerOnClickListener(imageMarkerPairs, this);
+                    googleMap.setOnMarkerClickListener(markerOnclickListener);
+
+                    imageResultReceiver = new ImageServiceResultReceiver(new Handler(), this);
                 }
 
-                imageMarkerPairs = new HashMap<Long, ImageMarkerPair>();
-
-                final MapFragment fragment = this;
-                googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-
-                    @Override
-                    public void onCameraChange(CameraPosition cameraPosition) {
-
-                        // Get current view bounds
-                        LatLngBounds latLngBounds = getLatLngBounds();
-
-                        // Remove invisible markers
-                        //removeInvisibleMarkers(latLngBounds);
-
-                        // Load new images for view bounds
-                        loadImages(latLngBounds);
-                    }
-                });
-
-                /** Set custom on marker click listener  **/
-                MarkerOnClickListener markerOnclickListener = new MarkerOnClickListener(imageMarkerPairs, this);
-                googleMap.setOnMarkerClickListener(markerOnclickListener);
-
-                imageResultReceiver = new ImageServiceResultReceiver(new Handler(), this);
+            } else {
+                clearMarkers();
+                loadImages(getLatLngBounds());
             }
-
         } else {
-            clearMarkers();
-            loadImages(getLatLngBounds());
+            LayoutUtil.showNoConnectionLayout(getActivity(), this);
         }
 
         return result;

@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import com.jrew.geocatch.mobile.R;
+import com.jrew.geocatch.mobile.util.LayoutUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -83,6 +84,7 @@ public class FragmentSwitcher {
      * @param addToBackStack
      */
     private void showFragment(String fragmentTag, Bundle fragmentData, boolean addToBackStack) {
+
         displayingFragmentTag = fragmentTag;
         Fragment fragment = getFragment(fragmentTag);
 
@@ -97,7 +99,7 @@ public class FragmentSwitcher {
         }
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment, fragmentTag);
+        transaction.replace(R.id.fragmentContainer, fragment, fragmentTag);
         if (addToBackStack) {
             transaction.addToBackStack(fragmentTag);
         }
@@ -205,6 +207,15 @@ public class FragmentSwitcher {
      */
     public void showSettingsFragment() {
         showFragment(TAG.SETTINGS_FRAGMENT_TAG);
+    }
+
+    /**
+     *
+     */
+    public void refreshCurrentFragment() {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(LayoutUtil.REFRESH_FRAGMENT_FLAG, true);
+        showFragment(displayingFragmentTag);
     }
 
     /**
