@@ -52,11 +52,6 @@ public class MainActivity extends SherlockFragmentActivity implements
 
         ActionBar actionBar = getSupportActionBar();
         ActionBarHolder.setActionBar(actionBar);
-        Resources resources = getResources();
-
-        // Set app icon and name to action bar
-        actionBar.setIcon(resources.getDrawable(R.drawable.icon));
-        actionBar.setTitle(resources.getString(R.string.appName));
 
         if (isGooglePlayServicesInstalled()) {
 

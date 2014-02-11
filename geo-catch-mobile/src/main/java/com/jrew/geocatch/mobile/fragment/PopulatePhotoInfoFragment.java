@@ -61,7 +61,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
     private Location currentLocation;
 
     /** **/
-    private ProgressDialog progressDialog;
+   // private ProgressDialog progressDialog;
 
     /** **/
     private Bundle imageBundle;
@@ -77,11 +77,11 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
 
         setHasOptionsMenu(true);
 
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         // Action bar subtitle
-        ActionBar actionBar = ActionBarHolder.getActionBar();
-        actionBar.setSubtitle(getResources().getString(R.string.populatePhotoInfoFragmentLabel));
+        ActionBarUtil.initActionBar(ActionBar.NAVIGATION_MODE_STANDARD, getActivity());
+        ActionBarUtil.setActionBarSubtitle(R.string.populatePhotoInfoFragmentLabel, getActivity());
+
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         layout = inflater.inflate(R.layout.populate_photo_info_fragment, container, false);
 
@@ -113,17 +113,17 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
 
                 switch (resultCode) {
                     case ImageService.ResultStatus.UPLOAD_IMAGE_STARTED:
-                        progressDialog = DialogUtil.createProgressDialog(getActivity());
-                        progressDialog.show();
+                       // progressDialog = DialogUtil.createProgressDialog(getActivity());
+                       // progressDialog.show();
                         break;
 
                     case ImageService.ResultStatus.UPLOAD_IMAGE_FINISHED:
-                        progressDialog.hide();
+                        //progressDialog.hide();
                         FragmentSwitcherHolder.getFragmentSwitcher().showUploadedPhotosFragment();
                         break;
 
                     case ImageService.ResultStatus.ERROR:
-                        progressDialog.hide();
+                        //progressDialog.hide();
                         AlertDialog alert = buildUploadingErrorAlert();
                         alert.show();
                         break;

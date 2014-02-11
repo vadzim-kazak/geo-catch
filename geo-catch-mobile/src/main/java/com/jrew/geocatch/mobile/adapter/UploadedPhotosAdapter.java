@@ -42,7 +42,7 @@ public class UploadedPhotosAdapter extends BaseAdapter {
     private final Context context;
 
     /** **/
-    private ProgressDialog dialog;
+   // private ProgressDialog dialog;
 
     /** **/
     private ServiceResultReceiver resultReceiver;
@@ -60,8 +60,8 @@ public class UploadedPhotosAdapter extends BaseAdapter {
 
         this.context = context;
 
-        dialog = DialogUtil.createProgressDialog(this.context);
-        dialog.show();
+        //dialog = DialogUtil.createProgressDialog(this.context);
+       // dialog.show();
 
         resultReceiver = new ServiceResultReceiver(new Handler());
         resultReceiver.setReceiver(new ServiceResultReceiver.Receiver() {
@@ -73,11 +73,11 @@ public class UploadedPhotosAdapter extends BaseAdapter {
                     case ImageService.ResultStatus.LOAD_IMAGES_FINISHED:
                         images = (List<ClientImagePreview>) resultData.getSerializable(ImageService.RESULT_KEY);
                         notifyDataSetChanged();
-                        dialog.hide();
+                        //dialog.hide();
                         break;
 
                     case ImageService.ResultStatus.ERROR:
-                        dialog.hide();
+                       // dialog.hide();
                         CharSequence text = UploadedPhotosAdapter.this.context.getResources().getString(R.string.uploadedPhotosLoadingError);
                         int duration = Toast.LENGTH_SHORT;
                         Toast toast = Toast.makeText(UploadedPhotosAdapter.this.context, text, duration);

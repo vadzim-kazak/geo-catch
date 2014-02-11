@@ -28,10 +28,7 @@ import com.jrew.geocatch.mobile.activity.MainActivity;
 import com.jrew.geocatch.mobile.listener.MarkerOnClickListener;
 import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.reciever.ImageServiceResultReceiver;
-import com.jrew.geocatch.mobile.util.ActionBarHolder;
-import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
-import com.jrew.geocatch.mobile.util.SearchCriteriaHolder;
-import com.jrew.geocatch.mobile.util.ServiceUtil;
+import com.jrew.geocatch.mobile.util.*;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.ViewBounds;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
@@ -64,40 +61,8 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
         setHasOptionsMenu(true);
 
-        // Action bar subtitle
-        ActionBar actionBar = ActionBarHolder.getActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        //actionBar.setSubtitle(getResources().getString(R.string.mapFragmentLabel));
-        //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-
-        if (actionBar.getNavigationMode() != ActionBar.NAVIGATION_MODE_STANDARD) {
-            ActionBarHolder.getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        }
-
-        View actionBarView = View.inflate(getActivity(), R.layout.action_bar_layout, null);
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setCustomView(actionBarView);
-
-        ImageView settingImageView = (ImageView) actionBarView.findViewById(R.id.settingImageView);
-
-        if (settingImageView.getVisibility() == View.GONE) {
-            settingImageView.setVisibility(View.VISIBLE);
-        }
-
-        settingImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentSwitcherHolder.getFragmentSwitcher().showSettingsFragment();
-            }
-        });
-
-
-        actionBar.setLogo(null);
-        View homeIcon = getActivity().findViewById(
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ?
-                        android.R.id.home : R.id.abs__home);
-        ((View) homeIcon.getParent()).setVisibility(View.GONE);
-        ((View) homeIcon).setVisibility(View.GONE);
+        ActionBarUtil.initActionBar(ActionBar.NAVIGATION_MODE_STANDARD, getActivity());
+        ActionBarUtil.setActionBarSubtitle(R.string.mapFragmentLabel, getActivity());
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 

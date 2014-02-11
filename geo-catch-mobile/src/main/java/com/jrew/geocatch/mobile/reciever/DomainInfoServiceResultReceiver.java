@@ -26,7 +26,7 @@ public class DomainInfoServiceResultReceiver extends ResultReceiver {
     private Activity activity;
 
     /** **/
-    private ProgressDialog dialog;
+  //  private ProgressDialog dialog;
 
     /**
      *
@@ -43,8 +43,8 @@ public class DomainInfoServiceResultReceiver extends ResultReceiver {
         switch (resultCode) {
 
             case DomainInfoService.ResultStatus.LOADING:
-                dialog = DialogUtil.createProgressDialog(activity);
-                dialog.show();
+               // dialog = DialogUtil.createProgressDialog(activity);
+               // dialog.show();
                 break;
 
             case DomainInfoService.ResultStatus.LOADING_FINISHED:
@@ -54,9 +54,9 @@ public class DomainInfoServiceResultReceiver extends ResultReceiver {
                 if (domainProperties != null && domainProperties.size() > 0) {
                     synchronizeDomainProperties(domainProperties);
                     SharedPreferencesHelper.saveLastSyncDate(activity);
-                    dialog.hide();
+                   // dialog.hide();
                 } else {
-                    dialog.hide();
+                  //  dialog.hide();
                     Toast.makeText(activity, activity.getResources().getString(R.string.syncError),
                             Toast.LENGTH_LONG).show();
                 }
@@ -64,7 +64,7 @@ public class DomainInfoServiceResultReceiver extends ResultReceiver {
                 break;
 
             case DomainInfoService.ResultStatus.ERROR:
-                dialog.hide();
+               // dialog.hide();
                 Toast.makeText(activity, activity.getResources().getString(R.string.syncError),
                         Toast.LENGTH_LONG).show();
                 break;

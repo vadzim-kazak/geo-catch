@@ -10,6 +10,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.adapter.PostponedImageAdapter;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
+import com.jrew.geocatch.mobile.util.ActionBarUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,8 +27,7 @@ public class PostponedPhotosFragment extends UserPhotosFragment {
         init();
 
         // Action bar subtitle
-        ActionBar actionBar = ActionBarHolder.getActionBar();
-        actionBar.setSubtitle(getResources().getString(R.string.postponedPhotosFragmentLabel));
+        ActionBarUtil.setActionBarSubtitle(R.string.postponedPhotosFragmentLabel, getActivity());
 
         View layout = inflater.inflate(R.layout.postponed_photos_fragment, container, false);
 

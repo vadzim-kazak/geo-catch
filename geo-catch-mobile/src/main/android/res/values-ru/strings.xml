@@ -8,6 +8,11 @@
 
     <string name="syncError">Не удалось подгрузить данные с сервера...</string>
 
+    <!-- Settings fragment -->
+    <string name="settingsFragmentLabel">Настройки</string>
+
+    <string name="languageSettingsLabel">ЯЗЫК</string>
+
     <!-- Get photo fragment -->
     <string name="getPhotoFragmentLabel">Сделать фото</string>
 

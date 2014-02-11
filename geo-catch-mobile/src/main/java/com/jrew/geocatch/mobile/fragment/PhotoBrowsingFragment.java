@@ -53,7 +53,7 @@ public class PhotoBrowsingFragment extends SherlockFragment {
     private ServiceResultReceiver imageResultReceiver;
 
     /** **/
-    private ProgressDialog progressDialog;
+   // private ProgressDialog progressDialog;
 
     /** **/
     private ClientImage clientImage;
@@ -64,15 +64,15 @@ public class PhotoBrowsingFragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        // Action bar subtitle
-        ActionBar actionBar = ActionBarHolder.getActionBar();
-        actionBar.setSubtitle(getResources().getString(R.string.photoBrowsingFragmentLabel));
-
         setHasOptionsMenu(true);
 
-        progressDialog = DialogUtil.createProgressDialog(getActivity());
+        // Action bar subtitle
+        ActionBarUtil.initActionBar(ActionBar.NAVIGATION_MODE_STANDARD, getActivity());
+        ActionBarUtil.setActionBarSubtitle(R.string.photoBrowsingFragmentLabel, getActivity());
+
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+      //  progressDialog = DialogUtil.createProgressDialog(getActivity());
 
         View photoBrowsingLayout = inflater.inflate(R.layout.photo_browsing_fragment, container, false);
 
@@ -150,16 +150,16 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                             descriptionLayout.setVisibility(View.VISIBLE);
                         }
 
-                        progressDialog.dismiss();
+                        //progressDialog.dismiss();
                         break;
 
                     case ImageService.ResultStatus.DELETE_IMAGE_FINISHED:
-                        progressDialog.hide();
+                        //progressDialog.hide();
                         FragmentSwitcherHolder.getFragmentSwitcher().showUploadedPhotosFragment();
                         break;
 
                     case ImageService.ResultStatus.ERROR:
-                        progressDialog.hide();
+                       // progressDialog.hide();
                         break;
                 }
             }
@@ -212,7 +212,7 @@ public class PhotoBrowsingFragment extends SherlockFragment {
 
             case R.id.deleteImageMenuOption:
                 if (clientImage != null) {
-                    progressDialog.show();
+                   // progressDialog.show();
 
                     Bundle requestBundle = new Bundle();
                     requestBundle.putLong(ImageService.IMAGE_ID_KEY, clientImage.getId());

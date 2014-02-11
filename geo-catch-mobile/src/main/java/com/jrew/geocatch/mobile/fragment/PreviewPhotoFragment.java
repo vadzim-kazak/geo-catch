@@ -16,6 +16,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
+import com.jrew.geocatch.mobile.util.ActionBarUtil;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.LayoutUtil;
 
@@ -39,11 +40,11 @@ public class PreviewPhotoFragment extends SherlockFragment {
 
         setHasOptionsMenu(true);
 
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         // Action bar subtitle
-        ActionBar actionBar = ActionBarHolder.getActionBar();
-        actionBar.setSubtitle(getResources().getString(R.string.previewPhotoFragmentLabel));
+        ActionBarUtil.initActionBar(ActionBar.NAVIGATION_MODE_STANDARD, getActivity());
+        ActionBarUtil.setActionBarSubtitle(R.string.previewPhotoFragmentLabel, getActivity());
+
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         View result = inflater.inflate(R.layout.preview_photo_fragment, container, false);
         imageView = (ImageView) result.findViewById(R.id.imagePreview);

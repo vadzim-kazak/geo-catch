@@ -19,10 +19,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.activity.MainActivity;
-import com.jrew.geocatch.mobile.util.ActionBarHolder;
-import com.jrew.geocatch.mobile.util.DialogUtil;
-import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
-import com.jrew.geocatch.mobile.util.LayoutUtil;
+import com.jrew.geocatch.mobile.util.*;
 
 import java.util.List;
 
@@ -51,7 +48,7 @@ public class GetPhotoFragment extends SherlockFragment {
     private boolean inPreview;
 
     /** **/
-    private ProgressDialog dialog;
+   // private ProgressDialog dialog;
 
     /** **/
     private FrameLayout parentLayout;
@@ -65,9 +62,8 @@ public class GetPhotoFragment extends SherlockFragment {
         setHasOptionsMenu(true);
 
         // Action bar subtitle
-        ActionBar actionBar = ActionBarHolder.getActionBar();
-        actionBar.setSubtitle(getResources().getString(R.string.getPhotoFragmentLabel));
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        ActionBarUtil.initActionBar(ActionBar.NAVIGATION_MODE_STANDARD, getActivity());
+        ActionBarUtil.setActionBarSubtitle(R.string.getPhotoFragmentLabel, getActivity());
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -317,7 +313,7 @@ public class GetPhotoFragment extends SherlockFragment {
 
         public void onPictureTaken(final byte[] data, final Camera camera) {
 
-            dialog = DialogUtil.createProgressDialog(getActivity());
+           // dialog = DialogUtil.createProgressDialog(getActivity());
 
             new Thread() {
                 public void run() {
@@ -347,7 +343,7 @@ public class GetPhotoFragment extends SherlockFragment {
         MainActivity activity = (MainActivity) getActivity();
         FragmentSwitcherHolder.getFragmentSwitcher().showPreviewPhotoFragment(bundle);
 
-        dialog.dismiss();
+        //dialog.dismiss();
     }
 
     /**

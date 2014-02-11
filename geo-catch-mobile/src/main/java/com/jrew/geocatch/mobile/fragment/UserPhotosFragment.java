@@ -2,6 +2,7 @@ package com.jrew.geocatch.mobile.fragment;
 
 import android.content.pm.ActivityInfo;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import com.actionbarsherlock.app.ActionBar;
@@ -12,6 +13,7 @@ import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.dao.PostponedImageManager;
 import com.jrew.geocatch.mobile.listener.UserPhotoTabListener;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
+import com.jrew.geocatch.mobile.util.ActionBarUtil;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 
 /**
@@ -21,6 +23,9 @@ import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
  * Time: 1:25 PM
  */
 public class UserPhotosFragment extends SherlockFragment {
+
+    /** **/
+    public static final String SELECTED_TAB_KEY = "selectedTabKey";
 
     /**
      *
@@ -46,10 +51,7 @@ public class UserPhotosFragment extends SherlockFragment {
         //Init fragment in tab mode if there are postponed images presented
         if (PostponedImageManager.isPostponedImagesPresented(getActivity())) {
 
-            int currentNavigationMode = actionBar.getNavigationMode();
-            if (currentNavigationMode != ActionBar.NAVIGATION_MODE_TABS) {
-                actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-            }
+            ActionBarUtil.initActionBar(ActionBar.NAVIGATION_MODE_TABS, getActivity());
 
             int tabCount = actionBar.getTabCount();
             ActionBar.Tab uploadedPhotosTab, postponedPhotosTab;
@@ -69,10 +71,15 @@ public class UserPhotosFragment extends SherlockFragment {
                 postponedPhotosTab.setTag(TabTag.POSTPONED_PHOTOS_TAB);
                 postponedPhotosTab.setTabListener(tabListener);
                 actionBar.addTab(postponedPhotosTab, false);
-
             }
+
+            final Bundle bundle = getArguments();
+            if (bundle != null && bundle.containsKey(SELECTED_TAB_KEY)) {
+                selectTabByTag(TabTag.valueOf(bundle.getString(SELECTED_TAB_KEY)));
+            }
+
         } else {
-            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+            ActionBarUtil.initActionBar(ActionBar.NAVIGATION_MODE_STANDARD, getActivity());
         }
     }
 

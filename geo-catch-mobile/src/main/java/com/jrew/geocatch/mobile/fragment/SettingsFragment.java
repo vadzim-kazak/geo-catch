@@ -12,6 +12,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
+import com.jrew.geocatch.mobile.util.ActionBarUtil;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.view.LanguageSpinner;
 
@@ -26,15 +27,12 @@ public class SettingsFragment extends SherlockFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+
+
         setHasOptionsMenu(true);
 
-        // Action bar subtitle
-        ActionBar actionBar = ActionBarHolder.getActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-
-        View actionBarView = actionBar.getCustomView();
-        ImageView settingImageView = (ImageView) actionBarView.findViewById(R.id.settingImageView);
-        settingImageView.setVisibility(View.GONE);
+        ActionBarUtil.initActionBar(ActionBar.NAVIGATION_MODE_STANDARD, false, getActivity());
+        ActionBarUtil.setActionBarSubtitle(R.string.settingsFragmentLabel, getActivity());
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 

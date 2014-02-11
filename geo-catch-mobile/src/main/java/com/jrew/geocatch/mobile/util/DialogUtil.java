@@ -14,23 +14,23 @@ import com.jrew.geocatch.mobile.R;
  */
 public class DialogUtil {
 
-    /**
-     *
-     * @param mContext
-     * @return
-     */
-    public static ProgressDialog createProgressDialog(Context mContext) {
-        ProgressDialog dialog = new ProgressDialog(mContext);
-        try {
-            dialog.show();
-            dialog.hide();
-        } catch (WindowManager.BadTokenException e) {
-
-        }
-
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.progress_dialog);
-        return dialog;
-    }
+//    /**
+//     *
+//     * @param mContext
+//     * @return
+//     */
+//    public static ProgressDialog createProgressDialog(Context mContext) {
+//        ProgressDialog dialog = new ProgressDialog(mContext);
+//        try {
+//            dialog.show();
+//            dialog.hide();
+//        } catch (WindowManager.BadTokenException e) {
+//
+//        }
+//
+//        dialog.setCancelable(false);
+//        dialog.setContentView(R.layout.progress_dialog);
+//        return dialog;
+//    }
 
 }

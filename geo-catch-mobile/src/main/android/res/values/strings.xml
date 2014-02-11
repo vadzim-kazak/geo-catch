@@ -8,6 +8,11 @@
 
     <string name="syncError">Couldn\'t load application data...</string>
 
+    <!-- Settings fragment -->
+    <string name="settingsFragmentLabel">Settings</string>
+
+    <string name="languageSettingsLabel">LANGUAGE</string>
+
     <!-- Get photo fragment -->
     <string name="getPhotoFragmentLabel">Take a photo</string>
 

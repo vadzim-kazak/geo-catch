@@ -64,7 +64,6 @@ public class FragmentSwitcher {
      * @param fragmentTag
      */
     private void showFragment(String fragmentTag) {
-        displayingFragmentTag = fragmentTag;
         showFragment(fragmentTag, null);
     }
 
@@ -74,7 +73,17 @@ public class FragmentSwitcher {
      * @param fragmentData
      */
     private void showFragment(String fragmentTag, Bundle fragmentData) {
+        showFragment(fragmentTag, fragmentData, true);
+    }
 
+    /**
+     *
+     * @param fragmentTag
+     * @param fragmentData
+     * @param addToBackStack
+     */
+    private void showFragment(String fragmentTag, Bundle fragmentData, boolean addToBackStack) {
+        displayingFragmentTag = fragmentTag;
         Fragment fragment = getFragment(fragmentTag);
 
         if (fragmentData != null) {
@@ -89,7 +98,9 @@ public class FragmentSwitcher {
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_container, fragment, fragmentTag);
-        transaction.addToBackStack(null);
+        if (addToBackStack) {
+            transaction.addToBackStack(fragmentTag);
+        }
         transaction.commit();
     }
 
@@ -201,11 +212,15 @@ public class FragmentSwitcher {
      * @param selectTab
      */
     public void showPostponedPhotosFragment(boolean selectTab) {
-        showFragment(TAG.POSTPONED_PHOTOS_FRAGMENT_TAG);
+
+        Bundle bundle = null;
         if (selectTab) {
-            UserPhotosFragment fragment = (UserPhotosFragment) getFragment(TAG.POSTPONED_PHOTOS_FRAGMENT_TAG);
-            fragment.selectTabByTag(UserPhotosFragment.TabTag.POSTPONED_PHOTOS_TAB);
+            bundle = new Bundle();
+            bundle.putString(UserPhotosFragment.SELECTED_TAB_KEY,
+                    UserPhotosFragment.TabTag.POSTPONED_PHOTOS_TAB.toString());
         }
+        showFragment(TAG.POSTPONED_PHOTOS_FRAGMENT_TAG, bundle);
+
     }
 
     /**
@@ -220,20 +235,21 @@ public class FragmentSwitcher {
      * @param selectTab
      */
     public void showUploadedPhotosFragment(boolean selectTab) {
-        showFragment(TAG.UPLOADED_PHOTOS_FRAGMENT_TAG);
+
+        Bundle bundle = null;
         if (selectTab) {
-            UserPhotosFragment fragment = (UserPhotosFragment) getFragment(TAG.UPLOADED_PHOTOS_FRAGMENT_TAG);
-            fragment.selectTabByTag(UserPhotosFragment.TabTag.UPLOADED_PHOTOS_TAB);
+            bundle = new Bundle();
+            bundle.putString(UserPhotosFragment.SELECTED_TAB_KEY,
+                    UserPhotosFragment.TabTag.UPLOADED_PHOTOS_TAB.toString());
         }
+        showFragment(TAG.UPLOADED_PHOTOS_FRAGMENT_TAG, bundle);
     }
 
     /**
      *
      */
     public void handleActivityCreation() {
-        if (displayingFragmentTag != null) {
-            showFragment(displayingFragmentTag);
-        } else {
+        if (displayingFragmentTag == null) {
             // Display start fragment here
             showMapFragment();
         }

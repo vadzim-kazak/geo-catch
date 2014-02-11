@@ -39,7 +39,7 @@ public class PostponedImageAdapter extends BaseAdapter {
     private double thumbnailScaleFactor;
 
     /** **/
-    private ProgressDialog dialog;
+  //  private ProgressDialog dialog;
 
     /** **/
     private ServiceResultReceiver resultReceiver;
@@ -50,7 +50,7 @@ public class PostponedImageAdapter extends BaseAdapter {
 
         this.context = context;
 
-        dialog = DialogUtil.createProgressDialog(this.context);
+       // dialog = DialogUtil.createProgressDialog(this.context);
 
         postponedImages = PostponedImageManager.loadPostponedImages(this.context);
 
@@ -68,7 +68,7 @@ public class PostponedImageAdapter extends BaseAdapter {
                         break;
 
                     case ImageService.ResultStatus.UPLOAD_IMAGE_FINISHED:
-                        dialog.hide();
+                        //dialog.hide();
                         long uploadedPostponedId = resultData.getLong(ImageService.POSTPONED_IMAGE_ID_KEY);
                         removePostponedImage(uploadedPostponedId);
                         if (PostponedImageManager.isPostponedImagesPresented(PostponedImageAdapter.this.context)) {
@@ -79,14 +79,14 @@ public class PostponedImageAdapter extends BaseAdapter {
                         break;
 
                     case ImageService.ResultStatus.ERROR:
-                        dialog.hide();
+                        //dialog.hide();
                         break;
                 }
             }
 
         });
 
-        dialog.hide();
+        //dialog.hide();
     }
 
     @Override
@@ -108,7 +108,7 @@ public class PostponedImageAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
 
         if (i == 0) {
-            dialog.show();
+            //dialog.show();
         }
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -131,7 +131,7 @@ public class PostponedImageAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
 
-                dialog.show();
+                //dialog.show();
 
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(ImageService.IMAGE_KEY, postponedImage.getUploadImage());
@@ -157,7 +157,7 @@ public class PostponedImageAdapter extends BaseAdapter {
         });
 
         if (i == postponedImages.size() - 1) {
-            dialog.hide();
+            //dialog.hide();
         }
 
         return row;

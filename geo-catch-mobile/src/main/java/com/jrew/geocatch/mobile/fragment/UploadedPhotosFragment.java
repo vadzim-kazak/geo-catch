@@ -9,6 +9,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.adapter.UploadedPhotosAdapter;
 import com.jrew.geocatch.mobile.util.ActionBarHolder;
+import com.jrew.geocatch.mobile.util.ActionBarUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,8 +26,7 @@ public class UploadedPhotosFragment extends UserPhotosFragment {
         init();
 
         // Action bar subtitle
-        ActionBar actionBar = ActionBarHolder.getActionBar();
-        actionBar.setSubtitle(getResources().getString(R.string.uploadedPhotosFragmentLabel));
+        ActionBarUtil.setActionBarSubtitle(R.string.uploadedPhotosFragmentLabel, getActivity());
 
         View layout = inflater.inflate(R.layout.uploaded_photos_fragment, container, false);
 
