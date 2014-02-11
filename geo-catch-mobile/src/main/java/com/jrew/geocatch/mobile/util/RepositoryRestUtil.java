@@ -215,13 +215,12 @@ public class RepositoryRestUtil {
         HttpResponse response = httpClient.execute(httpPost, localContext);
 
         Bundle bundle = new Bundle();
-        if (imageBundle.containsKey(ImageService.POSTPONED_IMAGE_ID_KEY)) {
-            bundle.putLong(ImageService.POSTPONED_IMAGE_ID_KEY, imageBundle.getLong(ImageService.POSTPONED_IMAGE_ID_KEY));
-        }
-
         int status = response.getStatusLine().getStatusCode();
         if (status == 200) {
             bundle.putBoolean(ImageService.RESULT_KEY, true);
+            if (imageBundle.containsKey(ImageService.POSTPONED_IMAGE_ID_KEY)) {
+                bundle.putLong(ImageService.POSTPONED_IMAGE_ID_KEY, imageBundle.getLong(ImageService.POSTPONED_IMAGE_ID_KEY));
+            }
         } else {
             bundle.putBoolean(ImageService.RESULT_KEY, false);
         }

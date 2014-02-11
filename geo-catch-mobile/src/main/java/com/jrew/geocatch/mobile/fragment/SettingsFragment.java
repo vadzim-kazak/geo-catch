@@ -58,7 +58,7 @@ public class SettingsFragment extends SherlockFragment {
 
         switch (pressedMenuItemId) {
             case R.id.forwardMenuOption:
-                getSherlockActivity().getSupportFragmentManager().popBackStack();
+                FragmentSwitcherHolder.getFragmentSwitcher().popBackStack();
                 break;
         }
 

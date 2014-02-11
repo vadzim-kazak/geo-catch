@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import com.jrew.geocatch.mobile.R;
-import com.jrew.geocatch.mobile.util.LayoutUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -122,6 +121,22 @@ public class FragmentSwitcher {
 
     /**
      *
+     */
+    public void popBackStack() {
+        if (fragmentManager.getBackStackEntryCount() > 1) {
+            String newTag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 2).getName();
+
+            if (TAG.POSTPONED_PHOTOS_FRAGMENT_TAG.equalsIgnoreCase(newTag)) {
+                showPostponedPhotosFragment();
+            } else {
+                displayingFragmentTag = newTag;
+                fragmentManager.popBackStack();
+            }
+        }
+    }
+
+    /**
+     *
      * @param fragmentTag
      * @return
      */
@@ -213,9 +228,7 @@ public class FragmentSwitcher {
      *
      */
     public void refreshCurrentFragment() {
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(LayoutUtil.REFRESH_FRAGMENT_FLAG, true);
-        showFragment(displayingFragmentTag);
+        showFragment(displayingFragmentTag, null, false);
     }
 
     /**

@@ -75,9 +75,6 @@ public class LayoutUtil {
                 noNetworkConnectionLayout.setVisibility(View.VISIBLE);
             }
 
-            //        noNetworkConnectionLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-            //        LinearLayout.LayoutParams.MATCH_PARENT));
-
             ImageView refreshImageView = (ImageView) noNetworkConnectionLayout.findViewById(R.id.refreshNetworkImageView);
             refreshImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -88,14 +85,11 @@ public class LayoutUtil {
 
         }
 
-        Bundle bundle = fragment.getArguments();
-        if (bundle != null && bundle.containsKey(REFRESH_FRAGMENT_FLAG)) {
-            Toast.makeText(activity, activity.getResources().getString(R.string.noNetworkConnectionError),
-                    Toast.LENGTH_LONG).show();
-        }
+        Toast.makeText(activity, activity.getResources().getString(R.string.noNetworkConnectionError),
+            Toast.LENGTH_LONG).show();
     }
 
-    /**
+    /**       l
      *
      * @param activity
      */

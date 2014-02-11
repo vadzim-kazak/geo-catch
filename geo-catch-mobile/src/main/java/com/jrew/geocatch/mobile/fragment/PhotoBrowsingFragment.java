@@ -203,11 +203,9 @@ public class PhotoBrowsingFragment extends SherlockFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int pressedMenuItemId = item.getItemId();
-
-        FragmentSwitcher fragmentSwitcher = FragmentSwitcherHolder.getFragmentSwitcher();
         switch (pressedMenuItemId) {
             case R.id.backMenuOption:
-                getSherlockActivity().getSupportFragmentManager().popBackStack();
+                FragmentSwitcherHolder.getFragmentSwitcher().popBackStack();
                 break;
 
             case R.id.deleteImageMenuOption:

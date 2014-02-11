@@ -69,12 +69,16 @@ public class PostponedImageAdapter extends BaseAdapter {
 
                     case ImageService.ResultStatus.UPLOAD_IMAGE_FINISHED:
                         //dialog.hide();
-                        long uploadedPostponedId = resultData.getLong(ImageService.POSTPONED_IMAGE_ID_KEY);
-                        removePostponedImage(uploadedPostponedId);
-                        if (PostponedImageManager.isPostponedImagesPresented(PostponedImageAdapter.this.context)) {
-                            PostponedImageAdapter.this.notifyDataSetChanged();
+                        if (resultData.containsKey(ImageService.POSTPONED_IMAGE_ID_KEY)) {
+                            long uploadedPostponedId = resultData.getLong(ImageService.POSTPONED_IMAGE_ID_KEY);
+                            removePostponedImage(uploadedPostponedId);
+                            if (PostponedImageManager.isPostponedImagesPresented(PostponedImageAdapter.this.context)) {
+                                PostponedImageAdapter.this.notifyDataSetChanged();
+                            } else {
+                                FragmentSwitcherHolder.getFragmentSwitcher().showUploadedPhotosFragment();
+                            }
                         } else {
-                            FragmentSwitcherHolder.getFragmentSwitcher().showUploadedPhotosFragment();
+                            // Image uploading error
                         }
                         break;
 
