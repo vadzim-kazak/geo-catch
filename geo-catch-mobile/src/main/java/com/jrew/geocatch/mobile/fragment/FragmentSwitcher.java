@@ -241,6 +241,13 @@ public class FragmentSwitcher implements ActionBar.TabListener {
     /**
      *
      */
+    public void showSingleUploadedPhotosFragment() {
+        showFragment(TAG.UPLOADED_PHOTOS_FRAGMENT_TAG);
+    }
+
+    /**
+     *
+     */
     public void showSettingsFragment() {
         showFragment(TAG.SETTINGS_FRAGMENT_TAG);
     }

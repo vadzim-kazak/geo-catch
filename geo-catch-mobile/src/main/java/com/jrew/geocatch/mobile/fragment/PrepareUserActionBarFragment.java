@@ -4,16 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
-import com.jrew.geocatch.mobile.adapter.UploadedPhotosAdapter;
+import com.jrew.geocatch.mobile.dao.PostponedImageManager;
 import com.jrew.geocatch.mobile.util.ActionBarUtil;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
-import com.jrew.geocatch.mobile.util.LayoutUtil;
-import com.jrew.geocatch.mobile.util.WebUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,6 +29,10 @@ public class PrepareUserActionBarFragment extends SherlockFragment {
         if (bundle != null && bundle.containsKey(SELECTED_TAB_KEY)) {
             ActionBarUtil.initTabActionBar(getActivity(), ActionBarUtil.TabTag.valueOf(bundle.getString(SELECTED_TAB_KEY)),
                     FragmentSwitcherHolder.getFragmentSwitcher());
+        }
+
+        if (!PostponedImageManager.isPostponedImagesPresented(getActivity())) {
+            FragmentSwitcherHolder.getFragmentSwitcher().showSingleUploadedPhotosFragment();
         }
 
         return inflater.inflate(R.layout.empty_layout, container, false);
