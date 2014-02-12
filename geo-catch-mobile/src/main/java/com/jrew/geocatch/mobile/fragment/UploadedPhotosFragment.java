@@ -6,12 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.adapter.UploadedPhotosAdapter;
-import com.jrew.geocatch.mobile.util.ActionBarHolder;
-import com.jrew.geocatch.mobile.util.ActionBarUtil;
-import com.jrew.geocatch.mobile.util.LayoutUtil;
-import com.jrew.geocatch.mobile.util.WebUtil;
+import com.jrew.geocatch.mobile.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,12 +20,12 @@ import com.jrew.geocatch.mobile.util.WebUtil;
  * Time: 16:15
  * To change this template use File | Settings | File Templates.
  */
-public class UploadedPhotosFragment extends UserPhotosFragment {
+public class UploadedPhotosFragment extends SherlockFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        init();
+        setHasOptionsMenu(true);
 
         // Action bar subtitle
         ActionBarUtil.setActionBarSubtitle(R.string.uploadedPhotosFragmentLabel, getActivity());
@@ -47,4 +47,28 @@ public class UploadedPhotosFragment extends UserPhotosFragment {
         return layout;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_user_photos, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int pressedMenuItemId = item.getItemId();
+
+        FragmentSwitcher fragmentSwitcher = FragmentSwitcherHolder.getFragmentSwitcher();
+        switch (pressedMenuItemId) {
+            case R.id.proceedToMapMenuOption:
+                fragmentSwitcher.showMapFragment();
+                break;
+
+            case R.id.takeImageMenuOption:
+                fragmentSwitcher.showGetPhotoFragment();
+                break;
+        }
+
+        return true;
+    }
 }

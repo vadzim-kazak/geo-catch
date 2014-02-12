@@ -6,10 +6,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.jrew.geocatch.mobile.R;
-import com.jrew.geocatch.mobile.util.ActionBarHolder;
-import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
+import com.jrew.geocatch.mobile.dao.PostponedImageManager;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,6 +17,16 @@ import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
  * To change this template use File | Settings | File Templates.
  */
 public class ActionBarUtil {
+
+    /**
+     *
+     */
+    public static enum TabTag {
+
+        UPLOADED_PHOTOS_TAB,
+
+        POSTPONED_PHOTOS_TAB
+    }
 
     /**
      *
@@ -104,5 +112,44 @@ public class ActionBarUtil {
         // action bar subtitle
         TextView actionBarSubtitleTextView = (TextView) actionBarView.findViewById(R.id.subTitleTextView);
         actionBarSubtitleTextView.setText(activity.getString(subtitleResourceId));
+    }
+
+    /**
+     *
+     * @param activity
+     */
+    public static void initTabActionBar(Activity activity, TabTag tabToSelect, ActionBar.TabListener tabListener) {
+
+        ActionBar actionBar = ActionBarHolder.getActionBar();
+
+        if (PostponedImageManager.isPostponedImagesPresented(activity)) {
+            ActionBarUtil.initActionBar(ActionBar.NAVIGATION_MODE_TABS, activity);
+
+            int tabCount = actionBar.getTabCount();
+            ActionBar.Tab uploadedPhotosTab, postponedPhotosTab;
+            if (tabCount == 0) {
+
+                // Init tabs
+                uploadedPhotosTab = actionBar.newTab();
+                uploadedPhotosTab.setIcon(android.R.drawable.ic_menu_gallery);
+                uploadedPhotosTab.setTag(TabTag.UPLOADED_PHOTOS_TAB);
+                uploadedPhotosTab.setTabListener(tabListener);
+                actionBar.addTab(uploadedPhotosTab, false);
+                if (TabTag.UPLOADED_PHOTOS_TAB == tabToSelect) {
+                    uploadedPhotosTab.select();
+                }
+
+                postponedPhotosTab = actionBar.newTab();
+                postponedPhotosTab.setIcon(android.R.drawable.ic_menu_recent_history);
+                postponedPhotosTab.setTag(TabTag.POSTPONED_PHOTOS_TAB);
+                postponedPhotosTab.setTabListener(tabListener);
+                actionBar.addTab(postponedPhotosTab, false);
+                if (TabTag.POSTPONED_PHOTOS_TAB == tabToSelect) {
+                    postponedPhotosTab.select();
+                }
+            }
+        } else {
+            ActionBarUtil.initActionBar(ActionBar.NAVIGATION_MODE_STANDARD, activity);
+        }
     }
 }

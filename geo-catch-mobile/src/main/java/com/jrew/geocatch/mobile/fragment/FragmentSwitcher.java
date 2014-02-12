@@ -1,10 +1,13 @@
 package com.jrew.geocatch.mobile.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import com.actionbarsherlock.app.ActionBar;
 import com.jrew.geocatch.mobile.R;
+import com.jrew.geocatch.mobile.util.ActionBarUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,7 +16,7 @@ import com.jrew.geocatch.mobile.R;
  * Time: 16:56
  * To change this template use File | Settings | File Templates.
  */
-public class FragmentSwitcher {
+public class FragmentSwitcher implements ActionBar.TabListener {
 
     public interface TAG {
 
@@ -43,20 +46,24 @@ public class FragmentSwitcher {
 
         /** **/
         String SETTINGS_FRAGMENT_TAG = "settingsFragmentTag";
+
+        /** **/
+        String PREPARE_USER_ACTION_BAR_FRAGMENT_TAG = "prepareUserActionBarFragmentTag";
     }
 
     /** **/
-    private FragmentManager fragmentManager;
+    private Activity activity;
 
     /** **/
-    private String displayingFragmentTag;
+    private FragmentManager fragmentManager;
 
     /**
      *
      * @param fragmentManager
      */
-    public FragmentSwitcher(FragmentManager fragmentManager) {
+    public FragmentSwitcher(FragmentManager fragmentManager, Activity activity) {
         this.fragmentManager = fragmentManager;
+        this.activity = activity;
     }
 
     /**
@@ -79,21 +86,20 @@ public class FragmentSwitcher {
     /**
      *
      * @param fragmentTag
-     * @param fragmentData
+     * @param bundle
      * @param addToBackStack
      */
-    private void showFragment(String fragmentTag, Bundle fragmentData, boolean addToBackStack) {
+    private void showFragment(String fragmentTag, Bundle bundle, boolean addToBackStack) {
 
-        displayingFragmentTag = fragmentTag;
         Fragment fragment = getFragment(fragmentTag);
 
-        if (fragmentData != null) {
-            Bundle bundle = fragment.getArguments();
-            if (bundle != null ) {
-                bundle.clear();
-                bundle.putAll(fragmentData);
+        if (bundle != null) {
+            Bundle fragmentBundle = fragment.getArguments();
+            if (fragmentBundle != null ) {
+                fragmentBundle.clear();
+                fragmentBundle.putAll(bundle);
             } else {
-                fragment.setArguments(fragmentData);
+                fragment.setArguments(bundle);
             }
         }
 
@@ -124,12 +130,13 @@ public class FragmentSwitcher {
      */
     public void popBackStack() {
         if (fragmentManager.getBackStackEntryCount() > 1) {
-            String newTag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 2).getName();
 
-            if (TAG.POSTPONED_PHOTOS_FRAGMENT_TAG.equalsIgnoreCase(newTag)) {
+            String newTag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 2).getName();
+            if (TAG.UPLOADED_PHOTOS_FRAGMENT_TAG.equalsIgnoreCase(newTag)) {
+                showUploadedPhotosFragment();
+            } else if (TAG.POSTPONED_PHOTOS_FRAGMENT_TAG.equalsIgnoreCase(newTag)) {
                 showPostponedPhotosFragment();
             } else {
-                displayingFragmentTag = newTag;
                 fragmentManager.popBackStack();
             }
         }
@@ -160,6 +167,8 @@ public class FragmentSwitcher {
             return new UploadedPhotosFragment();
         } else if (TAG.SETTINGS_FRAGMENT_TAG.equals(fragmentTag)) {
             return new SettingsFragment();
+        } else if (TAG.PREPARE_USER_ACTION_BAR_FRAGMENT_TAG.equalsIgnoreCase(fragmentTag)) {
+            return new PrepareUserActionBarFragment();
         }
 
         return null;
@@ -214,7 +223,19 @@ public class FragmentSwitcher {
      *
      */
     public void showPostponedPhotosFragment() {
-        showPostponedPhotosFragment(true);
+       Bundle bundle = new Bundle();
+       bundle.putString(PrepareUserActionBarFragment.SELECTED_TAB_KEY, ActionBarUtil.TabTag.POSTPONED_PHOTOS_TAB.toString());
+       showFragment(TAG.PREPARE_USER_ACTION_BAR_FRAGMENT_TAG, bundle, false);
+    }
+
+    /**
+     *
+     */
+    public void showUploadedPhotosFragment() {
+       // ActionBarUtil.initTabActionBar(activity, ActionBarUtil.TabTag.UPLOADED_PHOTOS_TAB, this);
+        Bundle bundle = new Bundle();
+        bundle.putString(PrepareUserActionBarFragment.SELECTED_TAB_KEY, ActionBarUtil.TabTag.UPLOADED_PHOTOS_TAB.toString());
+        showFragment(TAG.PREPARE_USER_ACTION_BAR_FRAGMENT_TAG, bundle, false);
     }
 
     /**
@@ -228,52 +249,15 @@ public class FragmentSwitcher {
      *
      */
     public void refreshCurrentFragment() {
-        showFragment(displayingFragmentTag, null, false);
-    }
-
-    /**
-     *
-     * @param selectTab
-     */
-    public void showPostponedPhotosFragment(boolean selectTab) {
-
-        Bundle bundle = null;
-        if (selectTab) {
-            bundle = new Bundle();
-            bundle.putString(UserPhotosFragment.SELECTED_TAB_KEY,
-                    UserPhotosFragment.TabTag.POSTPONED_PHOTOS_TAB.toString());
-        }
-        showFragment(TAG.POSTPONED_PHOTOS_FRAGMENT_TAG, bundle);
-
-    }
-
-    /**
-     *
-     */
-    public void showUploadedPhotosFragment() {
-        showUploadedPhotosFragment(true);
-    }
-
-    /**
-     *
-     * @param selectTab
-     */
-    public void showUploadedPhotosFragment(boolean selectTab) {
-
-        Bundle bundle = null;
-        if (selectTab) {
-            bundle = new Bundle();
-            bundle.putString(UserPhotosFragment.SELECTED_TAB_KEY,
-                    UserPhotosFragment.TabTag.UPLOADED_PHOTOS_TAB.toString());
-        }
-        showFragment(TAG.UPLOADED_PHOTOS_FRAGMENT_TAG, bundle);
+        String currentTag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
+        showFragment(currentTag, null, false);
     }
 
     /**
      *
      */
     public void handleActivityCreation() {
-        if (displayingFragmentTag == null) {
+        if (fragmentManager.getBackStackEntryCount() == 0) {
             // Display start fragment here
             showMapFragment();
         }
@@ -286,4 +270,20 @@ public class FragmentSwitcher {
     public void setFragmentManager(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
     }
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+        ActionBarUtil.TabTag selectedTab = (ActionBarUtil.TabTag) tab.getTag();
+        if (selectedTab == ActionBarUtil.TabTag.POSTPONED_PHOTOS_TAB) {
+            showFragment(TAG.POSTPONED_PHOTOS_FRAGMENT_TAG);
+        } else if (selectedTab == ActionBarUtil.TabTag.UPLOADED_PHOTOS_TAB) {
+            showFragment(TAG.UPLOADED_PHOTOS_FRAGMENT_TAG);
+        }
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {}
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {}
 }

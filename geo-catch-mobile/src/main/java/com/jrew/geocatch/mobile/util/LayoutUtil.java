@@ -86,7 +86,7 @@ public class LayoutUtil {
         }
 
         Toast.makeText(activity, activity.getResources().getString(R.string.noNetworkConnectionError),
-            Toast.LENGTH_LONG).show();
+            Toast.LENGTH_SHORT).show();
     }
 
     /**       l

@@ -55,7 +55,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 
         if (isGooglePlayServicesInstalled()) {
 
-            FragmentSwitcherHolder.initFragmentSwitcher(getSupportFragmentManager());
+            FragmentSwitcherHolder.initFragmentSwitcher(getSupportFragmentManager(), this);
             FragmentSwitcherHolder.getFragmentSwitcher().handleActivityCreation();
 
 
