@@ -1,7 +1,6 @@
 package com.jrew.geocatch.mobile.adapter;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,8 +16,7 @@ import com.jrew.geocatch.mobile.fragment.PhotoBrowsingFragment;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.service.ReloadImageTask;
-import com.jrew.geocatch.mobile.util.CommonUtils;
-import com.jrew.geocatch.mobile.util.DialogUtil;
+import com.jrew.geocatch.mobile.util.CommonUtil;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.ServiceUtil;
 import com.jrew.geocatch.web.model.ClientImagePreview;
@@ -127,7 +125,7 @@ public class UploadedPhotosAdapter extends BaseAdapter {
         ImageView thumbnailImageView = (ImageView) row.findViewById(R.id.thumbnailImageView);
         thumbnailImageView.setImageResource(R.drawable.chat);
 
-        int displaySize = CommonUtils.getDisplayLargerSideSize((Activity) context);
+        int displaySize = CommonUtil.getDisplayLargerSideSize((Activity) context);
         int thumbnailSize = (int) (displaySize * thumbnailScaleFactor);
         thumbnailImageView.setLayoutParams(new LinearLayout.LayoutParams(thumbnailSize, thumbnailSize));
 
@@ -157,7 +155,7 @@ public class UploadedPhotosAdapter extends BaseAdapter {
         SearchCriteria searchCriteria = new SearchCriteria();
 
         // Device Id
-        searchCriteria.setDeviceId(CommonUtils.getDeviceId(context));
+        searchCriteria.setDeviceId(CommonUtil.getDeviceId(context));
         searchCriteria.setLoadOwnImages(true);
 
         ServiceUtil.callLoadImagesService(searchCriteria, resultReceiver, (Activity) context);

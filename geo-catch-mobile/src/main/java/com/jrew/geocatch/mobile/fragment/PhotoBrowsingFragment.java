@@ -1,7 +1,5 @@
 package com.jrew.geocatch.mobile.fragment;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -214,7 +212,7 @@ public class PhotoBrowsingFragment extends SherlockFragment {
 
                     Bundle requestBundle = new Bundle();
                     requestBundle.putLong(ImageService.IMAGE_ID_KEY, clientImage.getId());
-                    requestBundle.putString(ImageService.DEVICE_ID_KEY, CommonUtils.getDeviceId(getActivity()));
+                    requestBundle.putString(ImageService.DEVICE_ID_KEY, CommonUtil.getDeviceId(getActivity()));
                     ServiceUtil.callDeleteImageService(requestBundle, imageResultReceiver, getActivity());
                 }
                 break;

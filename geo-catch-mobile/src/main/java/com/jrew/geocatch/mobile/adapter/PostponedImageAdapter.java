@@ -1,7 +1,6 @@
 package com.jrew.geocatch.mobile.adapter;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,7 +17,6 @@ import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.util.*;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -124,7 +122,7 @@ public class PostponedImageAdapter extends BaseAdapter {
         ImageView photoThumbnail = (ImageView) row.findViewById(R.id.photoThumbnail);
         photoThumbnail.setImageBitmap(postponedImage.getBitmap());
 
-        int displaySize = CommonUtils.getDisplayLargerSideSize((Activity) context);
+        int displaySize = CommonUtil.getDisplayLargerSideSize((Activity) context);
         int thumbnailSize = (int) (displaySize * thumbnailScaleFactor);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(thumbnailSize, thumbnailSize);
         photoThumbnail.setLayoutParams(params);

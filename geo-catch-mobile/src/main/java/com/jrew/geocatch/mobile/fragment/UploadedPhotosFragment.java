@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
-import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -41,7 +40,7 @@ public class UploadedPhotosFragment extends SherlockFragment {
 
         } else {
 
-            LayoutUtil.showNoConnectionLayout(getActivity(), this);
+            LayoutUtil.showNoConnectionLayout(getActivity(), R.string.noNetworkConnectionError);
         }
 
         return layout;

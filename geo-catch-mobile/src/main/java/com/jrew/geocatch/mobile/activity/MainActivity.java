@@ -34,9 +34,6 @@ public class MainActivity extends SherlockFragmentActivity implements
     /** **/
     private static int theme = R.style.Theme_Styled;
 
-    /** **/
-    private LocationClient locationClient;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(theme);
@@ -61,17 +58,15 @@ public class MainActivity extends SherlockFragmentActivity implements
 
             if (WebUtil.isNetworkAvailable(this)) {
                 syncDomainsInfo();
-
-                /*
-                 * Create a new location client, using the enclosing class to
-                 * handle callbacks.
-                 */
-                locationClient = new LocationClient(this, this, this);
-
                 DomainDatabaseManager.loadDomainProperties(this);
             }
-        }
 
+            /*
+             * Create a new location client, using the enclosing class to
+             * handle callbacks.
+             */
+            LocationManagerHolder.initLocationHolder(this);
+        }
     }
 
     /**
@@ -129,10 +124,7 @@ public class MainActivity extends SherlockFragmentActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        // Connect the client.
-        if(locationClient != null) {
-            locationClient.connect();
-        }
+        LocationManagerHolder.getLocationManager().connect();
     }
 
     /*
@@ -140,24 +132,8 @@ public class MainActivity extends SherlockFragmentActivity implements
          */
     @Override
     protected void onStop() {
-        // Disconnecting the client invalidates it.
-        if (locationClient != null) {
-            locationClient.disconnect();
-        }
+        LocationManagerHolder.getLocationManager().disconnect();
         super.onStop();
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Location getCurrentLocation() {
-
-        if (locationClient != null && locationClient.isConnected()) {
-            return locationClient.getLastLocation();
-        }
-
-        return null;
     }
 
     /**

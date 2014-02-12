@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import android.view.Display;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -16,9 +15,8 @@ import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.fragment.MapFragment;
 import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.service.ImageService;
-import com.jrew.geocatch.mobile.util.CommonUtils;
+import com.jrew.geocatch.mobile.util.CommonUtil;
 import com.jrew.geocatch.mobile.util.ServiceUtil;
-import com.jrew.geocatch.web.model.ClientImage;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 
 import java.util.Iterator;
@@ -184,7 +182,7 @@ public class ImageServiceResultReceiver extends ResultReceiver {
        double borderSizeFactor = Double.parseDouble(mapFragment.getResources().getString(R.config.thumbnailBorderSizeScaleFactor));
 
        // get larger display size
-       int largerSide = CommonUtils.getDisplayLargerSideSize(mapFragment.getActivity());
+       int largerSide = CommonUtil.getDisplayLargerSideSize(mapFragment.getActivity());
 
        int thumbnailSize = (int) (largerSide * scaleFactor);
        int borderSize = (int)(thumbnailSize * borderSizeFactor);

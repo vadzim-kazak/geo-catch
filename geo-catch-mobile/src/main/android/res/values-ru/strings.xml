@@ -72,6 +72,12 @@
 
     <string name="noNetworkConnectionError">Нет доступа к интернету</string>
 
+    <string name="noGPSConnectionWarning">GPS сенсор выключен. Вы хотите включить его?</string>
+
+    <string name="noGPSConnectionYesChoice">Да</string>
+
+    <string name="noGPSConnectionLaterChoice">Позже</string>
+
     <string-array name="photo_owner_array">
         <item>Любой</item>
         <item>Я</item>

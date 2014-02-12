@@ -1,9 +1,9 @@
 package com.jrew.geocatch.mobile.fragment;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.location.Location;
@@ -17,7 +17,6 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
-import com.jrew.geocatch.mobile.activity.MainActivity;
 import com.jrew.geocatch.mobile.dao.PostponedImageManager;
 import com.jrew.geocatch.mobile.model.PostponedImage;
 import com.jrew.geocatch.mobile.model.UploadImage;
@@ -57,7 +56,6 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
     /** **/
     private View layout;
 
-    /** **/
     private Location currentLocation;
 
     /** **/
@@ -79,6 +77,8 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
         ActionBarUtil.setActionBarSubtitle(R.string.populatePhotoInfoFragmentLabel, getActivity());
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        LayoutUtil.showFragmentContainer(getActivity());
 
         layout = inflater.inflate(R.layout.populate_photo_info_fragment, container, false);
 
@@ -110,8 +110,8 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
 
                 switch (resultCode) {
                     case ImageService.ResultStatus.UPLOAD_IMAGE_STARTED:
-                       // progressDialog = DialogUtil.createProgressDialog(getActivity());
-                       // progressDialog.show();
+                        // progressDialog = DialogUtil.createProgressDialog(getActivity());
+                        // progressDialog.show();
                         break;
 
                     case ImageService.ResultStatus.UPLOAD_IMAGE_FINISHED:
@@ -139,10 +139,33 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
         fishingBaitView = (DomainPropertyView) layout.findViewById(R.id.fishingBaitView);
         fishingBaitView.loadDomainProperties(DomainInfoService.DomainInfoType.BAIT);
 
-        MainActivity parentActivity = (MainActivity) getActivity();
-        currentLocation = parentActivity.getCurrentLocation();
-
         return layout;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        LocationManagerHolder.getLocationManager().start();
+        currentLocation = LocationManagerHolder.getLocationManager().getCurrentLocation();
+        if (currentLocation == null && !CommonUtil.isGPSEnabled(getActivity())) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(getResources().getString(R.string.noGPSConnectionWarning))
+                    .setCancelable(false)
+                    .setNegativeButton(getResources().getString(R.string.noGPSConnectionLaterChoice), new DialogInterface.OnClickListener() {
+                        public void onClick(final DialogInterface dialog, final int id) {
+                            dialog.cancel();
+                        }
+                    })
+                    .setPositiveButton(getResources().getString(R.string.noGPSConnectionYesChoice), new DialogInterface.OnClickListener() {
+                        public void onClick(final DialogInterface dialog, final int id) {
+                            startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        }
+                    });
+
+            final AlertDialog alert = builder.create();
+            alert.show();
+        }
     }
 
     @Override
@@ -153,6 +176,8 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        currentLocation = LocationManagerHolder.getLocationManager().getCurrentLocation();
 
         int pressedMenuItemId = item.getItemId();
         switch (pressedMenuItemId) {
@@ -179,6 +204,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
                 break;
         }
 
+        LocationManagerHolder.getLocationManager().stop();
         return true;
     }
 

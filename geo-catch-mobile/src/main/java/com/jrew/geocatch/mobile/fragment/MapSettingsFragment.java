@@ -14,14 +14,12 @@ import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.util.*;
 import com.jrew.geocatch.mobile.view.DomainPropertyView;
-import com.jrew.geocatch.mobile.view.LanguageSpinner;
 import com.jrew.geocatch.mobile.view.StrictDomainPropertyView;
 import com.jrew.geocatch.web.model.DomainProperty;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created with IntelliJ IDEA.
@@ -154,7 +152,7 @@ public class MapSettingsFragment extends SherlockFragment {
         SearchCriteria searchCriteria = SearchCriteriaHolder.getSearchCriteria();
 
         // Device Id
-        searchCriteria.setDeviceId(CommonUtils.getDeviceId(getActivity()));
+        searchCriteria.setDeviceId(CommonUtil.getDeviceId(getActivity()));
 
         // Domain properties
         List<DomainProperty> domainProperties = new ArrayList<DomainProperty>();

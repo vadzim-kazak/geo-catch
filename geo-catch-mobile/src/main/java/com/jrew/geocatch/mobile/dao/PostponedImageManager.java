@@ -117,7 +117,7 @@ public class PostponedImageManager {
     /**
      *
      */
-    public synchronized static void close() {
+    public static synchronized void close() {
         if (helper != null) {
             helper.close();
             helper = null;

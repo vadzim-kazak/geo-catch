@@ -3,6 +3,7 @@ package com.jrew.geocatch.mobile.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.location.LocationManager;
 import android.provider.Settings;
 import android.view.Display;
 import com.jrew.geocatch.mobile.R;
@@ -14,7 +15,21 @@ import com.jrew.geocatch.mobile.R;
  * Time: 16:45
  * To change this template use File | Settings | File Templates.
  */
-public class CommonUtils {
+public class CommonUtil {
+
+    /**
+     *
+     * @param activity
+     * @return
+     */
+    public static boolean isGPSEnabled(Activity activity) {
+        final LocationManager manager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+        if (manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      *

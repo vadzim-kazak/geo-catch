@@ -35,7 +35,7 @@ public class FileUtil {
             out.close();
             return bitmapFile.getAbsolutePath();
         } catch (Exception exception) {
-            Log.e(CommonUtils.getDebugTag(resources), exception.getMessage());
+            Log.e(CommonUtil.getDebugTag(resources), exception.getMessage());
         }
 
         return null;

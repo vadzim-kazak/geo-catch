@@ -2,9 +2,6 @@ package com.jrew.geocatch.mobile.util;
 
 import android.app.Activity;
 import android.graphics.Point;
-import android.hardware.Camera;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -62,20 +59,20 @@ public class LayoutUtil {
      *
      * @param activity
      */
-    public static void showNoConnectionLayout(Activity activity, Fragment fragment) {
+    public static void showNoConnectionLayout(Activity activity, int messageId) {
 
         FrameLayout fragmentContainer = (FrameLayout) activity.findViewById(R.id.fragmentContainer);
         if (fragmentContainer != null && fragmentContainer.getVisibility() != View.GONE) {
             fragmentContainer.setVisibility(View.GONE);
         }
 
-        LinearLayout noNetworkConnectionLayout = (LinearLayout) activity.findViewById(R.id.noNetworkConnectionLayout);
-        if (noNetworkConnectionLayout != null) {
-            if (noNetworkConnectionLayout.getVisibility() != View.VISIBLE) {
-                noNetworkConnectionLayout.setVisibility(View.VISIBLE);
+        LinearLayout refreshLayout = (LinearLayout) activity.findViewById(R.id.refreshLayout);
+        if (refreshLayout != null) {
+            if (refreshLayout.getVisibility() != View.VISIBLE) {
+                refreshLayout.setVisibility(View.VISIBLE);
             }
 
-            ImageView refreshImageView = (ImageView) noNetworkConnectionLayout.findViewById(R.id.refreshNetworkImageView);
+            ImageView refreshImageView = (ImageView) refreshLayout.findViewById(R.id.refreshNetworkImageView);
             refreshImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -85,7 +82,7 @@ public class LayoutUtil {
 
         }
 
-        Toast.makeText(activity, activity.getResources().getString(R.string.noNetworkConnectionError),
+        Toast.makeText(activity, activity.getResources().getString(messageId),
             Toast.LENGTH_SHORT).show();
     }
 
@@ -95,7 +92,7 @@ public class LayoutUtil {
      */
     public static void showFragmentContainer(Activity activity) {
 
-        LinearLayout noNetworkConnectionLayout = (LinearLayout) activity.findViewById(R.id.noNetworkConnectionLayout);
+        LinearLayout noNetworkConnectionLayout = (LinearLayout) activity.findViewById(R.id.refreshLayout);
         if (noNetworkConnectionLayout != null && noNetworkConnectionLayout.getVisibility() != View.GONE) {
             noNetworkConnectionLayout.setVisibility(View.GONE);
         }

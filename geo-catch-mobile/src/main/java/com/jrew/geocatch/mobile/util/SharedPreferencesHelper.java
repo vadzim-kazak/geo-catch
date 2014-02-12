@@ -1,10 +1,8 @@
 package com.jrew.geocatch.mobile.util;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-import com.jrew.geocatch.mobile.R;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -43,7 +41,7 @@ public class SharedPreferencesHelper {
             try {
                 return lastSyncDate = dateFormat.parse(lastSyncDateRecord);
             } catch(ParseException exception) {
-                Log.e(CommonUtils.getDebugTag(activity.getResources()), "Couldn't parse last domain sync date.", exception);
+                Log.e(CommonUtil.getDebugTag(activity.getResources()), "Couldn't parse last domain sync date.", exception);
             }
         }
 

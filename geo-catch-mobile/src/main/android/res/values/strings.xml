@@ -72,6 +72,12 @@
 
     <string name="noNetworkConnectionError">Network connection isn\'t available.</string>
 
+    <string name="noGPSConnectionWarning">Your GPS seems to be disabled, do you want to enable it?</string>
+
+    <string name="noGPSConnectionYesChoice">Yes</string>
+
+    <string name="noGPSConnectionLaterChoice">Later</string>
+
     <string-array name="photo_owner_array">
         <item>Anyone</item>
         <item>Me</item>

@@ -1,9 +1,7 @@
 package com.jrew.geocatch.mobile.fragment;
 
 import android.content.pm.ActivityInfo;
-import android.content.res.TypedArray;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -11,9 +9,6 @@ import android.support.v4.app.Watson;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -83,7 +78,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                     googleMap.setMapType(mapType);
 
                     MainActivity parentActivity = (MainActivity) getActivity();
-                    Location currentLocation = parentActivity.getCurrentLocation();
+                    Location currentLocation = null; //parentActivity.getCurrentLocation();
                     if (currentLocation != null) {
 
                         CameraUpdate center =  CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(),
@@ -126,7 +121,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                 loadImages(getLatLngBounds());
             }
         } else {
-            LayoutUtil.showNoConnectionLayout(getActivity(), this);
+            LayoutUtil.showNoConnectionLayout(getActivity(), R.string.noNetworkConnectionError);
         }
 
         return result;
