@@ -6,7 +6,8 @@
               android:orientation="vertical">
 
     <!-- Domain properties layout -->
-    <LinearLayout android:id="@+id/domainPropertiesView"
+    <com.jrew.geocatch.mobile.view.FlexibleLayout
+                  android:id="@+id/domainPropertiesView"
                   android:orientation="horizontal"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
@@ -14,7 +15,9 @@
                   android:layout_marginLeft="5dip"
                   android:layout_marginBottom="5dip"
                   android:layout_marginTop="5dip"
-                  android:gravity="center_vertical|left">
+                  android:gravity="center_vertical|left"
+                  android:horizontalSpacing="5dip"
+                  android:verticalSpacing="5dip">
 
         <LinearLayout android:id="@+id/fishDomainPropertyTag"
                       android:orientation="horizontal"
@@ -94,7 +97,7 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+    </com.jrew.geocatch.mobile.view.FlexibleLayout>
 
     <!-- Image view layout -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
