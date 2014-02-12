@@ -189,7 +189,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
                 if (currentLocation == null) {
                     showNoLocationDetectedWarning();
                 } else {
-                    imageBundle = prepareUploadData(layout, bitmap);
+                    imageBundle = prepareUploadBundle(layout, bitmap);
                     ServiceUtil.callUploadImageService(imageBundle, resultReceiver, getActivity());
                 }
                 break;
@@ -208,26 +208,31 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
         return true;
     }
 
-    /**
-     *
-     * @param layout
-     * @param image
-     * @return
-     */
-    public Bundle prepareUploadData(View layout, Bitmap image) {
+    public Bundle prepareUploadBundle(View layout, Bitmap image) {
+
+        UploadImage uploadImage = prepareUploadData(layout, image);
 
         Bundle bundle = new Bundle();
-
-        UploadImage uploadImage = prepareImageData(layout);
-
-        byte[] fileData = ConversionUtil.marshallBitmap(image);
-
-        String file = new String(Base64.encodeBase64(fileData));//.encodeToString(, Base64.URL_SAFE);
-        uploadImage.setFile(file);
-
         bundle.putSerializable(ImageService.IMAGE_KEY, uploadImage);
 
         return bundle;
+    }
+
+    /**
+     *
+     * @param layout
+     * @param bitmap
+     * @return
+     */
+    public UploadImage prepareUploadData(View layout, Bitmap bitmap) {
+
+        UploadImage uploadImage = prepareImageData(layout);
+
+        byte[] bitmapData = ConversionUtil.marshallBitmap(bitmap);
+        String file = new String(Base64.encodeBase64(bitmapData));
+        uploadImage.setFile(file);
+
+        return uploadImage;
     }
 
     /**
@@ -351,7 +356,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
     private void postponePhotoUpload() {
         PostponedImage postponedImage = new PostponedImage();
         postponedImage.setBitmap(bitmap);
-        UploadImage uploadImage = prepareImageData(layout);
+        UploadImage uploadImage = prepareUploadData(layout, bitmap);
         postponedImage.setUploadImage(uploadImage);
         PostponedImageManager.persistPostponedImage(getActivity(), postponedImage);
     }
