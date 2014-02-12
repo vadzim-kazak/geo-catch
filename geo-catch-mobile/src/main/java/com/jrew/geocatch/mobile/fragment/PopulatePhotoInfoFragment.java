@@ -69,9 +69,6 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
     /** **/
     private Bitmap bitmap;
 
-    /** **/
-    private UploadImage uploadImage;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -195,7 +192,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
 
         Bundle bundle = new Bundle();
 
-        uploadImage = prepareImageData(layout);
+        UploadImage uploadImage = prepareImageData(layout);
 
         byte[] fileData = ConversionUtil.marshallBitmap(image);
 
@@ -328,6 +325,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
     private void postponePhotoUpload() {
         PostponedImage postponedImage = new PostponedImage();
         postponedImage.setBitmap(bitmap);
+        UploadImage uploadImage = prepareImageData(layout);
         postponedImage.setUploadImage(uploadImage);
         PostponedImageManager.persistPostponedImage(getActivity(), postponedImage);
     }
