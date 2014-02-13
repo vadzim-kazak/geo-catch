@@ -11,11 +11,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.view.*;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.dao.PostponedImageManager;
 import com.jrew.geocatch.mobile.model.PostponedImage;
@@ -42,7 +46,8 @@ import java.util.List;
  * Time: 15:06
  * To change this template use File | Settings | File Templates.
  */
-public class PopulatePhotoInfoFragment extends SherlockFragment {
+public class PopulatePhotoInfoFragment extends SherlockFragment implements
+        GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener{
 
     /** **/
     private static final Double IMAGE_VIEW_SCALE_SIZE = 0.15d;
@@ -71,13 +76,16 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
     /** **/
     private Bitmap bitmap;
 
+    /** **/
+    private Animation blinkAnimation;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         setHasOptionsMenu(true);
 
         // Action bar subtitle
-        ActionBarUtil.initActionBar(ActionBar.NAVIGATION_MODE_STANDARD, getActivity());
+        ActionBarUtil.initPopulatePhotoInfoActionBar(ActionBar.NAVIGATION_MODE_STANDARD, getActivity());
         ActionBarUtil.setActionBarSubtitle(R.string.populatePhotoInfoFragmentLabel, getActivity());
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -143,6 +151,8 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
         fishingBaitView = (DomainPropertyView) layout.findViewById(R.id.fishingBaitView);
         fishingBaitView.loadDomainProperties(DomainInfoService.DomainInfoType.BAIT);
 
+        blinkAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.blink);
+
         return layout;
     }
 
@@ -150,9 +160,8 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
     public void onResume() {
         super.onResume();
 
-        LocationManagerHolder.getLocationManager().start();
-        currentLocation = LocationManagerHolder.getLocationManager().getCurrentLocation();
-        if (currentLocation == null && !CommonUtil.isGPSEnabled(getActivity())) {
+        //currentLocation = LocationManagerHolder.getLocationManager().getCurrentLocation();
+        if (!CommonUtil.isGPSEnabled(getActivity())) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage(getResources().getString(R.string.noGPSConnectionWarning))
                     .setCancelable(false)
@@ -169,6 +178,9 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
 
             final AlertDialog alert = builder.create();
             alert.show();
+        } else {
+            LocationManagerHolder.getLocationManager().start(this, this);
+            ActionBarUtil.getLocationLoadingImageView().startAnimation(blinkAnimation);
         }
     }
 
@@ -181,8 +193,6 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        currentLocation = LocationManagerHolder.getLocationManager().getCurrentLocation();
-
         int pressedMenuItemId = item.getItemId();
         switch (pressedMenuItemId) {
             case R.id.backMenuOption:
@@ -193,6 +203,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
                 if (currentLocation == null) {
                     showNoLocationDetectedWarning();
                 } else {
+                    LocationManagerHolder.getLocationManager().stop(this, this);
                     imageBundle = prepareUploadBundle(layout, bitmap);
                     ServiceUtil.callUploadImageService(imageBundle, resultReceiver, getActivity());
                 }
@@ -202,13 +213,13 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
                 if (currentLocation == null) {
                     showNoLocationDetectedWarning();
                 } else {
+                    LocationManagerHolder.getLocationManager().stop(this, this);
                     postponePhotoUpload();
                     FragmentSwitcherHolder.getFragmentSwitcher().showPostponedPhotosFragment();
                 }
                 break;
         }
 
-        LocationManagerHolder.getLocationManager().stop();
         return true;
     }
 
@@ -374,5 +385,23 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        currentLocation = LocationManagerHolder.getLocationManager().getCurrentLocation();
+        ImageView imageView = ActionBarUtil.getLocationLoadingImageView();
+        imageView.clearAnimation();
+        imageView.setImageResource(R.drawable.ic_action_location);
+    }
+
+    @Override
+    public void onDisconnected() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

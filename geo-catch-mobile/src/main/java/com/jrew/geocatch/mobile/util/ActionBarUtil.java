@@ -21,6 +21,18 @@ public class ActionBarUtil {
     /**
      *
      */
+    private static enum MenuOption {
+
+        /** **/
+        SETTINGS_MENU_OPTION,
+
+        /** **/
+        LOCATION_LOADING_MENU_OPTION,
+    }
+
+    /**
+     *
+     */
     public static enum TabTag {
 
         UPLOADED_PHOTOS_TAB,
@@ -28,22 +40,50 @@ public class ActionBarUtil {
         POSTPONED_PHOTOS_TAB
     }
 
+    /** **/
+    private static MenuOption[] NO_MENU_OPTIONS = new MenuOption[0];
+
+    /** **/
+    private static MenuOption[] SETTING_MENU_OPTION = new MenuOption[] {MenuOption.SETTINGS_MENU_OPTION};
+
+    /** **/
+    private static MenuOption[] BOTH_MENU_OPTIONS = new MenuOption[] {MenuOption.SETTINGS_MENU_OPTION,
+            MenuOption.LOCATION_LOADING_MENU_OPTION};
+
     /**
      *
      * @param navigationMode
      * @param activity
      */
     public static void initActionBar(int navigationMode, Activity activity) {
-        initActionBar(navigationMode, true, activity);
+        initActionBar(navigationMode, activity, SETTING_MENU_OPTION);
     }
 
     /**
      *
      * @param navigationMode
-     * @param showSettingsMenuOption
      * @param activity
      */
-    public static void initActionBar(int navigationMode, boolean showSettingsMenuOption, Activity activity) {
+    public static void initSettingsActionBar(int navigationMode, Activity activity) {
+        initActionBar(navigationMode, activity, NO_MENU_OPTIONS);
+    }
+
+    /**
+     *
+     * @param navigationMode
+     * @param activity
+     */
+    public static void initPopulatePhotoInfoActionBar(int navigationMode, Activity activity) {
+        initActionBar(navigationMode, activity, BOTH_MENU_OPTIONS);
+    }
+
+    /**
+     *
+     * @param navigationMode
+     * @param activity
+     * @param menuOptions
+     */
+    public static void initActionBar(int navigationMode, Activity activity,  MenuOption... menuOptions) {
 
         ActionBar actionBar = ActionBarHolder.getActionBar();
 
@@ -70,11 +110,38 @@ public class ActionBarUtil {
             }
         });
 
-        if (showSettingsMenuOption) {
+        if (isPresented(MenuOption.SETTINGS_MENU_OPTION, menuOptions)) {
             actionBarSettingsImageView.setVisibility(View.VISIBLE);
         } else {
             actionBarSettingsImageView.setVisibility(View.GONE);
         }
+
+
+        // location loading action bar option
+        ImageView actionBarLocationImageView = (ImageView) actionBarView.findViewById(R.id.locationLoading);
+        if (isPresented(MenuOption.LOCATION_LOADING_MENU_OPTION, menuOptions)) {
+            actionBarLocationImageView.setVisibility(View.VISIBLE);
+        } else {
+            actionBarLocationImageView.clearAnimation();
+            actionBarLocationImageView.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     *
+     * @param menuOption
+     * @param menuOptions
+     * @return
+     */
+    private static boolean isPresented(MenuOption menuOption, MenuOption... menuOptions) {
+
+        for (MenuOption currentMenuOption : menuOptions) {
+            if (currentMenuOption == menuOption) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -173,5 +240,17 @@ public class ActionBarUtil {
         }
 
         return null;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static ImageView getLocationLoadingImageView() {
+
+        ActionBar actionBar = ActionBarHolder.getActionBar();
+        View actionBarView = actionBar.getCustomView();
+
+        return (ImageView) actionBarView.findViewById(R.id.locationLoading);
     }
 }

@@ -14,8 +14,7 @@ import com.google.android.gms.location.LocationClient;
  * Time: 16:48
  * To change this template use File | Settings | File Templates.
  */
-public class LocationManager implements
-        GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
+public class LocationManager {
 
     /** **/
     private LocationClient locationClient;
@@ -23,28 +22,46 @@ public class LocationManager implements
     /** **/
     private boolean isUsed = false;
 
+    /** **/
+    private Activity activity;
+
     /**
      *
      * @param activity
      */
     public LocationManager(Activity activity) {
-        locationClient = new LocationClient(activity, this, this);
+        this.activity = activity;
     }
 
     /**
      *
+     * @param connectionCallback
+     * @param connectionFailedListener
      */
-    public void start() {
+    public void start(GooglePlayServicesClient.ConnectionCallbacks connectionCallback,
+                      GooglePlayServicesClient.OnConnectionFailedListener connectionFailedListener) {
+
+        if (locationClient == null) {
+            locationClient = new LocationClient(activity, connectionCallback, connectionFailedListener);
+        } else {
+            locationClient.registerConnectionCallbacks(connectionCallback);
+            locationClient.registerConnectionFailedListener(connectionFailedListener);
+        }
         isUsed = true;
         connect();
     }
 
     /**
      *
+     * @param connectionCallback
+     * @param connectionFailedListener
      */
-    public void stop() {
+    public void stop(GooglePlayServicesClient.ConnectionCallbacks connectionCallback,
+                     GooglePlayServicesClient.OnConnectionFailedListener connectionFailedListener) {
         isUsed = false;
         disconnect();
+        locationClient.unregisterConnectionCallbacks(connectionCallback);
+        locationClient.unregisterConnectionFailedListener(connectionFailedListener);
     }
 
     /**
@@ -81,12 +98,4 @@ public class LocationManager implements
         return null;
     }
 
-    @Override
-    public void onConnected(Bundle bundle) {}
-
-    @Override
-    public void onDisconnected() {}
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {}
 }

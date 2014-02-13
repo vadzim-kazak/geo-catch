@@ -30,7 +30,7 @@ public class SettingsFragment extends SherlockFragment {
 
         setHasOptionsMenu(true);
 
-        ActionBarUtil.initActionBar(ActionBar.NAVIGATION_MODE_STANDARD, false, getActivity());
+        ActionBarUtil.initSettingsActionBar(ActionBar.NAVIGATION_MODE_STANDARD, getActivity());
         ActionBarUtil.setActionBarSubtitle(R.string.settingsFragmentLabel, getActivity());
 
         LayoutUtil.showFragmentContainer(getActivity());

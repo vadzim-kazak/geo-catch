@@ -40,6 +40,15 @@
 
     </LinearLayout>
 
+    <ImageView android:id="@+id/locationLoading"
+               android:layout_width="@dimen/abs__action_bar_default_height"
+               android:layout_height="@dimen/abs__action_bar_default_height"
+               android:src="@android:drawable/ic_menu_mylocation"
+               android:scaleType="center"
+               android:layout_centerVertical="true"
+               android:visibility="gone"
+               android:layout_toLeftOf="@+id/settingsImageView"/>
+
     <ImageView android:id="@+id/settingsImageView"
                android:layout_width="@dimen/abs__action_bar_default_height"
                android:layout_height="@dimen/abs__action_bar_default_height"
