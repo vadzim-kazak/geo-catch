@@ -1,11 +1,16 @@
 package com.jrew.geocatch.mobile.fragment;
 
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.app.Watson;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +35,8 @@ import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.ViewBounds;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,48 +80,46 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
                 googleMap = getMap();
 
-                if (googleMap != null) {
-                    int mapType = Integer.parseInt(getResources().getString(R.config.mapType));
-                    googleMap.setMapType(mapType);
+                int mapType = Integer.parseInt(getResources().getString(R.config.mapType));
+                googleMap.setMapType(mapType);
 
-                    MainActivity parentActivity = (MainActivity) getActivity();
-                    Location currentLocation = null; //parentActivity.getCurrentLocation();
-                    if (currentLocation != null) {
+                MainActivity parentActivity = (MainActivity) getActivity();
+                Location currentLocation = null; //parentActivity.getCurrentLocation();
+                if (currentLocation != null) {
 
-                        CameraUpdate center =  CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(),
-                                currentLocation.getLongitude()));
+                    CameraUpdate center =  CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(),
+                            currentLocation.getLongitude()));
 
-                        CameraUpdate zoom = CameraUpdateFactory.zoomTo(
-                                Integer.parseInt(getResources().getString(R.config.cameraInitialZoom)));
+                    CameraUpdate zoom = CameraUpdateFactory.zoomTo(
+                            Integer.parseInt(getResources().getString(R.config.cameraInitialZoom)));
 
-                        googleMap.moveCamera(center);
-                        googleMap.animateCamera(zoom);
-                    }
-
-                    imageMarkerPairs = new HashMap<Long, ImageMarkerPair>();
-
-                    googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-
-                        @Override
-                        public void onCameraChange(CameraPosition cameraPosition) {
-
-                            // Get current view bounds
-                            LatLngBounds latLngBounds = getLatLngBounds();
-
-                            // Remove invisible markers
-                            //removeInvisibleMarkers(latLngBounds);
-
-                            // Load new images for view bounds
-                            loadImages(latLngBounds);
-                        }
-                    });
-
-                    /** Set custom on marker click listener  **/
-                    MarkerOnClickListener markerOnclickListener = new MarkerOnClickListener(imageMarkerPairs, this);
-                    googleMap.setOnMarkerClickListener(markerOnclickListener);
-
-                    imageResultReceiver = new ImageServiceResultReceiver(new Handler(), this);
+                    googleMap.moveCamera(center);
+                    googleMap.animateCamera(zoom);
                 }
+
+                imageMarkerPairs = new HashMap<Long, ImageMarkerPair>();
+
+                googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+
+                    @Override
+                    public void onCameraChange(CameraPosition cameraPosition) {
+
+                        // Get current view bounds
+                        LatLngBounds latLngBounds = getLatLngBounds();
+
+                        // Remove invisible markers
+                        //removeInvisibleMarkers(latLngBounds);
+
+                        // Load new images for view bounds
+                        loadImages(latLngBounds);
+                    }
+                });
+
+                /** Set custom on marker click listener  **/
+                MarkerOnClickListener markerOnclickListener = new MarkerOnClickListener(imageMarkerPairs, this);
+                googleMap.setOnMarkerClickListener(markerOnclickListener);
+
+                imageResultReceiver = new ImageServiceResultReceiver(new Handler(), this);
 
             } else {
                 clearMarkers();
