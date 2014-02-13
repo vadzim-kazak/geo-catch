@@ -43,7 +43,7 @@
     <ImageView android:id="@+id/locationLoading"
                android:layout_width="@dimen/abs__action_bar_default_height"
                android:layout_height="@dimen/abs__action_bar_default_height"
-               android:src="@android:drawable/ic_menu_mylocation"
+               android:src="@drawable/no_location"
                android:scaleType="center"
                android:layout_centerVertical="true"
                android:visibility="gone"

@@ -120,6 +120,7 @@ public class ActionBarUtil {
         // location loading action bar option
         ImageView actionBarLocationImageView = (ImageView) actionBarView.findViewById(R.id.locationLoading);
         if (isPresented(MenuOption.LOCATION_LOADING_MENU_OPTION, menuOptions)) {
+            actionBarLocationImageView.setImageResource(R.drawable.no_location);
             actionBarLocationImageView.setVisibility(View.VISIBLE);
         } else {
             actionBarLocationImageView.clearAnimation();

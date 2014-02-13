@@ -180,6 +180,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements
             alert.show();
         } else {
             LocationManagerHolder.getLocationManager().start(this, this);
+            ActionBarUtil.getLocationLoadingImageView().setImageResource(R.drawable.location);
             ActionBarUtil.getLocationLoadingImageView().startAnimation(blinkAnimation);
         }
     }
@@ -392,7 +393,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements
         currentLocation = LocationManagerHolder.getLocationManager().getCurrentLocation();
         ImageView imageView = ActionBarUtil.getLocationLoadingImageView();
         imageView.clearAnimation();
-        imageView.setImageResource(R.drawable.ic_action_location);
+        imageView.setImageResource(R.drawable.location);
     }
 
     @Override

@@ -65,7 +65,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
         setHasOptionsMenu(true);
 
-        ActionBarUtil.initActionBar(ActionBar.NAVIGATION_MODE_STANDARD, getActivity());
+        ActionBarUtil.initPopulatePhotoInfoActionBar(ActionBar.NAVIGATION_MODE_STANDARD, getActivity());
         ActionBarUtil.setActionBarSubtitle(R.string.mapFragmentLabel, getActivity());
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
