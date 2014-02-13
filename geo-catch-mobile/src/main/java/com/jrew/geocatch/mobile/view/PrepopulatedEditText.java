@@ -2,11 +2,13 @@ package com.jrew.geocatch.mobile.view;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 /**
  * Created with IntelliJ IDEA.
@@ -39,6 +41,7 @@ public class PrePopulatedEditText extends EditText implements TextWatcher, View.
         addTextChangedListener(this);
         setOnFocusChangeListener(this);
         initialValue = getText().toString();
+        setSaveEnabled(false);
     }
 
     /**
@@ -52,6 +55,7 @@ public class PrePopulatedEditText extends EditText implements TextWatcher, View.
         addTextChangedListener(this);
         setOnFocusChangeListener(this);
         initialValue = getText().toString();
+        setSaveEnabled(false);
     }
 
     /**
@@ -66,6 +70,7 @@ public class PrePopulatedEditText extends EditText implements TextWatcher, View.
         addTextChangedListener(this);
         setOnFocusChangeListener(this);
         initialValue = getText().toString();
+        setSaveEnabled(false);
     }
 
     @Override
@@ -83,9 +88,7 @@ public class PrePopulatedEditText extends EditText implements TextWatcher, View.
     }
 
     @Override
-    public void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
-        super.onTextChanged(text, start, lengthBefore, lengthAfter);
-    }
+    public void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {}
 
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {}

@@ -56,7 +56,11 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
     /** **/
     private View layout;
 
+    /** **/
     private Location currentLocation;
+
+    /** **/
+    private PrePopulatedEditText descriptionView;
 
     /** **/
    // private ProgressDialog progressDialog;
@@ -249,7 +253,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment {
         uploadImage.setDeviceId(deviceId);
 
         // Description
-        PrePopulatedEditText descriptionView = (PrePopulatedEditText) layout.findViewById(R.id.uploadImageDescription);
+        descriptionView = (PrePopulatedEditText) layout.findViewById(R.id.uploadImageDescription);
         uploadImage.setDescription(descriptionView.getValue());
 
         // Latitude

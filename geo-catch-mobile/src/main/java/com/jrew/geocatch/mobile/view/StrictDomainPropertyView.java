@@ -1,11 +1,13 @@
 package com.jrew.geocatch.mobile.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Editable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.jrew.geocatch.mobile.R;
 
@@ -17,6 +19,9 @@ import com.jrew.geocatch.mobile.R;
  * To change this template use File | Settings | File Templates.
  */
 public class StrictDomainPropertyView extends DomainPropertyView {
+
+    /** **/
+    private static int DISABLED_VIEW_COLOR = Color.argb(255, 200, 200, 200);
 
     /**
      *
@@ -61,6 +66,8 @@ public class StrictDomainPropertyView extends DomainPropertyView {
         super.loadDomainProperties(domainPropertyType);
         if (adapter.getCount() == 0) {
             setEnabled(false);
+            LinearLayout parent = (LinearLayout) getParent();
+            parent.setBackgroundColor(DISABLED_VIEW_COLOR);
         }
     }
 }

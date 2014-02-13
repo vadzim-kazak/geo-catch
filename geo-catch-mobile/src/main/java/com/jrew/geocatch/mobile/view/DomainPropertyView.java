@@ -60,6 +60,7 @@ public class DomainPropertyView extends AutoCompleteTextView implements TextWatc
         addTextChangedListener(this);
         setOnFocusChangeListener(this);
         initialValue = getText().toString();
+        setSaveEnabled(false);
     }
 
     /**
@@ -76,6 +77,7 @@ public class DomainPropertyView extends AutoCompleteTextView implements TextWatc
         addTextChangedListener(this);
         setOnFocusChangeListener(this);
         initialValue = getText().toString();
+        setSaveEnabled(false);
     }
 
     /**
