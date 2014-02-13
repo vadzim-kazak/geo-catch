@@ -6,13 +6,13 @@
           android:showAsAction="always">
     </item>
 
-    <item android:id="@+id/uploadPhotoMenuOption"
-          android:icon="@android:drawable/ic_menu_send"
+    <item android:id="@+id/postponePhotoUploadMenuOption"
+          android:icon="@android:drawable/ic_menu_recent_history"
           android:showAsAction="always">
     </item>
 
-    <item android:id="@+id/postponePhotoUploadMenuOption"
-          android:icon="@android:drawable/ic_menu_recent_history"
+    <item android:id="@+id/uploadPhotoMenuOption"
+          android:icon="@android:drawable/ic_menu_send"
           android:showAsAction="always">
     </item>
 
