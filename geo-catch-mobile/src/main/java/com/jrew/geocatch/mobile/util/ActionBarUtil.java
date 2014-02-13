@@ -147,9 +147,31 @@ public class ActionBarUtil {
                 if (TabTag.POSTPONED_PHOTOS_TAB == tabToSelect) {
                     postponedPhotosTab.select();
                 }
+            } else {
+                if (TabTag.UPLOADED_PHOTOS_TAB == tabToSelect || TabTag.POSTPONED_PHOTOS_TAB == tabToSelect) {
+                    getActionBarTabByTag(tabToSelect, actionBar).select();
+                }
             }
         } else {
             ActionBarUtil.initActionBar(ActionBar.NAVIGATION_MODE_STANDARD, activity);
         }
+    }
+
+    /**
+     *
+     * @param tag
+     * @param actionBar
+     * @return
+     */
+    private static ActionBar.Tab getActionBarTabByTag(TabTag tag, ActionBar actionBar) {
+
+        for (int i = 0; i < actionBar.getTabCount(); i++ ) {
+            ActionBar.Tab tab = actionBar.getTabAt(i);
+            if (tag == tab.getTag()) {
+                return tab;
+            }
+        }
+
+        return null;
     }
 }
