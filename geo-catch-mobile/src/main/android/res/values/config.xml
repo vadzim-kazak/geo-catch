@@ -38,7 +38,7 @@
     -->
     <item name="mapType" type="config">3</item>
 
-    <item name="cameraInitialZoom" type="config">8</item>
+    <item name="cameraInitialZoom" type="config">9</item>
 
     <item name="debugTag" type="config">geoCatch</item>
 

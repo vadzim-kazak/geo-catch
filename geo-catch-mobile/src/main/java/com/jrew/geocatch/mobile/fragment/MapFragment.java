@@ -14,9 +14,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -49,7 +54,8 @@ import java.util.Map;
  *
  */
 public class MapFragment extends SupportMapFragment implements Watson.OnCreateOptionsMenuListener,
-        Watson.OnOptionsItemSelectedListener {
+        Watson.OnOptionsItemSelectedListener, GooglePlayServicesClient.ConnectionCallbacks,
+        GooglePlayServicesClient.OnConnectionFailedListener {
 
     /** **/
     private GoogleMap googleMap;
@@ -83,20 +89,6 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                 int mapType = Integer.parseInt(getResources().getString(R.config.mapType));
                 googleMap.setMapType(mapType);
 
-                MainActivity parentActivity = (MainActivity) getActivity();
-                Location currentLocation = null; //parentActivity.getCurrentLocation();
-                if (currentLocation != null) {
-
-                    CameraUpdate center =  CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(),
-                            currentLocation.getLongitude()));
-
-                    CameraUpdate zoom = CameraUpdateFactory.zoomTo(
-                            Integer.parseInt(getResources().getString(R.config.cameraInitialZoom)));
-
-                    googleMap.moveCamera(center);
-                    googleMap.animateCamera(zoom);
-                }
-
                 imageMarkerPairs = new HashMap<Long, ImageMarkerPair>();
 
                 googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
@@ -125,6 +117,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                 clearMarkers();
                 loadImages(getLatLngBounds());
             }
+
         } else {
             LayoutUtil.showNoConnectionLayout(getActivity(), R.string.noNetworkConnectionError);
         }
@@ -158,6 +151,24 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
         }
 
         return true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (WebUtil.isNetworkAvailable(getActivity())) {
+            LocationManagerHolder.getLocationManager().start(this, this);
+            ActionBarUtil.handleLocationLoadingEvent(getActivity());
+        }
+    }
+
+    @Override
+    public void onPause() {
+
+        LocationManagerHolder.getLocationManager().stop(this, this);
+
+        super.onPause();
     }
 
     /**
@@ -230,5 +241,33 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
      */
     private LatLngBounds getLatLngBounds() {
         return googleMap.getProjection().getVisibleRegion().latLngBounds;
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Location currentLocation = LocationManagerHolder.getLocationManager().getCurrentLocation();
+        if (currentLocation != null) {
+
+            CameraUpdate center =  CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(),
+                    currentLocation.getLongitude()));
+
+            CameraUpdate zoom = CameraUpdateFactory.zoomTo(
+                    Integer.parseInt(getResources().getString(R.config.cameraInitialZoom)));
+
+            googleMap.moveCamera(center);
+            googleMap.animateCamera(zoom);
+
+            ActionBarUtil.handleLocationLoadedEvent();
+        }
+    }
+
+    @Override
+    public void onDisconnected() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

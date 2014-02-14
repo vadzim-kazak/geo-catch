@@ -3,6 +3,8 @@ package com.jrew.geocatch.mobile.util;
 import android.app.Activity;
 import android.os.Build;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
@@ -253,5 +255,25 @@ public class ActionBarUtil {
         View actionBarView = actionBar.getCustomView();
 
         return (ImageView) actionBarView.findViewById(R.id.locationLoading);
+    }
+
+    /**
+     *
+     * @param activity
+     */
+    public static void handleLocationLoadingEvent(Activity activity) {
+        ImageView locationImageView =  ActionBarUtil.getLocationLoadingImageView();
+        locationImageView.setImageResource(R.drawable.no_location);
+        Animation blinkAnimation = AnimationUtils.loadAnimation(activity, R.anim.blink);
+        locationImageView.startAnimation(blinkAnimation);
+    }
+
+    /**
+     *
+     */
+    public static void handleLocationLoadedEvent() {
+        ImageView locationImageView =  ActionBarUtil.getLocationLoadingImageView();
+        locationImageView.clearAnimation();
+        locationImageView.setImageResource(R.drawable.location);
     }
 }

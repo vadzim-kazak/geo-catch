@@ -47,7 +47,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class PopulatePhotoInfoFragment extends SherlockFragment implements
-        GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener{
+        GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
 
     /** **/
     private static final Double IMAGE_VIEW_SCALE_SIZE = 0.15d;
@@ -75,9 +75,6 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements
 
     /** **/
     private Bitmap bitmap;
-
-    /** **/
-    private Animation blinkAnimation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -151,8 +148,6 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements
         fishingBaitView = (DomainPropertyView) layout.findViewById(R.id.fishingBaitView);
         fishingBaitView.loadDomainProperties(DomainInfoService.DomainInfoType.BAIT);
 
-        blinkAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.blink);
-
         return layout;
     }
 
@@ -180,8 +175,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements
             alert.show();
         } else {
             LocationManagerHolder.getLocationManager().start(this, this);
-            ActionBarUtil.getLocationLoadingImageView().setImageResource(R.drawable.location);
-            ActionBarUtil.getLocationLoadingImageView().startAnimation(blinkAnimation);
+            ActionBarUtil.handleLocationLoadingEvent(getActivity());
         }
     }
 
@@ -391,9 +385,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements
     @Override
     public void onConnected(Bundle bundle) {
         currentLocation = LocationManagerHolder.getLocationManager().getCurrentLocation();
-        ImageView imageView = ActionBarUtil.getLocationLoadingImageView();
-        imageView.clearAnimation();
-        imageView.setImageResource(R.drawable.location);
+        ActionBarUtil.handleLocationLoadedEvent();
     }
 
     @Override
