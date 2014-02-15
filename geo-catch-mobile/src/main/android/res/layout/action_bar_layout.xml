@@ -8,38 +8,48 @@
                 android:paddingLeft="5dip"
                 android:paddingRight="0dip">
 
-    <ImageView android:layout_width="@dimen/abs__action_bar_default_height"
-               android:layout_height="@dimen/abs__action_bar_default_height"
+    <ImageView android:layout_width="33dip"
+               android:layout_height="33dip"
                android:id="@+id/imageView"
                android:src="@drawable/icon"
                android:layout_gravity="center_vertical|left"
                android:layout_alignParentLeft="true"
                android:layout_centerVertical="true"/>
 
-    <LinearLayout android:orientation="vertical"
+    <LinearLayout android:orientation="horizontal"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_toRightOf="@+id/imageView"
-                  android:layout_centerVertical="true"
+                  android:layout_alignParentTop="false"
                   android:layout_marginLeft="5dip"
-                  android:layout_marginBottom="5dip">
+                  android:layout_marginBottom="5dip"
+                  android:layout_centerVertical="true"
+                  android:gravity="center">
 
         <TextView android:id="@+id/titleTextView"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:text="@string/appName"
+                  android:textSize="18dip"/>
+
+        <TextView android:id="@+id/titleSeparatorTextView"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/actionBarTitleDelimiter"
                   android:textSize="18dip"
-                  android:layout_gravity="left"/>
+                  android:textColor="@android:color/darker_gray"
+                  android:layout_marginLeft="5dip"
+                  android:layout_marginRight="5dip"/>
 
         <TextView android:id="@+id/subTitleTextView"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:text="Subtitle ..."
-                  android:textSize="14dip"
-                  android:layout_gravity="left"/>
+                  android:textSize="14dip"/>
 
     </LinearLayout>
 
+   <!--
     <ImageView android:id="@+id/locationLoading"
                android:layout_width="@dimen/abs__action_bar_default_height"
                android:layout_height="@dimen/abs__action_bar_default_height"
@@ -47,6 +57,7 @@
                android:scaleType="center"
                android:visibility="visible"
                android:layout_centerVertical="true" android:layout_alignParentLeft="true"/>
+    -->
 
     <ImageView android:id="@+id/settingsImageView"
                android:layout_width="@dimen/abs__action_bar_default_height"
