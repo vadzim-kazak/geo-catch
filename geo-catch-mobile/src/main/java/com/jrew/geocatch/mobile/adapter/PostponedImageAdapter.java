@@ -18,6 +18,7 @@ import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.util.*;
 
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created with IntelliJ IDEA.
@@ -171,7 +172,9 @@ public class PostponedImageAdapter extends BaseAdapter {
      */
     private void removePostponedImage(long postponedImageId) {
 
-        for (PostponedImage postponedImage : postponedImages) {
+        ListIterator<PostponedImage> iterator = postponedImages.listIterator();
+        while (iterator.hasNext()) {
+            PostponedImage postponedImage = iterator.next();
             if (postponedImage.getId() == postponedImageId) {
                 PostponedImageManager.deletePostponedImage(PostponedImageAdapter.this.context, postponedImage);
                 postponedImages.remove(postponedImage);
