@@ -32,15 +32,15 @@
 
     <string name="baitDomainPropertyInitialLabel">Приманка...</string>
 
-    <string name="shareSectionLabel">ОТКРЫТОСТЬ</string>
+    <string name="shareSectionLabel">ДОСТУП</string>
 
-    <string name="sharePublicOptionLabel">Публичный</string>
+    <string name="sharePublicOptionLabel">Открытый</string>
 
-    <string name="sharePrivateOptionLabel">Частный</string>
+    <string name="sharePrivateOptionLabel">Закрытый</string>
 
     <string name="locationLoadingWarning">Ожидание подгрузки локации...</string>
 
-    <string name="imageUploadingError">Ошибка загрузки фотографии</string>
+    <string name="imageUploadingError">Ошибка загрузки фото</string>
 
     <string name="imageUploadingRetry">Повторить</string>
 
@@ -61,14 +61,14 @@
     <string name="photoBrowsingFragmentLabel">Просмотр фото</string>
 
     <!-- Uploaded photos fragment -->
-    <string name="uploadedPhotosFragmentLabel">Мои фотографии</string>
+    <string name="uploadedPhotosFragmentLabel">Мои фото</string>
 
-    <string name="uploadedPhotosLoadingError">Ошибка загрузки фотографий</string>
+    <string name="uploadedPhotosLoadingError">Ошибка загрузки фото</string>
 
     <!-- Postponed photos fragment -->
-    <string name="postponedPhotosFragmentLabel">Отложенные фотографии</string>
+    <string name="postponedPhotosFragmentLabel">Отложенные фото</string>
 
-    <string name="uploadedPhotosLoadingError">Ошибка загрузки фотографий</string>
+    <string name="uploadedPhotosLoadingError">Ошибка загрузки фото</string>
 
     <string name="noNetworkConnectionError">Нет доступа к интернету</string>
 
