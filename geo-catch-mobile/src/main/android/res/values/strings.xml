@@ -20,7 +20,7 @@
     <string name="previewPhotoFragmentLabel">Photo preview</string>
 
     <!-- Populate photo info fragment (some strings are also used in map settings fragment)-->
-    <string name="populatePhotoInfoFragmentLabel">Photo information</string>
+    <string name="populatePhotoInfoFragmentLabel">Photo info</string>
 
     <string name="photoDescriptionInitialLabel">Add description here...</string>
 
