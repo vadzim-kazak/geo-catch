@@ -7,19 +7,17 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.view.*;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.dao.PostponedImageManager;
 import com.jrew.geocatch.mobile.model.PostponedImage;
@@ -46,8 +44,7 @@ import java.util.List;
  * Time: 15:06
  * To change this template use File | Settings | File Templates.
  */
-public class PopulatePhotoInfoFragment extends SherlockFragment implements
-        GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
+public class PopulatePhotoInfoFragment extends SherlockFragment implements LocationListener{
 
     /** **/
     private static final Double IMAGE_VIEW_SCALE_SIZE = 0.15d;
@@ -62,9 +59,6 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements
     private View layout;
 
     /** **/
-    private Location currentLocation;
-
-    /** **/
     private PrePopulatedEditText descriptionView;
 
     /** **/
@@ -76,16 +70,27 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements
     /** **/
     private Bitmap bitmap;
 
+    /** **/
+    private LocationManager locationManager;
+
+    /** **/
+    private Location currentLocation;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         setHasOptionsMenu(true);
 
         // Action bar subtitle
-        ActionBarUtil.initPopulatePhotoInfoActionBar(ActionBar.NAVIGATION_MODE_STANDARD, getActivity());
+        ActionBarUtil.initActionBar(ActionBar.NAVIGATION_MODE_STANDARD, getActivity());
         ActionBarUtil.setActionBarSubtitle(R.string.populatePhotoInfoFragmentLabel, getActivity());
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        currentLocation = null;
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        ActionBarUtil.initLocationProcessingStatusArea(getActivity());
 
         LayoutUtil.showFragmentContainer(getActivity());
 
@@ -174,8 +179,9 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements
             final AlertDialog alert = builder.create();
             alert.show();
         } else {
-            LocationManagerHolder.getLocationManager().start(this, this);
-            ActionBarUtil.handleLocationLoadingEvent(getActivity());
+            if (currentLocation == null) {
+                ActionBarUtil.statusAreaHandleLocationLoading(getActivity());
+            }
         }
     }
 
@@ -198,7 +204,6 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements
                 if (currentLocation == null) {
                     showNoLocationDetectedWarning();
                 } else {
-                    LocationManagerHolder.getLocationManager().stop(this, this);
                     imageBundle = prepareUploadBundle(layout, bitmap);
                     ServiceUtil.callUploadImageService(imageBundle, resultReceiver, getActivity());
                 }
@@ -208,7 +213,6 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements
                 if (currentLocation == null) {
                     showNoLocationDetectedWarning();
                 } else {
-                    LocationManagerHolder.getLocationManager().stop(this, this);
                     postponePhotoUpload();
                     FragmentSwitcherHolder.getFragmentSwitcher().showPostponedPhotosFragment();
                 }
@@ -383,18 +387,36 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements
     }
 
     @Override
-    public void onConnected(Bundle bundle) {
-        currentLocation = LocationManagerHolder.getLocationManager().getCurrentLocation();
-        ActionBarUtil.handleLocationLoadedEvent();
+    public void onLocationChanged(Location location) {
+        // in meters
+        final int MIN_ACCURACY = 30;
+        if (location.getAccuracy()  < getResources().getInteger(R.config.locationDetectionAccuracy)) {
+            currentLocation = location;
+            ActionBarUtil.statusAreaHandleLocationDetection(getActivity());
+            locationManager.removeUpdates(this);
+        }
     }
 
     @Override
-    public void onDisconnected() {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void onStatusChanged(String s, int i, Bundle bundle) {}
+
+    @Override
+    public void onProviderEnabled(String providerName) {
+        if (LocationManager.GPS_PROVIDER.equalsIgnoreCase(providerName)) {
+            ActionBarUtil.statusAreaHandleLocationLoading(getActivity());
+        }
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void onProviderDisabled(String providerName) {
+        if (LocationManager.GPS_PROVIDER.equalsIgnoreCase(providerName)) {
+            ActionBarUtil.initLocationProcessingStatusArea(getActivity());
+        }
+    }
+
+    @Override
+    public void onStop() {
+        locationManager.removeUpdates(this);
+        super.onStop();
     }
 }

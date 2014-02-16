@@ -78,6 +78,13 @@
 
     <string name="noGPSConnectionLaterChoice">Позже</string>
 
+    <!-- Action bar status area -->
+    <string name="statusAreaLocationNotDetected">Местоположение не определено</string>
+
+    <string name="statusAreaLocationIsLoading">Определение местоположения ...</string>
+
+    <string name="statusAreaLocationDetected">Местоположение определено</string>
+
     <string-array name="photo_owner_array">
         <item>Любой</item>
         <item>Я</item>

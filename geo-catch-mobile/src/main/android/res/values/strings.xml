@@ -85,6 +85,13 @@
         <item>Me</item>
     </string-array>
 
+    <!-- Action bar status area -->
+    <string name="statusAreaLocationNotDetected">Location is not detected</string>
+
+    <string name="statusAreaLocationIsLoading">Loading location ...</string>
+
+    <string name="statusAreaLocationDetected">Location is detected</string>
+
     <!-- Supported languages array -->
     <string-array name="languages_array">
         <item>English</item>

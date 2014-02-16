@@ -54,8 +54,7 @@ import java.util.Map;
  *
  */
 public class MapFragment extends SupportMapFragment implements Watson.OnCreateOptionsMenuListener,
-        Watson.OnOptionsItemSelectedListener, GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener {
+        Watson.OnOptionsItemSelectedListener {
 
     /** **/
     private GoogleMap googleMap;
@@ -71,7 +70,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
         setHasOptionsMenu(true);
 
-        ActionBarUtil.initPopulatePhotoInfoActionBar(ActionBar.NAVIGATION_MODE_STANDARD, getActivity());
+        ActionBarUtil.initActionBar(ActionBar.NAVIGATION_MODE_STANDARD, getActivity());
         ActionBarUtil.setActionBarSubtitle(R.string.mapFragmentLabel, getActivity());
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
@@ -158,15 +157,12 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
         super.onResume();
 
         if (WebUtil.isNetworkAvailable(getActivity())) {
-            LocationManagerHolder.getLocationManager().start(this, this);
-            ActionBarUtil.handleLocationLoadingEvent(getActivity());
         }
     }
 
     @Override
     public void onPause() {
 
-        LocationManagerHolder.getLocationManager().stop(this, this);
 
         super.onPause();
     }
@@ -243,7 +239,6 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
         return googleMap.getProjection().getVisibleRegion().latLngBounds;
     }
 
-    @Override
     public void onConnected(Bundle bundle) {
         Location currentLocation = LocationManagerHolder.getLocationManager().getCurrentLocation();
         if (currentLocation != null) {
@@ -257,17 +252,6 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
             googleMap.moveCamera(center);
             googleMap.animateCamera(zoom);
 
-            ActionBarUtil.handleLocationLoadedEvent();
         }
-    }
-
-    @Override
-    public void onDisconnected() {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

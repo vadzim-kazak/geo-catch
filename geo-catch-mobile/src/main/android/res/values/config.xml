@@ -28,6 +28,8 @@
 
     <item name="gridPhotosThumbnailSizeScaleFactor" type="config">0.13</item>
 
+    <item name="locationDetectionAccuracy" type="config">30</item>
+
     <!--
         Possible values:
             MAP_TYPE_NONE = 0;

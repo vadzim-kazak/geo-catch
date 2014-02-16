@@ -1,11 +1,14 @@
 package com.jrew.geocatch.mobile.util;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.jrew.geocatch.mobile.R;
@@ -26,10 +29,10 @@ public class ActionBarUtil {
     private static enum MenuOption {
 
         /** **/
-        SETTINGS_MENU_OPTION,
+        SETTINGS_MENU_OPTION //,
 
         /** **/
-        LOCATION_LOADING_MENU_OPTION,
+        //LOCATION_LOADING_MENU_OPTION,
     }
 
     /**
@@ -49,8 +52,10 @@ public class ActionBarUtil {
     private static MenuOption[] SETTING_MENU_OPTION = new MenuOption[] {MenuOption.SETTINGS_MENU_OPTION};
 
     /** **/
+    /**
     private static MenuOption[] BOTH_MENU_OPTIONS = new MenuOption[] {MenuOption.SETTINGS_MENU_OPTION,
             MenuOption.LOCATION_LOADING_MENU_OPTION};
+    **/
 
     /**
      *
@@ -68,15 +73,6 @@ public class ActionBarUtil {
      */
     public static void initSettingsActionBar(int navigationMode, Activity activity) {
         initActionBar(navigationMode, activity, NO_MENU_OPTIONS);
-    }
-
-    /**
-     *
-     * @param navigationMode
-     * @param activity
-     */
-    public static void initPopulatePhotoInfoActionBar(int navigationMode, Activity activity) {
-        initActionBar(navigationMode, activity, BOTH_MENU_OPTIONS);
     }
 
     /**
@@ -118,15 +114,9 @@ public class ActionBarUtil {
             actionBarSettingsImageView.setVisibility(View.GONE);
         }
 
-
-        // location loading action bar option
-        ImageView actionBarLocationImageView = (ImageView) actionBarView.findViewById(R.id.locationLoading);
-        if (isPresented(MenuOption.LOCATION_LOADING_MENU_OPTION, menuOptions)) {
-            actionBarLocationImageView.setImageResource(R.drawable.no_location);
-            actionBarLocationImageView.setVisibility(View.VISIBLE);
-        } else {
-            actionBarLocationImageView.clearAnimation();
-            actionBarLocationImageView.setVisibility(View.GONE);
+        LinearLayout statusArea = (LinearLayout) actionBarView.findViewById(R.id.statusArea);
+        if (statusArea.getVisibility() != View.GONE) {
+            statusArea.setVisibility(View.GONE);
         }
     }
 
@@ -247,33 +237,82 @@ public class ActionBarUtil {
 
     /**
      *
+     * @param context
      * @return
      */
-    public static ImageView getLocationLoadingImageView() {
-
+    public static void initLocationProcessingStatusArea(Context context) {
         ActionBar actionBar = ActionBarHolder.getActionBar();
         View actionBarView = actionBar.getCustomView();
+        LinearLayout statusArea = (LinearLayout) actionBarView.findViewById(R.id.statusArea);
+        if (statusArea.getVisibility() != View.VISIBLE) {
+            statusArea.setVisibility(View.VISIBLE);
+        }
 
-        return (ImageView) actionBarView.findViewById(R.id.locationLoading);
+        TextView statusAreaTextView = (TextView) statusArea.findViewById(R.id.statusAreaTextView);
+        statusAreaTextView.setText(context.getResources().getString(R.string.statusAreaLocationNotDetected));
+
+        ProgressBar progressBar = (ProgressBar) statusArea.findViewById(R.id.statusAreaProgressBar);
+        if (progressBar.getVisibility() != View.GONE) {
+            progressBar.setVisibility(View.GONE);
+        }
+
+        ImageView imageView = (ImageView) statusArea.findViewById(R.id.statusAreaImageView);
+        if (imageView.getVisibility() != View.GONE) {
+            imageView.setVisibility(View.GONE);
+        }
     }
 
     /**
      *
-     * @param activity
+     * @param context
+     * @return
      */
-    public static void handleLocationLoadingEvent(Activity activity) {
-        ImageView locationImageView =  ActionBarUtil.getLocationLoadingImageView();
-        locationImageView.setImageResource(R.drawable.no_location);
-        Animation blinkAnimation = AnimationUtils.loadAnimation(activity, R.anim.blink);
-        locationImageView.startAnimation(blinkAnimation);
+    public static void statusAreaHandleLocationLoading(Context context) {
+        ActionBar actionBar = ActionBarHolder.getActionBar();
+        View actionBarView = actionBar.getCustomView();
+        LinearLayout statusArea = (LinearLayout) actionBarView.findViewById(R.id.statusArea);
+        if (statusArea.getVisibility() != View.VISIBLE) {
+            statusArea.setVisibility(View.VISIBLE);
+        }
+
+        TextView statusAreaTextView = (TextView) statusArea.findViewById(R.id.statusAreaTextView);
+        statusAreaTextView.setText(context.getResources().getString(R.string.statusAreaLocationIsLoading));
+
+        ProgressBar progressBar = (ProgressBar) statusArea.findViewById(R.id.statusAreaProgressBar);
+        if (progressBar.getVisibility() != View.VISIBLE) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        ImageView imageView = (ImageView) statusArea.findViewById(R.id.statusAreaImageView);
+        if (imageView.getVisibility() != View.GONE) {
+            imageView.setVisibility(View.GONE);
+        }
     }
 
     /**
      *
+     * @param context
+     * @return
      */
-    public static void handleLocationLoadedEvent() {
-        ImageView locationImageView =  ActionBarUtil.getLocationLoadingImageView();
-        locationImageView.clearAnimation();
-        locationImageView.setImageResource(R.drawable.location);
+    public static void statusAreaHandleLocationDetection(Context context) {
+        ActionBar actionBar = ActionBarHolder.getActionBar();
+        View actionBarView = actionBar.getCustomView();
+        LinearLayout statusArea = (LinearLayout) actionBarView.findViewById(R.id.statusArea);
+        if (statusArea.getVisibility() != View.VISIBLE) {
+            statusArea.setVisibility(View.VISIBLE);
+        }
+
+        TextView statusAreaTextView = (TextView) statusArea.findViewById(R.id.statusAreaTextView);
+        statusAreaTextView.setText(context.getResources().getString(R.string.statusAreaLocationDetected));
+
+        ProgressBar progressBar = (ProgressBar) statusArea.findViewById(R.id.statusAreaProgressBar);
+        if (progressBar.getVisibility() != View.GONE) {
+            progressBar.setVisibility(View.GONE);
+        }
+
+        ImageView imageView = (ImageView) statusArea.findViewById(R.id.statusAreaImageView);
+        if (imageView.getVisibility() != View.VISIBLE) {
+            imageView.setVisibility(View.VISIBLE);
+        }
     }
 }
