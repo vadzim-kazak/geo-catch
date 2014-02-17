@@ -436,7 +436,9 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
 
     @Override
     public void onStart() {
-        super.onStart();
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        if (currentLocation == null) {
+            super.onStart();
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        }
     }
 }
