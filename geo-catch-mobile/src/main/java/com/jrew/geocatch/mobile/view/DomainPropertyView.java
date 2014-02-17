@@ -163,8 +163,15 @@ public class DomainPropertyView extends AutoCompleteTextView implements TextWatc
         } else {
             isTextFilled = true;
         }
-
     }
 
-
+    /**
+     *
+     */
+    public void reset() {
+        if (isEnabled()) {
+            isTextFilled = false;
+            setText(initialValue);
+        }
+    }
 }

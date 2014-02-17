@@ -97,6 +97,11 @@ public class MapSettingsFragment extends SherlockFragment {
                 break;
 
             case R.id.resetMapSettingsMenuOption:
+                fishTypeView.reset();
+                fishingToolView.reset();
+                fishingBaitView.reset();
+                ownerSpinner.setSelection(0);
+                resetSearchCriteria();
                 break;
         }
 
@@ -155,7 +160,9 @@ public class MapSettingsFragment extends SherlockFragment {
         searchCriteria.setDeviceId(CommonUtil.getDeviceId(getActivity()));
 
         // Domain properties
-        List<DomainProperty> domainProperties = new ArrayList<DomainProperty>();
+        List<DomainProperty> domainProperties = searchCriteria.getDomainProperties();
+        domainProperties.clear();
+
         DomainProperty fishType = fishTypeView.getSelectedDomainProperty(false);
         if (fishType != null) {
             domainProperties.add(fishType);
@@ -170,7 +177,6 @@ public class MapSettingsFragment extends SherlockFragment {
         if (fishingBait != null) {
             domainProperties.add(fishingBait);
         }
-        searchCriteria.setDomainProperties(domainProperties);
 
         if (ownerSpinner.getSelectedItemPosition() == OwnerValuePositions.OWNER_ANY_VALUE_POSITION) {
             searchCriteria.setOwner(SearchCriteria.OWNER_ANY_VALUE);
@@ -179,5 +185,14 @@ public class MapSettingsFragment extends SherlockFragment {
         }
 
         return searchCriteria;
+    }
+
+    /**
+     *
+     */
+    private void resetSearchCriteria() {
+        SearchCriteria searchCriteria = SearchCriteriaHolder.getSearchCriteria();
+        searchCriteria.getDomainProperties().clear();
+        searchCriteria.setOwner(SearchCriteria.OWNER_ANY_VALUE);
     }
 }

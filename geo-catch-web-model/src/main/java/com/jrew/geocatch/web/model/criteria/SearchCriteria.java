@@ -4,6 +4,7 @@ import com.jrew.geocatch.web.model.DomainProperty;
 import com.jrew.geocatch.web.model.ViewBounds;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ public class SearchCriteria implements Serializable {
     private String owner;
 
     /** **/
-    private List<DomainProperty> domainProperties;
+    private List<DomainProperty> domainProperties = new ArrayList<DomainProperty>(3);
 
     /** **/
     private DayPeriodSearchCriterion dayPeriod;
@@ -92,14 +93,6 @@ public class SearchCriteria implements Serializable {
      */
     public List<DomainProperty> getDomainProperties() {
         return domainProperties;
-    }
-
-    /**
-     *
-     * @param domainProperties
-     */
-    public void setDomainProperties(List<DomainProperty> domainProperties) {
-        this.domainProperties = domainProperties;
     }
 
     /**
