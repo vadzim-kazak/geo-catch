@@ -237,6 +237,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
     @Override
     public void onLocationChanged(Location location) {
 
+        if (googleMap != null) {
             CameraUpdate center =  CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(),
                     location.getLongitude()));
 
@@ -247,6 +248,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
             googleMap.animateCamera(zoom);
 
             locationManager.removeUpdates(this);
+        }
     }
 
     @Override
