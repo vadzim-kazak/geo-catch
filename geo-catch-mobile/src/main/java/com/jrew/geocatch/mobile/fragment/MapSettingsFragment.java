@@ -18,7 +18,6 @@ import com.jrew.geocatch.mobile.view.StrictDomainPropertyView;
 import com.jrew.geocatch.web.model.DomainProperty;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +29,9 @@ import java.util.List;
  */
 public class MapSettingsFragment extends SherlockFragment {
 
+    /**
+     *
+     */
     private interface OwnerValuePositions {
 
         /** **/
@@ -70,7 +72,7 @@ public class MapSettingsFragment extends SherlockFragment {
 
         ownerSpinner = (Spinner) mapSettingsLayout.findViewById(R.id.ownerSpinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.spinner_item, getResources().getStringArray(R.array.photo_owner_array));
+                R.layout.spinner_item, getResources().getStringArray(R.array.photoOwnerArray));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ownerSpinner.setAdapter(adapter);
 

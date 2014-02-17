@@ -51,10 +51,6 @@
 
     <string name="photoOwnerSectionLabel">АВТОР</string>
 
-    <!-- string name="photoOwnerAnyoneOptionLabel">Любой</string>
-
-    <string name="photoOwnerMeOptionLabel">Я</string-->
-
     <string name="domainPropertyNotPresented">Введенное значение не существует</string>
 
     <!-- Photo browsing fragment -->
@@ -85,7 +81,12 @@
 
     <string name="statusAreaLocationDetected">Местоположение определено</string>
 
-    <string-array name="photo_owner_array">
+    <string-array name="shareSectionOptions">
+        <item>Открытый</item>
+        <item>Закрытый</item>
+    </string-array>
+
+    <string-array name="photoOwnerArray">
         <item>Любой</item>
         <item>Я</item>
     </string-array>

@@ -51,10 +51,6 @@
 
     <string name="photoOwnerSectionLabel">OWNER</string>
 
-    <!--string name="photoOwnerAnyoneOptionLabel">Anyone</string>
-
-    <string name="photoOwnerMeOptionLabel">Me</string-->
-
     <string name="domainPropertyNotPresented">Populated value isn\'t presented</string>
 
     <!-- Photo browsing fragment -->
@@ -80,17 +76,22 @@
 
     <string name="actionBarTitleDelimiter">|</string>
 
-    <string-array name="photo_owner_array">
-        <item>Anyone</item>
-        <item>Me</item>
-    </string-array>
-
     <!-- Action bar status area -->
     <string name="statusAreaLocationNotDetected">Location is not detected</string>
 
     <string name="statusAreaLocationIsLoading">Loading location ...</string>
 
     <string name="statusAreaLocationDetected">Location is detected</string>
+
+    <string-array name="shareSectionOptions">
+        <item>Public</item>
+        <item>Private</item>
+    </string-array>
+
+    <string-array name="photoOwnerArray">
+        <item>Anyone</item>
+        <item>Me</item>
+    </string-array>
 
     <!-- Supported languages array -->
     <string-array name="languages_array">

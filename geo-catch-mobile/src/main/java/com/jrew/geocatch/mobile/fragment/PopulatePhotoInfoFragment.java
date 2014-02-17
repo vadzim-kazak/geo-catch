@@ -46,6 +46,18 @@ import java.util.List;
  */
 public class PopulatePhotoInfoFragment extends SherlockFragment implements LocationListener {
 
+    /**
+     *
+     */
+    private interface ShareSectionPositions {
+
+        /** **/
+        public static final int PUBLIC_VALUE_POSITION = 0;
+
+        /** **/
+        public static final int PRIVATE_VALUE_POSITION = 1;
+    }
+
     /** **/
     private static final Double IMAGE_VIEW_SCALE_SIZE = 0.15d;
 
@@ -75,6 +87,9 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
 
     /** **/
     private Location currentLocation;
+
+    /** **/
+    private Spinner shareSection;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -151,6 +166,13 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
 
         fishingBaitView = (DomainPropertyView) layout.findViewById(R.id.fishingBaitView);
         fishingBaitView.loadDomainProperties(DomainInfoService.DomainInfoType.BAIT);
+
+        shareSection = (Spinner) layout.findViewById(R.id.shareSectionSpinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                R.layout.spinner_item, getResources().getStringArray(R.array.shareSectionOptions));
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        shareSection.setAdapter(adapter);
+        shareSection.setSaveEnabled(false);
 
         return layout;
     }
@@ -272,7 +294,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
         uploadImage.setLongitude(currentLocation.getLongitude());
 
         // Privacy level
-        uploadImage.setPrivacyLevel(getSelectedPrivacyLevel(layout));
+        uploadImage.setPrivacyLevel(getSelectedPrivacyLevel());
 
         // Domain properties
         uploadImage.setDomainProperties(getPopulatedDomainProperties());
@@ -288,17 +310,12 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
 
     /**
      *
-     * @param layout
      * @return
      */
-    private UploadImage.PrivacyLevel getSelectedPrivacyLevel(View layout) {
-
-        RadioGroup radioGroup = (RadioGroup) layout.findViewById(R.id.privacyLevel);
-        int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
-        RadioButton radioButton = (RadioButton) radioGroup.findViewById(checkedRadioButtonId);
+    private UploadImage.PrivacyLevel getSelectedPrivacyLevel() {
 
         UploadImage.PrivacyLevel privacyLevel;
-        if (radioButton.getId() == R.id.sharePublic) {
+        if (shareSection.getSelectedItemPosition() == ShareSectionPositions.PUBLIC_VALUE_POSITION) {
             privacyLevel = UploadImage.PrivacyLevel.PUBLIC;
         } else {
             privacyLevel = UploadImage.PrivacyLevel.PRIVATE;
