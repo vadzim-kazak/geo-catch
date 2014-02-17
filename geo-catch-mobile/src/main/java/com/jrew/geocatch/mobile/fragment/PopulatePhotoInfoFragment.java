@@ -44,7 +44,7 @@ import java.util.List;
  * Time: 15:06
  * To change this template use File | Settings | File Templates.
  */
-public class PopulatePhotoInfoFragment extends SherlockFragment implements LocationListener{
+public class PopulatePhotoInfoFragment extends SherlockFragment implements LocationListener {
 
     /** **/
     private static final Double IMAGE_VIEW_SCALE_SIZE = 0.15d;
@@ -89,7 +89,6 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         currentLocation = null;
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         ActionBarUtil.initLocationProcessingStatusArea(getActivity());
 
         LayoutUtil.showFragmentContainer(getActivity());
@@ -388,8 +387,6 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
 
     @Override
     public void onLocationChanged(Location location) {
-        // in meters
-        final int MIN_ACCURACY = 30;
         if (location.getAccuracy()  < getResources().getInteger(R.config.locationDetectionAccuracy)) {
             currentLocation = location;
             ActionBarUtil.statusAreaHandleLocationDetection(getActivity());
@@ -418,5 +415,11 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
     public void onStop() {
         locationManager.removeUpdates(this);
         super.onStop();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
     }
 }

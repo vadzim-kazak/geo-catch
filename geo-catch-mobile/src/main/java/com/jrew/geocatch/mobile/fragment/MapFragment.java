@@ -1,27 +1,20 @@
 package com.jrew.geocatch.mobile.fragment;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.app.Watson;
-import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,7 +24,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.jrew.geocatch.mobile.R;
-import com.jrew.geocatch.mobile.activity.MainActivity;
 import com.jrew.geocatch.mobile.listener.MarkerOnClickListener;
 import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.reciever.ImageServiceResultReceiver;
@@ -40,8 +32,6 @@ import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.ViewBounds;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,7 +44,7 @@ import java.util.Map;
  *
  */
 public class MapFragment extends SupportMapFragment implements Watson.OnCreateOptionsMenuListener,
-        Watson.OnOptionsItemSelectedListener {
+        Watson.OnOptionsItemSelectedListener, LocationListener {
 
     /** **/
     private GoogleMap googleMap;
@@ -64,6 +54,9 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
     /** **/
     public ImageServiceResultReceiver imageResultReceiver;
+
+    /** **/
+    private LocationManager locationManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,6 +69,8 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
         View result = super.onCreateView(inflater, container, savedInstanceState);
+
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         if (WebUtil.isNetworkAvailable(getActivity())) {
 
@@ -239,12 +234,11 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
         return googleMap.getProjection().getVisibleRegion().latLngBounds;
     }
 
-    public void onConnected(Bundle bundle) {
-        Location currentLocation = LocationManagerHolder.getLocationManager().getCurrentLocation();
-        if (currentLocation != null) {
+    @Override
+    public void onLocationChanged(Location location) {
 
-            CameraUpdate center =  CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(),
-                    currentLocation.getLongitude()));
+            CameraUpdate center =  CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(),
+                    location.getLongitude()));
 
             CameraUpdate zoom = CameraUpdateFactory.zoomTo(
                     Integer.parseInt(getResources().getString(R.config.cameraInitialZoom)));
@@ -252,6 +246,27 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
             googleMap.moveCamera(center);
             googleMap.animateCamera(zoom);
 
-        }
+            locationManager.removeUpdates(this);
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {}
+
+    @Override
+    public void onProviderEnabled(String s) {}
+
+    @Override
+    public void onProviderDisabled(String s) {}
+
+    @Override
+    public void onStop() {
+        locationManager.removeUpdates(this);
+        super.onStop();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
     }
 }
