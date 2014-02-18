@@ -5,7 +5,9 @@ import com.jrew.geocatch.repository.model.ClientImagePreview;
 import com.jrew.geocatch.repository.model.DomainProperty;
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.service.DomainPropertyService;
+import com.jrew.geocatch.repository.service.ImageReviewService;
 import com.jrew.geocatch.repository.service.ImageService;
+import com.jrew.geocatch.web.model.ImageReview;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,11 +29,17 @@ import java.util.List;
 @RequestMapping("/")
 public class RepositoryController {
 
+    /** **/
     @Autowired
-    ImageService imageService;
+    private ImageService imageService;
 
+    /** **/
     @Autowired
-    DomainPropertyService domainPropertyService;
+    private DomainPropertyService domainPropertyService;
+
+    /** **/
+    @Autowired
+    private ImageReviewService imageReviewService;
 
     @RequestMapping(value = "images", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
@@ -68,5 +76,11 @@ public class RepositoryController {
                     method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody List<DomainProperty> loadDomainsInfo(@PathVariable("locale") String locale) {
         return domainPropertyService.loadDomainProperties(locale);
+    }
+
+    @RequestMapping(value = "reviews", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public void handleReview(@RequestBody ImageReview imageReview) {
+        imageReviewService.handleReview(imageReview);
     }
 }

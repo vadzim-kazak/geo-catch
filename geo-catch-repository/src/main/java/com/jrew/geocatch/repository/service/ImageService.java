@@ -3,6 +3,7 @@ package com.jrew.geocatch.repository.service;
 import com.jrew.geocatch.repository.model.ClientImage;
 import com.jrew.geocatch.repository.model.ClientImagePreview;
 import com.jrew.geocatch.repository.model.Image;
+import com.jrew.geocatch.web.model.ImageReview;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,4 +49,5 @@ public interface ImageService {
      * @param deviceId
      */
     public void deleteImage(long imageId, String deviceId);
+
 }

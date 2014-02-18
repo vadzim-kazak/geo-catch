@@ -22,6 +22,8 @@
 
     <bean id="databaseManager" class="com.jrew.geocatch.repository.dao.database.ImageDBManagerJPAImpl" />
 
+    <bean id="imageReviewDBManager" class="com.jrew.geocatch.repository.dao.database.ImageReviewDBManagerImpl" />
+
     <!-- JDBC Data Source. It is assumed you have MySQL running on localhost port 3306 with
       username root and blank password. Change below if it's not the case -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
@@ -34,6 +36,7 @@
     <jdbc:initialize-database data-source="dataSource">
         <jdbc:script location="classpath:sql/domain-properties-table.sql" encoding="UTF-8"/>
         <jdbc:script location="classpath:sql/fishing-domain-properties-data.sql" encoding="UTF-8"/>
+        <jdbc:script location="classpath:sql/review-tables.sql" encoding="UTF-8"/>
     </jdbc:initialize-database>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">

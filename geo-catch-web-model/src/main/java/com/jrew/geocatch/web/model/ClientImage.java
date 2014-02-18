@@ -42,13 +42,28 @@ public class ClientImage implements Serializable {
     private Date date;
 
     /** **/
-    private int rating;
-
-    /** **/
     private List<DomainProperty> domainProperties;
 
     /** **/
     private PrivacyLevel privacyLevel;
+
+    /** **/
+    private boolean isLikeSelected;
+
+    /** **/
+    private boolean isDislikeSelected;
+
+    /** **/
+    private boolean isReportSelected;
+
+    /** **/
+    private int likesCount;
+
+    /** **/
+    private int dislikesCount;
+
+    /** **/
+    private int reportsCount;
 
     /**
      *
@@ -150,22 +165,6 @@ public class ClientImage implements Serializable {
      *
      * @return
      */
-    public int getRating() {
-        return rating;
-    }
-
-    /**
-     *
-     * @param rating
-     */
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    /**
-     *
-     * @return
-     */
     public List<DomainProperty> getDomainProperties() {
         return domainProperties;
     }
@@ -192,5 +191,101 @@ public class ClientImage implements Serializable {
      */
     public void setPrivacyLevel(PrivacyLevel privacyLevel) {
         this.privacyLevel = privacyLevel;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isLikeSelected() {
+        return isLikeSelected;
+    }
+
+    /**
+     *
+     * @param likeSelected
+     */
+    public void setLikeSelected(boolean likeSelected) {
+        isLikeSelected = likeSelected;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isDislikeSelected() {
+        return isDislikeSelected;
+    }
+
+    /**
+     *
+     * @param dislikeSelected
+     */
+    public void setDislikeSelected(boolean dislikeSelected) {
+        isDislikeSelected = dislikeSelected;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isReportSelected() {
+        return isReportSelected;
+    }
+
+    /**
+     *
+     * @param reportSelected
+     */
+    public void setReportSelected(boolean reportSelected) {
+        isReportSelected = reportSelected;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getLikesCount() {
+        return likesCount;
+    }
+
+    /**
+     *
+     * @param likesCount
+     */
+    public void setLikesCount(int likesCount) {
+        this.likesCount = likesCount;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getDislikesCount() {
+        return dislikesCount;
+    }
+
+    /**
+     *
+     * @param dislikesCount
+     */
+    public void setDislikesCount(int dislikesCount) {
+        this.dislikesCount = dislikesCount;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getReportsCount() {
+        return reportsCount;
+    }
+
+    /**
+     *
+     * @param reportsCount
+     */
+    public void setReportsCount(int reportsCount) {
+        this.reportsCount = reportsCount;
     }
 }

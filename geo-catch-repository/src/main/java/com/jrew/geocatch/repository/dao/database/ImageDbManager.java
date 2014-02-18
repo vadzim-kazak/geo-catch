@@ -2,6 +2,7 @@ package com.jrew.geocatch.repository.dao.database;
 
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.model.ViewBounds;
+import com.jrew.geocatch.web.model.ImageReview;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 
 import java.util.List;
@@ -39,4 +40,5 @@ public interface ImageDBManager {
      * @return
      */
     public Image loadImage(long id);
+
 }

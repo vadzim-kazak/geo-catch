@@ -5,6 +5,7 @@ import com.jrew.geocatch.repository.dao.filesystem.FileSystemManager;
 import com.jrew.geocatch.repository.model.ClientImage;
 import com.jrew.geocatch.repository.model.ClientImagePreview;
 import com.jrew.geocatch.repository.model.Image;
+import com.jrew.geocatch.web.model.ImageReview;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,6 +25,10 @@ public class ImageServiceImpl implements ImageService {
 
     /** **/
     private final ImageDBManager imageDBManager;
+
+    /** **/
+    @Autowired
+    private ImageReviewService imageReviewService;
 
     /** **/
     @Autowired
@@ -55,7 +60,10 @@ public class ImageServiceImpl implements ImageService {
     public ClientImage getImage(long imageId) {
         Image image = imageDBManager.loadImage(imageId);
         fileSystemManager.updatePath(image);
-        return clientImageConverter.convert(image);
+
+        ClientImage clientImage = clientImageConverter.convert(image);
+
+        return clientImage;
     }
 
     @Override

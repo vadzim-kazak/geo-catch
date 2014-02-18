@@ -24,7 +24,6 @@ public class ClientImageConverter implements Converter<Image, ClientImage> {
         clientImage.setPath(image.getPath());
         clientImage.setDate(image.getDate());
         clientImage.setDomainProperties(image.getDomainProperties());
-        clientImage.setRating(image.getRating());
         clientImage.setPrivacyLevel(image.getPrivacyLevel());
 
         return clientImage;

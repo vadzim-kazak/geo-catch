@@ -71,9 +71,6 @@ public class Image {
     @NotNull
     private Date date;
 
-    /** **/
-    private int rating;
-
     @ManyToMany
     @JoinTable( name="IMAGE_DOMAIN_PROPERTY",
                 joinColumns={@JoinColumn(name="image_id", referencedColumnName="id")},
@@ -161,20 +158,6 @@ public class Image {
      */
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    /**
-     * @return
-     */
-    public int getRating() {
-        return rating;
-    }
-
-    /**
-     * @param rating
-     */
-    public void setRating(int rating) {
-        this.rating = rating;
     }
 
     /**
@@ -302,7 +285,6 @@ public class Image {
                .append(path).append(':')
                .append(thumbnailPath).append(':')
                .append(date).append(':')
-               .append(rating).append(':')
                .append(privacyLevel.toString());
 
         return message.toString();
