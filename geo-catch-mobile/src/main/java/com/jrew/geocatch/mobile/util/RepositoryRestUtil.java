@@ -8,9 +8,11 @@ import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.model.UploadImage;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.service.ImageService;
+import com.jrew.geocatch.mobile.service.ReviewService;
 import com.jrew.geocatch.web.model.ClientImage;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.DomainProperty;
+import com.jrew.geocatch.web.model.ImageReview;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -207,10 +209,10 @@ public class RepositoryRestUtil {
         Gson gson = new Gson();
         String imageToUploadJson = gson.toJson(imageToUpload);
 
-        StringEntity jsonRequest = new StringEntity(imageToUploadJson, "UTF8");
+        StringEntity jsonRequest = new StringEntity(imageToUploadJson, UTF_8_ENCODING);
 
         HttpPost httpPost = new HttpPost(uploadUrl.toString());
-        httpPost.setHeader("Content-type", "application/json");
+        httpPost.setHeader(HTTP.CONTENT_TYPE, CONTENT_TYPE_JSON_UTF_8);
         httpPost.setEntity(jsonRequest);
         HttpResponse response = httpClient.execute(httpPost, localContext);
 
@@ -302,6 +304,46 @@ public class RepositoryRestUtil {
             bundle.putBoolean(ImageService.RESULT_KEY, true);
         } else {
             bundle.putBoolean(ImageService.RESULT_KEY, false);
+        }
+
+        return bundle;
+    }
+
+    /**
+     *
+     * @param intent
+     * @param resources
+     * @return
+     * @throws Exception
+     */
+    public static Bundle uploadReview(Intent intent, Resources resources) throws Exception {
+
+        HttpClient httpClient = createHttpClient();
+        HttpContext localContext = new BasicHttpContext();
+
+        StringBuilder uploadUrl = new StringBuilder();
+        uploadUrl.append(resources.getString(R.config.repositoryUrl))
+                .append(resources.getString(R.config.repositoryPath))
+                .append(resources.getString(R.config.repositoryReviewsUri));
+
+        ImageReview imageReview = (ImageReview) intent.getSerializableExtra(ReviewService.REVIEW_KEY);
+
+        Gson gson = new Gson();
+        String imageReviewJson = gson.toJson(imageReview);
+
+        StringEntity jsonRequest = new StringEntity(imageReviewJson, UTF_8_ENCODING);
+
+        HttpPost httpPost = new HttpPost(uploadUrl.toString());
+        httpPost.setHeader(HTTP.CONTENT_TYPE, CONTENT_TYPE_JSON_UTF_8);
+        httpPost.setEntity(jsonRequest);
+        HttpResponse response = httpClient.execute(httpPost, localContext);
+
+        Bundle bundle = new Bundle();
+        int status = response.getStatusLine().getStatusCode();
+        if (status == 200) {
+            bundle.putBoolean(ReviewService.RESULT_KEY, true);
+        } else {
+            bundle.putBoolean(ReviewService.RESULT_KEY, false);
         }
 
         return bundle;

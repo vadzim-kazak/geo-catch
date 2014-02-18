@@ -143,9 +143,6 @@ public class WebUtil {
         Date imageDate = dateFormat.parse(jsonObject.getString("date"));
         clientImage.setDate(imageDate);
 
-        // Rating
-        clientImage.setRating(jsonObject.getInt("rating"));
-
         // Privacy level
         String privacyLevel = jsonObject.getString("privacyLevel");
         ClientImage.PrivacyLevel imagePrivacyLevel = ClientImage.PrivacyLevel.PRIVATE;

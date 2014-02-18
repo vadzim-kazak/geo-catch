@@ -8,8 +8,10 @@ import android.os.ResultReceiver;
 import com.jrew.geocatch.mobile.reciever.DomainInfoServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.service.ImageService;
+import com.jrew.geocatch.mobile.service.ReviewService;
 import com.jrew.geocatch.web.model.ClientImage;
 import com.jrew.geocatch.web.model.ClientImagePreview;
+import com.jrew.geocatch.web.model.ImageReview;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 
 /**
@@ -123,6 +125,20 @@ public class ServiceUtil {
         final Intent intent = new Intent(Intent.ACTION_SYNC, null, activity, DomainInfoService.class);
         intent.putExtra(DomainInfoService.REQUEST_KEY, bundle);
         intent.putExtra(DomainInfoService.RECEIVER_KEY, resultReceiver);
+        activity.startService(intent);
+    }
+
+    /**
+     *
+     * @param imageReview
+     * @param resultReceiver
+     * @param activity
+     */
+    public static void callUploadReviewService(ImageReview imageReview, ResultReceiver resultReceiver, Activity activity) {
+
+        final Intent intent = new Intent(Intent.ACTION_SYNC, null, activity, ReviewService.class);
+        intent.putExtra(ReviewService.REVIEW_KEY, imageReview);
+        intent.putExtra(ReviewService.RECEIVER_KEY, resultReceiver);
         activity.startService(intent);
     }
 

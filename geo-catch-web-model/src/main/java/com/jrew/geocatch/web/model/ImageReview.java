@@ -1,9 +1,11 @@
 package com.jrew.geocatch.web.model;
 
+import java.io.Serializable;
+
 /**
  * Represents user image review activity.
  */
-public class ImageReview {
+public class ImageReview implements Serializable {
 
     /**
      *

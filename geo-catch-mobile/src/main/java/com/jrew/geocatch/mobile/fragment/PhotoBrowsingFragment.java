@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
@@ -94,6 +95,11 @@ public class PhotoBrowsingFragment extends SherlockFragment {
         final LinearLayout baitDomainPropertyTag = (LinearLayout) photoBrowsingLayout.findViewById(R.id.baitDomainPropertiesView);
         final TextView baitTextView = (TextView) photoBrowsingLayout.findViewById(R.id.baitTextView);
 
+        final RelativeLayout reviewLayout = (RelativeLayout) photoBrowsingLayout.findViewById(R.id.reviewLayout);
+        final TextView likesCount = (TextView) reviewLayout.findViewById(R.id.likesCount);
+        final TextView dislikesCount = (TextView) reviewLayout.findViewById(R.id.dislikesCount);
+        final TextView reportsCount = (TextView) reviewLayout.findViewById(R.id.reportsCount);
+
         imageResultReceiver = new ServiceResultReceiver(new Handler());
         imageResultReceiver.setReceiver(new ServiceResultReceiver.Receiver() {
 
@@ -136,6 +142,12 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                         double scaleFactor = LayoutUtil.getViewWidthScaleFactor(display.getWidth(), image.getWidth(), 0);
                         imageView.setLayoutParams(new LinearLayout.LayoutParams((int)
                                 (image.getWidth() * scaleFactor), (int) (image.getHeight() * scaleFactor)));
+
+                        // reviews
+                        reviewLayout.setVisibility(View.VISIBLE);
+                        likesCount.setText(Integer.toString(clientImage.getLikesCount()));
+                        dislikesCount.setText(Integer.toString(clientImage.getDislikesCount()));
+                        reportsCount.setText(Integer.toString(clientImage.getReportsCount()));
 
                         // date
                         date.setText(browsingDateFormat.format(clientImage.getDate()));

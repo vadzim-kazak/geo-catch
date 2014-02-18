@@ -100,8 +100,7 @@
     </com.jrew.geocatch.mobile.view.FlexibleLayout>
 
     <!-- Image view layout -->
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="horizontal"
+    <LinearLayout android:orientation="horizontal"
                   android:background="@android:color/white"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
@@ -115,6 +114,61 @@
                    android:layout_gravity="center"/>
 
     </LinearLayout>
+
+    <!-- Photo review row -->
+    <RelativeLayout android:id="@+id/reviewLayout"
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="10dip"
+                    android:layout_marginBottom="5dip"
+                    android:visibility="gone"
+                    android:gravity="center_vertical|left"
+                    android:layout_gravity="center_vertical">
+
+        <ImageView android:id="@+id/likesImageView"
+                   android:layout_width="25dip"
+                   android:layout_height="25dip"
+                   android:src="@drawable/like_unselected"
+                   android:layout_alignParentLeft="true"/>
+
+        <TextView android:id="@+id/likesCount"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="left|top"
+                  android:textSize="16dip"
+                  android:layout_toRightOf="@+id/likesImageView"/>
+
+        <ImageView android:id="@+id/dislikesImageView"
+                   android:layout_width="25dip"
+                   android:layout_height="25dip"
+                   android:src="@drawable/dislike_unselected"
+                   android:layout_marginLeft="10dip"
+                   android:layout_toRightOf="@+id/likesCount"/>
+
+        <TextView android:id="@+id/dislikesCount"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="left|top"
+                  android:textSize="16dip"
+                  android:layout_toRightOf="@+id/dislikesImageView"/>
+
+        <ImageView android:id="@+id/reportsImageView"
+                   android:layout_width="25dip"
+                   android:layout_height="25dip"
+                   android:src="@drawable/report_unselected_1"
+                   android:layout_toLeftOf="@+id/reportsCount"/>
+
+        <TextView android:id="@+id/reportsCount"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:paddingLeft="5dip"
+                  android:layout_gravity="left|top"
+                  android:textSize="16dip"
+                  android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
 
     <!-- Uploading time -->
     <LinearLayout android:id="@+id/uploadingDateLayout"
