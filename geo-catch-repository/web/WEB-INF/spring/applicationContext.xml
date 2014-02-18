@@ -52,6 +52,8 @@
 
     <bean class="com.jrew.geocatch.repository.converter.ClientImagePreviewConverter" />
     <bean class="com.jrew.geocatch.repository.converter.ClientImageConverter" />
+    <bean class="com.jrew.geocatch.repository.converter.DomainPropertyConverter" />
+    <bean class="com.jrew.geocatch.repository.converter.DomainPropertiesConverter" />
 
     <bean id="imageReviewService" class="com.jrew.geocatch.repository.service.ImageReviewServiceImpl" />
 

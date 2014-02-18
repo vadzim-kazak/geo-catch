@@ -1,11 +1,9 @@
 package com.jrew.geocatch.repository.service;
 
-import com.jrew.geocatch.repository.model.ClientImage;
-import com.jrew.geocatch.repository.model.ClientImagePreview;
 import com.jrew.geocatch.repository.model.Image;
-import com.jrew.geocatch.web.model.ImageReview;
+import com.jrew.geocatch.web.model.ClientImage;
+import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;

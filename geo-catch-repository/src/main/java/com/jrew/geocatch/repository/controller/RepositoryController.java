@@ -1,12 +1,12 @@
 package com.jrew.geocatch.repository.controller;
 
-import com.jrew.geocatch.repository.model.ClientImage;
-import com.jrew.geocatch.repository.model.ClientImagePreview;
 import com.jrew.geocatch.repository.model.DomainProperty;
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.service.DomainPropertyService;
 import com.jrew.geocatch.repository.service.ImageReviewService;
 import com.jrew.geocatch.repository.service.ImageService;
+import com.jrew.geocatch.web.model.ClientImage;
+import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.ImageReview;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;

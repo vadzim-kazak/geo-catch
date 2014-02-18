@@ -3,6 +3,7 @@ package com.jrew.geocatch.repository.service;
 import com.jrew.geocatch.repository.dao.database.ImageReviewDBManager;
 import com.jrew.geocatch.web.model.ImageReview;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,12 +19,18 @@ public class ImageReviewServiceImpl implements ImageReviewService {
 
     @Override
     public void handleReview(ImageReview imageReview) {
-        if (imageReview.getReviewType() == ImageReview.ReviewType.LIKE) {
-            handleLikeReview(imageReview);
-        } else if (imageReview.getReviewType() == ImageReview.ReviewType.DISLIKE) {
-            handleDislikeReview(imageReview);
-        } else if (imageReview.getReviewType() == ImageReview.ReviewType.REPORT) {
-            handleReportReview(imageReview);
+
+        long imageId = imageReview.getImageId();
+        String deviceId = imageReview.getDeviceId();
+        if (imageId > 0 && !StringUtils.isEmpty(deviceId)) {
+
+            if (imageReview.getReviewType() == ImageReview.ReviewType.LIKE) {
+                handleLikeReview(imageReview);
+            } else if (imageReview.getReviewType() == ImageReview.ReviewType.DISLIKE) {
+                handleDislikeReview(imageReview);
+            } else if (imageReview.getReviewType() == ImageReview.ReviewType.REPORT) {
+                handleReportReview(imageReview);
+            }
         }
     }
 
@@ -80,16 +87,28 @@ public class ImageReviewServiceImpl implements ImageReviewService {
 
     @Override
     public boolean isLikeSelected(long imageId, String deviceId) {
-        return imageReviewDBManager.isLikeSelected(imageId, deviceId);
+        if (imageId > 0 && !StringUtils.isEmpty(deviceId)) {
+            return imageReviewDBManager.isLikeSelected(imageId, deviceId);
+        }
+
+        return false;
     }
 
     @Override
     public boolean isDislikeSelected(long imageId, String deviceId) {
-        return imageReviewDBManager.isDislikeSelected(imageId, deviceId);
+        if (imageId > 0 && !StringUtils.isEmpty(deviceId)) {
+            return imageReviewDBManager.isDislikeSelected(imageId, deviceId);
+        }
+
+        return false;
     }
 
     @Override
     public boolean isReportSelected(long imageId, String deviceId) {
-        return imageReviewDBManager.isReportSelected(imageId, deviceId);
+        if (imageId > 0 && !StringUtils.isEmpty(deviceId)) {
+            return imageReviewDBManager.isReportSelected(imageId, deviceId);
+        }
+
+        return false;
     }
 }

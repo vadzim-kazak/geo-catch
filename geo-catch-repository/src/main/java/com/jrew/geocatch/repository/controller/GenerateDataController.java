@@ -85,8 +85,6 @@ public class GenerateDataController {
             image.setPrivacyLevel(Image.PrivacyLevel.PRIVATE);
         }
 
-        image.setRating(random.nextInt(100));
-
         int imageChoice = random.nextInt(4);
         List<DomainProperty> domainProperties = new ArrayList<DomainProperty>();
         switch(imageChoice) {

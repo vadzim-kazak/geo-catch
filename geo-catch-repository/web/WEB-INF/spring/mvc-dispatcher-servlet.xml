@@ -36,16 +36,6 @@
         <property name="basename" value="messages" />
     </bean>
 
-    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
-
-    <mvc:annotation-driven conversion-service="conversionService" />
-
-    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
-        <property name="converters">
-            <set>
-                <bean class="com.jrew.geocatch.repository.converter.ImageConverter"/>
-            </set>
-        </property>
-    </bean>
+    <mvc:annotation-driven />
 
 </beans>

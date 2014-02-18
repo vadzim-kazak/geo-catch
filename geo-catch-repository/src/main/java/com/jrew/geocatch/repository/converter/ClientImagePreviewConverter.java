@@ -1,13 +1,13 @@
 package com.jrew.geocatch.repository.converter;
 
-import com.jrew.geocatch.repository.model.ClientImagePreview;
 import com.jrew.geocatch.repository.model.Image;
+import com.jrew.geocatch.web.model.ClientImagePreview;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.converter.Converter;
 
 /**
  * Performs conversion {@link Image} entity to
- * {@link com.jrew.geocatch.repository.model.ClientImagePreview} entity
+ * {@link com.jrew.geocatch.web.model.ClientImagePreview} entity
  */
 @Qualifier("clientImagePreviewConverter")
 public class ClientImagePreviewConverter implements Converter<Image, ClientImagePreview> {

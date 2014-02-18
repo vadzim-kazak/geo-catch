@@ -2,10 +2,9 @@ package com.jrew.geocatch.repository.service;
 
 import com.jrew.geocatch.repository.dao.database.ImageDBManager;
 import com.jrew.geocatch.repository.dao.filesystem.FileSystemManager;
-import com.jrew.geocatch.repository.model.ClientImage;
-import com.jrew.geocatch.repository.model.ClientImagePreview;
 import com.jrew.geocatch.repository.model.Image;
-import com.jrew.geocatch.web.model.ImageReview;
+import com.jrew.geocatch.web.model.ClientImage;
+import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -62,6 +61,14 @@ public class ImageServiceImpl implements ImageService {
         fileSystemManager.updatePath(image);
 
         ClientImage clientImage = clientImageConverter.convert(image);
+
+        clientImage.setLikesCount(imageReviewService.getLikeReviewsCount(image.getId()));
+        clientImage.setDislikesCount(imageReviewService.getDislikeReviewsCount(image.getId()));
+        clientImage.setReportsCount(imageReviewService.getReportReviewsCount(image.getId()));
+
+        clientImage.setLikeSelected(imageReviewService.isLikeSelected(image.getId(), image.getDeviceId()));
+        clientImage.setDislikeSelected(imageReviewService.isDislikeSelected(image.getId(), image.getDeviceId()));
+        clientImage.setReportSelected(imageReviewService.isReportSelected(image.getId(), image.getDeviceId()));
 
         return clientImage;
     }
