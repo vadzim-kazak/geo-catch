@@ -45,9 +45,7 @@ public class CoobirdThumbnailFactoryImpl implements ThumbnailFactory {
     public String createThumbnail(String pathToImage) throws IOException {
 
         // Create thumbnail image full path
-        String pathToThumbnail = FilenameUtils.getFullPath(pathToImage) +
-                FilenameUtils.getBaseName(pathToImage) + thumbnailPostfix + "." +
-                FilenameUtils.getExtension(pathToImage);
+        String pathToThumbnail = generateThumbnailFileName(pathToImage);
 
         File thumbnailFile = new File(pathToThumbnail);
         if (!thumbnailFile.exists()) {
@@ -55,5 +53,27 @@ public class CoobirdThumbnailFactoryImpl implements ThumbnailFactory {
         }
 
         return pathToThumbnail;
+    }
+
+    @Override
+    public File createThumbnailFile(File origin) throws IOException {
+
+        File thumbnailFile = new File(generateThumbnailFileName(origin.getName()));
+        if (!thumbnailFile.exists()) {
+            Thumbnails.of(origin).scale(scaleFactor).toFile(thumbnailFile);
+        }
+
+        return thumbnailFile;
+    }
+
+    /**
+     *
+     * @param pathToOrigin
+     * @return
+     */
+    private String generateThumbnailFileName(String pathToOrigin) {
+        return  FilenameUtils.getFullPath(pathToOrigin) +
+                FilenameUtils.getBaseName(pathToOrigin) + thumbnailPostfix + "." +
+                FilenameUtils.getExtension(pathToOrigin);
     }
 }

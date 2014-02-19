@@ -1,5 +1,6 @@
 package com.jrew.geocatch.repository.service.thumbnail;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -18,4 +19,12 @@ public interface ThumbnailFactory {
      * @throws IOException
      */
     public String createThumbnail(String pathToImage) throws IOException;
+
+    /**
+     *
+     * @param origin
+     * @return
+     * @throws IOException
+     */
+    public File createThumbnailFile(File origin) throws IOException;
 }
