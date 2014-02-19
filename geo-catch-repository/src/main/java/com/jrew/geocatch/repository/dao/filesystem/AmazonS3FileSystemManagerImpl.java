@@ -5,10 +5,11 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.service.generator.FileNameGenerator;
 import com.jrew.geocatch.repository.service.thumbnail.ThumbnailFactory;
+import com.jrew.geocatch.repository.util.FileUtil;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,8 @@ import java.util.List;
  */
 public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
 
+    private static final String TMP_DIRECTORY_KEY = "java.io.tmpdir";
+
     /** Used for file name generation **/
     @Autowired
     private FileNameGenerator geoTimeFileNameGenerator;
@@ -47,6 +50,13 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
     @Value("#{configProperties['amazon.s3.bucket.name']}")
     private String amazonS3BucketName;
 
+    @Value("#{configProperties['amazon.s3.storage.prefix']}")
+    private String amazonS3StoragePrefix;
+
+    /**  **/
+    @Value("#{configProperties['imageFileExtension']}")
+    private String fileExtension;
+
     /** **/
     private AmazonS3 amazonS3;
 
@@ -58,52 +68,51 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
     @Override
     public void saveImage(Image image) throws IOException, IllegalArgumentException {
 
-        byte[] inputFile  = image.getFile().getBytes();
-        if (inputFile == null || inputFile.length == 0) {
-            throw new IllegalArgumentException("Uploaded image file is empty.");
-        }
+        String imageFileName = geoTimeFileNameGenerator.generate(image);
+        File imageFile = FileUtil.createFile(System.getProperty(TMP_DIRECTORY_KEY) + File.separator + imageFileName);
 
-        if (Base64.isArrayByteBase64(inputFile)) {
-            inputFile = Base64.decodeBase64(inputFile);
-        }
+        FileUtil.writeImageToFile(imageFile, image.getFile().getBytes(), fileExtension);
 
-        String imageName = geoTimeFileNameGenerator.generate(image);
-        String tmpDirectoryPath = System.getProperty("java.io.tmpdir");
-
-        String fullImagePath = tmpDirectoryPath + File.separator + imageName;
-        BufferedImage src = ImageIO.read(new ByteArrayInputStream(inputFile));
-        File imageFile = new File(fullImagePath);
-        if (!imageFile.exists()) {
-            ImageIO.write(src, "jpg", imageFile);
-        }
-
-
-        amazonS3.putObject(new PutObjectRequest(amazonS3BucketName, imageName, imageFile));
+        PutObjectRequest putObjectRequest = new PutObjectRequest(amazonS3BucketName, imageFileName, imageFile);
+        putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
+        amazonS3.putObject(putObjectRequest);
         // Set to image relative to image file path
-        image.setPath(imageName);
+        image.setPath(imageFileName);
 
-        // 2) Create thumbnail for original image
+        // Create thumbnail for original image
         File thumbnailFile = thumbnailFactory.createThumbnailFile(imageFile);
-        String thumbnailName = thumbnailFile.getName();
+        String thumbnailFileName = thumbnailFile.getName();
         // Set to image relative to thumbnail image file path
-        image.setThumbnailPath(thumbnailName);
-        amazonS3.putObject(new PutObjectRequest(amazonS3BucketName, thumbnailName, thumbnailFile));
+        putObjectRequest = new PutObjectRequest(amazonS3BucketName, thumbnailFileName, thumbnailFile);
+        putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
+        amazonS3.putObject(putObjectRequest);
+        image.setThumbnailPath(thumbnailFileName);
 
-        return;
+        // Delete image files from file system
+        FileUtil.deleteFile(imageFile);
+        FileUtil.deleteFile(thumbnailFile);
     }
 
     @Override
     public void deleteImage(Image image) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        // delete image file
+        amazonS3.deleteObject(new DeleteObjectRequest(amazonS3BucketName, image.getPath()));
+
+        // delete image thumbnail file
+        amazonS3.deleteObject(new DeleteObjectRequest(amazonS3BucketName, image.getThumbnailPath()));
     }
 
     @Override
     public void updateThumbnailPath(List<Image> images) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        for (Image image : images) {
+            String thumbnailFileName = image.getThumbnailPath();
+            image.setThumbnailPath(amazonS3StoragePrefix + thumbnailFileName);
+        }
     }
 
     @Override
     public void updatePath(Image image) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        String imageFileName = image.getPath();
+        image.setPath(amazonS3StoragePrefix + imageFileName);
     }
 }

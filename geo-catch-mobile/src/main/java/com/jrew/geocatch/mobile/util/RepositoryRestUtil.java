@@ -167,14 +167,7 @@ public class RepositoryRestUtil {
         HttpClient httpClient = createHttpClient();
         HttpContext localContext = new BasicHttpContext();
 
-        StringBuilder loadImageThumbnailUrl = new StringBuilder();
-        loadImageThumbnailUrl.append(resources.getString(R.config.repositoryUrl))
-                .append(imagePath);
-
-        // Temporary workaround. Need to be fixed on server side
-        String finalUrl = loadImageThumbnailUrl.toString().replace("\\","/");
-
-        HttpGet httpGet = new HttpGet(finalUrl);
+        HttpGet httpGet = new HttpGet(imagePath);
         HttpResponse response = httpClient.execute(httpGet, localContext);
 
         Bundle bundle = new Bundle();

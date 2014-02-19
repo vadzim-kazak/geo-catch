@@ -27,11 +27,13 @@
         <constructor-arg name="imageDBManager" ref="databaseManager"/>
     </bean>
 
-    <bean id="fileSystemManager" class="com.jrew.geocatch.repository.dao.filesystem.FileSystemManagerImpl" >
+    <!--bean id="fileSystemManager" class="com.jrew.geocatch.repository.dao.filesystem.FileSystemManagerImpl" >
         <property name="fileNameGenerator" ref="fileNameGenerator"/>
         <property name="folderLocator" ref="folderLocator"/>
         <property name="thumbnailFactory" ref="thumbnailFactory"/>
-    </bean>
+    </bean-->
+
+    <bean id="fileSystemManager" class="com.jrew.geocatch.repository.dao.filesystem.AmazonS3FileSystemManagerImpl" />
 
     <bean id="thumbnailFactory" class="com.jrew.geocatch.repository.service.thumbnail.CoobirdThumbnailFactoryImpl"/>
 

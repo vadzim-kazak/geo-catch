@@ -1,5 +1,6 @@
 package com.jrew.geocatch.repository.service.thumbnail;
 
+import com.jrew.geocatch.repository.util.FileUtil;
 import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,8 @@ import java.io.IOException;
  *
  */
 public class CoobirdThumbnailFactoryImpl implements ThumbnailFactory {
+
+    private static final char DOT = '.';
 
     /** Thumbnail image postfix **/
     @Value("#{configProperties['thumbnailFactory.thumbnailPostfix']}")
@@ -47,10 +50,8 @@ public class CoobirdThumbnailFactoryImpl implements ThumbnailFactory {
         // Create thumbnail image full path
         String pathToThumbnail = generateThumbnailFileName(pathToImage);
 
-        File thumbnailFile = new File(pathToThumbnail);
-        if (!thumbnailFile.exists()) {
-            Thumbnails.of(pathToImage).scale(scaleFactor).toFile(thumbnailFile);
-        }
+        File thumbnailFile = FileUtil.createFile(pathToThumbnail);
+        Thumbnails.of(pathToImage).scale(scaleFactor).toFile(thumbnailFile);
 
         return pathToThumbnail;
     }
@@ -59,9 +60,7 @@ public class CoobirdThumbnailFactoryImpl implements ThumbnailFactory {
     public File createThumbnailFile(File origin) throws IOException {
 
         File thumbnailFile = new File(generateThumbnailFileName(origin.getName()));
-        if (!thumbnailFile.exists()) {
-            Thumbnails.of(origin).scale(scaleFactor).toFile(thumbnailFile);
-        }
+        Thumbnails.of(origin).scale(scaleFactor).toFile(thumbnailFile);
 
         return thumbnailFile;
     }
@@ -73,7 +72,7 @@ public class CoobirdThumbnailFactoryImpl implements ThumbnailFactory {
      */
     private String generateThumbnailFileName(String pathToOrigin) {
         return  FilenameUtils.getFullPath(pathToOrigin) +
-                FilenameUtils.getBaseName(pathToOrigin) + thumbnailPostfix + "." +
+                FilenameUtils.getBaseName(pathToOrigin) + thumbnailPostfix + DOT +
                 FilenameUtils.getExtension(pathToOrigin);
     }
 }

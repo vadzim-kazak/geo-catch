@@ -3,6 +3,7 @@ package com.jrew.geocatch.repository.dao.filesystem;
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.service.generator.FileNameGenerator;
 import com.jrew.geocatch.repository.service.thumbnail.ThumbnailFactory;
+import com.jrew.geocatch.repository.util.FileUtil;
 import com.jrew.geocatch.repository.util.FolderUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,17 +45,17 @@ public class FileSystemManagerImpl implements FileSystemManager {
     @Override
     public void saveImage(Image image) throws IOException, IllegalArgumentException {
 
-        // 1) Save image
+        // Save image
         String imageFolderPath = folderLocator.getFolderAbsolutePath(image.getLatitude(), image.getLongitude());
         FolderUtils.checkOrCreateFoldersStructure(imageFolderPath);
 
-        String imageAbsolutePath = imageFolderPath  + File.separator + fileNameGenerator.generate(image);
-        writeImageToFolder(image, imageAbsolutePath);
+        String imageFilePath = imageFolderPath  + File.separator + fileNameGenerator.generate(image);
+        writeImageToFolder(image, imageFilePath);
         // Set to image relative to image file path
-        image.setPath(getImageRelativePath(imageAbsolutePath));
+        image.setPath(getImageRelativePath(imageFilePath));
 
-        // 2) Create thumbnail for original image
-        String thumbnailAbsolutePath = thumbnailFactory.createThumbnail(imageAbsolutePath);
+        // Create thumbnail for original image
+        String thumbnailAbsolutePath = thumbnailFactory.createThumbnail(imageFilePath);
         // Set to image relative to thumbnail image file path
         image.setThumbnailPath(getImageRelativePath(thumbnailAbsolutePath));
 
@@ -64,6 +65,7 @@ public class FileSystemManagerImpl implements FileSystemManager {
     @Override
     public void updateThumbnailPath(List<Image> images) {
         for (Image image : images) {
+            //TODO Need to populate here full image host url
             String thumbnailFullPath = rootRelativePath + image.getThumbnailPath();
             image.setThumbnailPath(thumbnailFullPath);
         }
@@ -71,6 +73,7 @@ public class FileSystemManagerImpl implements FileSystemManager {
 
     @Override
     public void updatePath(Image image) {
+        //TODO Need to populate here full image host url
         String imageFullPath = rootRelativePath + image.getPath();
         image.setPath(imageFullPath);
     }
@@ -85,20 +88,8 @@ public class FileSystemManagerImpl implements FileSystemManager {
      */
     private void writeImageToFolder(Image image, String fullImagePath) throws IOException {
 
-        byte[] inputFile  = image.getFile().getBytes();
-        if (inputFile == null || inputFile.length == 0) {
-            throw new IllegalArgumentException("Uploaded image file is empty.");
-        }
-
-        if (Base64.isArrayByteBase64(inputFile)) {
-            inputFile = Base64.decodeBase64(inputFile);
-        }
-
-        BufferedImage src = ImageIO.read(new ByteArrayInputStream(inputFile));
-        File destination = new File(fullImagePath);
-        if (!destination.exists()) {
-            ImageIO.write(src, fileExtension, destination);
-        }
+        File imageFile = FileUtil.createFile(fullImagePath);
+        FileUtil.writeImageToFile(imageFile, image.getFile().getBytes(), fileExtension);
     }
 
     @Override
