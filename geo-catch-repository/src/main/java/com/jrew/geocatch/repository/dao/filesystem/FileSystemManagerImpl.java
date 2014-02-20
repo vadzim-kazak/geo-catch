@@ -5,12 +5,8 @@ import com.jrew.geocatch.repository.service.generator.FileNameGenerator;
 import com.jrew.geocatch.repository.service.thumbnail.ThumbnailFactory;
 import com.jrew.geocatch.repository.util.FileUtil;
 import com.jrew.geocatch.repository.util.FolderUtils;
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -99,7 +95,7 @@ public class FileSystemManagerImpl implements FileSystemManager {
     }
 
     @Override
-    public void deleteImage(Image image) {
+    public void deleteImage(Image image) throws IOException {
 
         // Get absolute path images prefix
         String pathPrefix = folderLocator.getRootFolderPath();

@@ -1,14 +1,11 @@
 package com.jrew.geocatch.repository.dao.filesystem;
 
+import com.amazonaws.HttpMethod;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.CreateBucketRequest;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.service.generator.FileNameGenerator;
 import com.jrew.geocatch.repository.service.thumbnail.ThumbnailFactory;
@@ -19,6 +16,8 @@ import org.springframework.beans.factory.annotation.Value;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,6 +29,10 @@ import java.util.List;
  */
 public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
 
+    /** **/
+    private static final long URL_EXPIRATION_TIME = 1 * 60 * 1000;
+
+    /** **/
     private static final String TMP_DIRECTORY_KEY = "java.io.tmpdir";
 
     /** Used for file name generation **/
@@ -54,16 +57,6 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
     @Value("#{configProperties['amazon.s3.secretKey']}")
     private String amazonS3SecretKey;
 
-    @Value("#{configProperties['amazon.s3.bucket.name']}")
-    private String amazonS3BucketName;
-
-    @Value("#{configProperties['amazon.s3.storage.prefix']}")
-    private String amazonS3StoragePrefix;
-
-    @Value("#{configProperties['amazon.s3.storage.domain']}")
-    private String amazonS3StorageDomain;
-
-    /**  **/
     @Value("#{configProperties['imageFileExtension']}")
     private String fileExtension;
 
@@ -86,7 +79,7 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
 
         FileUtil.writeImageToFile(imageFile, image.getFile().getBytes(), fileExtension);
 
-        PutObjectRequest putObjectRequest = new PutObjectRequest(amazonS3BucketName, imageFileName, imageFile);
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, imageFileName, imageFile);
         putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
         amazonS3.putObject(putObjectRequest);
         // Set to image relative to image file path
@@ -96,8 +89,8 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
         File thumbnailFile = thumbnailFactory.createThumbnailFile(imageFile);
         String thumbnailFileName = thumbnailFile.getName();
         // Set to image relative to thumbnail image file path
-        putObjectRequest = new PutObjectRequest(amazonS3BucketName, thumbnailFileName, thumbnailFile);
-        putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
+        putObjectRequest = new PutObjectRequest(bucketName, thumbnailFileName, thumbnailFile);
+        putObjectRequest.withCannedAcl(CannedAccessControlList.Private);
         amazonS3.putObject(putObjectRequest);
         image.setThumbnailPath(bucketName + File.separator + thumbnailFileName);
 
@@ -107,32 +100,28 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
     }
 
     @Override
-    public void deleteImage(Image image) {
+    public void deleteImage(Image image) throws IOException {
+
+        String bucketName = folderLocator.getFolderName(image.getLatitude(), image.getLongitude());
         // delete image file
-        amazonS3.deleteObject(new DeleteObjectRequest(amazonS3BucketName, image.getPath()));
+        amazonS3.deleteObject(new DeleteObjectRequest(bucketName, image.getPath()));
 
         // delete image thumbnail file
-        amazonS3.deleteObject(new DeleteObjectRequest(amazonS3BucketName, image.getThumbnailPath()));
+        amazonS3.deleteObject(new DeleteObjectRequest(bucketName, image.getThumbnailPath()));
     }
 
     @Override
     public void updateThumbnailPath(List<Image> images) {
         for (Image image : images) {
             String thumbnailPath = image.getThumbnailPath();
-            image.setThumbnailPath(amazonS3StoragePrefix +
-                                   getBucketName(thumbnailPath) +
-                                   amazonS3StorageDomain +
-                                   getFileName(thumbnailPath));
+            image.setThumbnailPath(generatePreSignedUrl(getBucketName(thumbnailPath), getFileName(thumbnailPath)));
         }
     }
 
     @Override
     public void updatePath(Image image) {
         String imagePath = image.getPath();
-        image.setPath(amazonS3StoragePrefix +
-                      getBucketName(imagePath) +
-                      amazonS3StorageDomain +
-                      getFileName(imagePath));
+        image.setPath(generatePreSignedUrl(getBucketName(imagePath), getFileName(imagePath)));
     }
 
     /**
@@ -168,5 +157,27 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
     private String getFileName(String path) {
         int separatorIndex = path.lastIndexOf(File.separator);
         return path.substring(separatorIndex);
+    }
+
+    /**
+     *
+     * @param bucketName
+     * @param fileName
+     * @return
+     */
+    private String generatePreSignedUrl(String bucketName, String fileName) {
+
+        GeneratePresignedUrlRequest generatePresignedUrlRequest =
+                new GeneratePresignedUrlRequest(bucketName, fileName);
+        generatePresignedUrlRequest.setMethod(HttpMethod.GET);
+
+        Date expiration = new java.util.Date();
+        long msec = expiration.getTime();
+        msec += URL_EXPIRATION_TIME;
+        expiration.setTime(msec);
+        generatePresignedUrlRequest.setExpiration(expiration);
+
+        URL preSignedUrl = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
+        return preSignedUrl.toString();
     }
 }

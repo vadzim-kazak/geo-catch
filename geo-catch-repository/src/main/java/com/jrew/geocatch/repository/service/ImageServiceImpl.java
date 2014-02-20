@@ -92,7 +92,11 @@ public class ImageServiceImpl implements ImageService {
         if (image != null && image.getDeviceId().equalsIgnoreCase(deviceId)) {
 
             // 1) Remove image from file system
-            fileSystemManager.deleteImage(image);
+            try {
+                fileSystemManager.deleteImage(image);
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
 
             //2) Remove image from db
             imageDBManager.deleteImage(image);

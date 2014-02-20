@@ -32,7 +32,7 @@ public interface FileSystemManager {
      *
      * @param image
      */
-    public void deleteImage(Image image);
+    public void deleteImage(Image image) throws IOException;
 
     /**
      * Updates images path.
