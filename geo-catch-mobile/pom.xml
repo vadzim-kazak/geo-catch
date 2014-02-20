@@ -77,6 +77,13 @@
             <version>4.48</version>
         </dependency>
 
+        <!-- Universal Image Loader lib -->
+        <dependency>
+            <groupId>com.nostra13.universalimageloader</groupId>
+            <artifactId>universal-image-loader</artifactId>
+            <version>1.9.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>

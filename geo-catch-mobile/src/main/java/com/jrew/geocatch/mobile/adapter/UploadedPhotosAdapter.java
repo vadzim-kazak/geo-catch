@@ -21,6 +21,7 @@ import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.ServiceUtil;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -120,7 +121,13 @@ public class UploadedPhotosAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View row = inflater.inflate(R.layout.photo_grid_view_cell, null);
+
+        View row = null;
+        if (view == null) {
+            row = inflater.inflate(R.layout.photo_grid_view_cell, null);
+        } else {
+            row = view;
+        }
 
         ImageView thumbnailImageView = (ImageView) row.findViewById(R.id.thumbnailImageView);
         thumbnailImageView.setImageResource(R.drawable.chat);
@@ -132,7 +139,8 @@ public class UploadedPhotosAdapter extends BaseAdapter {
         final ClientImagePreview clientImagePreview = images.get(i);
 
         // Load thumbnail image
-        new ReloadImageTask(thumbnailImageView, this, context).execute(clientImagePreview.getThumbnailPath());
+        ImageLoader imageLoader = ImageLoader.getInstance();
+        imageLoader.displayImage(clientImagePreview.getThumbnailPath(), thumbnailImageView);
 
         thumbnailImageView.setOnClickListener(new View.OnClickListener() {
             @Override

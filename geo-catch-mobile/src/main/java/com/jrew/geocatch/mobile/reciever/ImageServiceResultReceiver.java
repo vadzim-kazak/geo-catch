@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
+import android.view.View;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -18,6 +19,8 @@ import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.util.CommonUtil;
 import com.jrew.geocatch.mobile.util.ServiceUtil;
 import com.jrew.geocatch.web.model.ClientImagePreview;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 
 import java.util.Iterator;
 import java.util.List;
@@ -37,58 +40,58 @@ public class ImageServiceResultReceiver extends ResultReceiver {
     /** **/
     private Paint thumbnailPaint;
 
-    /**
-     * Implements thumbnails loading
-     */
-    public class ThumbnailLoader {
-
-        /**
-         *
-         */
-        private List<ClientImagePreview> images;
-
-        /**
-         *
-         */
-        private int counter;
-
-        /**
-         *
-         */
-        private boolean isLoading;
-
-        /**
-         *
-         * @param images
-         */
-        public void loadThumbnails(List<ClientImagePreview> images) {
-            this.images = images;
-            counter = 0;
-            isLoading = true;
-            loadNext();
-        }
-
-        /**
-         *
-         */
-        public void loadNext() {
-            if(counter < images.size()) {
-                ClientImagePreview image = images.get(counter);
-                ServiceUtil.callLoadImageThumbnailService(image, ImageServiceResultReceiver.this, mapFragment.getActivity());
-                counter++;
-            } else {
-                isLoading = false;
-            }
-        }
-
-        /**
-         *
-         * @return
-         */
-        public boolean isLoading() {
-            return isLoading;
-        }
-    }
+//    /**
+//     * Implements thumbnails loading
+//     */
+//    public class ThumbnailLoader {
+//
+//        /**
+//         *
+//         */
+//        private List<ClientImagePreview> images;
+//
+//        /**
+//         *
+//         */
+//        private int counter;
+//
+//        /**
+//         *
+//         */
+//        private boolean isLoading;
+//
+//        /**
+//         *
+//         * @param images
+//         */
+//        public void loadThumbnails(List<ClientImagePreview> images) {
+//            this.images = images;
+//            counter = 0;
+//            isLoading = true;
+//            loadNext();
+//        }
+//
+//        /**
+//         *
+//         */
+//        public void loadNext() {
+//            if(counter < images.size()) {
+//                ClientImagePreview image = images.get(counter);
+//                ServiceUtil.callLoadImageThumbnailService(image, ImageServiceResultReceiver.this, mapFragment.getActivity());
+//                counter++;
+//            } else {
+//                isLoading = false;
+//            }
+//        }
+//
+//        /**
+//         *
+//         * @return
+//         */
+//        public boolean isLoading() {
+//            return isLoading;
+//        }
+//    }
 
     /** **/
     private MapFragment mapFragment;
@@ -96,7 +99,7 @@ public class ImageServiceResultReceiver extends ResultReceiver {
     /**
      *
      */
-    private ThumbnailLoader thumbnailLoader;
+  //  private ThumbnailLoader thumbnailLoader;
 
     /**
      *
@@ -106,7 +109,7 @@ public class ImageServiceResultReceiver extends ResultReceiver {
     public ImageServiceResultReceiver(Handler handler, MapFragment mapFragment) {
         super(handler);
         this.mapFragment = mapFragment;
-        thumbnailLoader = new ThumbnailLoader();
+       // thumbnailLoader = new ThumbnailLoader();
 
         iconPaint = new Paint();
         iconPaint.setColor(Color.WHITE);
@@ -132,7 +135,27 @@ public class ImageServiceResultReceiver extends ResultReceiver {
 
                     filterDisplayedImages(images);
                     if(!images.isEmpty()) {
-                        thumbnailLoader.loadThumbnails(images);
+                       // thumbnailLoader.loadThumbnails(images);
+
+                        for (final ClientImagePreview imagePreview : images) {
+
+                            // Load image, decode it to Bitmap and return Bitmap to callback
+                            ImageLoader imageLoader = ImageLoader.getInstance();
+                            imageLoader.loadImage(imagePreview.getThumbnailPath(), new SimpleImageLoadingListener() {
+                                @Override
+                                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+
+                                    MarkerOptions markerOptions = new MarkerOptions();
+                                    markerOptions.position(new LatLng(imagePreview.getLatitude(), imagePreview.getLongitude()));
+
+                                    markerOptions.icon(BitmapDescriptorFactory.fromBitmap(createIconWithBorder(loadedImage)));
+
+                                    Marker marker = mapFragment.getGoogleMap().addMarker(markerOptions);
+                                    mapFragment.getImageMarkerPairs().put(imagePreview.getId(), new ImageMarkerPair(imagePreview, marker));
+
+                                }
+                            });
+                        }
                     }
                 }
                 break;
@@ -140,20 +163,20 @@ public class ImageServiceResultReceiver extends ResultReceiver {
             // Handle thumbnail loading
             case ImageService.ResultStatus.LOAD_THUMBNAIL_FINISHED:
 
-                ClientImagePreview image = (ClientImagePreview) resultData.getSerializable(ImageService.IMAGE_KEY);
-                Bitmap bitmap = (Bitmap) resultData.getParcelable(ImageService.RESULT_KEY);
-
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(new LatLng(image.getLatitude(), image.getLongitude()));
-
-                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(createIconWithBorder(bitmap)));
-
-
-                Marker marker = mapFragment.getGoogleMap().addMarker(markerOptions);
-                mapFragment.getImageMarkerPairs().put(image.getId(), new ImageMarkerPair(image, marker));
+//                ClientImagePreview image = (ClientImagePreview) resultData.getSerializable(ImageService.IMAGE_KEY);
+//                Bitmap bitmap = (Bitmap) resultData.getParcelable(ImageService.RESULT_KEY);
+//
+//                MarkerOptions markerOptions = new MarkerOptions();
+//                markerOptions.position(new LatLng(image.getLatitude(), image.getLongitude()));
+//
+//                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(createIconWithBorder(bitmap)));
+//
+//
+//                Marker marker = mapFragment.getGoogleMap().addMarker(markerOptions);
+//                mapFragment.getImageMarkerPairs().put(image.getId(), new ImageMarkerPair(image, marker));
 
                 // Load next thumbnail image
-                thumbnailLoader.loadNext();
+               // thumbnailLoader.loadNext();
                 break;
 
             case ImageService.ResultStatus.UPLOAD_IMAGE_STARTED:
@@ -164,9 +187,9 @@ public class ImageServiceResultReceiver extends ResultReceiver {
 
                 // The could be issue with loading of particular image.
                 // So, try to load next images in the row
-                if(thumbnailLoader.isLoading()) {
-                    thumbnailLoader.loadNext();
-                }
+//                if(thumbnailLoader.isLoading()) {
+//                    thumbnailLoader.loadNext();
+//                }
                 break;
         }
     }
