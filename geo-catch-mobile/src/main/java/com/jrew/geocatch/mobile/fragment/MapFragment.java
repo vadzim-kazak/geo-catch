@@ -53,7 +53,10 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
     private Map<Long, ImageMarkerPair> imageMarkerPairs;
 
     /** **/
-    public ImageServiceResultReceiver imageResultReceiver;
+    private ImageServiceResultReceiver imageResultReceiver;
+
+    /** **/
+    private boolean isLocationSet;
 
     /** **/
     private LocationManager locationManager;
@@ -107,6 +110,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
                 imageResultReceiver = new ImageServiceResultReceiver(new Handler(), this);
 
+                isLocationSet = false;
             } else {
                 clearMarkers();
                 loadImages(getLatLngBounds());
@@ -237,7 +241,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
     @Override
     public void onLocationChanged(Location location) {
 
-        if (googleMap != null) {
+        if (googleMap != null && !isLocationSet) {
             CameraUpdate center =  CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(),
                     location.getLongitude()));
 
@@ -248,6 +252,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
             googleMap.animateCamera(zoom);
 
             locationManager.removeUpdates(this);
+            isLocationSet = true;
         }
     }
 
