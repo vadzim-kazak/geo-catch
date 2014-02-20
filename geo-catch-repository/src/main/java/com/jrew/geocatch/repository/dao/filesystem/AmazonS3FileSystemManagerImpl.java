@@ -5,19 +5,18 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.*;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.CreateBucketRequest;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.repository.service.generator.FileNameGenerator;
 import com.jrew.geocatch.repository.service.thumbnail.ThumbnailFactory;
 import com.jrew.geocatch.repository.util.FileUtil;
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.PostConstruct;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -41,6 +40,14 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
     @Autowired
     private ThumbnailFactory thumbnailFactory;
 
+    /** Used for images thumbnails creation **/
+    @Autowired
+    private FolderLocator folderLocator;
+
+    /** **/
+    @Autowired
+    private AmazonS3RegionsConfig amazonS3RegionsConfig;
+
     @Value("#{configProperties['amazon.s3.accessKey']}")
     private String amazonS3AccessKey;
 
@@ -52,6 +59,9 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
 
     @Value("#{configProperties['amazon.s3.storage.prefix']}")
     private String amazonS3StoragePrefix;
+
+    @Value("#{configProperties['amazon.s3.storage.domain']}")
+    private String amazonS3StorageDomain;
 
     /**  **/
     @Value("#{configProperties['imageFileExtension']}")
@@ -68,6 +78,9 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
     @Override
     public void saveImage(Image image) throws IOException, IllegalArgumentException {
 
+        String bucketName = folderLocator.getFolderName(image.getLatitude(), image.getLongitude());
+        checkOrCreateBucket(bucketName, image.getLatitude(), image.getLongitude());
+
         String imageFileName = geoTimeFileNameGenerator.generate(image);
         File imageFile = FileUtil.createFile(System.getProperty(TMP_DIRECTORY_KEY) + File.separator + imageFileName);
 
@@ -77,7 +90,7 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
         putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
         amazonS3.putObject(putObjectRequest);
         // Set to image relative to image file path
-        image.setPath(imageFileName);
+        image.setPath(bucketName + File.separator + imageFileName);
 
         // Create thumbnail for original image
         File thumbnailFile = thumbnailFactory.createThumbnailFile(imageFile);
@@ -86,7 +99,7 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
         putObjectRequest = new PutObjectRequest(amazonS3BucketName, thumbnailFileName, thumbnailFile);
         putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
         amazonS3.putObject(putObjectRequest);
-        image.setThumbnailPath(thumbnailFileName);
+        image.setThumbnailPath(bucketName + File.separator + thumbnailFileName);
 
         // Delete image files from file system
         FileUtil.deleteFile(imageFile);
@@ -105,14 +118,55 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
     @Override
     public void updateThumbnailPath(List<Image> images) {
         for (Image image : images) {
-            String thumbnailFileName = image.getThumbnailPath();
-            image.setThumbnailPath(amazonS3StoragePrefix + thumbnailFileName);
+            String thumbnailPath = image.getThumbnailPath();
+            image.setThumbnailPath(amazonS3StoragePrefix +
+                                   getBucketName(thumbnailPath) +
+                                   amazonS3StorageDomain +
+                                   getFileName(thumbnailPath));
         }
     }
 
     @Override
     public void updatePath(Image image) {
-        String imageFileName = image.getPath();
-        image.setPath(amazonS3StoragePrefix + imageFileName);
+        String imagePath = image.getPath();
+        image.setPath(amazonS3StoragePrefix +
+                      getBucketName(imagePath) +
+                      amazonS3StorageDomain +
+                      getFileName(imagePath));
+    }
+
+    /**
+     *
+     * @param bucketName
+     * @param latitude
+     * @param longitude
+     */
+    private void checkOrCreateBucket(String bucketName, double latitude, double longitude) {
+
+        if (!amazonS3.doesBucketExist(bucketName)) {
+            Regions region = amazonS3RegionsConfig.getRegionForLocation(latitude, longitude);
+            CreateBucketRequest createBucketRequest = new CreateBucketRequest(bucketName, region.toString());
+            amazonS3.createBucket(createBucketRequest);
+        }
+    }
+
+    /**
+     *
+     * @param path
+     * @return
+     */
+    private String getBucketName(String path) {
+        int separatorIndex = path.lastIndexOf(File.separator);
+        return path.substring(0, separatorIndex - 1);
+    }
+
+    /**
+     *
+     * @param path
+     * @return
+     */
+    private String getFileName(String path) {
+        int separatorIndex = path.lastIndexOf(File.separator);
+        return path.substring(separatorIndex);
     }
 }

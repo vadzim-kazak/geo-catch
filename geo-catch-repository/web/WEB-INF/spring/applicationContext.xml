@@ -59,4 +59,82 @@
 
     <bean id="imageReviewService" class="com.jrew.geocatch.repository.service.ImageReviewServiceImpl" />
 
+    <bean id="amazonRegionsConfig" class="com.jrew.geocatch.repository.dao.filesystem.AmazonS3RegionsConfig" >
+        <property name="regions">
+            <util:map map-class="java.util.HashMap">
+                <entry key="US_EAST_1" value-ref="usEast1Region"/>
+                <entry key="US_WEST_1" value-ref="usWest1Region"/>
+                <entry key="US_WEST_2" value-ref="usWest2Region"/>
+                <entry key="EU_WEST_1" value-ref="euWest1Region"/>
+                <entry key="AP_SOUTHEAST_1" value-ref="apSoutheast1Region"/>
+                <entry key="AP_SOUTHEAST_2" value-ref="apSoutheast2Region"/>
+                <entry key="AP_NORTHEAST_1" value-ref="apNorthEast1Region"/>
+                <entry key="SA_EAST_1" value-ref="saEast1Region"/>
+            </util:map>
+        </property>
+    </bean>
+
+    <bean id="usEast1Region" class="com.jrew.geocatch.repository.model.Region" >
+        <constructor-arg name="startLatitude" value="0" />
+        <constructor-arg name="endLatitude" value="90" />
+        <constructor-arg name="startLongitude" value="-30" />
+        <constructor-arg name="endLongitude" value="-90" />
+    </bean>
+
+    <!-- US West(Oregon) Region  -->
+    <bean id="usWest1Region" class="com.jrew.geocatch.repository.model.Region" >
+        <constructor-arg name="startLatitude" value="40" />
+        <constructor-arg name="endLatitude" value="90" />
+        <constructor-arg name="startLongitude" value="-90" />
+        <constructor-arg name="endLongitude" value="-180" />
+    </bean>
+
+    <!-- US West (Northern California) Region -->
+    <bean id="usWest2Region" class="com.jrew.geocatch.repository.model.Region" >
+        <constructor-arg name="startLatitude" value="0" />
+        <constructor-arg name="endLatitude" value="40" />
+        <constructor-arg name="startLongitude" value="-90" />
+        <constructor-arg name="endLongitude" value="-180" />
+    </bean>
+
+    <!-- EU (Ireland) Region  -->
+    <bean id="euWest1Region" class="com.jrew.geocatch.repository.model.Region" >
+        <constructor-arg name="startLatitude" value="-90" />
+        <constructor-arg name="endLatitude" value="90" />
+        <constructor-arg name="startLongitude" value="-30" />
+        <constructor-arg name="endLongitude" value="70" />
+    </bean>
+
+    <!-- Asia Pacific (Singapore) Region -->
+    <bean id="apSoutheast1Region" class="com.jrew.geocatch.repository.model.Region" >
+        <constructor-arg name="startLatitude" value="-10" />
+        <constructor-arg name="endLatitude" value="35" />
+        <constructor-arg name="startLongitude" value="70" />
+        <constructor-arg name="endLongitude" value="180" />
+    </bean>
+
+    <!-- Asia Pacific (Sydney) Region -->
+    <bean id="apSoutheast2Region" class="com.jrew.geocatch.repository.model.Region" >
+        <constructor-arg name="startLatitude" value="-90" />
+        <constructor-arg name="endLatitude" value="-10" />
+        <constructor-arg name="startLongitude" value="70" />
+        <constructor-arg name="endLongitude" value="180" />
+    </bean>
+
+    <!-- Asia Pacific (Tokyo) Region -->
+    <bean id="apNorthEast1Region" class="com.jrew.geocatch.repository.model.Region" >
+        <constructor-arg name="startLatitude" value="-10" />
+        <constructor-arg name="endLatitude" value="90" />
+        <constructor-arg name="startLongitude" value="70" />
+        <constructor-arg name="endLongitude" value="180" />
+    </bean>
+
+    <!-- South America (Sao Paulo) Region -->
+    <bean id="saEast1Region" class="com.jrew.geocatch.repository.model.Region" >
+        <constructor-arg name="startLatitude" value="0" />
+        <constructor-arg name="endLatitude" value="-90" />
+        <constructor-arg name="startLongitude" value="-30" />
+        <constructor-arg name="endLongitude" value="-180" />
+    </bean>
+
 </beans>

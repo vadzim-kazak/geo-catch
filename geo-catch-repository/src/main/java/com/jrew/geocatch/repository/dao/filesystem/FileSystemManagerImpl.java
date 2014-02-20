@@ -42,6 +42,12 @@ public class FileSystemManagerImpl implements FileSystemManager {
     @Value("#{configProperties['imageFileExtension']}")
     private String fileExtension;
 
+    /**  **/
+    @Value("#{configProperties['fileSystem.repo.host']}")
+    private String host;
+
+
+
     @Override
     public void saveImage(Image image) throws IOException, IllegalArgumentException {
 
@@ -65,16 +71,16 @@ public class FileSystemManagerImpl implements FileSystemManager {
     @Override
     public void updateThumbnailPath(List<Image> images) {
         for (Image image : images) {
-            //TODO Need to populate here full image host url
-            String thumbnailFullPath = rootRelativePath + image.getThumbnailPath();
+            String thumbnailFullPath = host + rootRelativePath + image.getThumbnailPath();
+            thumbnailFullPath = thumbnailFullPath.replace("\\","/");
             image.setThumbnailPath(thumbnailFullPath);
         }
     }
 
     @Override
     public void updatePath(Image image) {
-        //TODO Need to populate here full image host url
-        String imageFullPath = rootRelativePath + image.getPath();
+        String imageFullPath = host + rootRelativePath + image.getPath();
+        imageFullPath = imageFullPath.replace("\\","/");
         image.setPath(imageFullPath);
     }
 

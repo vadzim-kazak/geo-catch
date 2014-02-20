@@ -1,5 +1,6 @@
 package com.jrew.geocatch.repository.dao.filesystem;
 
+import com.jrew.geocatch.repository.model.DegreeRange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,51 +53,6 @@ public class FolderLocatorImpl implements FolderLocator {
     private double foldersDegreeCoverage;
 
     /**
-     *  Util class for degree range value representation.
-     */
-    public class DegreeRange {
-
-        /** Start degree range value **/
-        private double startDegree;
-
-        /** End degree range value **/
-        private double endDegree;
-
-        /**
-         */
-        public DegreeRange() {
-        }
-
-        /**
-         * @return
-         */
-        public double getStartDegree() {
-            return startDegree;
-        }
-
-        /**
-         * @param startDegree
-         */
-        public void setStartDegree(double startDegree) {
-            this.startDegree = startDegree;
-        }
-
-        /**
-         * @return
-         */
-        public double getEndDegree() {
-            return endDegree;
-        }
-
-        /**
-         * @param endDegree
-         */
-        public void setEndDegree(double endDegree) {
-            this.endDegree = endDegree;
-        }
-    }
-
-    /**
      * Constructor
      */
     public FolderLocatorImpl() {}
@@ -116,6 +72,11 @@ public class FolderLocatorImpl implements FolderLocator {
     @Override
     public String getFolderAbsolutePath(double latitude, double longitude) throws IOException {
         return  rootFolderPath + File.separator + getFolder(latitude, longitude);
+    }
+
+    @Override
+    public String getFolderName(double latitude, double longitude) throws IOException {
+        return getFolder(latitude, longitude);
     }
 
     /**
