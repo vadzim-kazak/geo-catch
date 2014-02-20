@@ -335,6 +335,7 @@ public class RepositoryRestUtil {
         int status = response.getStatusLine().getStatusCode();
         if (status == 200) {
             bundle.putBoolean(ReviewService.RESULT_KEY, true);
+            bundle.putSerializable(ReviewService.REVIEW_KEY, imageReview);
         } else {
             bundle.putBoolean(ReviewService.RESULT_KEY, false);
         }

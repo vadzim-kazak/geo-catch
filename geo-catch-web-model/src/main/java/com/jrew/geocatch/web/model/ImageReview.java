@@ -32,7 +32,7 @@ public class ImageReview implements Serializable {
     private ReviewType reviewType;
 
     /** **/
-    private boolean isSelected;
+    private boolean selected;
 
     /**
      *
@@ -87,7 +87,7 @@ public class ImageReview implements Serializable {
      * @return
      */
     public boolean isSelected() {
-        return isSelected;
+        return selected;
     }
 
     /**
@@ -95,6 +95,6 @@ public class ImageReview implements Serializable {
      * @param selected
      */
     public void setSelected(boolean selected) {
-        isSelected = selected;
+        this.selected = selected;
     }
 }

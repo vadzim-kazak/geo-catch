@@ -11,7 +11,7 @@
 
     <item name="repositoryImagesUri" type="config">repo/images</item>
 
-    <item name="repositoryReviewsUri" type="config">repo/review</item>
+    <item name="repositoryReviewsUri" type="config">repo/reviews</item>
 
     <item name="repositoryUploadImagesDateFormat" type="config">yyDDDHHmmssSSS</item>
 

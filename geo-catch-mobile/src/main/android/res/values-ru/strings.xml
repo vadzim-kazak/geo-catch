@@ -81,6 +81,8 @@
 
     <string name="statusAreaLocationDetected">Местоположение определено</string>
 
+    <string name="commonServerCommunicationError">Ошибка связи с сервером</string>
+
     <string-array name="shareSectionOptions">
         <item>Открытый</item>
         <item>Закрытый</item>

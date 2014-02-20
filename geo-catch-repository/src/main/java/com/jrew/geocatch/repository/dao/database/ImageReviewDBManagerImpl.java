@@ -61,32 +61,32 @@ public class ImageReviewDBManagerImpl implements ImageReviewDBManager {
 
     @Override
     public void handleSetLikeReview(long imageId, String deviceId) {
-        processReportReview(imageId, deviceId, insertLikeReviewQuery);
+        processReview(imageId, deviceId, insertLikeReviewQuery);
     }
 
     @Override
     public void handleClearLikeReview(long imageId, String deviceId) {
-        processReportReview(imageId, deviceId, deleteLikeReviewQuery);
+        processReview(imageId, deviceId, deleteLikeReviewQuery);
     }
 
     @Override
     public void handleSetDislikeReview(long imageId, String deviceId) {
-        processReportReview(imageId, deviceId, insertDislikeReviewQuery);
+        processReview(imageId, deviceId, insertDislikeReviewQuery);
     }
 
     @Override
     public void handleClearDislikeReview(long imageId, String deviceId) {
-        processReportReview(imageId, deviceId, deleteDislikeReviewQuery);
+        processReview(imageId, deviceId, deleteDislikeReviewQuery);
     }
 
     @Override
     public void handleSetReportReview(long imageId, String deviceId) {
-        processReportReview(imageId, deviceId, insertReportReviewQuery);
+        processReview(imageId, deviceId, insertReportReviewQuery);
     }
 
     @Override
     public void handleClearReportReview(long imageId, String deviceId) {
-        processReportReview(imageId, deviceId, deleteReportReviewQuery);
+        processReview(imageId, deviceId, deleteReportReviewQuery);
     }
 
     /**
@@ -95,7 +95,7 @@ public class ImageReviewDBManagerImpl implements ImageReviewDBManager {
      * @param deviceId
      * @param actionQuery
      */
-    private void processReportReview(long imageId, String deviceId, String actionQuery) {
+    private void processReview(long imageId, String deviceId, String actionQuery) {
         Query query = entityManager.createNativeQuery(actionQuery);
         query.setParameter(1, imageId);
         query.setParameter(2, deviceId);

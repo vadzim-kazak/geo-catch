@@ -83,6 +83,8 @@
 
     <string name="statusAreaLocationDetected">Location is detected</string>
 
+    <string name="commonServerCommunicationError">Server communication error</string>
+
     <string-array name="shareSectionOptions">
         <item>Public</item>
         <item>Private</item>

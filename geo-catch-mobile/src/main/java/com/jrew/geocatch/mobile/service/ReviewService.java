@@ -64,8 +64,6 @@ public class ReviewService extends IntentService {
         super(ReviewService.class.getName());
     }
 
-
-
     @Override
     protected void onHandleIntent(Intent intent) {
 
@@ -77,7 +75,7 @@ public class ReviewService extends IntentService {
             if(command.equals(Commands.UPLOAD_REVIEW)) {
 
                 receiver.send(ResultStatus.UPLOAD_REVIEW_FINISHED,
-                        RepositoryRestUtil.loadImages(intent, resources));
+                        RepositoryRestUtil.uploadReview(intent, resources));
 
             }
 

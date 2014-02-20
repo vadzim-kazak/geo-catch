@@ -6,11 +6,6 @@
           android:showAsAction="always">
     </item>
 
-    <item android:id="@+id/reportImageMenuOption"
-          android:icon="@android:drawable/ic_menu_report_image"
-          android:showAsAction="always">
-    </item>
-
     <item android:id="@+id/deleteImageMenuOption"
           android:icon="@android:drawable/ic_menu_delete"
           android:showAsAction="always">

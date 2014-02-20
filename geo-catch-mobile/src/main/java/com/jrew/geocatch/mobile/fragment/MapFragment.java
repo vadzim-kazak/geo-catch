@@ -93,14 +93,11 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                     @Override
                     public void onCameraChange(CameraPosition cameraPosition) {
 
-                        // Get current view bounds
-                        LatLngBounds latLngBounds = getLatLngBounds();
-
                         // Remove invisible markers
                         //removeInvisibleMarkers(latLngBounds);
 
                         // Load new images for view bounds
-                        loadImages(latLngBounds);
+                        loadImages();
                     }
                 });
 
@@ -111,9 +108,12 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                 imageResultReceiver = new ImageServiceResultReceiver(new Handler(), this);
 
                 isLocationSet = false;
+
+                loadImages();
+
             } else {
                 clearMarkers();
-                loadImages(getLatLngBounds());
+                loadImages();
             }
 
         } else {
@@ -185,9 +185,10 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
     /**
      *
-     * @param latLngBounds
      */
-    private void loadImages(LatLngBounds latLngBounds) {
+    private void loadImages() {
+
+        LatLngBounds latLngBounds = getLatLngBounds();
 
         SearchCriteria searchCriteria = SearchCriteriaHolder.getSearchCriteria();
 
@@ -275,5 +276,8 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
     public void onStart() {
         super.onStart();
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        if (googleMap != null) {
+            loadImages();
+        }
     }
 }

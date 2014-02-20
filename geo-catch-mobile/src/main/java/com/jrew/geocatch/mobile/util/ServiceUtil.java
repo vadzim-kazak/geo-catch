@@ -138,6 +138,7 @@ public class ServiceUtil {
 
         final Intent intent = new Intent(Intent.ACTION_SYNC, null, activity, ReviewService.class);
         intent.putExtra(ReviewService.REVIEW_KEY, imageReview);
+        intent.putExtra(ReviewService.COMMAND_KEY, ReviewService.Commands.UPLOAD_REVIEW);
         intent.putExtra(ReviewService.RECEIVER_KEY, resultReceiver);
         activity.startService(intent);
     }
