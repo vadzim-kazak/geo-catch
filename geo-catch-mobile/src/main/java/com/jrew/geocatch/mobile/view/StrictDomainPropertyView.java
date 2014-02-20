@@ -64,7 +64,7 @@ public class StrictDomainPropertyView extends DomainPropertyView {
     @Override
     public void loadDomainProperties(long domainPropertyType) {
         super.loadDomainProperties(domainPropertyType);
-        if (adapter.getCount() == 0) {
+        if (!adapter.isPopulated()) {
             setEnabled(false);
             LinearLayout parent = (LinearLayout) getParent();
             parent.setBackgroundColor(DISABLED_VIEW_COLOR);

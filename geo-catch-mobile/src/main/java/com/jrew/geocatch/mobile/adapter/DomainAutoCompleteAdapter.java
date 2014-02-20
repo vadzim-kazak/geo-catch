@@ -121,4 +121,17 @@ public class DomainAutoCompleteAdapter extends ArrayAdapter<DomainProperty> impl
     public void setInitialDomainProperties(List<DomainProperty> initialDomainProperties) {
         this.initialDomainProperties = initialDomainProperties;
     }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isPopulated() {
+
+        if (initialDomainProperties != null && initialDomainProperties.size() > 0) {
+            return true;
+        }
+
+        return false;
+    }
 }
