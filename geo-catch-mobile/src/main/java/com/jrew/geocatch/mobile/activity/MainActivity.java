@@ -58,7 +58,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 
             if (WebUtil.isNetworkAvailable(this)) {
                 syncDomainsInfo();
-                DomainDatabaseManager.loadDomainProperties(this);
+                //DomainDatabaseManager.loadDomainProperties(this);
             }
 
             /*
@@ -78,8 +78,7 @@ public class MainActivity extends SherlockFragmentActivity implements
         Date lastSyncDate = SharedPreferencesHelper.loadLastSyncDate(this);
         if (lastSyncDate != null) {
 
-            String syncPeriodConfig = getResources().getString(R.config.domainInfoSyncPeriodInHours);
-            int syncPeriod = Integer.parseInt(syncPeriodConfig);
+            int syncPeriod = getResources().getInteger(R.config.domainInfoSyncPeriodInHours);
 
             Date currentDate = new Date();
             if (currentDate.getTime() - lastSyncDate.getTime() >= syncPeriod * 60 * 60 * 1000 ) {
@@ -87,10 +86,10 @@ public class MainActivity extends SherlockFragmentActivity implements
                 processSyncDomainsInfo();
             }
 
+        } else {
+            // LastSyncDate isn't set. Probably this is first app launch
+            processSyncDomainsInfo();
         }
-
-        // LastSyncDate isn't set. Probably this is first app launch
-        processSyncDomainsInfo();
     }
 
     /**
