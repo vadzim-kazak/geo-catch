@@ -40,66 +40,8 @@ public class ImageServiceResultReceiver extends ResultReceiver {
     /** **/
     private Paint thumbnailPaint;
 
-//    /**
-//     * Implements thumbnails loading
-//     */
-//    public class ThumbnailLoader {
-//
-//        /**
-//         *
-//         */
-//        private List<ClientImagePreview> images;
-//
-//        /**
-//         *
-//         */
-//        private int counter;
-//
-//        /**
-//         *
-//         */
-//        private boolean isLoading;
-//
-//        /**
-//         *
-//         * @param images
-//         */
-//        public void loadThumbnails(List<ClientImagePreview> images) {
-//            this.images = images;
-//            counter = 0;
-//            isLoading = true;
-//            loadNext();
-//        }
-//
-//        /**
-//         *
-//         */
-//        public void loadNext() {
-//            if(counter < images.size()) {
-//                ClientImagePreview image = images.get(counter);
-//                ServiceUtil.callLoadImageThumbnailService(image, ImageServiceResultReceiver.this, mapFragment.getActivity());
-//                counter++;
-//            } else {
-//                isLoading = false;
-//            }
-//        }
-//
-//        /**
-//         *
-//         * @return
-//         */
-//        public boolean isLoading() {
-//            return isLoading;
-//        }
-//    }
-
     /** **/
     private MapFragment mapFragment;
-
-    /**
-     *
-     */
-  //  private ThumbnailLoader thumbnailLoader;
 
     /**
      *
@@ -109,7 +51,6 @@ public class ImageServiceResultReceiver extends ResultReceiver {
     public ImageServiceResultReceiver(Handler handler, MapFragment mapFragment) {
         super(handler);
         this.mapFragment = mapFragment;
-       // thumbnailLoader = new ThumbnailLoader();
 
         iconPaint = new Paint();
         iconPaint.setColor(Color.WHITE);
@@ -120,8 +61,6 @@ public class ImageServiceResultReceiver extends ResultReceiver {
 
     @Override
     protected void onReceiveResult(int resultCode, Bundle resultData) {
-
-       // Map<Integer, ImageMarkerPair> imageMarkerPairs = mapFragment.getImageMarkerPairs();
 
         switch (resultCode) {
 
@@ -135,7 +74,6 @@ public class ImageServiceResultReceiver extends ResultReceiver {
 
                     filterDisplayedImages(images);
                     if(!images.isEmpty()) {
-                       // thumbnailLoader.loadThumbnails(images);
 
                         for (final ClientImagePreview imagePreview : images) {
 
@@ -160,36 +98,13 @@ public class ImageServiceResultReceiver extends ResultReceiver {
                 }
                 break;
 
-            // Handle thumbnail loading
-            case ImageService.ResultStatus.LOAD_THUMBNAIL_FINISHED:
-
-//                ClientImagePreview image = (ClientImagePreview) resultData.getSerializable(ImageService.IMAGE_KEY);
-//                Bitmap bitmap = (Bitmap) resultData.getParcelable(ImageService.RESULT_KEY);
-//
-//                MarkerOptions markerOptions = new MarkerOptions();
-//                markerOptions.position(new LatLng(image.getLatitude(), image.getLongitude()));
-//
-//                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(createIconWithBorder(bitmap)));
-//
-//
-//                Marker marker = mapFragment.getGoogleMap().addMarker(markerOptions);
-//                mapFragment.getImageMarkerPairs().put(image.getId(), new ImageMarkerPair(image, marker));
-
-                // Load next thumbnail image
-               // thumbnailLoader.loadNext();
-                break;
-
             case ImageService.ResultStatus.UPLOAD_IMAGE_STARTED:
 
+                break;
 
             // Handle service error;
             case ImageService.ResultStatus.ERROR:
 
-                // The could be issue with loading of particular image.
-                // So, try to load next images in the row
-//                if(thumbnailLoader.isLoading()) {
-//                    thumbnailLoader.loadNext();
-//                }
                 break;
         }
     }
