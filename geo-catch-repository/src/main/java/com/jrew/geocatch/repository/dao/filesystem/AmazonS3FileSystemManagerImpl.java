@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.jrew.geocatch.repository.model.Image;
+import com.jrew.geocatch.repository.model.Location;
 import com.jrew.geocatch.repository.service.generator.FileNameGenerator;
 import com.jrew.geocatch.repository.service.thumbnail.ThumbnailFactory;
 import com.jrew.geocatch.repository.util.FileUtil;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.PostConstruct;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -133,7 +135,8 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
     private void checkOrCreateBucket(String bucketName, double latitude, double longitude) {
 
         if (!amazonS3.doesBucketExist(bucketName)) {
-            Regions region = amazonS3RegionsConfig.getRegionForLocation(latitude, longitude);
+            Location bucketCenter = folderLocator.getFolderCentralLocation(bucketName);
+            Regions region = amazonS3RegionsConfig.getRegionForLocation(bucketCenter.getLatitude(), bucketCenter.getLongitude());
             CreateBucketRequest createBucketRequest = new CreateBucketRequest(bucketName, region.toString());
             amazonS3.createBucket(createBucketRequest);
         }
@@ -179,5 +182,7 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
 
         URL preSignedUrl = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
         return preSignedUrl.toString();
+
     }
+
 }

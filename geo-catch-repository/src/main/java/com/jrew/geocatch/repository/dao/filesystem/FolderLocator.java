@@ -1,5 +1,7 @@
 package com.jrew.geocatch.repository.dao.filesystem;
 
+import com.jrew.geocatch.repository.model.Location;
+
 import java.io.IOException;
 
 /**
@@ -30,6 +32,13 @@ public interface FolderLocator {
      * @throws IOException
      */
     public String getFolderName(double latitude, double longitude) throws IOException;
+
+    /**
+     *
+     * @param folderName
+     * @return
+     */
+    public Location getFolderCentralLocation(String folderName);
 
     /**
      * Gets full path to images root folder

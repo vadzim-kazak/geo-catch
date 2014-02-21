@@ -1,9 +1,11 @@
 package com.jrew.geocatch.repository.dao.filesystem;
 
 import com.jrew.geocatch.repository.model.DegreeRange;
+import com.jrew.geocatch.repository.model.Location;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -155,5 +157,21 @@ public class FolderLocatorImpl implements FolderLocator {
     @Override
     public String getRootFolderPath() {
         return rootFolderPath;
+    }
+
+    @Override
+    public Location getFolderCentralLocation(String folderName) {
+
+        if (!StringUtils.isEmpty(folderName)) {
+            String[] degrees = folderName.split(folderDegreeSeparator);
+            double startLatitude = Double.parseDouble(degrees[0]);
+            double endLatitude = Double.parseDouble(degrees[1]);
+            double startLongitude = Double.parseDouble(degrees[2]);
+            double endLongitude = Double.parseDouble(degrees[3]);
+
+            return new Location((endLatitude - startLatitude) / 2, (endLongitude - startLongitude) / 2);
+        }
+
+        return null;
     }
 }
