@@ -35,19 +35,20 @@ public class AmazonS3RegionsConfig {
 
     /**
      *
+     *
      * @param latitude
      * @param longitude
      * @return
      */
-    public Regions getRegionForLocation(double latitude, double longitude) {
+    public com.amazonaws.services.s3.model.Region getRegionForLocation(double latitude, double longitude) {
 
        for (Map.Entry<String, Region> entry : regions.entrySet()) {
             Region region = entry.getValue();
            if (region.isLocationInside(latitude, longitude)) {
-                return Regions.valueOf(entry.getKey());
+                return com.amazonaws.services.s3.model.Region.valueOf(entry.getKey());
            }
        }
 
-       return Regions.DEFAULT_REGION;
+       return com.amazonaws.services.s3.model.Region.US_Standard;
    }
 }

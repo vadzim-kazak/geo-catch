@@ -62,14 +62,14 @@
     <bean id="amazonRegionsConfig" class="com.jrew.geocatch.repository.dao.filesystem.AmazonS3RegionsConfig" >
         <property name="regions">
             <util:map map-class="java.util.HashMap">
-                <entry key="US_EAST_1" value-ref="usEast1Region"/>
-                <entry key="US_WEST_1" value-ref="usWest1Region"/>
-                <entry key="US_WEST_2" value-ref="usWest2Region"/>
-                <entry key="EU_WEST_1" value-ref="euWest1Region"/>
-                <entry key="AP_SOUTHEAST_1" value-ref="apSoutheast1Region"/>
-                <entry key="AP_SOUTHEAST_2" value-ref="apSoutheast2Region"/>
-                <entry key="AP_NORTHEAST_1" value-ref="apNorthEast1Region"/>
-                <entry key="SA_EAST_1" value-ref="saEast1Region"/>
+                <entry key="US_Standard" value-ref="usEast1Region"/>
+                <entry key="US_West" value-ref="usWest1Region"/>
+                <entry key="US_West_2" value-ref="usWest2Region"/>
+                <entry key="EU_Ireland" value-ref="euWest1Region"/>
+                <entry key="AP_Singapore" value-ref="apSoutheast1Region"/>
+                <entry key="AP_Sydney" value-ref="apSoutheast2Region"/>
+                <entry key="AP_Tokyo" value-ref="apNorthEast1Region"/>
+                <entry key="SA_SaoPaulo" value-ref="saEast1Region"/>
             </util:map>
         </property>
     </bean>

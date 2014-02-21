@@ -61,7 +61,7 @@ public class DegreeRange {
      */
     public boolean isDegreeInside(double degree) {
 
-        if (startDegree >= degree && degree < endDegree ) {
+        if (startDegree <= degree && degree < endDegree ) {
             return true;
         }
 

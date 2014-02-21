@@ -165,11 +165,12 @@ public class FolderLocatorImpl implements FolderLocator {
         if (!StringUtils.isEmpty(folderName)) {
             String[] degrees = folderName.split(folderDegreeSeparator);
             double startLatitude = Double.parseDouble(degrees[0]);
-            double endLatitude = Double.parseDouble(degrees[1]);
-            double startLongitude = Double.parseDouble(degrees[2]);
+            double endLatitude = Double.parseDouble(degrees[2]);
+            double startLongitude = Double.parseDouble(degrees[1]);
             double endLongitude = Double.parseDouble(degrees[3]);
 
-            return new Location((endLatitude - startLatitude) / 2, (endLongitude - startLongitude) / 2);
+            return new Location(startLatitude + (endLatitude - startLatitude) / 2,
+                                startLongitude + (endLongitude - startLongitude) / 2);
         }
 
         return null;

@@ -82,7 +82,7 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
         FileUtil.writeImageToFile(imageFile, image.getFile().getBytes(), fileExtension);
 
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, imageFileName, imageFile);
-        putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
+        putObjectRequest.withCannedAcl(CannedAccessControlList.Private);
         amazonS3.putObject(putObjectRequest);
         // Set to image relative to image file path
         image.setPath(bucketName + File.separator + imageFileName);
@@ -136,8 +136,8 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
 
         if (!amazonS3.doesBucketExist(bucketName)) {
             Location bucketCenter = folderLocator.getFolderCentralLocation(bucketName);
-            Regions region = amazonS3RegionsConfig.getRegionForLocation(bucketCenter.getLatitude(), bucketCenter.getLongitude());
-            CreateBucketRequest createBucketRequest = new CreateBucketRequest(bucketName, region.toString());
+            Region region = amazonS3RegionsConfig.getRegionForLocation(bucketCenter.getLatitude(), bucketCenter.getLongitude());
+            CreateBucketRequest createBucketRequest = new CreateBucketRequest(bucketName, region);
             amazonS3.createBucket(createBucketRequest);
         }
     }
@@ -149,7 +149,7 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
      */
     private String getBucketName(String path) {
         int separatorIndex = path.lastIndexOf(File.separator);
-        return path.substring(0, separatorIndex - 1);
+        return path.substring(0, separatorIndex);
     }
 
     /**
@@ -159,7 +159,7 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
      */
     private String getFileName(String path) {
         int separatorIndex = path.lastIndexOf(File.separator);
-        return path.substring(separatorIndex);
+        return path.substring(separatorIndex + 1);
     }
 
     /**
