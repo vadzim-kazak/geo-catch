@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import com.jrew.geocatch.mobile.adapter.DomainAutoCompleteAdapter;
 import com.jrew.geocatch.mobile.dao.DomainDatabaseManager;
@@ -47,6 +48,9 @@ public class DomainPropertyView extends AutoCompleteTextView implements TextWatc
     /** **/
     protected DomainAutoCompleteAdapter adapter;
 
+    /** **/
+    protected Context context;
+
     /**
      *
      * @param context
@@ -61,6 +65,7 @@ public class DomainPropertyView extends AutoCompleteTextView implements TextWatc
         setOnFocusChangeListener(this);
         initialValue = getText().toString();
         setSaveEnabled(false);
+        this.context = context;
     }
 
     /**
@@ -78,6 +83,7 @@ public class DomainPropertyView extends AutoCompleteTextView implements TextWatc
         setOnFocusChangeListener(this);
         initialValue = getText().toString();
         setSaveEnabled(false);
+        this.context = context;
     }
 
     /**
@@ -127,6 +133,7 @@ public class DomainPropertyView extends AutoCompleteTextView implements TextWatc
      * @param domainProperty
      */
     public void setSelectedDomainProperty(DomainProperty domainProperty) {
+        setTextColor(NORMAL_TEXT_COLOR);
         setText(domainProperty.getValue());
     }
 
@@ -140,6 +147,11 @@ public class DomainPropertyView extends AutoCompleteTextView implements TextWatc
                 setTextColor(INITIAL_TEXT_COLOR);
                 this.setText(initialValue);
             }
+        }
+
+        if (!isFocused) {
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getWindowToken(), 0);
         }
     }
 
@@ -171,7 +183,9 @@ public class DomainPropertyView extends AutoCompleteTextView implements TextWatc
     public void reset() {
         if (isEnabled()) {
             isTextFilled = false;
+            setTextColor(INITIAL_TEXT_COLOR);
             setText(initialValue);
+            clearFocus();
         }
     }
 }

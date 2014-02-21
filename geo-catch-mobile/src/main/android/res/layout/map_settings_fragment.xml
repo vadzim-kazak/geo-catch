@@ -4,7 +4,10 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:padding="20dip">
+              android:padding="20dip"
+              android:focusableInTouchMode="true"
+              android:focusable="true"
+              android:clickable="true">
 
 
     <TextView android:layout_width="wrap_content"

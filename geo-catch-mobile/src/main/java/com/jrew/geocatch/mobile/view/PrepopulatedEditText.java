@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -31,6 +32,9 @@ public class PrePopulatedEditText extends EditText implements TextWatcher, View.
     /** **/
     private String initialValue;
 
+    /** **/
+    private Context context;
+
     /**
      *
      * @param context
@@ -42,6 +46,7 @@ public class PrePopulatedEditText extends EditText implements TextWatcher, View.
         setOnFocusChangeListener(this);
         initialValue = getText().toString();
         setSaveEnabled(false);
+        this.context = context;
     }
 
     /**
@@ -56,6 +61,7 @@ public class PrePopulatedEditText extends EditText implements TextWatcher, View.
         setOnFocusChangeListener(this);
         initialValue = getText().toString();
         setSaveEnabled(false);
+        this.context = context;
     }
 
     /**
@@ -71,6 +77,7 @@ public class PrePopulatedEditText extends EditText implements TextWatcher, View.
         setOnFocusChangeListener(this);
         initialValue = getText().toString();
         setSaveEnabled(false);
+        this.context = context;
     }
 
     @Override
@@ -84,6 +91,11 @@ public class PrePopulatedEditText extends EditText implements TextWatcher, View.
                 setTextColor(INITIAL_TEXT_COLOR);
                 this.setText(initialValue);
             }
+        }
+
+        if (!isFocused) {
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getWindowToken(), 0);
         }
     }
 

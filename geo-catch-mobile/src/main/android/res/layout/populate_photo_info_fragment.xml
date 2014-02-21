@@ -4,10 +4,12 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:padding="20dip">
+              android:padding="20dip"
+              android:focusableInTouchMode="true"
+              android:focusable="true"
+              android:clickable="true">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="horizontal"
+    <LinearLayout android:orientation="horizontal"
                   android:background="@drawable/white_bordered_background"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
@@ -40,8 +42,7 @@
               android:layout_gravity="left|center_vertical"
               android:layout_marginBottom="5dip"/>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="horizontal"
+    <LinearLayout android:orientation="horizontal"
                   android:background="@drawable/white_bordered_background"
                   android:layout_width="match_parent"
                   android:layout_height="40dip"
@@ -64,8 +65,7 @@
 
     </LinearLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="horizontal"
+    <LinearLayout android:orientation="horizontal"
                   android:background="@drawable/white_bordered_background"
                   android:layout_width="match_parent"
                   android:layout_height="40dip"
@@ -88,8 +88,7 @@
 
     </LinearLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="horizontal"
+    <LinearLayout android:orientation="horizontal"
                   android:background="@drawable/white_bordered_background"
                   android:layout_width="match_parent"
                   android:layout_height="40dip"
