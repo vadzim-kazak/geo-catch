@@ -114,8 +114,15 @@ public class PostponedImageAdapter extends BaseAdapter {
             //dialog.show();
         }
 
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View row = inflater.inflate(R.layout.postponed_image_adapter_row, null);
+        View row = null;
+        if (view == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            row = inflater.inflate(R.layout.postponed_image_adapter_row, null);
+        } else {
+            row = view;
+        }
+
+
         row.setClickable(false);
 
         final PostponedImage postponedImage = postponedImages.get(i);
