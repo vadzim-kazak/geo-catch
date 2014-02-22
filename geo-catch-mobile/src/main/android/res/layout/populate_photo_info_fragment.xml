@@ -1,137 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:padding="20dip"
-              android:focusableInTouchMode="true"
-              android:focusable="true"
-              android:clickable="true">
-
-    <LinearLayout android:orientation="horizontal"
-                  android:background="@drawable/white_bordered_background"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:padding="10dip"
-                  android:layout_marginBottom="30dip" >
-
-        <ImageView android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:id="@+id/imageThumbnail"
-                   android:background="@android:color/darker_gray"
-                   android:padding="1dip"
-                   android:layout_gravity="center_vertical|left"/>
-
-        <com.jrew.geocatch.mobile.view.PrePopulatedEditText android:layout_width="fill_parent"
-                                                            android:layout_height="fill_parent"
-                                                            android:text="@string/photoDescriptionInitialLabel"
-                                                            android:background="@null"
-                                                            android:id="@+id/uploadImageDescription"
-                                                            android:paddingLeft="10dip"
-                                                            android:gravity="top"/>
-
-    </LinearLayout>
-
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/domainPropertiesSectionLabel"
-              android:textStyle="bold"
-              android:textSize="18dip"
-              android:textColor="@android:color/darker_gray"
-              android:layout_gravity="left|center_vertical"
-              android:layout_marginBottom="5dip"/>
-
-    <LinearLayout android:orientation="horizontal"
-                  android:background="@drawable/white_bordered_background"
-                  android:layout_width="match_parent"
-                  android:layout_height="40dip"
-                  android:layout_marginBottom="10dip"
-                  android:gravity="center_vertical|left">
-
-        <ImageView android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:src="@drawable/fish"
-                   android:paddingLeft="5dip"
-                   android:layout_gravity="center_vertical|left"/>
-
-        <com.jrew.geocatch.mobile.view.DomainPropertyView android:layout_width="match_parent"
-                                                          android:layout_height="wrap_content"
-                                                          android:background="@null"
-                                                          android:text="@string/fishDomainPropertyInitialLabel"
-                                                          android:paddingLeft="5dip"
-                                                          android:id="@+id/fishTypeView"
-                                                          android:layout_gravity="center"/>
-
-    </LinearLayout>
-
-    <LinearLayout android:orientation="horizontal"
-                  android:background="@drawable/white_bordered_background"
-                  android:layout_width="match_parent"
-                  android:layout_height="40dip"
-                  android:layout_marginBottom="10dip"
-                  android:gravity="center_vertical|left">
-
-        <ImageView android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:src="@drawable/rod"
-                   android:paddingLeft="5dip"
-                   android:layout_gravity="center_vertical|left"/>
-
-        <com.jrew.geocatch.mobile.view.DomainPropertyView android:layout_width="match_parent"
-                                                          android:layout_height="wrap_content"
-                                                          android:background="@null"
-                                                          android:text="@string/toolDomainPropertyInitialLabel"
-                                                          android:paddingLeft="5dip"
-                                                          android:id="@+id/fishingToolView"
-                                                          android:layout_gravity="center"/>
-
-    </LinearLayout>
-
-    <LinearLayout android:orientation="horizontal"
-                  android:background="@drawable/white_bordered_background"
-                  android:layout_width="match_parent"
-                  android:layout_height="40dip"
-                  android:layout_marginBottom="30dip"
-                  android:gravity="center_vertical|left">
-
-        <ImageView android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:src="@drawable/hook"
-                   android:paddingLeft="5dip"
-                   android:layout_gravity="center_vertical|left"/>
-
-        <com.jrew.geocatch.mobile.view.DomainPropertyView android:layout_width="match_parent"
-                                                          android:layout_height="wrap_content"
-                                                          android:background="@null"
-                                                          android:layout_gravity="center"
-                                                          android:paddingLeft="5dip"
-                                                          android:text="@string/baitDomainPropertyInitialLabel"
-                                                          android:id="@+id/fishingBaitView"/>
-
-    </LinearLayout>
-
-
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/shareSectionLabel"
-              android:textStyle="bold"
-              android:textSize="18dip"
-              android:textColor="@android:color/darker_gray"
-              android:layout_gravity="left|center_vertical"
-              android:layout_marginBottom="5dip"/>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/scroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
     <LinearLayout android:orientation="vertical"
-                  android:background="@drawable/white_bordered_background"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_marginBottom="30dip">
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:padding="20dip"
+                  android:focusableInTouchMode="true"
+                  android:focusable="true"
+                  android:clickable="true">
 
-        <Spinner android:id="@+id/shareSectionSpinner"
-                 android:layout_width="fill_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_marginLeft="10dip"/>
+        <LinearLayout android:orientation="horizontal"
+                      android:background="@drawable/white_bordered_background"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:padding="10dip"
+                      android:layout_marginBottom="30dip" >
+
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:id="@+id/imageThumbnail"
+                       android:background="@android:color/darker_gray"
+                       android:padding="1dip"
+                       android:layout_gravity="center_vertical|left"/>
+
+            <com.jrew.geocatch.mobile.view.PrePopulatedEditText android:layout_width="fill_parent"
+                                                                android:layout_height="fill_parent"
+                                                                android:text="@string/photoDescriptionInitialLabel"
+                                                                android:background="@null"
+                                                                android:id="@+id/uploadImageDescription"
+                                                                android:paddingLeft="10dip"
+                                                                android:gravity="top"/>
+
+        </LinearLayout>
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/domainPropertiesSectionLabel"
+                  android:textStyle="bold"
+                  android:textSize="18dip"
+                  android:textColor="@android:color/darker_gray"
+                  android:layout_gravity="left|center_vertical"
+                  android:layout_marginBottom="5dip"/>
+
+        <LinearLayout android:orientation="horizontal"
+                      android:background="@drawable/white_bordered_background"
+                      android:layout_width="match_parent"
+                      android:layout_height="40dip"
+                      android:layout_marginBottom="10dip"
+                      android:gravity="center_vertical|left">
+
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/fish"
+                       android:paddingLeft="5dip"
+                       android:layout_gravity="center_vertical|left"/>
+
+            <com.jrew.geocatch.mobile.view.DomainPropertyView android:layout_width="match_parent"
+                                                              android:layout_height="wrap_content"
+                                                              android:background="@null"
+                                                              android:text="@string/fishDomainPropertyInitialLabel"
+                                                              android:paddingLeft="5dip"
+                                                              android:id="@+id/fishTypeView"
+                                                              android:layout_gravity="center"/>
+
+        </LinearLayout>
+
+        <LinearLayout android:orientation="horizontal"
+                      android:background="@drawable/white_bordered_background"
+                      android:layout_width="match_parent"
+                      android:layout_height="40dip"
+                      android:layout_marginBottom="10dip"
+                      android:gravity="center_vertical|left">
+
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/rod"
+                       android:paddingLeft="5dip"
+                       android:layout_gravity="center_vertical|left"/>
+
+            <com.jrew.geocatch.mobile.view.DomainPropertyView android:layout_width="match_parent"
+                                                              android:layout_height="wrap_content"
+                                                              android:background="@null"
+                                                              android:text="@string/toolDomainPropertyInitialLabel"
+                                                              android:paddingLeft="5dip"
+                                                              android:id="@+id/fishingToolView"
+                                                              android:layout_gravity="center"/>
+
+        </LinearLayout>
+
+        <LinearLayout android:orientation="horizontal"
+                      android:background="@drawable/white_bordered_background"
+                      android:layout_width="match_parent"
+                      android:layout_height="40dip"
+                      android:layout_marginBottom="30dip"
+                      android:gravity="center_vertical|left">
+
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/hook"
+                       android:paddingLeft="5dip"
+                       android:layout_gravity="center_vertical|left"/>
+
+            <com.jrew.geocatch.mobile.view.DomainPropertyView android:layout_width="match_parent"
+                                                              android:layout_height="wrap_content"
+                                                              android:background="@null"
+                                                              android:layout_gravity="center"
+                                                              android:paddingLeft="5dip"
+                                                              android:text="@string/baitDomainPropertyInitialLabel"
+                                                              android:id="@+id/fishingBaitView"/>
+
+        </LinearLayout>
+
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/shareSectionLabel"
+                  android:textStyle="bold"
+                  android:textSize="18dip"
+                  android:textColor="@android:color/darker_gray"
+                  android:layout_gravity="left|center_vertical"
+                  android:layout_marginBottom="5dip"/>
+
+        <LinearLayout android:orientation="vertical"
+                      android:background="@drawable/white_bordered_background"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginBottom="30dip">
+
+            <Spinner android:id="@+id/shareSectionSpinner"
+                     android:layout_width="fill_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_marginLeft="10dip"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>
