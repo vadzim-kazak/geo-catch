@@ -58,7 +58,6 @@ public class MainActivity extends SherlockFragmentActivity implements
 
             if (WebUtil.isNetworkAvailable(this)) {
                 syncDomainsInfo();
-                //DomainDatabaseManager.loadDomainProperties(this);
             }
 
             /*

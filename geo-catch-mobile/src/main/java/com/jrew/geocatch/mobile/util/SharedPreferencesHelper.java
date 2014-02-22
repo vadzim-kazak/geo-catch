@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,7 +19,7 @@ import java.util.Date;
 public class SharedPreferencesHelper {
 
     /** **/
-    private static final String LAST_SYNC_DATE_PROPERTY = "lastSyncDate";
+    private static final String LAST_SYNC_DATE_PROPERTY = "lastSyncDate_";
 
     /** **/
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
@@ -34,12 +35,13 @@ public class SharedPreferencesHelper {
     public static Date loadLastSyncDate(Activity activity) {
 
         SharedPreferences preferences = activity.getPreferences(Activity.MODE_PRIVATE);
-        String lastSyncDateRecord = preferences.getString(LAST_SYNC_DATE_PROPERTY, "");
+        // Current locale
+        String locale = Locale.getDefault().getLanguage();
+        String lastSyncDateRecord = preferences.getString(LAST_SYNC_DATE_PROPERTY + locale, "");
         if (lastSyncDateRecord.length() > 0) {
             DateFormat dateFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
-            Date lastSyncDate = null;
             try {
-                return lastSyncDate = dateFormat.parse(lastSyncDateRecord);
+                dateFormat.parse(lastSyncDateRecord);
             } catch(ParseException exception) {
                 Log.e(CommonUtil.getDebugTag(activity.getResources()), "Couldn't parse last domain sync date.", exception);
             }
@@ -59,7 +61,10 @@ public class SharedPreferencesHelper {
 
         DateFormat dateFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
         Date now = new Date();
-        editor.putString(LAST_SYNC_DATE_PROPERTY, dateFormat.format(now));
+
+        // Current locale
+        String locale = Locale.getDefault().getLanguage();
+        editor.putString(LAST_SYNC_DATE_PROPERTY + locale, dateFormat.format(now));
         editor.commit();
     }
 

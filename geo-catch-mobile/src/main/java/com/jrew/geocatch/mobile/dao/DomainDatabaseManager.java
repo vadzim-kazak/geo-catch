@@ -3,6 +3,7 @@ package com.jrew.geocatch.mobile.dao;
 import android.content.Context;
 import android.util.Log;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.jrew.geocatch.web.model.DomainProperty;
 
 import java.sql.SQLException;
@@ -71,6 +72,12 @@ public class DomainDatabaseManager {
         return localDomainProperties;
     }
 
+    /**
+     *
+     * @param context
+     * @param domainPropertiesToCreate
+     * @param domainPropertiesToUpdate
+     */
     public static void persistDomainProperties(Context context, final List<DomainProperty> domainPropertiesToCreate,
                                             final List<DomainProperty> domainPropertiesToUpdate) {
 
@@ -100,6 +107,38 @@ public class DomainDatabaseManager {
         }
 
         OpenHelperManager.releaseHelper();
+    }
+
+    /**
+     *
+     * @param domainProperty
+     * @param context
+     * @return
+     */
+    public static DomainProperty loadLocalizedDomainProperty(DomainProperty domainProperty, Context context) {
+
+        DomainDatabaseHelper helper = OpenHelperManager.getHelper(context, DomainDatabaseHelper.class);
+
+        String locale = Locale.getDefault().getLanguage();
+        List<DomainProperty> domainProperties = null;
+
+        try {
+            Map<String, Object> fieldValues = new HashMap<String, Object>();
+            fieldValues.put("locale", locale);
+            fieldValues.put("item", domainProperty.getItem());
+            domainProperties = helper.getDao().queryForFieldValues(fieldValues);
+        } catch (SQLException exception) {
+            Log.e(LOG_NAME, "Couldn't find localized domain property.", exception);
+        }
+
+        OpenHelperManager.releaseHelper();
+
+        if (domainProperties != null && !domainProperties.isEmpty()) {
+            return domainProperties.get(0);
+        }
+
+        // return original domain property if couldn't find localized one
+        return domainProperty;
     }
 
 }

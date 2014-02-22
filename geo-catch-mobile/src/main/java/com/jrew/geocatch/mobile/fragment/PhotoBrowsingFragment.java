@@ -14,6 +14,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
+import com.jrew.geocatch.mobile.dao.DomainDatabaseManager;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.ReviewService;
@@ -26,6 +27,7 @@ import com.jrew.geocatch.web.model.ImageReview;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created with IntelliJ IDEA.
@@ -126,7 +128,14 @@ public class PhotoBrowsingFragment extends SherlockFragment {
 
                         // domain properties
                         List<DomainProperty> domainProperties = clientImage.getDomainProperties();
+                        String locale = Locale.getDefault().getLanguage();
                         for (DomainProperty domainProperty : domainProperties) {
+
+                            if (!locale.equalsIgnoreCase(domainProperty.getLocale())) {
+                                domainProperty =
+                                        DomainDatabaseManager.loadLocalizedDomainProperty(domainProperty, getActivity());
+                            }
+
                             long domainPropertyType = domainProperty.getType();
                             if (domainPropertyType == 1) {
                                 fishDomainPropertyTag.setVisibility(View.VISIBLE);

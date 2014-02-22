@@ -11,6 +11,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
+import com.jrew.geocatch.mobile.dao.DomainDatabaseManager;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.util.*;
 import com.jrew.geocatch.mobile.view.DomainPropertyView;
@@ -19,6 +20,7 @@ import com.jrew.geocatch.web.model.DomainProperty;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created with IntelliJ IDEA.
@@ -121,7 +123,15 @@ public class MapSettingsFragment extends SherlockFragment {
         // Init domain properties
         List<DomainProperty> domainProperties = searchCriteria.getDomainProperties();
         if (domainProperties != null && !domainProperties.isEmpty()) {
+
+            String locale = Locale.getDefault().getLanguage();
             for (DomainProperty domainProperty : domainProperties) {
+
+                if (!locale.equalsIgnoreCase(domainProperty.getLocale())) {
+                    domainProperty =
+                            DomainDatabaseManager.loadLocalizedDomainProperty(domainProperty, getActivity());
+                }
+
                 if (domainProperty.getType() == DomainPropertyView.FISH_DOMAIN_PROPERTY_TYPE) {
                     fishTypeView.setSelectedDomainProperty(domainProperty);
                 } else if (domainProperty.getType() == DomainPropertyView.FISHING_TOOL_DOMAIN_PROPERTY_TYPE) {
