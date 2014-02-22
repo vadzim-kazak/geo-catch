@@ -17,4 +17,7 @@ AUTO_INCREMENT = 3;
 ALTER TABLE domain_property CONVERT TO CHARACTER SET utf8
 COLLATE utf8_general_ci;
 
+ALTER TABLE image CONVERT TO CHARACTER SET utf8
+COLLATE utf8_general_ci;
+
 commit;
