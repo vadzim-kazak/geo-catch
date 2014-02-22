@@ -162,6 +162,24 @@ public class WebUtil {
         }
         clientImage.setDomainProperties(domainProperties);
 
+        // likes count
+        int likesCount = jsonObject.getInt("likesCount");
+        clientImage.setLikesCount(likesCount);
+        boolean isLikeSelected = jsonObject.getBoolean("likeSelected");
+        clientImage.setLikeSelected(isLikeSelected);
+
+        // dislikes count
+        int dislikesCount = jsonObject.getInt("dislikesCount");
+        clientImage.setDislikesCount(dislikesCount);
+        boolean isDislikeSelected = jsonObject.getBoolean("dislikeSelected");
+        clientImage.setDislikeSelected(isDislikeSelected);
+
+        // reports count
+        int reportsCount = jsonObject.getInt("reportsCount");
+        clientImage.setReportsCount(reportsCount);
+        boolean isReportSelected = jsonObject.getBoolean("reportSelected");
+        clientImage.setReportSelected(isReportSelected);
+
         return clientImage;
     }
 
