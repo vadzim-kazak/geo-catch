@@ -3,6 +3,7 @@ package com.jrew.geocatch.mobile.util;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.WindowManager;
+import android.widget.TextView;
 import com.jrew.geocatch.mobile.R;
 
 /**
@@ -14,23 +15,33 @@ import com.jrew.geocatch.mobile.R;
  */
 public class DialogUtil {
 
-//    /**
-//     *
-//     * @param mContext
-//     * @return
-//     */
-//    public static ProgressDialog createProgressDialog(Context mContext) {
-//        ProgressDialog dialog = new ProgressDialog(mContext);
-//        try {
-//            dialog.show();
-//            dialog.hide();
-//        } catch (WindowManager.BadTokenException e) {
-//
-//        }
-//
-//        dialog.setCancelable(false);
-//        dialog.setContentView(R.layout.progress_dialog);
-//        return dialog;
-//    }
+    /**
+     *
+     * @param context
+     * @return
+     */
+    public static ProgressDialog createProgressDialog(Context context, String message) {
+        ProgressDialog dialog = new ProgressDialog(context);
+        dialog.setCancelable(false);
+        dialog.show();
+
+        dialog.setContentView(R.layout.progress_dialog);
+
+        TextView textView = (TextView) dialog.findViewById(R.id.message);
+        textView.setText(message);
+
+        return dialog;
+    }
+
+    /**
+     *
+     * @param context
+     * @return
+     */
+    public static ProgressDialog createProgressDialog(Context context, int resourceId) {
+
+        String message = context.getString(resourceId);
+        return createProgressDialog(context, message);
+    }
 
 }

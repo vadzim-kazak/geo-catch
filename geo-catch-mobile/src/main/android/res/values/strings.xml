@@ -16,6 +16,8 @@
     <!-- Get photo fragment -->
     <string name="getPhotoFragmentLabel">Take a photo</string>
 
+    <string name="processingPhotoMessage">Processing photo...</string>
+
     <!-- Preview photo fragment -->
     <string name="previewPhotoFragmentLabel">Photo preview</string>
 

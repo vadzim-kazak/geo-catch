@@ -48,7 +48,7 @@ public class GetPhotoFragment extends SherlockFragment {
     private boolean inPreview;
 
     /** **/
-   // private ProgressDialog dialog;
+    private ProgressDialog dialog;
 
     /** **/
     private FrameLayout parentLayout;
@@ -313,9 +313,9 @@ public class GetPhotoFragment extends SherlockFragment {
 
         public void onPictureTaken(final byte[] data, final Camera camera) {
 
-           // dialog = DialogUtil.createProgressDialog(getActivity());
+           dialog =  DialogUtil.createProgressDialog(getActivity(), R.string.processingPhotoMessage);
 
-            new Thread() {
+           new Thread() {
                 public void run() {
                     try {
                         Thread.sleep(1000);
@@ -323,7 +323,7 @@ public class GetPhotoFragment extends SherlockFragment {
                     catch(Exception ex){}
                     onPictureTake(data, camera);
                 }
-            }.start();
+           }.start();
         }
     };
 
@@ -343,7 +343,7 @@ public class GetPhotoFragment extends SherlockFragment {
         MainActivity activity = (MainActivity) getActivity();
         FragmentSwitcherHolder.getFragmentSwitcher().showPreviewPhotoFragment(bundle);
 
-        //dialog.dismiss();
+        dialog.dismiss();
     }
 
     /**
