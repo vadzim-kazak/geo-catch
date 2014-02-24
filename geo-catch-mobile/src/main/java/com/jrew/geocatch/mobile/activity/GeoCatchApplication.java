@@ -4,6 +4,7 @@ import android.app.Application;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,6 +26,7 @@ public class GeoCatchApplication extends Application {
         // Create global configuration and initialize ImageLoader with this configuration
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
                 .defaultDisplayImageOptions(defaultOptions)
+                .imageDownloader(new BaseImageDownloader(getApplicationContext(), 7 * 1000, 7 * 1000))
                 .build();
 
 

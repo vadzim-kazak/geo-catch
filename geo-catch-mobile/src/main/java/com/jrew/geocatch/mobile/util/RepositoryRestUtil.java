@@ -50,7 +50,7 @@ public class RepositoryRestUtil {
     private final static String CONTENT_TYPE_JSON_UTF_8 = "application/json; charset=UTF-8";
 
     /** **/
-    private static final int CONNECTION_TIMEOUT = 5000;
+    private static final int CONNECTION_TIMEOUT = 7000;
 
     /**
      *

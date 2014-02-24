@@ -427,6 +427,10 @@ public class PhotoBrowsingFragment extends SherlockFragment {
      *
      */
     private void showCommunicationError() {
+        if (loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
+        }
+
         Toast.makeText(getActivity(), getResources().getString(R.string.commonServerCommunicationError),
                 Toast.LENGTH_LONG).show();
     }
@@ -435,6 +439,10 @@ public class PhotoBrowsingFragment extends SherlockFragment {
      *
      */
     private void showImageLoadingError() {
+        if (loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
+        }
+
         Toast.makeText(getActivity(), getResources().getString(R.string.photoLoadingError),
                 Toast.LENGTH_LONG).show();
     }
