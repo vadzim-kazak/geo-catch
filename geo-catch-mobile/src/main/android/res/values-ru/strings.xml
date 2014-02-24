@@ -40,13 +40,19 @@
 
     <string name="sharePrivateOptionLabel">Закрытый</string>
 
-    <string name="locationLoadingWarning">Ожидание подгрузки локации...</string>
+    <string name="locationLoadingWarning">Ожидание определения местоположения...</string>
 
     <string name="imageUploadingError">Ошибка загрузки фото</string>
 
     <string name="imageUploadingRetry">Повторить</string>
 
     <string name="imageUploadingLater">Загрузить позже</string>
+
+    <string name="imageUploadingMessage">Загрузка фото...</string>
+
+    <string name="postponedImageSavingMessage">Сохранение фото...</string>
+
+    <string name="postponedImageSavingError">Ошибка подготовки фото к отложенной загрузке.</string>
 
     <!-- Map settings fragment -->
     <string name="mapSettingsFragmentLabel">Настройки карты</string>
@@ -58,16 +64,35 @@
     <!-- Photo browsing fragment -->
     <string name="photoBrowsingFragmentLabel">Просмотр фото</string>
 
+    <string name="photoLoadingMessage">Загрузка фото...</string>
+
+    <string name="photoLoadingError">Ошибка загрузки фото.</string>
+
+    <string name="photoDeletingMessage">Удаление фото...</string>
+
     <!-- Uploaded photos fragment -->
     <string name="uploadedPhotosFragmentLabel">Мои фото</string>
+
+    <string name="uploadedPhotosLoadingMessage">Загрузка фото...</string>
 
     <string name="uploadedPhotosLoadingError">Ошибка загрузки фото</string>
 
     <!-- Postponed photos fragment -->
     <string name="postponedPhotosFragmentLabel">Отложенные фото</string>
 
-    <string name="uploadedPhotosLoadingError">Ошибка загрузки фото</string>
+    <string name="postponedPhotosLoadingMessage">Загрузка отложенных фото...</string>
 
+    <string name="postponedPhotosLoadingError">Ошибка загрузки отложенных фото.</string>
+
+    <string name="postponedPhotosUploadingMessage">Загрузка фото...</string>
+
+    <string name="postponedPhotosUploadingError">Ошибка загрузки фото. Попробуйте загрузить его позже.</string>
+
+    <string name="postponedPhotosDeletingMessage">Удаление фото...</string>
+
+    <string name="postponedPhotosDeletingError">Ошибка удаления отложенного фото.</string>
+
+    <!-- -->
     <string name="noNetworkConnectionError">Нет доступа к интернету</string>
 
     <string name="noGPSConnectionWarning">GPS сенсор выключен. Вы хотите включить его?</string>

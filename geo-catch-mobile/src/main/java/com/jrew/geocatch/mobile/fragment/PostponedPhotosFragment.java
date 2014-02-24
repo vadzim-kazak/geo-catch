@@ -1,18 +1,16 @@
 package com.jrew.geocatch.mobile.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.adapter.PostponedImageAdapter;
-import com.jrew.geocatch.mobile.util.ActionBarHolder;
+import com.jrew.geocatch.mobile.service.LoadPostponedPhotosTask;
 import com.jrew.geocatch.mobile.util.ActionBarUtil;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.LayoutUtil;
@@ -37,9 +35,8 @@ public class PostponedPhotosFragment extends SherlockFragment {
         LayoutUtil.showFragmentContainer(getActivity());
 
         View layout = inflater.inflate(R.layout.postponed_photos_fragment, container, false);
-
-        ListView postponedPhotos = (ListView) layout.findViewById(R.id.postponedPhotosListView);
-        postponedPhotos.setAdapter(new PostponedImageAdapter(getActivity()));
+        LoadPostponedPhotosTask task = new LoadPostponedPhotosTask(getActivity(), layout);
+        task.execute();
 
         return layout;
     }

@@ -48,6 +48,12 @@
 
     <string name="imageUploadingLater">Upload later</string>
 
+    <string name="imageUploadingMessage">Uploading photo...</string>
+
+    <string name="postponedImageSavingMessage">Saving image...</string>
+
+    <string name="postponedImageSavingError">Couldn\'t prepare photo for postponed uploading.</string>
+
     <!-- Map settings fragment -->
     <string name="mapSettingsFragmentLabel">Map settings</string>
 
@@ -58,27 +64,46 @@
     <!-- Photo browsing fragment -->
     <string name="photoBrowsingFragmentLabel">View photo</string>
 
+    <string name="photoLoadingMessage">Loading photo...</string>
+
+    <string name="photoLoadingError">Couldn\'t load photo.</string>
+
+    <string name="photoDeletingMessage">Removing image...</string>
+
     <!-- Uploaded photos fragment -->
     <string name="uploadedPhotosFragmentLabel">My photos</string>
+
+    <string name="uploadedPhotosLoadingMessage">Loading photos...</string>
 
     <string name="uploadedPhotosLoadingError">Photos loading error</string>
 
     <!-- Postponed photos fragment -->
     <string name="postponedPhotosFragmentLabel">Postponed photos</string>
 
-    <string name="uploadedPhotosLoadingError">Photos loading error</string>
+    <string name="postponedPhotosLoadingMessage">Loading postponed photos...</string>
 
-    <string name="noNetworkConnectionError">Network connection isn\'t available.</string>
+    <string name="postponedPhotosLoadingError">Couldn\'t load postponed photos.</string>
 
-    <string name="noGPSConnectionWarning">Your GPS seems to be disabled, do you want to enable it?</string>
+    <string name="postponedPhotosUploadingMessage">Uploading photo...</string>
 
-    <string name="noGPSConnectionYesChoice">Yes</string>
+    <string name="postponedPhotosUploadingError">Photo uploading error. Try to upload it later.</string>
 
-    <string name="noGPSConnectionLaterChoice">Later</string>
+    <string name="postponedPhotosDeletingMessage">Removing photo...</string>
 
-    <string name="actionBarTitleDelimiter">|</string>
+    <string name="postponedPhotosDeletingError">Couldn\'t remove postponed photo.</string>
 
-    <!-- Action bar status area -->
+   <!-- -->
+   <string name="noNetworkConnectionError">Network connection isn\'t available.</string>
+
+   <string name="noGPSConnectionWarning">Your GPS seems to be disabled, do you want to enable it?</string>
+
+   <string name="noGPSConnectionYesChoice">Yes</string>
+
+   <string name="noGPSConnectionLaterChoice">Later</string>
+
+   <string name="actionBarTitleDelimiter">|</string>
+
+   <!-- Action bar status area -->
     <string name="statusAreaLocationNotDetected">Location is not detected</string>
 
     <string name="statusAreaLocationIsLoading">Loading location ...</string>

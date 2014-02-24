@@ -1,6 +1,7 @@
 package com.jrew.geocatch.mobile.fragment;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,12 +20,12 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.jrew.geocatch.mobile.R;
-import com.jrew.geocatch.mobile.dao.PostponedImageManager;
 import com.jrew.geocatch.mobile.model.PostponedImage;
 import com.jrew.geocatch.mobile.model.UploadImage;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
 import com.jrew.geocatch.mobile.service.ImageService;
+import com.jrew.geocatch.mobile.service.SavePostponedPhotoTask;
 import com.jrew.geocatch.mobile.util.*;
 import com.jrew.geocatch.mobile.view.DomainPropertyView;
 import com.jrew.geocatch.mobile.view.PrePopulatedEditText;
@@ -74,7 +75,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
     private PrePopulatedEditText descriptionView;
 
     /** **/
-   // private ProgressDialog progressDialog;
+    private ProgressDialog dialog;
 
     /** **/
     private Bundle imageBundle;
@@ -137,18 +138,14 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
             public void onReceiveResult(int resultCode, Bundle resultData) {
 
                 switch (resultCode) {
-                    case ImageService.ResultStatus.UPLOAD_IMAGE_STARTED:
-                        // progressDialog = DialogUtil.createProgressDialog(getActivity());
-                        // progressDialog.show();
-                        break;
 
                     case ImageService.ResultStatus.UPLOAD_IMAGE_FINISHED:
-                        //progressDialog.hide();
+                        dialog.dismiss();
                         FragmentSwitcherHolder.getFragmentSwitcher().showUploadedPhotosFragment();
                         break;
 
                     case ImageService.ResultStatus.ERROR:
-                        //progressDialog.hide();
+                        dialog.dismiss();
                         AlertDialog alert = buildUploadingErrorAlert();
                         alert.show();
                         break;
@@ -226,6 +223,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
                     showNoLocationDetectedWarning();
                 } else {
                     imageBundle = prepareUploadBundle(layout, bitmap);
+                    dialog =  DialogUtil.createProgressDialog(getActivity(), R.string.imageUploadingMessage);
                     ServiceUtil.callUploadImageService(imageBundle, resultReceiver, getActivity());
                 }
                 break;
@@ -234,8 +232,8 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
                 if (currentLocation == null) {
                     showNoLocationDetectedWarning();
                 } else {
+                    dialog = DialogUtil.createProgressDialog(getActivity(), R.string.postponedImageSavingMessage);
                     postponePhotoUpload();
-                    FragmentSwitcherHolder.getFragmentSwitcher().showPostponedPhotosFragment();
                 }
                 break;
         }
@@ -373,7 +371,6 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
         builder.setPositiveButton(R.string.imageUploadingLater, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 postponePhotoUpload();
-                FragmentSwitcherHolder.getFragmentSwitcher().showPostponedPhotosFragment();
             }
         });
 
@@ -388,7 +385,8 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
         postponedImage.setBitmap(bitmap);
         UploadImage uploadImage = prepareUploadData(layout, bitmap);
         postponedImage.setUploadImage(uploadImage);
-        PostponedImageManager.persistPostponedImage(getActivity(), postponedImage);
+        SavePostponedPhotoTask task = new SavePostponedPhotoTask(getActivity(), dialog);
+        task.execute(postponedImage);
     }
 
     /**

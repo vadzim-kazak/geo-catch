@@ -1,6 +1,7 @@
 package com.jrew.geocatch.mobile.adapter;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,8 +16,8 @@ import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.fragment.PhotoBrowsingFragment;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.ImageService;
-import com.jrew.geocatch.mobile.service.ReloadImageTask;
 import com.jrew.geocatch.mobile.util.CommonUtil;
+import com.jrew.geocatch.mobile.util.DialogUtil;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.ServiceUtil;
 import com.jrew.geocatch.web.model.ClientImagePreview;
@@ -41,7 +42,7 @@ public class UploadedPhotosAdapter extends BaseAdapter {
     private final Context context;
 
     /** **/
-   // private ProgressDialog dialog;
+    private ProgressDialog loadingDialog, deletingDialog;
 
     /** **/
     private ServiceResultReceiver resultReceiver;
@@ -59,8 +60,7 @@ public class UploadedPhotosAdapter extends BaseAdapter {
 
         this.context = context;
 
-        //dialog = DialogUtil.createProgressDialog(this.context);
-       // dialog.show();
+        loadingDialog = DialogUtil.createProgressDialog(this.context, R.string.uploadedPhotosLoadingMessage);
 
         resultReceiver = new ServiceResultReceiver(new Handler());
         resultReceiver.setReceiver(new ServiceResultReceiver.Receiver() {
@@ -70,17 +70,20 @@ public class UploadedPhotosAdapter extends BaseAdapter {
 
                 switch (resultCode) {
                     case ImageService.ResultStatus.LOAD_IMAGES_FINISHED:
-                        images = (List<ClientImagePreview>) resultData.getSerializable(ImageService.RESULT_KEY);
-                        notifyDataSetChanged();
-                        //dialog.hide();
+                        if (resultData.containsKey(ImageService.RESULT_KEY)) {
+                            images = (List<ClientImagePreview>) resultData.getSerializable(ImageService.RESULT_KEY);
+                            notifyDataSetChanged();
+                            if (loadingDialog.isShowing()) {
+                                loadingDialog.dismiss();
+                            }
+                        } else {
+                            showUploadedImagesLoadingError();
+                        }
+
                         break;
 
                     case ImageService.ResultStatus.ERROR:
-                       // dialog.hide();
-                        CharSequence text = UploadedPhotosAdapter.this.context.getResources().getString(R.string.uploadedPhotosLoadingError);
-                        int duration = Toast.LENGTH_SHORT;
-                        Toast toast = Toast.makeText(UploadedPhotosAdapter.this.context, text, duration);
-                        toast.show();
+                        showUploadedImagesLoadingError();
                         break;
                 }
             }
@@ -167,5 +170,20 @@ public class UploadedPhotosAdapter extends BaseAdapter {
         searchCriteria.setLoadOwnImages(true);
 
         ServiceUtil.callLoadImagesService(searchCriteria, resultReceiver, (Activity) context);
+    }
+
+    /**
+     *
+     */
+    public void showUploadedImagesLoadingError() {
+
+        if (loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
+        }
+
+        CharSequence text = UploadedPhotosAdapter.this.context.getResources().getString(R.string.uploadedPhotosLoadingError);
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(UploadedPhotosAdapter.this.context, text, duration);
+        toast.show();
     }
 }

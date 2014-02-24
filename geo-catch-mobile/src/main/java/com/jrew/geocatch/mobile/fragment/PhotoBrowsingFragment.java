@@ -1,5 +1,6 @@
 package com.jrew.geocatch.mobile.fragment;
 
+import android.app.ProgressDialog;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -24,7 +25,8 @@ import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.DomainProperty;
 import com.jrew.geocatch.web.model.ImageReview;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -55,7 +57,7 @@ public class PhotoBrowsingFragment extends SherlockFragment {
     private ServiceResultReceiver imageResultReceiver;
 
     /** **/
-   // private ProgressDialog progressDialog;
+    private ProgressDialog loadingDialog, deletingDialog;
 
     /** **/
     private ClientImage clientImage;
@@ -77,7 +79,7 @@ public class PhotoBrowsingFragment extends SherlockFragment {
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-      //  progressDialog = DialogUtil.createProgressDialog(getActivity());
+        loadingDialog = DialogUtil.createProgressDialog(getActivity(), R.string.photoLoadingMessage);
 
         View photoBrowsingLayout = inflater.inflate(R.layout.photo_browsing_fragment, container, false);
 
@@ -123,7 +125,16 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                         clientImage = (ClientImage) resultData.getSerializable(ImageService.RESULT_KEY);
 
                         ImageLoader imageLoader = ImageLoader.getInstance();
-                        imageLoader.loadImage(clientImage.getPath(), new SimpleImageLoadingListener() {
+
+                        imageLoader.loadImage(clientImage.getPath(), new ImageLoadingListener() {
+                            @Override
+                            public void onLoadingStarted(String s, View view) {}
+
+                            @Override
+                            public void onLoadingFailed(String s, View view, FailReason failReason) {
+                                showImageLoadingError();
+                            }
+
                             @Override
                             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
@@ -251,13 +262,23 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                                     descriptionView.setText(description);
                                     descriptionLayout.setVisibility(View.VISIBLE);
                                 }
+
+                                if (loadingDialog.isShowing()) {
+                                    loadingDialog.dismiss();
+                                }
+
                             }
+
+                            @Override
+                            public void onLoadingCancelled(String s, View view) {}
                         });
 
                         break;
 
                     case ImageService.ResultStatus.DELETE_IMAGE_FINISHED:
-                        //progressDialog.hide();
+                        if (deletingDialog.isShowing()) {
+                            deletingDialog.dismiss();
+                        }
                         FragmentSwitcherHolder.getFragmentSwitcher().showUploadedPhotosFragment();
                         break;
 
@@ -332,19 +353,6 @@ public class PhotoBrowsingFragment extends SherlockFragment {
 
         });
 
-//        reviewResultReceiver = new ServiceResultReceiver(fragmentHandler);
-//        reviewResultReceiver.setReceiver(new ServiceResultReceiver.Receiver() {
-//
-//            @Override
-//            public void onReceiveResult(int resultCode, Bundle resultData) {
-//
-//                switch (resultCode) {
-//
-//
-//                }
-//            }
-//        });
-
         Bundle fragmentData = getArguments();
         if (fragmentData != null && !fragmentData.isEmpty()) {
 
@@ -388,8 +396,7 @@ public class PhotoBrowsingFragment extends SherlockFragment {
 
             case R.id.deleteImageMenuOption:
                 if (clientImage != null) {
-                   // progressDialog.show();
-
+                    deletingDialog = DialogUtil.createProgressDialog(getActivity(), R.string.photoDeletingMessage);
                     Bundle requestBundle = new Bundle();
                     requestBundle.putLong(ImageService.IMAGE_ID_KEY, clientImage.getId());
                     requestBundle.putString(ImageService.DEVICE_ID_KEY, CommonUtil.getDeviceId(getActivity()));
@@ -421,6 +428,14 @@ public class PhotoBrowsingFragment extends SherlockFragment {
      */
     private void showCommunicationError() {
         Toast.makeText(getActivity(), getResources().getString(R.string.commonServerCommunicationError),
+                Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     *
+     */
+    private void showImageLoadingError() {
+        Toast.makeText(getActivity(), getResources().getString(R.string.photoLoadingError),
                 Toast.LENGTH_LONG).show();
     }
 }

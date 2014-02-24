@@ -75,14 +75,17 @@ public class PostponedImageManager {
      * @param context
      * @param postponedImage
      */
-    public synchronized static void persistPostponedImage(Context context, PostponedImage postponedImage) {
+    public synchronized static boolean persistPostponedImage(Context context, PostponedImage postponedImage) {
 
         PostponedImageDatabaseHelper helper = getHelper(context);
         try {
             helper.getDao().create(postponedImage);
+            return true;
         } catch (SQLException exception) {
             Log.e(LOG_NAME, "Couldn't persist postponed image.", exception);
         }
+
+        return false;
     }
 
     /**
@@ -90,14 +93,17 @@ public class PostponedImageManager {
      * @param context
      * @param postponedImage
      */
-    public synchronized static void deletePostponedImage(Context context, PostponedImage postponedImage) {
+    public synchronized static boolean deletePostponedImage(Context context, PostponedImage postponedImage) {
 
         PostponedImageDatabaseHelper helper = getHelper(context);
         try {
             helper.getDao().delete(postponedImage);
+            return true;
         } catch (SQLException exception) {
             Log.e(LOG_NAME, "Couldn't delete postponed image.", exception);
         }
+
+        return false;
     }
 
     /**

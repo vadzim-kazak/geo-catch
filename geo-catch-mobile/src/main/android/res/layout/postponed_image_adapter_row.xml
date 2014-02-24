@@ -23,21 +23,25 @@
 
     <!-- Retry image upload -->
     <ImageView android:id="@+id/retryUpload"
-               android:background="@drawable/ic_menu_refresh"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
+               android:src="@drawable/ic_menu_refresh"
+               android:scaleType="center"
+               android:layout_width="@dimen/abs__action_bar_default_height"
+               android:layout_height="@dimen/abs__action_bar_default_height"
                android:clickable="true"
                android:layout_marginRight="10dip"
                android:layout_toLeftOf="@+id/cancelUpload"
+               android:background="@drawable/abs__item_background_holo_light"
                android:layout_centerVertical="true"/>
 
     <!-- Cancel image upload -->
     <ImageView android:id="@+id/cancelUpload"
-               android:background="@android:drawable/ic_menu_close_clear_cancel"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
+               android:src="@android:drawable/ic_menu_close_clear_cancel"
+               android:scaleType="center"
+               android:layout_width="@dimen/abs__action_bar_default_height"
+               android:layout_height="@dimen/abs__action_bar_default_height"
                android:clickable="true"
                android:layout_marginRight="5dip"
+               android:background="@drawable/abs__item_background_holo_light"
                android:layout_alignParentRight="true"
                android:layout_centerVertical="true"/>
 

@@ -78,16 +78,19 @@ public class RepositoryRestUtil {
         httpPost.setHeader(HTTP.CONTENT_TYPE, CONTENT_TYPE_JSON_UTF_8);
         HttpResponse response = httpClient.execute(httpPost, localContext);
 
-        // Parse response
-        JSONArray result = WebUtil.parseHttpResponseAsArray(response);
-        ArrayList<ClientImagePreview> images = new ArrayList<ClientImagePreview>();
-        for (int i = 0; i < result.length(); i++) {
-            images.add(WebUtil.convertToClientImagePreview(result.getJSONObject(i)));
-        }
-
-        // put result to intent bundle
         Bundle bundle = new Bundle();
-        bundle.putSerializable(ImageService.RESULT_KEY, images);
+        int status = response.getStatusLine().getStatusCode();
+        if (status == 200) {
+            // Parse response
+            JSONArray result = WebUtil.parseHttpResponseAsArray(response);
+            ArrayList<ClientImagePreview> images = new ArrayList<ClientImagePreview>();
+            for (int i = 0; i < result.length(); i++) {
+                images.add(WebUtil.convertToClientImagePreview(result.getJSONObject(i)));
+            }
+
+            // put result to intent bundle
+            bundle.putSerializable(ImageService.RESULT_KEY, images);
+        }
 
         return bundle;
     }

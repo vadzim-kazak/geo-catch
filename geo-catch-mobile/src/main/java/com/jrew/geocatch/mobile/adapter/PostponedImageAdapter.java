@@ -1,6 +1,7 @@
 package com.jrew.geocatch.mobile.adapter;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,12 +11,17 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.dao.PostponedImageManager;
 import com.jrew.geocatch.mobile.model.PostponedImage;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
+import com.jrew.geocatch.mobile.service.DeletePostponedPhotoTask;
 import com.jrew.geocatch.mobile.service.ImageService;
-import com.jrew.geocatch.mobile.util.*;
+import com.jrew.geocatch.mobile.util.CommonUtil;
+import com.jrew.geocatch.mobile.util.DialogUtil;
+import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
+import com.jrew.geocatch.mobile.util.ServiceUtil;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -38,20 +44,18 @@ public class PostponedImageAdapter extends BaseAdapter {
     private double thumbnailScaleFactor;
 
     /** **/
-  //  private ProgressDialog dialog;
+    private ProgressDialog uploadingPhotoDialog;
 
     /** **/
     private ServiceResultReceiver resultReceiver;
 
-    public PostponedImageAdapter(Context context) {
+    public PostponedImageAdapter(Context context, List<PostponedImage> postponedImages) {
 
         super();
 
         this.context = context;
 
-       // dialog = DialogUtil.createProgressDialog(this.context);
-
-        postponedImages = PostponedImageManager.loadPostponedImages(this.context);
+        this.postponedImages = postponedImages;
 
         thumbnailScaleFactor = Double.parseDouble(
                 this.context.getResources().getString(R.config.postponedPhotosThumbnailSizeScaleFactor));
@@ -63,33 +67,35 @@ public class PostponedImageAdapter extends BaseAdapter {
             public void onReceiveResult(int resultCode, Bundle resultData) {
 
                 switch (resultCode) {
-                    case ImageService.ResultStatus.UPLOAD_IMAGE_STARTED:
-                        break;
 
                     case ImageService.ResultStatus.UPLOAD_IMAGE_FINISHED:
-                        //dialog.hide();
                         if (resultData.containsKey(ImageService.POSTPONED_IMAGE_ID_KEY)) {
                             long uploadedPostponedId = resultData.getLong(ImageService.POSTPONED_IMAGE_ID_KEY);
                             removePostponedImage(uploadedPostponedId);
                             if (PostponedImageManager.isPostponedImagesPresented(PostponedImageAdapter.this.context)) {
                                 PostponedImageAdapter.this.notifyDataSetChanged();
+                                if (uploadingPhotoDialog.isShowing()) {
+                                    uploadingPhotoDialog.dismiss();
+                                }
                             } else {
+                                if (uploadingPhotoDialog.isShowing()) {
+                                    uploadingPhotoDialog.dismiss();
+                                }
                                 FragmentSwitcherHolder.getFragmentSwitcher().showUploadedPhotosFragment();
                             }
                         } else {
-                            // Image uploading error
+                            showUploadingPostponedImageError();
                         }
                         break;
 
                     case ImageService.ResultStatus.ERROR:
-                        //dialog.hide();
+                        showUploadingPostponedImageError();
                         break;
                 }
             }
 
         });
 
-        //dialog.hide();
     }
 
     @Override
@@ -109,10 +115,6 @@ public class PostponedImageAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-
-        if (i == 0) {
-            //dialog.show();
-        }
 
         View row = null;
         if (view == null) {
@@ -141,8 +143,7 @@ public class PostponedImageAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
 
-                //dialog.show();
-
+                uploadingPhotoDialog = DialogUtil.createProgressDialog(context, R.string.postponedPhotosUploadingMessage);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(ImageService.IMAGE_KEY, postponedImage.getUploadImage());
                 bundle.putLong(ImageService.POSTPONED_IMAGE_ID_KEY, postponedImage.getId());
@@ -155,20 +156,10 @@ public class PostponedImageAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
 
-                PostponedImageManager.deletePostponedImage(context, postponedImage);
-                postponedImages.remove(postponedImage);
-
-                if (PostponedImageManager.isPostponedImagesPresented(context)) {
-                    PostponedImageAdapter.this.notifyDataSetChanged();
-                } else {
-                    FragmentSwitcherHolder.getFragmentSwitcher().showUploadedPhotosFragment();
-                }
+                DeletePostponedPhotoTask task = new DeletePostponedPhotoTask(context, PostponedImageAdapter.this);
+                task.execute(postponedImage);
             }
         });
-
-        if (i == postponedImages.size() - 1) {
-            //dialog.hide();
-        }
 
         return row;
     }
@@ -187,6 +178,28 @@ public class PostponedImageAdapter extends BaseAdapter {
                 postponedImages.remove(postponedImage);
             }
         }
+    }
+
+    /**
+     *
+     * @param postponedImage
+     */
+    public void removePostponedImage(PostponedImage postponedImage) {
+        postponedImages.remove(postponedImage);
+    }
+
+    /**
+     *
+     */
+    public void showUploadingPostponedImageError() {
+        if (uploadingPhotoDialog.isShowing()) {
+            uploadingPhotoDialog.dismiss();
+        }
+
+        CharSequence text =  PostponedImageAdapter.this.context.getString(R.string.postponedPhotosUploadingError);
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(PostponedImageAdapter.this.context, text, duration);
+        toast.show();
     }
 
 }
