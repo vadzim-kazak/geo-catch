@@ -131,6 +131,7 @@ public class MainActivity extends SherlockFragmentActivity implements
     @Override
     protected void onStop() {
         LocationManagerHolder.getLocationManager().disconnect();
+        HttpClientHolder.release();
         super.onStop();
     }
 

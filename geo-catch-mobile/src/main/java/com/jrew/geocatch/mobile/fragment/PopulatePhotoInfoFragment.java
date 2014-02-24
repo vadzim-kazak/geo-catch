@@ -140,12 +140,25 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
                 switch (resultCode) {
 
                     case ImageService.ResultStatus.UPLOAD_IMAGE_FINISHED:
-                        dialog.dismiss();
-                        FragmentSwitcherHolder.getFragmentSwitcher().showUploadedPhotosFragment();
+
+                        if (dialog.isShowing()) {
+                            dialog.dismiss();
+                        }
+
+                        if (resultData.getBoolean(ImageService.RESULT_KEY)) {
+                            FragmentSwitcherHolder.getFragmentSwitcher().showUploadedPhotosFragment();
+                        } else {
+                            AlertDialog alert = buildUploadingErrorAlert();
+                            alert.show();
+                        }
+
                         break;
 
                     case ImageService.ResultStatus.ERROR:
-                        dialog.dismiss();
+                        if (dialog.isShowing()) {
+                            dialog.dismiss();
+                        }
+
                         AlertDialog alert = buildUploadingErrorAlert();
                         alert.show();
                         break;
