@@ -33,6 +33,7 @@ import com.jrew.geocatch.web.model.ViewBounds;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -94,7 +95,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                     public void onCameraChange(CameraPosition cameraPosition) {
 
                         // Remove invisible markers
-                        //removeInvisibleMarkers(latLngBounds);
+                        removeInvisibleMarkers();
 
                         // Load new images for view bounds
                         loadImages();
@@ -106,7 +107,6 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                 googleMap.setOnMarkerClickListener(markerOnclickListener);
 
                 imageResultReceiver = new ImageServiceResultReceiver(new Handler(), this);
-
                 isLocationSet = false;
 
                 loadImages();
@@ -168,17 +168,19 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
     /**
      *
-     * @param latLngBounds
      */
-    private void removeInvisibleMarkers(LatLngBounds latLngBounds) {
+    private void removeInvisibleMarkers() {
 
-        for (Map.Entry<Long, ImageMarkerPair> entry : imageMarkerPairs.entrySet()) {
+        LatLngBounds latLngBounds = getLatLngBounds();
+
+        Iterator<Map.Entry<Long, ImageMarkerPair>> iterator = imageMarkerPairs.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Long, ImageMarkerPair> entry = iterator.next();
             ImageMarkerPair imageMarkerPair = entry.getValue();
             Marker currentMarker = imageMarkerPair.getMarker();
-            if (latLngBounds.contains(currentMarker.getPosition())) {
+            if (!latLngBounds.contains(currentMarker.getPosition())) {
+                iterator.remove();
                 currentMarker.remove();
-                ClientImagePreview imagePreview = imageMarkerPair.getImage();
-                imageMarkerPairs.remove(imagePreview.getId());
             }
         }
     }

@@ -38,16 +38,17 @@ public class SharedPreferencesHelper {
         // Current locale
         String locale = Locale.getDefault().getLanguage();
         String lastSyncDateRecord = preferences.getString(LAST_SYNC_DATE_PROPERTY + locale, "");
+        Date result = null;
         if (lastSyncDateRecord.length() > 0) {
             DateFormat dateFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
             try {
-                dateFormat.parse(lastSyncDateRecord);
+                result = dateFormat.parse(lastSyncDateRecord);
             } catch(ParseException exception) {
                 Log.e(CommonUtil.getDebugTag(activity.getResources()), "Couldn't parse last domain sync date.", exception);
             }
         }
 
-        return null;
+        return result;
     }
 
     /**

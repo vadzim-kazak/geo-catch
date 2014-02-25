@@ -269,7 +269,7 @@ public class RepositoryRestUtil {
                          .append(locale);
 
         HttpGet httpGet = new HttpGet(loadDomainInfoUrl.toString());
-       HttpResponse response = null;
+        HttpResponse response = null;
         Bundle bundle = new Bundle();
 
         try {

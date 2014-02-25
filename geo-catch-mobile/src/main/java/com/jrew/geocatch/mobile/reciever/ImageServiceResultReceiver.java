@@ -83,14 +83,19 @@ public class ImageServiceResultReceiver extends ResultReceiver {
                                 @Override
                                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
-                                    MarkerOptions markerOptions = new MarkerOptions();
-                                    markerOptions.position(new LatLng(imagePreview.getLatitude(), imagePreview.getLongitude()));
+                                    if (mapFragment.getActivity() != null) {
 
-                                    markerOptions.icon(BitmapDescriptorFactory.fromBitmap(createIconWithBorder(loadedImage)));
+                                        MarkerOptions markerOptions = new MarkerOptions();
+                                        markerOptions.position(new LatLng(imagePreview.getLatitude(), imagePreview.getLongitude()));
 
-                                    Marker marker = mapFragment.getGoogleMap().addMarker(markerOptions);
-                                    mapFragment.getImageMarkerPairs().put(imagePreview.getId(), new ImageMarkerPair(imagePreview, marker));
+                                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(createIconWithBorder(loadedImage)));
 
+                                        Marker marker = mapFragment.getGoogleMap().addMarker(markerOptions);
+
+                                        Map<Long, ImageMarkerPair> imageMarkerPairs = mapFragment.getImageMarkerPairs();
+                                        imageMarkerPairs.put(imagePreview.getId(), new ImageMarkerPair(imagePreview, marker));
+
+                                    }
                                 }
                             });
                         }
