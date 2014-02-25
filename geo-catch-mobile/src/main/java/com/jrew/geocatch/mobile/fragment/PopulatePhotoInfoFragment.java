@@ -239,7 +239,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
                     showNoLocationDetectedWarning();
                 } else {
                     imageBundle = prepareUploadBundle(layout, bitmap);
-                    dialog =  DialogUtil.createProgressDialog(getActivity(), R.string.imageUploadingMessage);
+                    dialog = DialogUtil.createProgressDialog(getActivity(), R.string.imageUploadingMessage);
                     ServiceUtil.callUploadImageService(imageBundle, resultReceiver, getActivity());
                 }
                 break;

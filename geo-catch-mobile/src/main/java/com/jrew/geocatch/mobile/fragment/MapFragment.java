@@ -12,6 +12,7 @@ import android.support.v4.app.Watson;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -192,21 +193,40 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
         LatLngBounds latLngBounds = getLatLngBounds();
 
-        SearchCriteria searchCriteria = SearchCriteriaHolder.getSearchCriteria();
+        if (!(latLngBounds.northeast.latitude == 0 &&
+            latLngBounds.northeast.longitude == 0 &&
+            latLngBounds.southwest.latitude == 0 &&
+            latLngBounds.southwest.longitude == 0)) {
 
-        // DeviceId
-        String deviceId = Settings.Secure.getString(getActivity().getContentResolver(),
-                Settings.Secure.ANDROID_ID);
-        searchCriteria.setDeviceId(deviceId);
+            WindowManager windowManager = getActivity().getWindowManager();
+            int displayWidth =  windowManager.getDefaultDisplay().getWidth();
+            int displayHeight =  windowManager.getDefaultDisplay().getHeight();
 
-        ViewBounds viewBounds = new ViewBounds(latLngBounds.northeast.latitude,
-                latLngBounds.northeast.longitude,
-                latLngBounds.southwest.latitude,
-                latLngBounds.southwest.longitude);
+            ViewBounds viewBounds = null;
+            if (displayWidth > displayHeight) {
+                viewBounds = new ViewBounds(latLngBounds.northeast.latitude,
+                        - latLngBounds.northeast.longitude,
+                        latLngBounds.southwest.latitude,
+                        -latLngBounds.southwest.longitude);
 
-        searchCriteria.setViewBounds(viewBounds);
+            } else {
+                viewBounds = new ViewBounds(latLngBounds.northeast.latitude,
+                        latLngBounds.northeast.longitude,
+                        latLngBounds.southwest.latitude,
+                        latLngBounds.southwest.longitude);
+            }
 
-        ServiceUtil.callLoadImagesService(searchCriteria, imageResultReceiver, getActivity());
+            SearchCriteria searchCriteria = SearchCriteriaHolder.getSearchCriteria();
+
+            // DeviceId
+            String deviceId = Settings.Secure.getString(getActivity().getContentResolver(),
+                    Settings.Secure.ANDROID_ID);
+            searchCriteria.setDeviceId(deviceId);
+            searchCriteria.setViewBounds(viewBounds);
+
+            ServiceUtil.callLoadImagesService(searchCriteria, imageResultReceiver, getActivity());
+
+        }
     }
 
     /**
