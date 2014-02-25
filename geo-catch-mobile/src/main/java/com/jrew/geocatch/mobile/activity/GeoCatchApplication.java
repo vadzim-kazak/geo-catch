@@ -1,6 +1,7 @@
 package com.jrew.geocatch.mobile.activity;
 
 import android.app.Application;
+import com.google.android.gms.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -23,10 +24,13 @@ public class GeoCatchApplication extends Application {
         .cacheOnDisc(true)
         .build();
 
-        // Create global configuration and initialize ImageLoader with this configuration
+        System.setProperty("http.keepAlive", "false");
+
+                // Create global configuration and initialize ImageLoader with this configuration
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
                 .defaultDisplayImageOptions(defaultOptions)
-                .imageDownloader(new BaseImageDownloader(getApplicationContext(), 7 * 1000, 7 * 1000))
+                .imageDownloader(new BaseImageDownloader(getApplicationContext(),
+                        getResources().getInteger(R.config.serverConnectionTimeout) * 1000, 20 * 1000))
                 .build();
 
 

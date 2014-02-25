@@ -36,6 +36,9 @@
 
     <item name="locationDetectionAccuracy" type="config">30</item>
 
+    <!-- In seconds -->
+    <item name="serverConnectionTimeout" type="config">7</item>
+
     <!--
         Possible values:
             MAP_TYPE_NONE = 0;

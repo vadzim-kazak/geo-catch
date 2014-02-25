@@ -14,16 +14,17 @@ import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.DomainProperty;
 import com.jrew.geocatch.web.model.ImageReview;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
-import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -52,7 +53,7 @@ public class RepositoryRestUtil {
      */
     public static Bundle loadImages(Intent intent, Resources resources) throws Exception {
 
-        CloseableHttpClient httpClient = createHttpClient();
+        HttpClient httpClient = createHttpClient();
         HttpContext localContext = new BasicHttpContext();
 
         StringBuilder loadImagesUrl = new StringBuilder();
@@ -68,7 +69,7 @@ public class RepositoryRestUtil {
         httpPost.setEntity(new ByteArrayEntity(searchCriteriaJson.getBytes(UTF_8_ENCODING)));
         httpPost.setHeader(HTTP.CONTENT_TYPE, CONTENT_TYPE_JSON_UTF_8);
 
-        CloseableHttpResponse response = null;
+        HttpResponse response = null;
         Bundle bundle = new Bundle();
 
         try {
@@ -88,7 +89,7 @@ public class RepositoryRestUtil {
             }
 
         } finally {
-            response.close();
+            releaseConnection(response);
         }
 
         return bundle;
@@ -103,7 +104,7 @@ public class RepositoryRestUtil {
      */
     public static Bundle loadImageData(Intent intent, Resources resources) throws Exception {
 
-        CloseableHttpClient httpClient = createHttpClient();
+        HttpClient httpClient = createHttpClient();
         HttpContext localContext = new BasicHttpContext();
 
         long imageId = (Long) intent.getSerializableExtra(ImageService.REQUEST_KEY);
@@ -117,7 +118,7 @@ public class RepositoryRestUtil {
 
         HttpGet httpGet = new HttpGet(loadImageUrl.toString());
 
-        CloseableHttpResponse response = null;
+        HttpResponse response = null;
         Bundle bundle = new Bundle();
 
         try {
@@ -132,7 +133,7 @@ public class RepositoryRestUtil {
             bundle.putSerializable(ImageService.RESULT_KEY, clientImage);
 
         } finally {
-           response.close();
+            releaseConnection(response);
         }
 
         return bundle;
@@ -175,11 +176,11 @@ public class RepositoryRestUtil {
      */
     public static Bundle loadImageFromPath(Resources resources, String imagePath) throws Exception {
 
-        CloseableHttpClient httpClient = createHttpClient();
+        HttpClient httpClient = createHttpClient();
         HttpContext localContext = new BasicHttpContext();
 
         HttpGet httpGet = new HttpGet(imagePath);
-        CloseableHttpResponse response = null;
+        HttpResponse response = null;
         Bundle bundle = new Bundle();
 
         try {
@@ -188,7 +189,7 @@ public class RepositoryRestUtil {
             bundle.putParcelable(ImageService.RESULT_KEY, WebUtil.getImageFromWeb(response));
 
         } finally {
-            response.close();
+            releaseConnection(response);
         }
 
         return bundle;
@@ -203,7 +204,7 @@ public class RepositoryRestUtil {
      */
     public static Bundle uploadImage(Intent intent, Resources resources) throws Exception {
 
-        CloseableHttpClient httpClient = createHttpClient();
+        HttpClient httpClient = createHttpClient();
         HttpContext localContext = new BasicHttpContext();
 
         StringBuilder uploadUrl = new StringBuilder();
@@ -223,7 +224,7 @@ public class RepositoryRestUtil {
         HttpPost httpPost = new HttpPost(uploadUrl.toString());
         httpPost.setHeader(HTTP.CONTENT_TYPE, CONTENT_TYPE_JSON_UTF_8);
         httpPost.setEntity(jsonRequest);
-        CloseableHttpResponse response = null;
+       HttpResponse response = null;
         Bundle bundle = new Bundle();
 
         try {
@@ -240,7 +241,7 @@ public class RepositoryRestUtil {
             }
 
         } finally {
-            response.close();
+            releaseConnection(response);
         }
 
         return bundle;
@@ -255,7 +256,7 @@ public class RepositoryRestUtil {
      */
     public static Bundle loadDomainInfo(Intent intent, Resources resources) throws Exception {
 
-        CloseableHttpClient httpClient = createHttpClient();
+        HttpClient httpClient = createHttpClient();
         HttpContext localContext = new BasicHttpContext();
 
         Bundle requestBundle = (Bundle) intent.getParcelableExtra(DomainInfoService.REQUEST_KEY);
@@ -268,7 +269,7 @@ public class RepositoryRestUtil {
                          .append(locale);
 
         HttpGet httpGet = new HttpGet(loadDomainInfoUrl.toString());
-        CloseableHttpResponse response = null;
+       HttpResponse response = null;
         Bundle bundle = new Bundle();
 
         try {
@@ -283,12 +284,8 @@ public class RepositoryRestUtil {
 
             bundle.putSerializable(DomainInfoService.RESULT_KEY, domainProperties);
         } finally {
-            response.close();
+            releaseConnection(response);
         }
-
-
-
-
 
         return bundle;
     }
@@ -302,7 +299,7 @@ public class RepositoryRestUtil {
      */
     public static Bundle deleteImage(Intent intent, Resources resources) throws Exception {
 
-        CloseableHttpClient httpClient = createHttpClient();
+        HttpClient httpClient = createHttpClient();
         HttpContext localContext = new BasicHttpContext();
 
         Bundle bundle = (Bundle) intent.getParcelableExtra(ImageService.REQUEST_KEY);
@@ -320,7 +317,7 @@ public class RepositoryRestUtil {
                 .append(deviceId);
 
         HttpDelete httpDelete = new HttpDelete(deleteImageUrl.toString());
-        CloseableHttpResponse response = null;
+        HttpResponse response = null;
 
         try {
             response = httpClient.execute(httpDelete, localContext);
@@ -334,7 +331,7 @@ public class RepositoryRestUtil {
             }
 
         }  finally {
-            response.close();
+            releaseConnection(response);
         }
 
         return bundle;
@@ -349,7 +346,7 @@ public class RepositoryRestUtil {
      */
     public static Bundle uploadReview(Intent intent, Resources resources) throws Exception {
 
-        CloseableHttpClient httpClient = createHttpClient();
+        HttpClient httpClient = createHttpClient();
         HttpContext localContext = new BasicHttpContext();
 
         StringBuilder uploadUrl = new StringBuilder();
@@ -367,7 +364,7 @@ public class RepositoryRestUtil {
         HttpPost httpPost = new HttpPost(uploadUrl.toString());
         httpPost.setHeader(HTTP.CONTENT_TYPE, CONTENT_TYPE_JSON_UTF_8);
         httpPost.setEntity(jsonRequest);
-        CloseableHttpResponse response = null;
+        HttpResponse response = null;
         Bundle bundle = new Bundle();
 
         try {
@@ -382,7 +379,7 @@ public class RepositoryRestUtil {
             }
 
         } finally {
-            response.close();
+            releaseConnection(response);
         }
 
         return bundle;
@@ -392,8 +389,19 @@ public class RepositoryRestUtil {
      *
      * @return
      */
-    private static CloseableHttpClient createHttpClient() {
+    private static HttpClient createHttpClient() {
 
         return HttpClientHolder.getHttpClient();
+    }
+
+    /**
+     *
+     * @param response
+     * @throws Exception
+     */
+    private static void releaseConnection(HttpResponse response) throws Exception {
+        if (response != null && response.getEntity() != null) {
+            response.getEntity().consumeContent();
+        }
     }
 }
