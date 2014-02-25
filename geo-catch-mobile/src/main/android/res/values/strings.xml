@@ -54,6 +54,8 @@
 
     <string name="postponedImageSavingError">Couldn\'t prepare photo for postponed uploading.</string>
 
+    <string name="fishNotPopulatedWarning">Required field \"fish\" isn\'t populated. Please populate it.</string>
+
     <!-- Map settings fragment -->
     <string name="mapSettingsFragmentLabel">Map settings</string>
 

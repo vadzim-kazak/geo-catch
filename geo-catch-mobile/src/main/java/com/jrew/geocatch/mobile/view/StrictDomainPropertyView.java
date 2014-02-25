@@ -6,7 +6,6 @@ import android.text.Editable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.jrew.geocatch.mobile.R;
@@ -57,7 +56,7 @@ public class StrictDomainPropertyView extends DomainPropertyView {
 
             setTextColor(INITIAL_TEXT_COLOR);
             setText(initialValue);
-            isTextFilled = false;
+            isTextPopulated = false;
         }
     }
 

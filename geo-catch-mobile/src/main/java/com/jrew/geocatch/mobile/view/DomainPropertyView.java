@@ -40,7 +40,7 @@ public class DomainPropertyView extends AutoCompleteTextView implements TextWatc
     private static final int THRESHOLD_VALUE = 0;
 
     /** **/
-    protected boolean isTextFilled;
+    protected boolean isTextPopulated;
 
     /** **/
     protected String initialValue;
@@ -139,7 +139,7 @@ public class DomainPropertyView extends AutoCompleteTextView implements TextWatc
 
     @Override
     public void onFocusChange(View view, boolean isFocused) {
-        if (!isTextFilled) {
+        if (!isTextPopulated) {
             if (isFocused) {
                 setTextColor(NORMAL_TEXT_COLOR);
                 this.setText("");
@@ -161,9 +161,7 @@ public class DomainPropertyView extends AutoCompleteTextView implements TextWatc
     }
 
     @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-
-    }
+    public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {}
 
     @Override
     public void afterTextChanged(Editable editable) {
@@ -171,9 +169,9 @@ public class DomainPropertyView extends AutoCompleteTextView implements TextWatc
         String populatedValue = editable.toString();
         if (populatedValue != null && ( populatedValue.length() == 0) ||
                 populatedValue.equalsIgnoreCase(initialValue)) {
-            isTextFilled = false;
+            isTextPopulated = false;
         } else {
-            isTextFilled = true;
+            isTextPopulated = true;
         }
     }
 
@@ -182,10 +180,18 @@ public class DomainPropertyView extends AutoCompleteTextView implements TextWatc
      */
     public void reset() {
         if (isEnabled()) {
-            isTextFilled = false;
+            isTextPopulated = false;
             setTextColor(INITIAL_TEXT_COLOR);
             setText(initialValue);
             clearFocus();
         }
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isTextPopulated() {
+        return isTextPopulated;
     }
 }

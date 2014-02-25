@@ -46,18 +46,20 @@
                   android:layout_gravity="left|center_vertical"
                   android:layout_marginBottom="5dip"/>
 
-        <LinearLayout android:orientation="horizontal"
+        <RelativeLayout android:orientation="horizontal"
                       android:background="@drawable/white_bordered_background"
                       android:layout_width="match_parent"
                       android:layout_height="40dip"
                       android:layout_marginBottom="10dip"
                       android:gravity="center_vertical|left">
 
-            <ImageView android:layout_width="wrap_content"
+            <ImageView android:id="@+id/fishIconView"
+                       android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
                        android:src="@drawable/fish"
                        android:paddingLeft="5dip"
-                       android:layout_gravity="center_vertical|left"/>
+                       android:layout_gravity="center_vertical" android:layout_alignParentLeft="true"
+                       android:layout_centerVertical="true"/>
 
             <com.jrew.geocatch.mobile.view.DomainPropertyView android:layout_width="match_parent"
                                                               android:layout_height="wrap_content"
@@ -65,9 +67,18 @@
                                                               android:text="@string/fishDomainPropertyInitialLabel"
                                                               android:paddingLeft="5dip"
                                                               android:id="@+id/fishTypeView"
-                                                              android:layout_gravity="center"/>
+                                                              android:layout_centerVertical="true"
+                                                              android:layout_toRightOf="@+id/fishIconView"/>
 
-        </LinearLayout>
+            <ImageView android:layout_width="15dip"
+                       android:layout_height="15dip"
+                       android:src="@drawable/asterix"
+                       android:scaleType="centerInside"
+                       android:layout_marginRight="5dip"
+                       android:layout_alignParentRight="true"
+                       android:layout_alignParentTop="false" android:layout_centerVertical="true"/>
+
+        </RelativeLayout>
 
         <LinearLayout android:orientation="horizontal"
                       android:background="@drawable/white_bordered_background"

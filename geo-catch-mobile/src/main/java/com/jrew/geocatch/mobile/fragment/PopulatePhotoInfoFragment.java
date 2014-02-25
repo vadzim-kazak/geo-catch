@@ -232,7 +232,10 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
                 break;
 
             case R.id.uploadPhotoMenuOption:
-                if (currentLocation == null) {
+                if (!fishTypeView.isTextPopulated()) {
+                    showFishNotPopulatedWarning();
+                }
+                else if (currentLocation == null) {
                     showNoLocationDetectedWarning();
                 } else {
                     imageBundle = prepareUploadBundle(layout, bitmap);
@@ -242,7 +245,9 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
                 break;
 
             case R.id.postponePhotoUploadMenuOption:
-                if (currentLocation == null) {
+                if (!fishTypeView.isTextPopulated()) {
+                    showFishNotPopulatedWarning();
+                } else if (currentLocation == null) {
                     showNoLocationDetectedWarning();
                 } else {
                     dialog = DialogUtil.createProgressDialog(getActivity(), R.string.postponedImageSavingMessage);
@@ -408,6 +413,17 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
     private void showNoLocationDetectedWarning() {
         Context context = getActivity();
         CharSequence text = getResources().getString(R.string.locationLoadingWarning);
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+    }
+
+    /**
+     *
+     */
+    private void showFishNotPopulatedWarning() {
+        Context context = getActivity();
+        CharSequence text = getResources().getString(R.string.fishNotPopulatedWarning);
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
