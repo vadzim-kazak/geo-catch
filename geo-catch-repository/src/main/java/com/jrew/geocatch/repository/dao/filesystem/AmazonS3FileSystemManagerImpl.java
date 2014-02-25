@@ -31,8 +31,8 @@ import java.util.List;
  */
 public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
 
-    /** **/
-    private static final long URL_EXPIRATION_TIME = 1 * 60 * 1000;
+    /** One week **/
+    private static final long URL_EXPIRATION_TIME = 7 * 24 * 60 * 60 * 1000;
 
     /** **/
     private static final String TMP_DIRECTORY_KEY = "java.io.tmpdir";

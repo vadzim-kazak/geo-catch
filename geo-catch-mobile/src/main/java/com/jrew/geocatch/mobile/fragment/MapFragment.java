@@ -2,6 +2,7 @@ package com.jrew.geocatch.mobile.fragment;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -20,21 +21,22 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.*;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.listener.MarkerOnClickListener;
 import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.reciever.ImageServiceResultReceiver;
+import com.jrew.geocatch.mobile.service.cache.ImageCache;
 import com.jrew.geocatch.mobile.util.*;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.ViewBounds;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -83,6 +85,8 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
             if (googleMap == null) {
 
+                imageResultReceiver = new ImageServiceResultReceiver(new Handler(), this);
+
                 googleMap = getMap();
 
                 int mapType = Integer.parseInt(getResources().getString(R.config.mapType));
@@ -95,8 +99,9 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                     @Override
                     public void onCameraChange(CameraPosition cameraPosition) {
 
+                        //googleMap.clear();
                         // Remove invisible markers
-                        removeInvisibleMarkers();
+                        //removeInvisibleMarkers();
 
                         // Load new images for view bounds
                         loadImages();
@@ -107,7 +112,6 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                 MarkerOnClickListener markerOnclickListener = new MarkerOnClickListener(imageMarkerPairs, this);
                 googleMap.setOnMarkerClickListener(markerOnclickListener);
 
-                imageResultReceiver = new ImageServiceResultReceiver(new Handler(), this);
                 isLocationSet = false;
 
                 loadImages();
@@ -198,23 +202,28 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
             latLngBounds.southwest.latitude == 0 &&
             latLngBounds.southwest.longitude == 0)) {
 
-            WindowManager windowManager = getActivity().getWindowManager();
-            int displayWidth =  windowManager.getDefaultDisplay().getWidth();
-            int displayHeight =  windowManager.getDefaultDisplay().getHeight();
+            displayImagesFromCache(latLngBounds);
 
-            ViewBounds viewBounds = null;
-            if (displayWidth > displayHeight) {
-                viewBounds = new ViewBounds(latLngBounds.northeast.latitude,
-                        - latLngBounds.northeast.longitude,
-                        latLngBounds.southwest.latitude,
-                        -latLngBounds.southwest.longitude);
+//            WindowManager windowManager = getActivity().getWindowManager();
+//            int displayWidth =  windowManager.getDefaultDisplay().getWidth();
+//            int displayHeight =  windowManager.getDefaultDisplay().getHeight();
 
-            } else {
-                viewBounds = new ViewBounds(latLngBounds.northeast.latitude,
-                        latLngBounds.northeast.longitude,
-                        latLngBounds.southwest.latitude,
-                        latLngBounds.southwest.longitude);
-            }
+            ViewBounds viewBounds = new ViewBounds(latLngBounds.northeast.latitude,
+                    latLngBounds.northeast.longitude,
+                    latLngBounds.southwest.latitude,
+                    latLngBounds.southwest.longitude);
+//            if (displayWidth > displayHeight) {
+//                viewBounds = new ViewBounds(latLngBounds.northeast.latitude,
+//                        - latLngBounds.northeast.longitude,
+//                        latLngBounds.southwest.latitude,
+//                        -latLngBounds.southwest.longitude);
+//
+//            } else {
+//                viewBounds = new ViewBounds(latLngBounds.northeast.latitude,
+//                        latLngBounds.northeast.longitude,
+//                        latLngBounds.southwest.latitude,
+//                        latLngBounds.southwest.longitude);
+//            }
 
             SearchCriteria searchCriteria = SearchCriteriaHolder.getSearchCriteria();
 
@@ -264,7 +273,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
     @Override
     public void onLocationChanged(Location location) {
 
-        if (googleMap != null && !isLocationSet) {
+        if (googleMap != null && !isLocationSet && getActivity() != null) {
             CameraUpdate center =  CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(),
                     location.getLongitude()));
 
@@ -301,5 +310,35 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
         if (googleMap != null) {
             loadImages();
         }
+    }
+
+    /**
+     *
+     * @param latLngBounds
+     */
+    private void displayImagesFromCache(LatLngBounds latLngBounds) {
+
+        // Display images from cache here
+        ImageLoader imageLoader = ImageLoader.getInstance();
+        List<ClientImagePreview> cachedImages = ImageCache.getInstance().getClientImagePreview(latLngBounds);
+        for (final ClientImagePreview imagePreview : cachedImages) {
+            imageLoader.loadImage(imagePreview.getThumbnailPath(), new SimpleImageLoadingListener() {
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    markerOptions.position(new LatLng(imagePreview.getLatitude(), imagePreview.getLongitude()));
+
+                    markerOptions.icon(BitmapDescriptorFactory.fromBitmap(BitmapUtil.createIconWithBorder(loadedImage, getActivity())));
+
+                    Marker marker = googleMap.addMarker(markerOptions);
+
+                    if (imageMarkerPairs.containsKey(imagePreview.getId())) {
+                        imageMarkerPairs.put(imagePreview.getId(), new ImageMarkerPair(imagePreview, marker));
+                    }
+                }
+            });
+        }
+
     }
 }

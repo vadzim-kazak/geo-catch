@@ -70,13 +70,13 @@
                                                               android:layout_centerVertical="true"
                                                               android:layout_toRightOf="@+id/fishIconView"/>
 
-            <ImageView android:layout_width="15dip"
-                       android:layout_height="15dip"
+            <ImageView android:layout_width="10dip"
+                       android:layout_height="10dip"
                        android:src="@drawable/asterix"
                        android:scaleType="centerInside"
                        android:layout_marginRight="5dip"
                        android:layout_alignParentRight="true"
-                       android:layout_alignParentTop="false" android:layout_centerVertical="true"/>
+                       android:layout_centerVertical="true"/>
 
         </RelativeLayout>
 

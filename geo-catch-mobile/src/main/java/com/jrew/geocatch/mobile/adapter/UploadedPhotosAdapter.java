@@ -42,7 +42,7 @@ public class UploadedPhotosAdapter extends BaseAdapter {
     private final Context context;
 
     /** **/
-    private ProgressDialog loadingDialog, deletingDialog;
+    private ProgressDialog loadingDialog;
 
     /** **/
     private ServiceResultReceiver resultReceiver;

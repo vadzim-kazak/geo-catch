@@ -1,9 +1,6 @@
 package com.jrew.geocatch.mobile.reciever;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
@@ -12,12 +9,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.fragment.MapFragment;
 import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.service.ImageService;
-import com.jrew.geocatch.mobile.util.CommonUtil;
-import com.jrew.geocatch.mobile.util.ServiceUtil;
+import com.jrew.geocatch.mobile.service.cache.ImageCache;
+import com.jrew.geocatch.mobile.util.BitmapUtil;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
@@ -34,11 +30,7 @@ import java.util.Map;
  */
 public class ImageServiceResultReceiver extends ResultReceiver {
 
-    /** **/
-    private Paint iconPaint;
 
-    /** **/
-    private Paint thumbnailPaint;
 
     /** **/
     private MapFragment mapFragment;
@@ -52,11 +44,7 @@ public class ImageServiceResultReceiver extends ResultReceiver {
         super(handler);
         this.mapFragment = mapFragment;
 
-        iconPaint = new Paint();
-        iconPaint.setColor(Color.WHITE);
-        iconPaint.setStyle(Paint.Style.FILL);
 
-        thumbnailPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
     }
 
     @Override
@@ -71,6 +59,8 @@ public class ImageServiceResultReceiver extends ResultReceiver {
                         (List<ClientImagePreview>) resultData.getSerializable(ImageService.RESULT_KEY);
 
                 if (images != null && !images.isEmpty()) {
+
+                    ImageCache.getInstance().addClientImagesPreview(images);
 
                     filterDisplayedImages(images);
                     if(!images.isEmpty()) {
@@ -88,7 +78,7 @@ public class ImageServiceResultReceiver extends ResultReceiver {
                                         MarkerOptions markerOptions = new MarkerOptions();
                                         markerOptions.position(new LatLng(imagePreview.getLatitude(), imagePreview.getLongitude()));
 
-                                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(createIconWithBorder(loadedImage)));
+                                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(BitmapUtil.createIconWithBorder(loadedImage, mapFragment.getActivity())));
 
                                         Marker marker = mapFragment.getGoogleMap().addMarker(markerOptions);
 
@@ -113,37 +103,6 @@ public class ImageServiceResultReceiver extends ResultReceiver {
                 break;
         }
     }
-
-    /**
-     *
-     * @param thumbnail
-     * @return
-     */
-    private Bitmap createIconWithBorder(Bitmap thumbnail) {
-
-       double scaleFactor = Double.parseDouble(mapFragment.getResources().getString(R.config.thumbnailSizeScaleFactor));
-       double borderSizeFactor = Double.parseDouble(mapFragment.getResources().getString(R.config.thumbnailBorderSizeScaleFactor));
-
-       // get larger display size
-       int largerSide = CommonUtil.getDisplayLargerSideSize(mapFragment.getActivity());
-
-       int thumbnailSize = (int) (largerSide * scaleFactor);
-       int borderSize = (int)(thumbnailSize * borderSizeFactor);
-
-       int iconSize = thumbnailSize + borderSize * 2;
-
-       Bitmap icon = Bitmap.createBitmap(iconSize, iconSize, Bitmap.Config.RGB_565);
-
-       Canvas canvas = new Canvas(icon);
-       canvas.drawRect(0, 0, iconSize, iconSize, iconPaint);
-
-       Bitmap scaledThumbnail = Bitmap.createScaledBitmap(thumbnail, thumbnailSize, thumbnailSize, false);
-
-       // Draw scaled thumbnail on bitmap
-       canvas.drawBitmap(scaledThumbnail, borderSize, borderSize, thumbnailPaint);
-
-       return icon;
-   }
 
     /**
      *
