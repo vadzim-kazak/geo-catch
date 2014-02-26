@@ -133,7 +133,6 @@ public class UploadedPhotosAdapter extends BaseAdapter {
         }
 
         ImageView thumbnailImageView = (ImageView) row.findViewById(R.id.thumbnailImageView);
-        thumbnailImageView.setImageResource(R.drawable.chat);
 
         int displaySize = CommonUtil.getDisplayLargerSideSize((Activity) context);
         int thumbnailSize = (int) (displaySize * thumbnailScaleFactor);
