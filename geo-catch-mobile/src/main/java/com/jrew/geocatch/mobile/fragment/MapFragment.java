@@ -130,7 +130,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
             }
 
         } else {
-            LayoutUtil.showNoConnectionLayout(getActivity(), R.string.noNetworkConnectionError);
+            LayoutUtil.showRefreshLayout(getActivity(), R.string.noNetworkConnectionError);
         }
 
         return result;

@@ -40,7 +40,7 @@ public class UploadedPhotosFragment extends SherlockFragment {
 
         } else {
 
-            LayoutUtil.showNoConnectionLayout(getActivity(), R.string.noNetworkConnectionError);
+            LayoutUtil.showRefreshLayout(getActivity(), R.string.noNetworkConnectionError);
         }
 
         return layout;

@@ -39,11 +39,11 @@ public class DialogUtil {
     /**
      *
      * @param context
-     * @param message
+     * @param resourceId
      * @param listener
      * @return
      */
-    public static ProgressDialog createProgressDialog(Context context, String message,
+    public static ProgressDialog createProgressDialog(Context context, int resourceId,
                                                       DialogInterface.OnCancelListener listener) {
         ProgressDialog dialog = new ProgressDialog(context);
         dialog.setCancelable(true);
@@ -53,7 +53,7 @@ public class DialogUtil {
         dialog.setContentView(R.layout.progress_dialog);
 
         TextView textView = (TextView) dialog.findViewById(R.id.message);
-        textView.setText(message);
+        textView.setText(context.getString(resourceId));
 
         return dialog;
     }

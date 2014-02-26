@@ -3,6 +3,8 @@ package com.jrew.geocatch.mobile.adapter;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -60,7 +62,21 @@ public class UploadedPhotosAdapter extends BaseAdapter {
 
         this.context = context;
 
-        loadingDialog = DialogUtil.createProgressDialog(this.context, R.string.uploadedPhotosLoadingMessage);
+        DialogInterface.OnCancelListener listener = new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+
+                ServiceUtil.abortImageService(UploadedPhotosAdapter.this.context);
+
+                loadingDialog.dismiss();
+
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(UploadedPhotosAdapter.this.context, "Image loading aborted.", duration);
+                toast.show();
+            }
+        };
+
+        loadingDialog = DialogUtil.createProgressDialog(this.context, R.string.uploadedPhotosLoadingMessage, listener);
 
         resultReceiver = new ServiceResultReceiver(new Handler());
         resultReceiver.setReceiver(new ServiceResultReceiver.Receiver() {
@@ -133,6 +149,7 @@ public class UploadedPhotosAdapter extends BaseAdapter {
         }
 
         ImageView thumbnailImageView = (ImageView) row.findViewById(R.id.thumbnailImageView);
+        thumbnailImageView.setImageResource(R.drawable.fish_frame);
 
         int displaySize = CommonUtil.getDisplayLargerSideSize((Activity) context);
         int thumbnailSize = (int) (displaySize * thumbnailScaleFactor);

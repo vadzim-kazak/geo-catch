@@ -61,6 +61,9 @@ public class ImageService extends IntentService {
 
         /** **/
         public static final String DELETE_IMAGE = "deleteImage";
+
+        /** **/
+        public static final String ABORT = "abort";
     }
 
     /**
@@ -162,12 +165,12 @@ public class ImageService extends IntentService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        int id = intent.getExtras().getInt("stopid");
-        if(id != 0) {
+        String command = intent.getExtras().getString(COMMAND_KEY);
+        if (Commands.ABORT.equalsIgnoreCase(command)) {
+            RepositoryRestUtil.abort();
             this.stopSelf();
         }
+
         return super.onStartCommand(intent, flags, startId);
     }
-
-
 }

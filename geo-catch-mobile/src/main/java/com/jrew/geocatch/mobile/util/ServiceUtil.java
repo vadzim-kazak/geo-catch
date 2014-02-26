@@ -2,6 +2,7 @@ package com.jrew.geocatch.mobile.util;
 
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -142,6 +143,16 @@ public class ServiceUtil {
         intent.putExtra(ReviewService.COMMAND_KEY, ReviewService.Commands.UPLOAD_REVIEW);
         intent.putExtra(ReviewService.RECEIVER_KEY, resultReceiver);
         activity.startService(intent);
+    }
+
+    /**
+     *
+     * @param context
+     */
+    public static void abortImageService(Context context) {
+        final Intent intent = new Intent(Intent.ACTION_SYNC, null, context, ImageService.class);
+        intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.ABORT);
+        context.startService(intent);
     }
 
 }

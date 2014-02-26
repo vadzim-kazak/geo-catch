@@ -1,6 +1,7 @@
 package com.jrew.geocatch.mobile.fragment;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -102,11 +103,22 @@ public class PhotoBrowsingFragment extends SherlockFragment {
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        loadingDialog = DialogUtil.createProgressDialog(getActivity(), R.string.photoLoadingMessage);
+        LayoutUtil.showFragmentContainer(getActivity());
 
         View photoBrowsingLayout = inflater.inflate(R.layout.photo_browsing_fragment, container, false);
 
         photoImageView = (ImageView) photoBrowsingLayout.findViewById(R.id.imageView);
+
+        DialogInterface.OnCancelListener listener = new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                ServiceUtil.abortImageService(getActivity());
+                ImageLoader.getInstance().cancelDisplayTask(photoImageView);
+                LayoutUtil.showRefreshLayout(getActivity(), R.string.photoLoadingCancelled);
+            }
+        };
+
+        loadingDialog = DialogUtil.createProgressDialog(getActivity(), R.string.photoLoadingMessage, listener);
 
         // Uploading photo date
         uploadingDateLayout = (LinearLayout) photoBrowsingLayout.findViewById(R.id.uploadingDateLayout);
@@ -338,13 +350,17 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                 Toast.LENGTH_LONG).show();
     }
 
+    /**
+     *
+     * @param clientImage
+     */
     private void processClientImageLoading(final ClientImage clientImage) {
 
         ImageCache.getInstance().add(clientImage);
 
         ImageLoader imageLoader = ImageLoader.getInstance();
 
-        imageLoader.loadImage(clientImage.getPath(), new ImageLoadingListener() {
+        ImageLoadingListener imageLoadingListener = new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String s, View view) {}
 
@@ -490,7 +506,9 @@ public class PhotoBrowsingFragment extends SherlockFragment {
             @Override
             public void onLoadingCancelled(String s, View view) {}
 
-        });
+        };
+
+        imageLoader.loadImage(clientImage.getPath(), imageLoadingListener);
 
     }
 }

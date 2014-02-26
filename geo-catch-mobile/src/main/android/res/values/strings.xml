@@ -72,6 +72,8 @@
 
     <string name="photoDeletingMessage">Removing image...</string>
 
+    <string name="photoLoadingCancelled">Photo loading is cancelled.</string>
+
     <!-- Uploaded photos fragment -->
     <string name="uploadedPhotosFragmentLabel">My photos</string>
 

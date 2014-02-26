@@ -59,7 +59,7 @@ public class LayoutUtil {
      *
      * @param activity
      */
-    public static void showNoConnectionLayout(Activity activity, int messageId) {
+    public static void showRefreshLayout(Activity activity, int messageId) {
 
         FrameLayout fragmentContainer = (FrameLayout) activity.findViewById(R.id.fragmentContainer);
         if (fragmentContainer != null && fragmentContainer.getVisibility() != View.GONE) {

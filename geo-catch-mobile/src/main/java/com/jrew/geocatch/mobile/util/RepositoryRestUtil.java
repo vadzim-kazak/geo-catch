@@ -16,15 +16,12 @@ import com.jrew.geocatch.web.model.ImageReview;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.*;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -43,6 +40,10 @@ public class RepositoryRestUtil {
 
     /** **/
     private final static String CONTENT_TYPE_JSON_UTF_8 = "application/json; charset=UTF-8";
+
+    /** **/
+    private static ThreadLocal<HttpRequestBase> httpMethod =
+            new InheritableThreadLocal<HttpRequestBase>();
 
     /**
      *
@@ -69,6 +70,8 @@ public class RepositoryRestUtil {
         httpPost.setEntity(new ByteArrayEntity(searchCriteriaJson.getBytes(UTF_8_ENCODING)));
         httpPost.setHeader(HTTP.CONTENT_TYPE, CONTENT_TYPE_JSON_UTF_8);
 
+        httpMethod.set(httpPost);
+
         HttpResponse response = null;
         Bundle bundle = new Bundle();
 
@@ -90,6 +93,7 @@ public class RepositoryRestUtil {
 
         } finally {
             releaseConnection(response);
+            httpMethod.remove();
         }
 
         return bundle;
@@ -117,6 +121,7 @@ public class RepositoryRestUtil {
                 .append(imageId);
 
         HttpGet httpGet = new HttpGet(loadImageUrl.toString());
+        httpMethod.set(httpGet);
 
         HttpResponse response = null;
         Bundle bundle = new Bundle();
@@ -134,6 +139,7 @@ public class RepositoryRestUtil {
 
         } finally {
             releaseConnection(response);
+            httpMethod.remove();
         }
 
         return bundle;
@@ -180,6 +186,8 @@ public class RepositoryRestUtil {
         HttpContext localContext = new BasicHttpContext();
 
         HttpGet httpGet = new HttpGet(imagePath);
+        httpMethod.set(httpGet);
+
         HttpResponse response = null;
         Bundle bundle = new Bundle();
 
@@ -190,6 +198,7 @@ public class RepositoryRestUtil {
 
         } finally {
             releaseConnection(response);
+            httpMethod.remove();
         }
 
         return bundle;
@@ -224,7 +233,9 @@ public class RepositoryRestUtil {
         HttpPost httpPost = new HttpPost(uploadUrl.toString());
         httpPost.setHeader(HTTP.CONTENT_TYPE, CONTENT_TYPE_JSON_UTF_8);
         httpPost.setEntity(jsonRequest);
-       HttpResponse response = null;
+        httpMethod.set(httpPost);
+
+        HttpResponse response = null;
         Bundle bundle = new Bundle();
 
         try {
@@ -242,6 +253,7 @@ public class RepositoryRestUtil {
 
         } finally {
             releaseConnection(response);
+            httpMethod.remove();
         }
 
         return bundle;
@@ -269,6 +281,8 @@ public class RepositoryRestUtil {
                          .append(locale);
 
         HttpGet httpGet = new HttpGet(loadDomainInfoUrl.toString());
+        httpMethod.set(httpGet);
+
         HttpResponse response = null;
         Bundle bundle = new Bundle();
 
@@ -285,6 +299,7 @@ public class RepositoryRestUtil {
             bundle.putSerializable(DomainInfoService.RESULT_KEY, domainProperties);
         } finally {
             releaseConnection(response);
+            httpMethod.remove();
         }
 
         return bundle;
@@ -317,6 +332,8 @@ public class RepositoryRestUtil {
                 .append(deviceId);
 
         HttpDelete httpDelete = new HttpDelete(deleteImageUrl.toString());
+        httpMethod.set(httpDelete);
+
         HttpResponse response = null;
 
         try {
@@ -332,6 +349,7 @@ public class RepositoryRestUtil {
 
         }  finally {
             releaseConnection(response);
+            httpMethod.remove();
         }
 
         return bundle;
@@ -364,6 +382,8 @@ public class RepositoryRestUtil {
         HttpPost httpPost = new HttpPost(uploadUrl.toString());
         httpPost.setHeader(HTTP.CONTENT_TYPE, CONTENT_TYPE_JSON_UTF_8);
         httpPost.setEntity(jsonRequest);
+        httpMethod.set(httpPost);
+
         HttpResponse response = null;
         Bundle bundle = new Bundle();
 
@@ -380,6 +400,7 @@ public class RepositoryRestUtil {
 
         } finally {
             releaseConnection(response);
+            httpMethod.remove();
         }
 
         return bundle;
@@ -402,6 +423,18 @@ public class RepositoryRestUtil {
     private static void releaseConnection(HttpResponse response) throws Exception {
         if (response != null && response.getEntity() != null) {
             response.getEntity().consumeContent();
+        }
+    }
+
+    /**
+     *
+     */
+    public static void abort() {
+
+        HttpRequestBase currentHttpMethod = httpMethod.get();
+        if (currentHttpMethod != null) {
+            currentHttpMethod.abort();
+            httpMethod.remove();
         }
     }
 }
