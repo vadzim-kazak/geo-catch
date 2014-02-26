@@ -49,7 +49,7 @@ public class MarkerOnClickListener implements GoogleMap.OnMarkerClickListener {
         for (Map.Entry<Long, ImageMarkerPair> entry : imageMarkerPairs.entrySet()) {
             ImageMarkerPair imageMarkerPair = entry.getValue();
             Marker currentMarker = imageMarkerPair.getMarker();
-            if (currentMarker.getId().equals(marker.getId())) {
+            if (currentMarker.getId().equalsIgnoreCase(marker.getId())) {
                 return imageMarkerPair.getImage();
             }
         }

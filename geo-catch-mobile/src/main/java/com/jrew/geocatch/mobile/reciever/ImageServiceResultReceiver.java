@@ -62,32 +62,34 @@ public class ImageServiceResultReceiver extends ResultReceiver {
 
                     ImageCache.getInstance().addClientImagesPreview(images);
 
-                    filterDisplayedImages(images);
                     if(!images.isEmpty()) {
 
+                        final Map<Long, ImageMarkerPair> imageMarkerPairs = mapFragment.getImageMarkerPairs();
                         for (final ClientImagePreview imagePreview : images) {
 
-                            // Load image, decode it to Bitmap and return Bitmap to callback
-                            ImageLoader imageLoader = ImageLoader.getInstance();
-                            imageLoader.loadImage(imagePreview.getThumbnailPath(), new SimpleImageLoadingListener() {
-                                @Override
-                                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            if (!imageMarkerPairs.containsKey(imagePreview.getId())) {
 
-                                    if (mapFragment.getActivity() != null) {
+                                // Load image, decode it to Bitmap and return Bitmap to callback
+                                ImageLoader imageLoader = ImageLoader.getInstance();
+                                imageLoader.loadImage(imagePreview.getThumbnailPath(), new SimpleImageLoadingListener() {
+                                    @Override
+                                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
-                                        MarkerOptions markerOptions = new MarkerOptions();
-                                        markerOptions.position(new LatLng(imagePreview.getLatitude(), imagePreview.getLongitude()));
+                                        if (mapFragment.getActivity() != null) {
 
-                                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(BitmapUtil.createIconWithBorder(loadedImage, mapFragment.getActivity())));
 
-                                        Marker marker = mapFragment.getGoogleMap().addMarker(markerOptions);
+                                                MarkerOptions markerOptions = new MarkerOptions();
+                                                markerOptions.position(new LatLng(imagePreview.getLatitude(), imagePreview.getLongitude()));
 
-                                        Map<Long, ImageMarkerPair> imageMarkerPairs = mapFragment.getImageMarkerPairs();
-                                        imageMarkerPairs.put(imagePreview.getId(), new ImageMarkerPair(imagePreview, marker));
+                                                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(BitmapUtil.createIconWithBorder(loadedImage, mapFragment.getActivity())));
 
-                                    }
-                                }
-                            });
+                                                Marker marker = mapFragment.getGoogleMap().addMarker(markerOptions);
+
+                                                imageMarkerPairs.put(imagePreview.getId(), new ImageMarkerPair(imagePreview, marker));
+                                            }
+                                        }
+                                });
+                            }
                         }
                     }
                 }
@@ -101,23 +103,6 @@ public class ImageServiceResultReceiver extends ResultReceiver {
             case ImageService.ResultStatus.ERROR:
 
                 break;
-        }
-    }
-
-    /**
-     *
-     * @param images
-     */
-    private void filterDisplayedImages(List<ClientImagePreview> images) {
-
-        Map<Long, ImageMarkerPair> imageMarkerPairs = mapFragment.getImageMarkerPairs();
-
-        Iterator<ClientImagePreview> imageIterator = images.listIterator();
-        while(imageIterator.hasNext()) {
-            ClientImagePreview image = imageIterator.next();
-            if(imageMarkerPairs.containsKey(image.getId())) {
-                imageIterator.remove();
-            }
         }
     }
 }

@@ -99,9 +99,8 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                     @Override
                     public void onCameraChange(CameraPosition cameraPosition) {
 
-                        //googleMap.clear();
                         // Remove invisible markers
-                        //removeInvisibleMarkers();
+                        removeInvisibleMarkers();
 
                         // Load new images for view bounds
                         loadImages();
@@ -322,22 +321,25 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
         ImageLoader imageLoader = ImageLoader.getInstance();
         List<ClientImagePreview> cachedImages = ImageCache.getInstance().getClientImagePreview(latLngBounds);
         for (final ClientImagePreview imagePreview : cachedImages) {
-            imageLoader.loadImage(imagePreview.getThumbnailPath(), new SimpleImageLoadingListener() {
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(new LatLng(imagePreview.getLatitude(), imagePreview.getLongitude()));
+            if (!imageMarkerPairs.containsKey(imagePreview.getId())) {
+                imageLoader.loadImage(imagePreview.getThumbnailPath(), new SimpleImageLoadingListener() {
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
-                    markerOptions.icon(BitmapDescriptorFactory.fromBitmap(BitmapUtil.createIconWithBorder(loadedImage, getActivity())));
+                        MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(new LatLng(imagePreview.getLatitude(), imagePreview.getLongitude()));
 
-                    Marker marker = googleMap.addMarker(markerOptions);
+                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(BitmapUtil.createIconWithBorder(loadedImage, getActivity())));
 
-                    if (imageMarkerPairs.containsKey(imagePreview.getId())) {
-                        imageMarkerPairs.put(imagePreview.getId(), new ImageMarkerPair(imagePreview, marker));
+                        Marker marker = googleMap.addMarker(markerOptions);
+
+                        if (imageMarkerPairs.containsKey(imagePreview.getId())) {
+                            imageMarkerPairs.put(imagePreview.getId(), new ImageMarkerPair(imagePreview, marker));
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
     }
