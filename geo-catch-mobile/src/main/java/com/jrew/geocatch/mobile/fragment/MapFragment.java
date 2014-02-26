@@ -13,19 +13,22 @@ import android.support.v4.app.Watson;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.androidmapsextensions.GoogleMap;
+import com.androidmapsextensions.Marker;
+import com.androidmapsextensions.MarkerOptions;
+import com.androidmapsextensions.SupportMapFragment;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.*;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.jrew.geocatch.mobile.R;
-import com.jrew.geocatch.mobile.listener.MarkerOnClickListener;
-import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.reciever.ImageServiceResultReceiver;
+import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.service.cache.ImageCache;
 import com.jrew.geocatch.mobile.util.*;
 import com.jrew.geocatch.web.model.ClientImagePreview;
@@ -53,8 +56,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
     /** **/
     private GoogleMap googleMap;
 
-    /** **/
-    private Map<Long, ImageMarkerPair> imageMarkerPairs;
+    private Map<Long, Marker> markers;
 
     /** **/
     private ImageServiceResultReceiver imageResultReceiver;
@@ -87,12 +89,12 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
                 imageResultReceiver = new ImageServiceResultReceiver(new Handler(), this);
 
-                googleMap = getMap();
+                googleMap = getExtendedMap();
 
                 int mapType = Integer.parseInt(getResources().getString(R.config.mapType));
                 googleMap.setMapType(mapType);
 
-                imageMarkerPairs = new HashMap<Long, ImageMarkerPair>();
+                markers = new HashMap<Long, Marker>();
 
                 googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
@@ -107,9 +109,19 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                     }
                 });
 
-                /** Set custom on marker click listener  **/
-                MarkerOnClickListener markerOnclickListener = new MarkerOnClickListener(imageMarkerPairs, this);
-                googleMap.setOnMarkerClickListener(markerOnclickListener);
+                googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+
+                        ClientImagePreview clientImagePreview = marker.getData();
+
+                        Bundle fragmentData = new Bundle();
+                        fragmentData.putSerializable(ImageService.IMAGE_KEY, clientImagePreview);
+                        FragmentSwitcherHolder.getFragmentSwitcher().showPhotoBrowsingFragment(fragmentData);
+
+                        return true;
+                    }
+                });
 
                 isLocationSet = false;
 
@@ -175,18 +187,37 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
      */
     private void removeInvisibleMarkers() {
 
-        LatLngBounds latLngBounds = getLatLngBounds();
+        List<Marker> displayedMarkers = googleMap.getDisplayedMarkers();
 
-        Iterator<Map.Entry<Long, ImageMarkerPair>> iterator = imageMarkerPairs.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<Long, ImageMarkerPair> entry = iterator.next();
-            ImageMarkerPair imageMarkerPair = entry.getValue();
-            Marker currentMarker = imageMarkerPair.getMarker();
-            if (!latLngBounds.contains(currentMarker.getPosition())) {
+        Iterator<Map.Entry<Long, Marker>> iterator = markers.entrySet().iterator();
+        while(iterator.hasNext()) {
+            Map.Entry<Long, Marker> entry = iterator.next();
+            Marker marker = entry.getValue();
+            if (!isMarkerDisplayed(marker, displayedMarkers)) {
                 iterator.remove();
-                currentMarker.remove();
+                marker.remove();
             }
         }
+    }
+
+    /**
+     *
+     * @param marker
+     * @param displayedMarkers
+     * @return
+     */
+    private boolean isMarkerDisplayed(Marker marker, List<Marker> displayedMarkers) {
+
+        ClientImagePreview image = marker.getData();
+
+        for (Marker displayedMarker : displayedMarkers) {
+            ClientImagePreview displayedImage = displayedMarker.getData();
+            if (displayedImage.getId() == image.getId()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -242,15 +273,15 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
      */
     private void clearMarkers() {
         googleMap.clear();
-        imageMarkerPairs.clear();
+        markers.clear();
     }
 
     /**
      *
      * @return
      */
-    public Map<Long, ImageMarkerPair> getImageMarkerPairs() {
-        return imageMarkerPairs;
+    public Map<Long, Marker> getMarkers() {
+        return markers;
     }
 
     /**
@@ -322,7 +353,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
         List<ClientImagePreview> cachedImages = ImageCache.getInstance().getClientImagePreview(latLngBounds);
         for (final ClientImagePreview imagePreview : cachedImages) {
 
-            if (!imageMarkerPairs.containsKey(imagePreview.getId())) {
+            if (!markers.containsKey(imagePreview.getId())) {
                 imageLoader.loadImage(imagePreview.getThumbnailPath(), new SimpleImageLoadingListener() {
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
@@ -333,10 +364,8 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(BitmapUtil.createIconWithBorder(loadedImage, getActivity())));
 
                         Marker marker = googleMap.addMarker(markerOptions);
-
-                        if (imageMarkerPairs.containsKey(imagePreview.getId())) {
-                            imageMarkerPairs.put(imagePreview.getId(), new ImageMarkerPair(imagePreview, marker));
-                        }
+                        marker.setData(imagePreview);
+                        markers.put(imagePreview.getId(), marker);
                     }
                 });
             }

@@ -5,12 +5,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.view.View;
+import com.androidmapsextensions.Marker;
+import com.androidmapsextensions.MarkerOptions;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.jrew.geocatch.mobile.fragment.MapFragment;
-import com.jrew.geocatch.mobile.model.ImageMarkerPair;
 import com.jrew.geocatch.mobile.service.ImageService;
 import com.jrew.geocatch.mobile.service.cache.ImageCache;
 import com.jrew.geocatch.mobile.util.BitmapUtil;
@@ -18,7 +17,6 @@ import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -64,10 +62,10 @@ public class ImageServiceResultReceiver extends ResultReceiver {
 
                     if(!images.isEmpty()) {
 
-                        final Map<Long, ImageMarkerPair> imageMarkerPairs = mapFragment.getImageMarkerPairs();
+                        final Map<Long, Marker> markers = mapFragment.getMarkers();
                         for (final ClientImagePreview imagePreview : images) {
 
-                            if (!imageMarkerPairs.containsKey(imagePreview.getId())) {
+                            if (!markers.containsKey(imagePreview.getId())) {
 
                                 // Load image, decode it to Bitmap and return Bitmap to callback
                                 ImageLoader imageLoader = ImageLoader.getInstance();
@@ -77,15 +75,14 @@ public class ImageServiceResultReceiver extends ResultReceiver {
 
                                         if (mapFragment.getActivity() != null) {
 
-
                                                 MarkerOptions markerOptions = new MarkerOptions();
                                                 markerOptions.position(new LatLng(imagePreview.getLatitude(), imagePreview.getLongitude()));
-
                                                 markerOptions.icon(BitmapDescriptorFactory.fromBitmap(BitmapUtil.createIconWithBorder(loadedImage, mapFragment.getActivity())));
 
                                                 Marker marker = mapFragment.getGoogleMap().addMarker(markerOptions);
+                                                marker.setData(imagePreview);
 
-                                                imageMarkerPairs.put(imagePreview.getId(), new ImageMarkerPair(imagePreview, marker));
+                                                markers.put(imagePreview.getId(), marker);
                                             }
                                         }
                                 });

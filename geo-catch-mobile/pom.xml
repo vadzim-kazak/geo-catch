@@ -85,6 +85,14 @@
             <version>4.1.1</version>
         </dependency>
 
+        <!-- Google maps extension -->
+        <dependency>
+            <groupId>com.androidmapsextensions</groupId>
+            <artifactId>android-maps-extensions</artifactId>
+            <version>2.1.0</version>
+            <type>aar</type>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -95,7 +103,7 @@
             <plugin>
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
-                <version>3.7.0</version>
+                <version>3.8.2</version>
                 <configuration>
                     <sdk>
                         <!-- Don't forget to set your ANDROID_HOME environment variable to your SDK directory! -->
@@ -115,6 +123,9 @@
                     <undeployBeforeDeploy>true</undeployBeforeDeploy>
                 </configuration>
                 <extensions>true</extensions>
+                <goals>
+                    <goal>consume-aar</goal>
+                </goals>
             </plugin>
         </plugins>
     </build>
