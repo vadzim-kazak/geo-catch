@@ -26,11 +26,12 @@ public class GeoCatchApplication extends Application {
 
         System.setProperty("http.keepAlive", "false");
 
-                // Create global configuration and initialize ImageLoader with this configuration
+        int connectionTimeOut = getResources().getInteger(R.config.serverConnectionTimeout);
+
+        // Create global configuration and initialize ImageLoader with this configuration
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
                 .defaultDisplayImageOptions(defaultOptions)
-                .imageDownloader(new BaseImageDownloader(getApplicationContext(),
-                        getResources().getInteger(R.config.serverConnectionTimeout) * 1000, 20 * 1000))
+                .imageDownloader(new BaseImageDownloader(getApplicationContext(), connectionTimeOut * 1000, connectionTimeOut * 1000))
                 .build();
 
 

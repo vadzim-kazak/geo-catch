@@ -63,6 +63,7 @@ public class ImageServiceResultReceiver extends ResultReceiver {
                     if(!images.isEmpty()) {
 
                         final Map<Long, Marker> markers = mapFragment.getMarkers();
+                        final MarkerOptions markerOptions = new MarkerOptions();
                         for (final ClientImagePreview imagePreview : images) {
 
                             if (!markers.containsKey(imagePreview.getId())) {
@@ -75,14 +76,15 @@ public class ImageServiceResultReceiver extends ResultReceiver {
 
                                         if (mapFragment.getActivity() != null) {
 
-                                                MarkerOptions markerOptions = new MarkerOptions();
                                                 markerOptions.position(new LatLng(imagePreview.getLatitude(), imagePreview.getLongitude()));
                                                 markerOptions.icon(BitmapDescriptorFactory.fromBitmap(BitmapUtil.createIconWithBorder(loadedImage, mapFragment.getActivity())));
-
-                                                Marker marker = mapFragment.getGoogleMap().addMarker(markerOptions);
-                                                marker.setData(imagePreview);
-
-                                                markers.put(imagePreview.getId(), marker);
+                                                synchronized (markers) {
+                                                    if (!markers.containsKey(imagePreview.getId())) {
+                                                        Marker marker = mapFragment.getGoogleMap().addMarker(markerOptions);
+                                                        marker.setData(imagePreview);
+                                                        markers.put(imagePreview.getId(), marker);
+                                                    }
+                                                }
                                             }
                                         }
                                 });

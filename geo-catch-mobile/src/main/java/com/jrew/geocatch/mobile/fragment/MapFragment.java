@@ -37,10 +37,7 @@ import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -94,7 +91,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                 int mapType = Integer.parseInt(getResources().getString(R.config.mapType));
                 googleMap.setMapType(mapType);
 
-                markers = new HashMap<Long, Marker>();
+                markers = Collections.synchronizedMap(new HashMap<Long, Marker>());
 
                 googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
@@ -187,37 +184,17 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
      */
     private void removeInvisibleMarkers() {
 
-        List<Marker> displayedMarkers = googleMap.getDisplayedMarkers();
+        LatLngBounds latLngBounds = getLatLngBounds();
 
         Iterator<Map.Entry<Long, Marker>> iterator = markers.entrySet().iterator();
         while(iterator.hasNext()) {
             Map.Entry<Long, Marker> entry = iterator.next();
             Marker marker = entry.getValue();
-            if (!isMarkerDisplayed(marker, displayedMarkers)) {
+            if (!latLngBounds.contains(marker.getPosition())) {
                 iterator.remove();
                 marker.remove();
             }
         }
-    }
-
-    /**
-     *
-     * @param marker
-     * @param displayedMarkers
-     * @return
-     */
-    private boolean isMarkerDisplayed(Marker marker, List<Marker> displayedMarkers) {
-
-        ClientImagePreview image = marker.getData();
-
-        for (Marker displayedMarker : displayedMarkers) {
-            ClientImagePreview displayedImage = displayedMarker.getData();
-            if (displayedImage.getId() == image.getId()) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -234,26 +211,10 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
             displayImagesFromCache(latLngBounds);
 
-//            WindowManager windowManager = getActivity().getWindowManager();
-//            int displayWidth =  windowManager.getDefaultDisplay().getWidth();
-//            int displayHeight =  windowManager.getDefaultDisplay().getHeight();
-
             ViewBounds viewBounds = new ViewBounds(latLngBounds.northeast.latitude,
                     latLngBounds.northeast.longitude,
                     latLngBounds.southwest.latitude,
                     latLngBounds.southwest.longitude);
-//            if (displayWidth > displayHeight) {
-//                viewBounds = new ViewBounds(latLngBounds.northeast.latitude,
-//                        - latLngBounds.northeast.longitude,
-//                        latLngBounds.southwest.latitude,
-//                        -latLngBounds.southwest.longitude);
-//
-//            } else {
-//                viewBounds = new ViewBounds(latLngBounds.northeast.latitude,
-//                        latLngBounds.northeast.longitude,
-//                        latLngBounds.southwest.latitude,
-//                        latLngBounds.southwest.longitude);
-//            }
 
             SearchCriteria searchCriteria = SearchCriteriaHolder.getSearchCriteria();
 
@@ -351,6 +312,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
         // Display images from cache here
         ImageLoader imageLoader = ImageLoader.getInstance();
         List<ClientImagePreview> cachedImages = ImageCache.getInstance().getClientImagePreview(latLngBounds);
+        final MarkerOptions markerOptions = new MarkerOptions();
         for (final ClientImagePreview imagePreview : cachedImages) {
 
             if (!markers.containsKey(imagePreview.getId())) {
@@ -358,14 +320,15 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
-                        MarkerOptions markerOptions = new MarkerOptions();
                         markerOptions.position(new LatLng(imagePreview.getLatitude(), imagePreview.getLongitude()));
-
                         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(BitmapUtil.createIconWithBorder(loadedImage, getActivity())));
-
-                        Marker marker = googleMap.addMarker(markerOptions);
-                        marker.setData(imagePreview);
-                        markers.put(imagePreview.getId(), marker);
+                        synchronized (markers) {
+                            if (!markers.containsKey(imagePreview.getId())) {
+                                Marker marker = googleMap.addMarker(markerOptions);
+                                marker.setData(imagePreview);
+                                markers.put(imagePreview.getId(), marker);
+                            }
+                        }
                     }
                 });
             }
