@@ -32,7 +32,7 @@ public class HttpClientHolder {
     private final static String HTTPS_PROTOCOL = "https";
 
     /** **/
-    private static final int CONNECTION_TIMEOUT = 7000;
+    private static final int CONNECTION_TIMEOUT = 5000;
 
     /** **/
     private static HttpClient httpClient = null;
@@ -49,6 +49,7 @@ public class HttpClientHolder {
             HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
             HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
             HttpConnectionParams.setConnectionTimeout(params, CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(params, CONNECTION_TIMEOUT);
 
             SchemeRegistry registry = new SchemeRegistry();
             registry.register(new Scheme(HTTP_PROTOCOL, PlainSocketFactory.getSocketFactory(), 80));

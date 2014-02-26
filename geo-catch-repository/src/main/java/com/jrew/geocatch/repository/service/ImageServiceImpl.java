@@ -9,6 +9,7 @@ import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class ImageServiceImpl implements ImageService {
         // Update images paths
         fileSystemManager.updateThumbnailPath(images);
 
-        return convertToClientImages(images);
+        return convertToClientImages(images, searchCriteria);
     }
 
     @Override
@@ -105,14 +106,24 @@ public class ImageServiceImpl implements ImageService {
 
     /**
      *
+     *
      * @param images
+     * @param searchCriteria
      * @return
      */
-    private List<ClientImagePreview> convertToClientImages(List<Image> images) {
+    private List<ClientImagePreview> convertToClientImages(List<Image> images, SearchCriteria searchCriteria) {
         List<ClientImagePreview> clientImagePreviews = new ArrayList<ClientImagePreview>(images.size());
-        for (Image image : images) {
-            clientImagePreviews.add(clientImagePreviewConverter.convert(image));
+        if (images != null) {
+            for (Image image : images) {
+                ClientImagePreview clientImagePreview = clientImagePreviewConverter.convert(image);
+                if (!StringUtils.isEmpty(searchCriteria.getDeviceId()) &&
+                        searchCriteria.getDeviceId().equalsIgnoreCase(image.getDeviceId())) {
+                    clientImagePreview.setOwn(true);
+                }
+                clientImagePreviews.add(clientImagePreview);
+            }
         }
+
         return clientImagePreviews;
     }
 

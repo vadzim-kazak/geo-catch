@@ -1,6 +1,8 @@
 package com.jrew.geocatch.web.model;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Lightweight version of Image entity for web representation
@@ -18,6 +20,12 @@ public class ClientImagePreview implements Serializable {
 
     /** **/
     private String thumbnailPath;
+
+    /** **/
+    private List<DomainProperty> domainProperties;
+
+    /** **/
+    private boolean own;
 
     /**
      *
@@ -81,5 +89,37 @@ public class ClientImagePreview implements Serializable {
      */
     public void setThumbnailPath(String thumbnailPath) {
         this.thumbnailPath = thumbnailPath;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<DomainProperty> getDomainProperties() {
+        return domainProperties;
+    }
+
+    /**
+     *
+     * @param domainProperties
+     */
+    public void setDomainProperties(List<DomainProperty> domainProperties) {
+        this.domainProperties = domainProperties;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isOwn() {
+        return own;
+    }
+
+    /**
+     *
+     * @param own
+     */
+    public void setOwn(boolean own) {
+        this.own = own;
     }
 }

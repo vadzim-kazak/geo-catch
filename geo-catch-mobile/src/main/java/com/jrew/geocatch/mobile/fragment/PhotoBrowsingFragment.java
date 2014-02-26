@@ -183,6 +183,8 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                                 }
 
                                 likesCount.setText(Integer.toString(likes));
+                                clientImage.setLikesCount(likes);
+                                clientImage.setLikeSelected(isLikeSelected);
 
                             } else if (ImageReview.ReviewType.DISLIKE == reviewType) {
 
@@ -198,6 +200,8 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                                     dislikes--;
                                 }
                                 dislikesCount.setText(Integer.toString(dislikes));
+                                clientImage.setDislikesCount(dislikes);
+                                clientImage.setDislikeSelected(isDislikeSelected);
 
                             } else if (ImageReview.ReviewType.REPORT == reviewType) {
 
@@ -214,7 +218,12 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                                 }
 
                                 reportsCount.setText(Integer.toString(reports));
+                                clientImage.setReportsCount(reports);
+                                clientImage.setReportSelected(isReportSelected);
                             }
+
+                            ImageCache.getInstance().replace(clientImage);
+
                         } else {
                             showCommunicationError();
                         }
@@ -237,7 +246,7 @@ public class PhotoBrowsingFragment extends SherlockFragment {
 
             ClientImagePreview image = (ClientImagePreview) fragmentData.getSerializable(ImageService.IMAGE_KEY);
 
-            ClientImage clientImage = ImageCache.getInstance().getClientImage(image.getId());
+            clientImage = ImageCache.getInstance().getClientImage(image.getId());
             if (clientImage != null) {
                 processClientImageLoading(clientImage);
             } else {

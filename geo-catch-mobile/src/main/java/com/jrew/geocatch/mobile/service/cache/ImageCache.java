@@ -3,8 +3,13 @@ package com.jrew.geocatch.mobile.service.cache;
 import android.support.v4.util.LruCache;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.jrew.geocatch.mobile.util.SearchCriteriaHolder;
+import com.jrew.geocatch.mobile.util.SearchCriteriaUtil;
 import com.jrew.geocatch.web.model.ClientImage;
 import com.jrew.geocatch.web.model.ClientImagePreview;
+import com.jrew.geocatch.web.model.DomainProperty;
+import com.jrew.geocatch.web.model.ViewBounds;
+import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,25 +81,24 @@ public class ImageCache {
 
     /**
      *
-     * @param latLngBounds
-     * @return
+     *
+     * @param searchCriteria@return
      */
-    public List<ClientImagePreview> getClientImagePreview(LatLngBounds latLngBounds) {
+    public List<ClientImagePreview> getClientImagePreview(SearchCriteria searchCriteria) {
 
         Map<Long, ClientImagePreview> images = clientImagePreviewCache.snapshot();
         List<ClientImagePreview> cachedImages = new ArrayList<ClientImagePreview>(images.size() / 2);
         for (Map.Entry<Long, ClientImagePreview> entries : images.entrySet()) {
             ClientImagePreview image = entries.getValue();
-            if (image.getLatitude() >= latLngBounds.southwest.latitude &&
-                image.getLatitude() < latLngBounds.northeast.latitude &&
-                image.getLongitude() >= latLngBounds.southwest.longitude &&
-                image.getLongitude() < latLngBounds.northeast.longitude) {
+            if (SearchCriteriaUtil.isPassingSearchCriteria(image, searchCriteria)) {
                 cachedImages.add(image);
             }
         }
 
         return cachedImages;
     }
+
+
 
     /**
      *
@@ -110,7 +114,17 @@ public class ImageCache {
      * @param clientImage
      */
     public void add(ClientImage clientImage) {
-        if (clientImage != null && getClientImagePreview(clientImage.getId()) == null) {
+        if (clientImage != null && getClientImage(clientImage.getId()) == null) {
+            clientImageCache.put(clientImage.getId(), clientImage);
+        }
+    }
+
+    /**
+     *
+     * @param clientImage
+     */
+    public void replace(ClientImage clientImage) {
+        if (clientImage != null) {
             clientImageCache.put(clientImage.getId(), clientImage);
         }
     }

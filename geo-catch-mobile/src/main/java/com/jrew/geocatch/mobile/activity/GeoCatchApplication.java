@@ -2,10 +2,12 @@ package com.jrew.geocatch.mobile.activity;
 
 import android.app.Application;
 import com.google.android.gms.R;
+import com.jrew.geocatch.mobile.util.HttpClientHolder;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
+import com.nostra13.universalimageloader.core.download.HttpClientImageDownloader;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,14 +28,11 @@ public class GeoCatchApplication extends Application {
 
         System.setProperty("http.keepAlive", "false");
 
-        int connectionTimeOut = getResources().getInteger(R.config.serverConnectionTimeout);
-
         // Create global configuration and initialize ImageLoader with this configuration
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
                 .defaultDisplayImageOptions(defaultOptions)
-                .imageDownloader(new BaseImageDownloader(getApplicationContext(), connectionTimeOut * 1000, connectionTimeOut * 1000))
+                .imageDownloader(new HttpClientImageDownloader(getApplicationContext(), HttpClientHolder.getHttpClient()))
                 .build();
-
 
         ImageLoader.getInstance().init(config);
     }

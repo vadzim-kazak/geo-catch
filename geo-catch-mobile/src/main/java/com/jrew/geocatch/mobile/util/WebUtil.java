@@ -197,6 +197,18 @@ public class WebUtil {
         imagePreview.setLongitude(jsonObject.getDouble("longitude"));
         imagePreview.setThumbnailPath(jsonObject.getString("thumbnailPath"));
 
+        // Domain properties
+        List<DomainProperty> domainProperties = new ArrayList<DomainProperty>();
+        JSONArray domainPropertiesJSON = jsonObject.getJSONArray("domainProperties");
+        for (int i = 0; i < domainPropertiesJSON.length(); i++) {
+            JSONObject domainPropertyJSON = domainPropertiesJSON.getJSONObject(i);
+            DomainProperty domainProperty = convertToDomainProperty(domainPropertyJSON);
+            domainProperties.add(domainProperty);
+        }
+        imagePreview.setDomainProperties(domainProperties);
+
+        imagePreview.setOwn(jsonObject.getBoolean("own"));
+
         return imagePreview;
     }
 

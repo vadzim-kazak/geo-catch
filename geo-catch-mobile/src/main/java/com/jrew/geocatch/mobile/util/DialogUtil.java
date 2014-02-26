@@ -30,6 +30,8 @@ public class DialogUtil {
         TextView textView = (TextView) dialog.findViewById(R.id.message);
         textView.setText(message);
 
+
+
         return dialog;
     }
 

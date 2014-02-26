@@ -53,6 +53,7 @@ public class ImageDBManagerJPAImpl implements ImageDBManager {
     }
 
     @Override
+    @Transactional
     public List<Image> loadImages(SearchCriteria searchCriteria) {
 
         CriteriaQuery<Image> criteriaQuery = criteriaSearchHelper.createSearchImagesCriteria(searchCriteria);
@@ -61,7 +62,15 @@ public class ImageDBManagerJPAImpl implements ImageDBManager {
         query.setFirstResult(0);
         query.setMaxResults(maxImagesPerQuery);
 
-        return query.getResultList();
+        List<Image> result = query.getResultList();
+        if (result != null) {
+            for (Image image : result) {
+                // Need this to load domain properties collection
+                image.getDomainProperties().size();
+            }
+        }
+
+        return result;
     }
 
     @Override

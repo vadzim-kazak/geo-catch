@@ -311,7 +311,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
         // Display images from cache here
         ImageLoader imageLoader = ImageLoader.getInstance();
-        List<ClientImagePreview> cachedImages = ImageCache.getInstance().getClientImagePreview(latLngBounds);
+        List<ClientImagePreview> cachedImages = ImageCache.getInstance().getClientImagePreview(SearchCriteriaHolder.getSearchCriteria());
         final MarkerOptions markerOptions = new MarkerOptions();
         for (final ClientImagePreview imagePreview : cachedImages) {
 
