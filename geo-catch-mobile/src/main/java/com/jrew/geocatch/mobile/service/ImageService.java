@@ -160,5 +160,14 @@ public class ImageService extends IntentService {
         this.stopSelf();
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        int id = intent.getExtras().getInt("stopid");
+        if(id != 0) {
+            this.stopSelf();
+        }
+        return super.onStartCommand(intent, flags, startId);
+    }
+
 
 }
