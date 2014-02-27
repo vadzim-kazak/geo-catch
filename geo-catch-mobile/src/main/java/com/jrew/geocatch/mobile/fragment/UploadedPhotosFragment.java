@@ -41,6 +41,8 @@ public class UploadedPhotosFragment extends SherlockFragment {
             GridView photosGridView = (GridView) layout.findViewById(R.id.photosGridView);
             if (uploadedPhotosAdapter == null) {
                 uploadedPhotosAdapter = new UploadedPhotosAdapter(getActivity());
+            } else {
+                uploadedPhotosAdapter.loadImagesServiceCall();
             }
             photosGridView.setAdapter(uploadedPhotosAdapter);
 

@@ -81,6 +81,8 @@
 
     <string name="uploadedPhotosLoadingError">Ошибка загрузки фото</string>
 
+    <string name="uploadedPhotosLoadingCancelled">Загрузка фото отменена.</string>
+
     <!-- Postponed photos fragment -->
     <string name="postponedPhotosFragmentLabel">Отложенные фото</string>
 

@@ -23,6 +23,7 @@ import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,10 +35,8 @@ import java.util.List;
  */
 public class UploadedPhotosAdapter extends BaseAdapter {
 
-    private static boolean isImagesLoadedFromServer;
-
     /** **/
-    private List<ClientImagePreview> images;
+    private List<ClientImagePreview> images = new ArrayList<ClientImagePreview>();
 
     /** **/
     private final Activity activity;
@@ -61,26 +60,17 @@ public class UploadedPhotosAdapter extends BaseAdapter {
 
         this.activity = activity;
 
-        if (!isImagesLoadedFromServer) {
-            DialogInterface.OnCancelListener listener = new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialogInterface) {
+        DialogInterface.OnCancelListener listener = new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
 
-                    ServiceUtil.abortImageService(UploadedPhotosAdapter.this.activity);
-                    loadingDialog.dismiss();
-                    LayoutUtil.showRefreshLayout(UploadedPhotosAdapter.this.activity, R.string.photoLoadingCancelled);
+            ServiceUtil.abortImageService(UploadedPhotosAdapter.this.activity);
+            loadingDialog.dismiss();
+            LayoutUtil.showRefreshLayout(UploadedPhotosAdapter.this.activity, R.string.uploadedPhotosLoadingCancelled);
+            }
+        };
 
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(UploadedPhotosAdapter.this.activity, "Image loading aborted.", duration);
-                    toast.show();
-                }
-            };
-
-            loadingDialog = DialogUtil.createProgressDialog(this.activity, R.string.uploadedPhotosLoadingMessage, listener);
-
-        } else {
-            images = ImageCache.getInstance().getOwnClientImagePreview();
-        }
+        loadingDialog = DialogUtil.createProgressDialog(this.activity, R.string.uploadedPhotosLoadingMessage, listener);
 
         resultReceiver = new ServiceResultReceiver(new Handler());
         resultReceiver.setReceiver(new ServiceResultReceiver.Receiver() {
@@ -91,12 +81,14 @@ public class UploadedPhotosAdapter extends BaseAdapter {
                 switch (resultCode) {
                     case ImageService.ResultStatus.LOAD_IMAGES_FINISHED:
                         if (resultData.containsKey(ImageService.RESULT_KEY)) {
-                            images = (List<ClientImagePreview>) resultData.getSerializable(ImageService.RESULT_KEY);
-                            ImageCache.getInstance().addClientImagesPreview(images);
-                            notifyDataSetChanged();
-                            isImagesLoadedFromServer = true;
-                            if (loadingDialog!= null && loadingDialog.isShowing()) {
-                                loadingDialog.dismiss();
+                            List<ClientImagePreview> loadedImages = (List<ClientImagePreview>) resultData.getSerializable(ImageService.RESULT_KEY);
+                            if (loadedImages != null && loadedImages.size() > images.size()) {
+                                images = loadedImages;
+                                ImageCache.getInstance().addClientImagesPreview(images);
+                                notifyDataSetChanged();
+                                if (loadingDialog!= null && loadingDialog.isShowing()) {
+                                    loadingDialog.dismiss();
+                                }
                             }
                         } else {
                             LayoutUtil.showRefreshLayout(UploadedPhotosAdapter.this.activity, R.string.uploadedPhotosLoadingError);
