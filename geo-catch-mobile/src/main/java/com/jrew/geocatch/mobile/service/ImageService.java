@@ -167,7 +167,6 @@ public class ImageService extends IntentService {
     public int onStartCommand(Intent intent, int flags, int startId) {
         String command = intent.getExtras().getString(COMMAND_KEY);
         if (Commands.ABORT.equalsIgnoreCase(command)) {
-            RepositoryRestUtil.abort();
             this.stopSelf();
         }
 

@@ -41,10 +41,6 @@ public class RepositoryRestUtil {
     /** **/
     private final static String CONTENT_TYPE_JSON_UTF_8 = "application/json; charset=UTF-8";
 
-    /** **/
-    private static ThreadLocal<HttpRequestBase> httpMethod =
-            new InheritableThreadLocal<HttpRequestBase>();
-
     /**
      *
      * @param intent
@@ -70,8 +66,6 @@ public class RepositoryRestUtil {
         httpPost.setEntity(new ByteArrayEntity(searchCriteriaJson.getBytes(UTF_8_ENCODING)));
         httpPost.setHeader(HTTP.CONTENT_TYPE, CONTENT_TYPE_JSON_UTF_8);
 
-        httpMethod.set(httpPost);
-
         HttpResponse response = null;
         Bundle bundle = new Bundle();
 
@@ -93,7 +87,6 @@ public class RepositoryRestUtil {
 
         } finally {
             releaseConnection(response);
-            httpMethod.remove();
         }
 
         return bundle;
@@ -121,7 +114,6 @@ public class RepositoryRestUtil {
                 .append(imageId);
 
         HttpGet httpGet = new HttpGet(loadImageUrl.toString());
-        httpMethod.set(httpGet);
 
         HttpResponse response = null;
         Bundle bundle = new Bundle();
@@ -139,7 +131,6 @@ public class RepositoryRestUtil {
 
         } finally {
             releaseConnection(response);
-            httpMethod.remove();
         }
 
         return bundle;
@@ -186,7 +177,6 @@ public class RepositoryRestUtil {
         HttpContext localContext = new BasicHttpContext();
 
         HttpGet httpGet = new HttpGet(imagePath);
-        httpMethod.set(httpGet);
 
         HttpResponse response = null;
         Bundle bundle = new Bundle();
@@ -198,7 +188,6 @@ public class RepositoryRestUtil {
 
         } finally {
             releaseConnection(response);
-            httpMethod.remove();
         }
 
         return bundle;
@@ -233,7 +222,6 @@ public class RepositoryRestUtil {
         HttpPost httpPost = new HttpPost(uploadUrl.toString());
         httpPost.setHeader(HTTP.CONTENT_TYPE, CONTENT_TYPE_JSON_UTF_8);
         httpPost.setEntity(jsonRequest);
-        httpMethod.set(httpPost);
 
         HttpResponse response = null;
         Bundle bundle = new Bundle();
@@ -253,7 +241,6 @@ public class RepositoryRestUtil {
 
         } finally {
             releaseConnection(response);
-            httpMethod.remove();
         }
 
         return bundle;
@@ -281,7 +268,6 @@ public class RepositoryRestUtil {
                          .append(locale);
 
         HttpGet httpGet = new HttpGet(loadDomainInfoUrl.toString());
-        httpMethod.set(httpGet);
 
         HttpResponse response = null;
         Bundle bundle = new Bundle();
@@ -299,7 +285,6 @@ public class RepositoryRestUtil {
             bundle.putSerializable(DomainInfoService.RESULT_KEY, domainProperties);
         } finally {
             releaseConnection(response);
-            httpMethod.remove();
         }
 
         return bundle;
@@ -332,7 +317,6 @@ public class RepositoryRestUtil {
                 .append(deviceId);
 
         HttpDelete httpDelete = new HttpDelete(deleteImageUrl.toString());
-        httpMethod.set(httpDelete);
 
         HttpResponse response = null;
 
@@ -349,7 +333,6 @@ public class RepositoryRestUtil {
 
         }  finally {
             releaseConnection(response);
-            httpMethod.remove();
         }
 
         return bundle;
@@ -382,7 +365,6 @@ public class RepositoryRestUtil {
         HttpPost httpPost = new HttpPost(uploadUrl.toString());
         httpPost.setHeader(HTTP.CONTENT_TYPE, CONTENT_TYPE_JSON_UTF_8);
         httpPost.setEntity(jsonRequest);
-        httpMethod.set(httpPost);
 
         HttpResponse response = null;
         Bundle bundle = new Bundle();
@@ -400,7 +382,6 @@ public class RepositoryRestUtil {
 
         } finally {
             releaseConnection(response);
-            httpMethod.remove();
         }
 
         return bundle;
@@ -426,15 +407,4 @@ public class RepositoryRestUtil {
         }
     }
 
-    /**
-     *
-     */
-    public static void abort() {
-
-        HttpRequestBase currentHttpMethod = httpMethod.get();
-        if (currentHttpMethod != null) {
-            currentHttpMethod.abort();
-            httpMethod.remove();
-        }
-    }
 }

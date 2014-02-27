@@ -372,139 +372,144 @@ public class PhotoBrowsingFragment extends SherlockFragment {
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
-                // domain properties
-                List<DomainProperty> domainProperties = clientImage.getDomainProperties();
-                String locale = Locale.getDefault().getLanguage();
-                for (DomainProperty domainProperty : domainProperties) {
+                if (getActivity() != null) {
 
-                    if (!locale.equalsIgnoreCase(domainProperty.getLocale())) {
-                        domainProperty =
-                                DomainDatabaseManager.loadLocalizedDomainProperty(domainProperty, getActivity());
+                    // domain properties
+                    List<DomainProperty> domainProperties = clientImage.getDomainProperties();
+                    String locale = Locale.getDefault().getLanguage();
+                    for (DomainProperty domainProperty : domainProperties) {
+
+                        if (!locale.equalsIgnoreCase(domainProperty.getLocale())) {
+                            domainProperty =
+                                    DomainDatabaseManager.loadLocalizedDomainProperty(domainProperty, getActivity());
+                        }
+
+                        long domainPropertyType = domainProperty.getType();
+                        if (domainPropertyType == 1) {
+                            fishDomainPropertyTag.setVisibility(View.VISIBLE);
+                            fishTextView.setText(domainProperty.getValue());
+                        } else if (domainPropertyType == 2) {
+                            toolDomainPropertyTag.setVisibility(View.VISIBLE);
+                            toolTextView.setText(domainProperty.getValue());
+                        } else if (domainPropertyType == 3) {
+                            baitDomainPropertyTag.setVisibility(View.VISIBLE);
+                            baitTextView.setText(domainProperty.getValue());
+                        }
                     }
 
-                    long domainPropertyType = domainProperty.getType();
-                    if (domainPropertyType == 1) {
-                        fishDomainPropertyTag.setVisibility(View.VISIBLE);
-                        fishTextView.setText(domainProperty.getValue());
-                    } else if (domainPropertyType == 2) {
-                        toolDomainPropertyTag.setVisibility(View.VISIBLE);
-                        toolTextView.setText(domainProperty.getValue());
-                    } else if (domainPropertyType == 3) {
-                        baitDomainPropertyTag.setVisibility(View.VISIBLE);
-                        baitTextView.setText(domainProperty.getValue());
+                    // Photo
+                    photoImageView.setImageBitmap(loadedImage);
+
+                    Display display = getActivity().getWindowManager().getDefaultDisplay();
+                    double scaleFactor = LayoutUtil.getViewWidthScaleFactor(display.getWidth(), loadedImage.getWidth(), 0);
+                    photoImageView.setLayoutParams(new LinearLayout.LayoutParams((int)
+                            (loadedImage.getWidth() * scaleFactor), (int) (loadedImage.getHeight() * scaleFactor)));
+
+                    // reviews
+                    reviewLayout.setVisibility(View.VISIBLE);
+                    likesCount.setText(Integer.toString(clientImage.getLikesCount()));
+                    isLikeSelected = clientImage.isLikeSelected();
+                    if (isLikeSelected) {
+                        likesImageView.setImageResource(R.drawable.like_selected);
+                    } else {
+                        likesImageView.setImageResource(R.drawable.like_unselected);
                     }
-                }
 
-                // Photo
-                photoImageView.setImageBitmap(loadedImage);
+                    likesImageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (!isDislikeSelected) {
 
-                Display display = getActivity().getWindowManager().getDefaultDisplay();
-                double scaleFactor = LayoutUtil.getViewWidthScaleFactor(display.getWidth(), loadedImage.getWidth(), 0);
-                photoImageView.setLayoutParams(new LinearLayout.LayoutParams((int)
-                        (loadedImage.getWidth() * scaleFactor), (int) (loadedImage.getHeight() * scaleFactor)));
+                                ImageReview imageReview =  createImageReview(clientImage);
+                                imageReview.setReviewType(ImageReview.ReviewType.LIKE);
+                                if (isLikeSelected) {
+                                    // select like
+                                    imageReview.setSelected(false);
+                                } else {
+                                    // unselect like
+                                    imageReview.setSelected(true);
+                                }
 
-                // reviews
-                reviewLayout.setVisibility(View.VISIBLE);
-                likesCount.setText(Integer.toString(clientImage.getLikesCount()));
-                isLikeSelected = clientImage.isLikeSelected();
-                if (isLikeSelected) {
-                    likesImageView.setImageResource(R.drawable.like_selected);
-                } else {
-                    likesImageView.setImageResource(R.drawable.like_unselected);
-                }
+                                ServiceUtil.callUploadReviewService(imageReview, imageResultReceiver, getActivity());
+                            }
+                        }
+                    });
 
-                likesImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (!isDislikeSelected) {
+
+                    dislikesCount.setText(Integer.toString(clientImage.getDislikesCount()));
+                    isDislikeSelected = clientImage.isDislikeSelected();
+                    if (isDislikeSelected) {
+                        dislikesImageView.setImageResource(R.drawable.dislike_selected);
+                    } else {
+                        dislikesImageView.setImageResource(R.drawable.dislike_unselected);
+                    }
+
+                    dislikesImageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (!isLikeSelected) {
+
+                                ImageReview imageReview =  createImageReview(clientImage);
+                                imageReview.setReviewType(ImageReview.ReviewType.DISLIKE);
+                                if (isDislikeSelected) {
+                                    // select like
+                                    imageReview.setSelected(false);
+                                } else {
+                                    // unselect like
+                                    imageReview.setSelected(true);
+                                }
+
+                                ServiceUtil.callUploadReviewService(imageReview, imageResultReceiver, getActivity());
+                            }
+                        }
+                    });
+
+                    reportsCount.setText(Integer.toString(clientImage.getReportsCount()));
+                    isReportSelected = clientImage.isReportSelected();
+                    if (isReportSelected) {
+                        reportsImageView.setImageResource(R.drawable.report_selected);
+                    } else {
+                        reportsImageView.setImageResource(R.drawable.report_unselected);
+                    }
+
+                    reportsImageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
 
                             ImageReview imageReview =  createImageReview(clientImage);
-                            imageReview.setReviewType(ImageReview.ReviewType.LIKE);
-                            if (isLikeSelected) {
-                                // select like
+                            imageReview.setReviewType(ImageReview.ReviewType.REPORT);
+                            if (isReportSelected) {
                                 imageReview.setSelected(false);
                             } else {
-                                // unselect like
                                 imageReview.setSelected(true);
                             }
 
                             ServiceUtil.callUploadReviewService(imageReview, imageResultReceiver, getActivity());
                         }
+                    });
+
+                    // date
+                    date.setText(browsingDateFormat.format(clientImage.getDate()));
+                    uploadingDateLayout.setVisibility(View.VISIBLE);
+
+                    // description
+                    String description = clientImage.getDescription();
+                    if (description != null && description.length() > 0) {
+                        descriptionView.setText(description);
+                        descriptionLayout.setVisibility(View.VISIBLE);
                     }
-                });
 
-
-                dislikesCount.setText(Integer.toString(clientImage.getDislikesCount()));
-                isDislikeSelected = clientImage.isDislikeSelected();
-                if (isDislikeSelected) {
-                    dislikesImageView.setImageResource(R.drawable.dislike_selected);
-                } else {
-                    dislikesImageView.setImageResource(R.drawable.dislike_unselected);
-                }
-
-                dislikesImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (!isLikeSelected) {
-
-                            ImageReview imageReview =  createImageReview(clientImage);
-                            imageReview.setReviewType(ImageReview.ReviewType.DISLIKE);
-                            if (isDislikeSelected) {
-                                // select like
-                                imageReview.setSelected(false);
-                            } else {
-                                // unselect like
-                                imageReview.setSelected(true);
-                            }
-
-                            ServiceUtil.callUploadReviewService(imageReview, imageResultReceiver, getActivity());
-                        }
+                    if (loadingDialog.isShowing()) {
+                        loadingDialog.dismiss();
                     }
-                });
 
-                reportsCount.setText(Integer.toString(clientImage.getReportsCount()));
-                isReportSelected = clientImage.isReportSelected();
-                if (isReportSelected) {
-                    reportsImageView.setImageResource(R.drawable.report_selected);
-                } else {
-                    reportsImageView.setImageResource(R.drawable.report_unselected);
                 }
-
-                reportsImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        ImageReview imageReview =  createImageReview(clientImage);
-                        imageReview.setReviewType(ImageReview.ReviewType.REPORT);
-                        if (isReportSelected) {
-                            imageReview.setSelected(false);
-                        } else {
-                            imageReview.setSelected(true);
-                        }
-
-                        ServiceUtil.callUploadReviewService(imageReview, imageResultReceiver, getActivity());
-                    }
-                });
-
-                // date
-                date.setText(browsingDateFormat.format(clientImage.getDate()));
-                uploadingDateLayout.setVisibility(View.VISIBLE);
-
-                // description
-                String description = clientImage.getDescription();
-                if (description != null && description.length() > 0) {
-                    descriptionView.setText(description);
-                    descriptionLayout.setVisibility(View.VISIBLE);
-                }
-
-                if (loadingDialog.isShowing()) {
-                    loadingDialog.dismiss();
-                }
-
             }
 
             @Override
-            public void onLoadingCancelled(String s, View view) {}
+            public void onLoadingCancelled(String s, View view) {
+
+            }
 
         };
 

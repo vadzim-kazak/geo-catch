@@ -21,6 +21,9 @@ import com.jrew.geocatch.mobile.util.*;
  */
 public class UploadedPhotosFragment extends SherlockFragment {
 
+    /** **/
+    private UploadedPhotosAdapter uploadedPhotosAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -36,7 +39,10 @@ public class UploadedPhotosFragment extends SherlockFragment {
 
             layout = inflater.inflate(R.layout.uploaded_photos_fragment, container, false);
             GridView photosGridView = (GridView) layout.findViewById(R.id.photosGridView);
-            photosGridView.setAdapter(new UploadedPhotosAdapter(getActivity()));
+            if (uploadedPhotosAdapter == null) {
+                uploadedPhotosAdapter = new UploadedPhotosAdapter(getActivity());
+            }
+            photosGridView.setAdapter(uploadedPhotosAdapter);
 
         } else {
 

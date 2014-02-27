@@ -87,7 +87,7 @@ public class ImageCache {
     public List<ClientImagePreview> getClientImagePreview(SearchCriteria searchCriteria) {
 
         Map<Long, ClientImagePreview> images = clientImagePreviewCache.snapshot();
-        List<ClientImagePreview> cachedImages = new ArrayList<ClientImagePreview>(images.size() / 2);
+        List<ClientImagePreview> cachedImages = new ArrayList<ClientImagePreview>();
         for (Map.Entry<Long, ClientImagePreview> entries : images.entrySet()) {
             ClientImagePreview image = entries.getValue();
             if (SearchCriteriaUtil.isPassingSearchCriteria(image, searchCriteria)) {
@@ -98,7 +98,23 @@ public class ImageCache {
         return cachedImages;
     }
 
+    /**
+     *
+     * @return
+     */
+    public  List<ClientImagePreview> getOwnClientImagePreview() {
 
+        Map<Long, ClientImagePreview> images = clientImagePreviewCache.snapshot();
+        List<ClientImagePreview> cachedImages = new ArrayList<ClientImagePreview>();
+        for (Map.Entry<Long, ClientImagePreview> entries : images.entrySet()) {
+            ClientImagePreview image = entries.getValue();
+            if (image.isOwn()) {
+                cachedImages.add(image);
+            }
+        }
+
+        return cachedImages;
+    }
 
     /**
      *

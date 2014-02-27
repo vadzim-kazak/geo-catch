@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -18,10 +17,8 @@ import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.fragment.PhotoBrowsingFragment;
 import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.ImageService;
-import com.jrew.geocatch.mobile.util.CommonUtil;
-import com.jrew.geocatch.mobile.util.DialogUtil;
-import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
-import com.jrew.geocatch.mobile.util.ServiceUtil;
+import com.jrew.geocatch.mobile.service.cache.ImageCache;
+import com.jrew.geocatch.mobile.util.*;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -37,11 +34,13 @@ import java.util.List;
  */
 public class UploadedPhotosAdapter extends BaseAdapter {
 
+    private static boolean isImagesLoadedFromServer;
+
     /** **/
     private List<ClientImagePreview> images;
 
     /** **/
-    private final Context context;
+    private final Activity activity;
 
     /** **/
     private ProgressDialog loadingDialog;
@@ -54,29 +53,34 @@ public class UploadedPhotosAdapter extends BaseAdapter {
 
     /**
      *
-     * @param context
+     * @param activity
      */
-    public UploadedPhotosAdapter(Context context) {
+    public UploadedPhotosAdapter(Activity activity) {
 
         super();
 
-        this.context = context;
+        this.activity = activity;
 
-        DialogInterface.OnCancelListener listener = new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialogInterface) {
+        if (!isImagesLoadedFromServer) {
+            DialogInterface.OnCancelListener listener = new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialogInterface) {
 
-                ServiceUtil.abortImageService(UploadedPhotosAdapter.this.context);
+                    ServiceUtil.abortImageService(UploadedPhotosAdapter.this.activity);
+                    loadingDialog.dismiss();
+                    LayoutUtil.showRefreshLayout(UploadedPhotosAdapter.this.activity, R.string.photoLoadingCancelled);
 
-                loadingDialog.dismiss();
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(UploadedPhotosAdapter.this.activity, "Image loading aborted.", duration);
+                    toast.show();
+                }
+            };
 
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(UploadedPhotosAdapter.this.context, "Image loading aborted.", duration);
-                toast.show();
-            }
-        };
+            loadingDialog = DialogUtil.createProgressDialog(this.activity, R.string.uploadedPhotosLoadingMessage, listener);
 
-        loadingDialog = DialogUtil.createProgressDialog(this.context, R.string.uploadedPhotosLoadingMessage, listener);
+        } else {
+            images = ImageCache.getInstance().getOwnClientImagePreview();
+        }
 
         resultReceiver = new ServiceResultReceiver(new Handler());
         resultReceiver.setReceiver(new ServiceResultReceiver.Receiver() {
@@ -88,18 +92,19 @@ public class UploadedPhotosAdapter extends BaseAdapter {
                     case ImageService.ResultStatus.LOAD_IMAGES_FINISHED:
                         if (resultData.containsKey(ImageService.RESULT_KEY)) {
                             images = (List<ClientImagePreview>) resultData.getSerializable(ImageService.RESULT_KEY);
+                            ImageCache.getInstance().addClientImagesPreview(images);
                             notifyDataSetChanged();
-                            if (loadingDialog.isShowing()) {
+                            isImagesLoadedFromServer = true;
+                            if (loadingDialog!= null && loadingDialog.isShowing()) {
                                 loadingDialog.dismiss();
                             }
                         } else {
-                            showUploadedImagesLoadingError();
+                            LayoutUtil.showRefreshLayout(UploadedPhotosAdapter.this.activity, R.string.uploadedPhotosLoadingError);
                         }
-
                         break;
 
                     case ImageService.ResultStatus.ERROR:
-                        showUploadedImagesLoadingError();
+                        LayoutUtil.showRefreshLayout(UploadedPhotosAdapter.this.activity, R.string.uploadedPhotosLoadingError);
                         break;
                 }
             }
@@ -107,7 +112,7 @@ public class UploadedPhotosAdapter extends BaseAdapter {
         });
 
         thumbnailScaleFactor = Double.parseDouble(
-                this.context.getResources().getString(R.config.gridPhotosThumbnailSizeScaleFactor));
+                this.activity.getResources().getString(R.config.gridPhotosThumbnailSizeScaleFactor));
 
         loadImagesServiceCall();
     }
@@ -139,7 +144,7 @@ public class UploadedPhotosAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
 
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View row = null;
         if (view == null) {
@@ -151,7 +156,7 @@ public class UploadedPhotosAdapter extends BaseAdapter {
         ImageView thumbnailImageView = (ImageView) row.findViewById(R.id.thumbnailImageView);
         thumbnailImageView.setImageResource(R.drawable.fish_frame);
 
-        int displaySize = CommonUtil.getDisplayLargerSideSize((Activity) context);
+        int displaySize = CommonUtil.getDisplayLargerSideSize((Activity) activity);
         int thumbnailSize = (int) (displaySize * thumbnailScaleFactor);
         thumbnailImageView.setLayoutParams(new LinearLayout.LayoutParams(thumbnailSize, thumbnailSize));
 
@@ -182,24 +187,10 @@ public class UploadedPhotosAdapter extends BaseAdapter {
         SearchCriteria searchCriteria = new SearchCriteria();
 
         // Device Id
-        searchCriteria.setDeviceId(CommonUtil.getDeviceId(context));
+        searchCriteria.setDeviceId(CommonUtil.getDeviceId(activity));
         searchCriteria.setLoadOwnImages(true);
 
-        ServiceUtil.callLoadImagesService(searchCriteria, resultReceiver, (Activity) context);
+        ServiceUtil.callLoadImagesService(searchCriteria, resultReceiver, (Activity) activity);
     }
 
-    /**
-     *
-     */
-    public void showUploadedImagesLoadingError() {
-
-        if (loadingDialog.isShowing()) {
-            loadingDialog.dismiss();
-        }
-
-        CharSequence text = UploadedPhotosAdapter.this.context.getResources().getString(R.string.uploadedPhotosLoadingError);
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(UploadedPhotosAdapter.this.context, text, duration);
-        toast.show();
-    }
 }
