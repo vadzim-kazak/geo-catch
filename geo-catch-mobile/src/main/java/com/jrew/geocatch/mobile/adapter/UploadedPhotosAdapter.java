@@ -36,16 +36,10 @@ import java.util.List;
 public class UploadedPhotosAdapter extends BaseAdapter {
 
     /** **/
-    private List<ClientImagePreview> images = new ArrayList<ClientImagePreview>();
+    private List<ClientImagePreview> images;
 
     /** **/
     private final Activity activity;
-
-    /** **/
-    private ProgressDialog loadingDialog;
-
-    /** **/
-    private ServiceResultReceiver resultReceiver;
 
     /** **/
     private double thumbnailScaleFactor;
@@ -60,53 +54,9 @@ public class UploadedPhotosAdapter extends BaseAdapter {
 
         this.activity = activity;
 
-        DialogInterface.OnCancelListener listener = new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialogInterface) {
-
-            ServiceUtil.abortImageService(UploadedPhotosAdapter.this.activity);
-            loadingDialog.dismiss();
-            LayoutUtil.showRefreshLayout(UploadedPhotosAdapter.this.activity, R.string.uploadedPhotosLoadingCancelled);
-            }
-        };
-
-        loadingDialog = DialogUtil.createProgressDialog(this.activity, R.string.uploadedPhotosLoadingMessage, listener);
-
-        resultReceiver = new ServiceResultReceiver(new Handler());
-        resultReceiver.setReceiver(new ServiceResultReceiver.Receiver() {
-
-            @Override
-            public void onReceiveResult(int resultCode, Bundle resultData) {
-
-                switch (resultCode) {
-                    case ImageService.ResultStatus.LOAD_IMAGES_FINISHED:
-                        if (resultData.containsKey(ImageService.RESULT_KEY)) {
-                            List<ClientImagePreview> loadedImages = (List<ClientImagePreview>) resultData.getSerializable(ImageService.RESULT_KEY);
-                            if (loadedImages != null && loadedImages.size() > images.size()) {
-                                images = loadedImages;
-                                ImageCache.getInstance().addClientImagesPreview(images);
-                                notifyDataSetChanged();
-                                if (loadingDialog!= null && loadingDialog.isShowing()) {
-                                    loadingDialog.dismiss();
-                                }
-                            }
-                        } else {
-                            LayoutUtil.showRefreshLayout(UploadedPhotosAdapter.this.activity, R.string.uploadedPhotosLoadingError);
-                        }
-                        break;
-
-                    case ImageService.ResultStatus.ERROR:
-                        LayoutUtil.showRefreshLayout(UploadedPhotosAdapter.this.activity, R.string.uploadedPhotosLoadingError);
-                        break;
-                }
-            }
-
-        });
-
         thumbnailScaleFactor = Double.parseDouble(
                 this.activity.getResources().getString(R.config.gridPhotosThumbnailSizeScaleFactor));
 
-        loadImagesServiceCall();
     }
 
     @Override
@@ -173,16 +123,21 @@ public class UploadedPhotosAdapter extends BaseAdapter {
 
     /**
      *
+     * @param images
      */
-    public void loadImagesServiceCall() {
-
-        SearchCriteria searchCriteria = new SearchCriteria();
-
-        // Device Id
-        searchCriteria.setDeviceId(CommonUtil.getDeviceId(activity));
-        searchCriteria.setLoadOwnImages(true);
-
-        ServiceUtil.callLoadImagesService(searchCriteria, resultReceiver, (Activity) activity);
+    public void setImages(List<ClientImagePreview> images) {
+        this.images = images;
     }
 
+    /**
+     *
+     * @return
+     */
+    public int getImagesCount() {
+        if (images != null) {
+            return images.size();
+        }
+
+        return 0;
+    }
 }
