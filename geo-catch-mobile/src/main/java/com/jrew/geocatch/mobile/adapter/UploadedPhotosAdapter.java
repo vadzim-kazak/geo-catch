@@ -1,29 +1,22 @@
 package com.jrew.geocatch.mobile.adapter;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.fragment.PhotoBrowsingFragment;
-import com.jrew.geocatch.mobile.reciever.ServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.ImageService;
-import com.jrew.geocatch.mobile.service.cache.ImageCache;
-import com.jrew.geocatch.mobile.util.*;
+import com.jrew.geocatch.mobile.util.CommonUtil;
+import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.web.model.ClientImagePreview;
-import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -98,7 +91,7 @@ public class UploadedPhotosAdapter extends BaseAdapter {
         ImageView thumbnailImageView = (ImageView) row.findViewById(R.id.thumbnailImageView);
         thumbnailImageView.setImageResource(R.drawable.fish_frame);
 
-        int displaySize = CommonUtil.getDisplayLargerSideSize((Activity) activity);
+        int displaySize = CommonUtil.getDisplayLargerSideSize(activity);
         int thumbnailSize = (int) (displaySize * thumbnailScaleFactor);
         thumbnailImageView.setLayoutParams(new LinearLayout.LayoutParams(thumbnailSize, thumbnailSize));
 

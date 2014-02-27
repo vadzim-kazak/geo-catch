@@ -20,6 +20,7 @@ import com.jrew.geocatch.mobile.service.cache.ImageCache;
 import com.jrew.geocatch.mobile.util.*;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
