@@ -211,7 +211,7 @@ public class ImageRestUtil {
         HttpClient httpClient = HttpClientHolder.getHttpClient();
         HttpContext localContext = new BasicHttpContext();
 
-        Bundle bundle = (Bundle) intent.getParcelableExtra(ImageService.REQUEST_KEY);
+        Bundle bundle = intent.getParcelableExtra(ImageService.REQUEST_KEY);
 
         long imageId = bundle.getLong(ImageService.IMAGE_ID_KEY);
         String deviceId = bundle.getString(ImageService.DEVICE_ID_KEY);
@@ -237,6 +237,7 @@ public class ImageRestUtil {
             int status = response.getStatusLine().getStatusCode();
             if (status == 200) {
                 bundle.putBoolean(ImageService.RESULT_KEY, true);
+                bundle.putLong(ImageService.IMAGE_ID_KEY, imageId);
             } else {
                 bundle.putBoolean(ImageService.RESULT_KEY, false);
             }

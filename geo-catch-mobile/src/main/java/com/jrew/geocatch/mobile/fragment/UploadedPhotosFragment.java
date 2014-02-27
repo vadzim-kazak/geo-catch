@@ -71,6 +71,9 @@ public class UploadedPhotosFragment extends SherlockFragment {
 
             if (uploadedPhotosAdapter.getImagesCount() == 0) {
                 loadingDialog = DialogUtil.createProgressDialog(getActivity(), R.string.uploadedPhotosLoadingMessage, listener);
+            } else {
+                uploadedPhotosAdapter.setImages(ImageCache.getInstance().getOwnClientImagePreview());
+                uploadedPhotosAdapter.notifyDataSetChanged();
             }
 
             photosGridView.setAdapter(uploadedPhotosAdapter);

@@ -154,4 +154,13 @@ public class ImageCache {
         return clientImageCache.get(id);
     }
 
+    /**
+     *
+     * @param id
+     */
+    public void removeImage(long id) {
+        clientImageCache.remove(id);
+        clientImagePreviewCache.remove(id);
+    }
+
 }

@@ -76,6 +76,12 @@
 
     <string name="photoLoadingCancelled">Загрузка фотографии отменена.</string>
 
+    <string name="photoDeleteAlertTitle">Вы действительно хотите удалить это фото?</string>
+
+    <string name="photoDeleteAlertYes">Да</string>
+
+    <string name="photoDeleteAlertCancel">Отмена</string>
+
     <!-- Uploaded photos fragment -->
     <string name="uploadedPhotosFragmentLabel">Мои фото</string>
 

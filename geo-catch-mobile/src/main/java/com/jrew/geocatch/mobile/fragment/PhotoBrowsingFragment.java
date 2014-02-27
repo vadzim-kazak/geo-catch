@@ -1,5 +1,6 @@
 package com.jrew.geocatch.mobile.fragment;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
@@ -166,7 +167,14 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                         if (deletingDialog.isShowing()) {
                             deletingDialog.dismiss();
                         }
-                        FragmentSwitcherHolder.getFragmentSwitcher().showUploadedPhotosFragment();
+
+                        if (resultData.getBoolean(ImageService.RESULT_KEY)) {
+                            // 1) Remove image from cache
+                            long imageId = resultData.getLong(ImageService.IMAGE_ID_KEY, 0);
+                            ImageCache.getInstance().removeImage(imageId);
+                            // 2) Show uploaded images fragment
+                            FragmentSwitcherHolder.getFragmentSwitcher().showUploadedPhotosFragment();
+                        }
                         break;
 
                     case ImageService.ResultStatus.ERROR:
@@ -298,13 +306,7 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                 break;
 
             case R.id.deleteImageMenuOption:
-                if (clientImage != null) {
-                    deletingDialog = DialogUtil.createProgressDialog(getActivity(), R.string.photoDeletingMessage);
-                    Bundle requestBundle = new Bundle();
-                    requestBundle.putLong(ImageService.IMAGE_ID_KEY, clientImage.getId());
-                    requestBundle.putString(ImageService.DEVICE_ID_KEY, CommonUtil.getDeviceId(getActivity()));
-                    ServiceUtil.callDeleteImageService(requestBundle, imageResultReceiver, getActivity());
-                }
+                showDeleteAlertDialog();
                 break;
 
         }
@@ -515,5 +517,41 @@ public class PhotoBrowsingFragment extends SherlockFragment {
 
         imageLoader.loadImage(clientImage.getPath(), imageLoadingListener);
 
+    }
+
+    /**
+     *
+     * @return
+     */
+    private void showDeleteAlertDialog() {
+
+        // 1. Instantiate an AlertDialog.Builder with its constructor
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        // 2. Chain together various setter methods to set the dialog characteristics
+        builder.setIcon(R.drawable.emo_im_sad)
+                .setTitle(R.string.photoDeleteAlertTitle);
+
+        // Add the buttons
+        builder.setNegativeButton(R.string.photoDeleteAlertCancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.setPositiveButton(R.string.photoDeleteAlertYes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (clientImage != null) {
+                    deletingDialog = DialogUtil.createProgressDialog(getActivity(), R.string.photoDeletingMessage);
+                    Bundle requestBundle = new Bundle();
+                    requestBundle.putLong(ImageService.IMAGE_ID_KEY, clientImage.getId());
+                    requestBundle.putString(ImageService.DEVICE_ID_KEY, CommonUtil.getDeviceId(getActivity()));
+                    ServiceUtil.callDeleteImageService(requestBundle, imageResultReceiver, getActivity());
+                }
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }
