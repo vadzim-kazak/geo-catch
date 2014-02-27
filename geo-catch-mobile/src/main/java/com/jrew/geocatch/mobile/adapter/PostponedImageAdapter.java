@@ -3,6 +3,7 @@ package com.jrew.geocatch.mobile.adapter;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -84,12 +85,16 @@ public class PostponedImageAdapter extends BaseAdapter {
                                 FragmentSwitcherHolder.getFragmentSwitcher().showUploadedPhotosFragment();
                             }
                         } else {
-                            showUploadingPostponedImageError();
+                            showImageProcessingMessage(R.string.postponedPhotosUploadingError);
                         }
                         break;
 
                     case ImageService.ResultStatus.ERROR:
-                        showUploadingPostponedImageError();
+                        showImageProcessingMessage(R.string.postponedPhotosUploadingError);
+                        break;
+
+                    case ImageService.ResultStatus.ABORTED:
+                        showImageProcessingMessage(R.string.postponedPhotosUploadingCancelled);
                         break;
                 }
             }
@@ -143,7 +148,15 @@ public class PostponedImageAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
 
-                uploadingPhotoDialog = DialogUtil.createProgressDialog(context, R.string.postponedPhotosUploadingMessage);
+
+                DialogInterface.OnCancelListener listener = new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+                        ServiceUtil.abortImageService(context);
+                    }
+                };
+
+                uploadingPhotoDialog = DialogUtil.createProgressDialog(context, R.string.postponedPhotosUploadingMessage, listener);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(ImageService.IMAGE_KEY, postponedImage.getUploadImage());
                 bundle.putLong(ImageService.POSTPONED_IMAGE_ID_KEY, postponedImage.getId());
@@ -191,12 +204,12 @@ public class PostponedImageAdapter extends BaseAdapter {
     /**
      *
      */
-    public void showUploadingPostponedImageError() {
+    public void showImageProcessingMessage(int messageId) {
         if (uploadingPhotoDialog.isShowing()) {
             uploadingPhotoDialog.dismiss();
         }
 
-        CharSequence text =  PostponedImageAdapter.this.context.getString(R.string.postponedPhotosUploadingError);
+        CharSequence text =  PostponedImageAdapter.this.context.getString(messageId);
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(PostponedImageAdapter.this.context, text, duration);
         toast.show();

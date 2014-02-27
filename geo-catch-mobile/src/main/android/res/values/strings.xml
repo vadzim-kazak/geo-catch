@@ -94,6 +94,8 @@
 
     <string name="postponedPhotosUploadingMessage">Uploading photo...</string>
 
+    <string name="postponedPhotosUploadingCancelled">Photo uploading is cancelled.</string>
+
     <string name="postponedPhotosUploadingError">Photo uploading error. Try to upload it later.</string>
 
     <string name="postponedPhotosDeletingMessage">Removing photo...</string>

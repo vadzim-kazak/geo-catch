@@ -96,6 +96,8 @@
 
     <string name="postponedPhotosUploadingError">Ошибка загрузки фото. Попробуйте загрузить его позже.</string>
 
+    <string name="postponedPhotosUploadingCancelled">Загрузка фото отменена.</string>
+
     <string name="postponedPhotosDeletingMessage">Удаление фото...</string>
 
     <string name="postponedPhotosDeletingError">Ошибка удаления отложенного фото.</string>
