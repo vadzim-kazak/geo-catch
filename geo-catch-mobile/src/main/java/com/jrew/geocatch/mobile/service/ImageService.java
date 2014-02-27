@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import com.jrew.geocatch.mobile.util.RepositoryRestUtil;
+import com.jrew.geocatch.mobile.util.rest.ImageRestUtil;
+
+import java.io.InterruptedIOException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,6 +16,9 @@ import com.jrew.geocatch.mobile.util.RepositoryRestUtil;
  * Time: 6:25 AM
  */
 public class ImageService extends IntentService {
+
+    /** **/
+    private static boolean isAborted;
 
     /** Receiver intent key  **/
     public static final String RECEIVER_KEY = "receiver";
@@ -72,19 +77,10 @@ public class ImageService extends IntentService {
     public interface ResultStatus {
 
         /** **/
-        public static final int LOADING = 1;
-
-        /** **/
         public static final int LOAD_IMAGES_FINISHED = 2;
 
         /** **/
-        public static final int LOAD_THUMBNAIL_FINISHED = 3;
-
-        /** **/
         public static final int LOAD_IMAGE_DATA_FINISHED = 4;
-
-        /** **/
-        public static final int LOAD_IMAGE_FINISHED = 5;
 
         /** **/
         public static final int UPLOAD_IMAGE_FINISHED = 6;
@@ -97,6 +93,9 @@ public class ImageService extends IntentService {
 
         /** **/
         public static final int DELETE_IMAGE_FINISHED = 9;
+
+        /** **/
+        public static final int ABORTED = 10;
     }
 
     /**
@@ -125,39 +124,32 @@ public class ImageService extends IntentService {
             if(command.equals(Commands.LOAD_IMAGES)) {
 
                 receiver.send(ResultStatus.LOAD_IMAGES_FINISHED,
-                        RepositoryRestUtil.loadImages(intent, resources));
-
-            } else if (command.equals(Commands.LOAD_IMAGE_THUMBNAIL)) {
-
-                receiver.send(ResultStatus.LOAD_THUMBNAIL_FINISHED,
-                        RepositoryRestUtil.loadThumbnail(intent, resources));
+                        ImageRestUtil.loadImages(intent, resources));
 
             } else if (command.equals(Commands.LOAD_IMAGE_DATA)) {
 
                 receiver.send(ResultStatus.LOAD_IMAGE_DATA_FINISHED,
-                        RepositoryRestUtil.loadImageData(intent, resources));
-
-            } else if (command.equals(Commands.LOAD_IMAGE)) {
-
-                receiver.send(ResultStatus.LOAD_IMAGE_FINISHED,
-                        RepositoryRestUtil.loadImage(intent, resources));
+                        ImageRestUtil.loadImageData(intent, resources));
 
             } else if (command.equals(Commands.UPLOAD_IMAGE)) {
 
                 receiver.send(ResultStatus.UPLOAD_IMAGE_STARTED, null);
 
                 receiver.send(ResultStatus.UPLOAD_IMAGE_FINISHED,
-                        RepositoryRestUtil.uploadImage(intent, resources));
+                        ImageRestUtil.uploadImage(intent, resources));
             } else if (command.equals(Commands.DELETE_IMAGE)) {
 
                 receiver.send(ResultStatus.DELETE_IMAGE_FINISHED,
-                        RepositoryRestUtil.deleteImage(intent, resources));
+                        ImageRestUtil.deleteImage(intent, resources));
             }
 
         } catch(Exception exception) {
-            Bundle bundle = new Bundle();
-            bundle.putString(Intent.EXTRA_TEXT, exception.toString());
-            receiver.send(ResultStatus.ERROR, bundle);
+
+            if (isAborted) {
+                receiver.send(ResultStatus.ABORTED, null);
+            } else {
+                receiver.send(ResultStatus.ERROR, null);
+            }
         }
 
         this.stopSelf();
@@ -167,7 +159,11 @@ public class ImageService extends IntentService {
     public int onStartCommand(Intent intent, int flags, int startId) {
         String command = intent.getExtras().getString(COMMAND_KEY);
         if (Commands.ABORT.equalsIgnoreCase(command)) {
+            isAborted = true;
+            ImageRestUtil.abort();
             this.stopSelf();
+        } else {
+            isAborted = false;
         }
 
         return super.onStartCommand(intent, flags, startId);

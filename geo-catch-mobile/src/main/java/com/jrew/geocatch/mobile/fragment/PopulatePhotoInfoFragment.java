@@ -78,6 +78,9 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
     private ProgressDialog dialog;
 
     /** **/
+    private DialogInterface.OnCancelListener cancelListener;
+
+    /** **/
     private Bundle imageBundle;
 
     /** **/
@@ -148,8 +151,8 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
                         if (resultData.getBoolean(ImageService.RESULT_KEY)) {
                             FragmentSwitcherHolder.getFragmentSwitcher().showUploadedPhotosFragment();
                         } else {
-                            AlertDialog alert = buildUploadingErrorAlert();
-                            alert.show();
+                            showAlertDialog(R.string.imageUploadingError);
+
                         }
 
                         break;
@@ -159,8 +162,11 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
                             dialog.dismiss();
                         }
 
-                        AlertDialog alert = buildUploadingErrorAlert();
-                        alert.show();
+                        showAlertDialog(R.string.imageUploadingError);
+                        break;
+
+                    case ImageService.ResultStatus.ABORTED:
+                        showAlertDialog(R.string.imageUploadingAborted);
                         break;
                 }
             }
@@ -183,6 +189,13 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         shareSection.setAdapter(adapter);
         shareSection.setSaveEnabled(false);
+
+        cancelListener = new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                ServiceUtil.abortImageService(getActivity());
+            }
+        };
 
         return layout;
     }
@@ -239,7 +252,9 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
                     showNoLocationDetectedWarning();
                 } else {
                     imageBundle = prepareUploadBundle(layout, bitmap);
-                    dialog = DialogUtil.createProgressDialog(getActivity(), R.string.imageUploadingMessage);
+
+
+                    dialog = DialogUtil.createProgressDialog(getActivity(), R.string.imageUploadingMessage, cancelListener);
                     ServiceUtil.callUploadImageService(imageBundle, resultReceiver, getActivity());
                 }
                 break;
@@ -370,19 +385,20 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
      *
      * @return
      */
-    private AlertDialog buildUploadingErrorAlert() {
+    private void showAlertDialog(int titleId) {
 
         // 1. Instantiate an AlertDialog.Builder with its constructor
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         // 2. Chain together various setter methods to set the dialog characteristics
         builder.setIcon(R.drawable.emo_im_sad)
-                .setTitle(R.string.imageUploadingError);
+                .setTitle(titleId);
 
         // Add the buttons
         builder.setNegativeButton(R.string.imageUploadingRetry, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-             ServiceUtil.callUploadImageService(imageBundle, resultReceiver, getActivity());
+            dialog = DialogUtil.createProgressDialog(getActivity(), R.string.imageUploadingMessage, cancelListener);
+            ServiceUtil.callUploadImageService(imageBundle, resultReceiver, getActivity());
             }
         });
 
@@ -392,7 +408,8 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
             }
         });
 
-        return  builder.create();
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     /**

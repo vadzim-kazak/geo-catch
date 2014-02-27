@@ -44,6 +44,8 @@
 
     <string name="imageUploadingError">Photo uploading error</string>
 
+    <string name="imageUploadingAborted">Photo uploading is cancelled</string>
+
     <string name="imageUploadingRetry">Retry</string>
 
     <string name="imageUploadingLater">Upload later</string>

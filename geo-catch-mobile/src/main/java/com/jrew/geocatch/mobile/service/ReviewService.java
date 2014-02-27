@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import com.jrew.geocatch.mobile.util.RepositoryRestUtil;
+import com.jrew.geocatch.mobile.util.rest.ReviewRestUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -75,7 +75,7 @@ public class ReviewService extends IntentService {
             if(command.equals(Commands.UPLOAD_REVIEW)) {
 
                 receiver.send(ResultStatus.UPLOAD_REVIEW_FINISHED,
-                        RepositoryRestUtil.uploadReview(intent, resources));
+                        ReviewRestUtil.uploadReview(intent, resources));
 
             }
 

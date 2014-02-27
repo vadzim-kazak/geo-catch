@@ -44,6 +44,8 @@
 
     <string name="imageUploadingError">Ошибка загрузки фото</string>
 
+    <string name="imageUploadingAborted">Загрузка фото отменена</string>
+
     <string name="imageUploadingRetry">Повторить</string>
 
     <string name="imageUploadingLater">Загрузить позже</string>
@@ -86,7 +88,7 @@
     <!-- Postponed photos fragment -->
     <string name="postponedPhotosFragmentLabel">Отложенные фото</string>
 
-    <string name="postponedPhotosLoadingMessage">Загрузка отложенных фото...</string>
+    <string name="postponedPhotosLoadingMessage">Подготовка отложенных фото...</string>
 
     <string name="postponedPhotosLoadingError">Ошибка загрузки отложенных фото.</string>
 

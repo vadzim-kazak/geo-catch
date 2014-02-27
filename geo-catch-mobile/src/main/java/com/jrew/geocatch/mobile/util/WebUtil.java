@@ -36,6 +36,13 @@ import java.util.List;
  */
 public class WebUtil {
 
+    /** **/
+    public final static String UTF_8_ENCODING = "UTF8";
+
+    /** **/
+    public final static String CONTENT_TYPE_JSON_UTF_8 = "application/json; charset=UTF-8";
+
+
     /**
      *
      * @param activity
@@ -228,6 +235,17 @@ public class WebUtil {
         domainProperty.setValue(jsonObject.getString("value"));
 
         return domainProperty;
+    }
+
+    /**
+     *
+     * @param response
+     * @throws Exception
+     */
+    public static void releaseConnection(HttpResponse response) throws Exception {
+        if (response != null && response.getEntity() != null) {
+            response.getEntity().consumeContent();
+        }
     }
 
 }

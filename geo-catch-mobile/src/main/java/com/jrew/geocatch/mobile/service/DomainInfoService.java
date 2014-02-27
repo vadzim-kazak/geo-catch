@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import com.jrew.geocatch.mobile.util.RepositoryRestUtil;
+import com.jrew.geocatch.mobile.util.rest.DomainPropertiesRestUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -82,7 +82,7 @@ public class DomainInfoService extends IntentService {
         try {
 
             receiver.send(DomainInfoService.ResultStatus.LOADING_FINISHED,
-                    RepositoryRestUtil.loadDomainInfo(intent, resources));
+                    DomainPropertiesRestUtil.loadDomainInfo(intent, resources));
 
         } catch (Exception exception) {
             Bundle bundle = new Bundle();
