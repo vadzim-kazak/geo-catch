@@ -29,30 +29,30 @@ public class GeoCatchApplication extends Application {
 
         OkHttpClient client = new OkHttpClient();
 
-        // disc cache
-        File externalStorageDirectory =  Environment.getExternalStorageDirectory();
-        String folderPath = externalStorageDirectory.getAbsolutePath() + File.separator + "geo-catch";
-        File cacheFolder = new File(folderPath);
-        if (!cacheFolder.exists()) {
-            cacheFolder.mkdir();
-        }
-        HttpResponseCache responseCache = null;
-        try {
-            responseCache = new HttpResponseCache(cacheFolder, 100000l);
-        } catch(IOException exc){
-
-        }
-
-        if (responseCache != null) {
-            client.setResponseCache(responseCache);
-        }
+//        // disc cache
+//        File externalStorageDirectory =  Environment.getExternalStorageDirectory();
+//        String folderPath = externalStorageDirectory.getAbsolutePath() + File.separator + "geo-catch";
+//        File cacheFolder = new File(folderPath);
+//        if (!cacheFolder.exists()) {
+//            cacheFolder.mkdir();
+//        }
+//        HttpResponseCache responseCache = null;
+//        try {
+//            responseCache = new HttpResponseCache(cacheFolder, 100000l);
+//        } catch(IOException exc){
+//
+//        }
+//
+//        if (responseCache != null) {
+//            client.setResponseCache(responseCache);
+//        }
 
         // connection pool
-        ConnectionPool connectionPool = new ConnectionPool(50, 300000l);
-        client.setConnectionPool(connectionPool);
+//        ConnectionPool connectionPool = new ConnectionPool(50, 300000l);
+//        client.setConnectionPool(connectionPool);
 
         Picasso picasso = new Picasso.Builder(this)
-                               .downloader(new OkHttpDownloader(client))
+                               .downloader(new OkHttpDownloader(getApplicationContext()))
                                .build();
 
         picasso.setDebugging(true);

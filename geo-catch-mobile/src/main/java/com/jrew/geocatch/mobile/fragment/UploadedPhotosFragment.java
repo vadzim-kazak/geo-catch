@@ -103,6 +103,9 @@ public class UploadedPhotosFragment extends SherlockFragment {
                                 }
 
                             } else {
+                                if (loadingDialog.isShowing()) {
+                                    loadingDialog.dismiss();
+                                }
                                 LayoutUtil.showRefreshLayout(getActivity(), R.string.uploadedPhotosLoadingError);
                             }
                             break;
