@@ -32,7 +32,7 @@
 
     <item name="postponedPhotosThumbnailSizeScaleFactor" type="config">0.1</item>
 
-    <item name="gridPhotosThumbnailSizeScaleFactor" type="config">0.13</item>
+    <item name="gridPhotosThumbnailSizeScaleFactor" type="config">0.18</item>
 
     <item name="locationDetectionAccuracy" type="config">30</item>
 

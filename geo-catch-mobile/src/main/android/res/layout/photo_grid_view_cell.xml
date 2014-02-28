@@ -10,6 +10,6 @@
                android:layout_height="wrap_content"
                android:layout_gravity="center"
                android:src="@drawable/fish_frame"
-               android:padding="5dip"/>
+               android:padding="2dip"/>
 
 </LinearLayout>

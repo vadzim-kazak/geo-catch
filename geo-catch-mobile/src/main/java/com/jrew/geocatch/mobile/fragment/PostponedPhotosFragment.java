@@ -1,5 +1,6 @@
 package com.jrew.geocatch.mobile.fragment;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,8 @@ public class PostponedPhotosFragment extends SherlockFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         setHasOptionsMenu(true);
+
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Action bar subtitle
         ActionBarUtil.setActionBarSubtitle(R.string.postponedPhotosFragmentLabel, getActivity());

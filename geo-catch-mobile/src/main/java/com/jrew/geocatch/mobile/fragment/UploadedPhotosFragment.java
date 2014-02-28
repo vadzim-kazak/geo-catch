@@ -1,8 +1,8 @@
 package com.jrew.geocatch.mobile.fragment;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -20,7 +20,6 @@ import com.jrew.geocatch.mobile.service.cache.ImageCache;
 import com.jrew.geocatch.mobile.util.*;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -46,6 +45,8 @@ public class UploadedPhotosFragment extends SherlockFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         setHasOptionsMenu(true);
+
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Action bar subtitle
         ActionBarUtil.setActionBarSubtitle(R.string.uploadedPhotosFragmentLabel, getActivity());
@@ -92,7 +93,7 @@ public class UploadedPhotosFragment extends SherlockFragment {
                                 List<ClientImagePreview> loadedImages = (List<ClientImagePreview>) resultData.getSerializable(ImageService.RESULT_KEY);
                                 ImageCache.getInstance().addClientImagesPreview(loadedImages);
 
-                                if (loadedImages != null && loadedImages.size() > uploadedPhotosAdapter.getImagesCount()) {
+                                if (loadedImages != null && loadedImages.size() != uploadedPhotosAdapter.getImagesCount()) {
                                     uploadedPhotosAdapter.setImages(loadedImages);
                                     uploadedPhotosAdapter.notifyDataSetChanged();
                                 }

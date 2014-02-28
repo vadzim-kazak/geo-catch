@@ -8,7 +8,7 @@
     <GridView android:id="@+id/photosGridView"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
-              android:numColumns="4"
+              android:numColumns="3"
               android:gravity="center"/>
 
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.jrew.geocatch.mobile.service.cache;
 
+import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -24,7 +25,7 @@ import java.util.Map;
 public class ImageCache {
 
     /** 4 mb **/
-    private static final int CACHE_SIZE = 4 * 1024 * 1024;
+    private static final int CACHE_SIZE = 10 * 1024 * 1024;
 
     /** **/
     private static ImageCache instance;
@@ -35,13 +36,17 @@ public class ImageCache {
     /** **/
     private LruCache<Long, ClientImage> clientImageCache;
 
+    /** **/
+    private LruCache<Long, Bitmap> markerCache;
+
     /**
      *
      */
     private ImageCache() {
 
-        clientImagePreviewCache = new LruCache<Long, ClientImagePreview>(CACHE_SIZE / 2);
-        clientImageCache = new LruCache<Long, ClientImage>(CACHE_SIZE / 2);
+        clientImagePreviewCache = new LruCache<Long, ClientImagePreview>((int)(0.1 * CACHE_SIZE));
+        clientImageCache = new LruCache<Long, ClientImage>((int)(0.1 * CACHE_SIZE));
+        markerCache = new LruCache<Long, Bitmap>((int)(0.8 * CACHE_SIZE));
     }
 
     /**
@@ -161,6 +166,25 @@ public class ImageCache {
     public void removeImage(long id) {
         clientImageCache.remove(id);
         clientImagePreviewCache.remove(id);
+    }
+
+    /**
+     *
+     * @param marker
+     */
+    public void addMarker(long imageId, Bitmap marker) {
+        if (marker != null && getMarker(imageId) == null) {
+            markerCache.put(imageId, marker);
+        }
+    }
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    public Bitmap getMarker(Long id) {
+        return markerCache.get(id);
     }
 
 }

@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Display;
@@ -27,9 +26,7 @@ import com.jrew.geocatch.web.model.ClientImage;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.DomainProperty;
 import com.jrew.geocatch.web.model.ImageReview;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
+import com.squareup.picasso.Callback;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -113,8 +110,8 @@ public class PhotoBrowsingFragment extends SherlockFragment {
         DialogInterface.OnCancelListener listener = new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
+                PicassoHolder.getPicasso().cancelRequest(photoImageView);
                 ServiceUtil.abortImageService(getActivity());
-                ImageLoader.getInstance().cancelDisplayTask(photoImageView);
                 LayoutUtil.showRefreshLayout(getActivity(), R.string.photoLoadingCancelled);
             }
         };
@@ -178,7 +175,15 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                         break;
 
                     case ImageService.ResultStatus.ERROR:
-                        showCommunicationError();
+
+                        if (loadingDialog != null && !loadingDialog.isShowing()) {
+                            loadingDialog.dismiss();
+                        }
+                        if (deletingDialog != null && !deletingDialog.isShowing()) {
+                            deletingDialog.dismiss();
+                        }
+
+                        LayoutUtil.showRefreshLayout(getActivity(), R.string.photoLoadingError);
                         break;
 
                     case ReviewService.ResultStatus.UPLOAD_REVIEW_FINISHED:
@@ -340,17 +345,7 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                 Toast.LENGTH_LONG).show();
     }
 
-    /**
-     *
-     */
-    private void showImageLoadingError() {
-        if (loadingDialog.isShowing()) {
-            loadingDialog.dismiss();
-        }
 
-        Toast.makeText(getActivity(), getResources().getString(R.string.photoLoadingError),
-                Toast.LENGTH_LONG).show();
-    }
 
     /**
      *
@@ -360,20 +355,9 @@ public class PhotoBrowsingFragment extends SherlockFragment {
 
         ImageCache.getInstance().add(clientImage);
 
-        ImageLoader imageLoader = ImageLoader.getInstance();
-
-        ImageLoadingListener imageLoadingListener = new ImageLoadingListener() {
+        Callback callback = new Callback() {
             @Override
-            public void onLoadingStarted(String s, View view) {}
-
-            @Override
-            public void onLoadingFailed(String s, View view, FailReason failReason) {
-                showImageLoadingError();
-            }
-
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-
+            public void onSuccess() {
                 if (getActivity() != null) {
 
                     // domain properties
@@ -399,13 +383,12 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                         }
                     }
 
-                    // Photo
-                    photoImageView.setImageBitmap(loadedImage);
-
+//                    // Photo
+//                    photoImageView.setImageBitmap(loadedImage);
+//
                     Display display = getActivity().getWindowManager().getDefaultDisplay();
-                    double scaleFactor = LayoutUtil.getViewWidthScaleFactor(display.getWidth(), loadedImage.getWidth(), 0);
                     photoImageView.setLayoutParams(new LinearLayout.LayoutParams((int)
-                            (loadedImage.getWidth() * scaleFactor), (int) (loadedImage.getHeight() * scaleFactor)));
+                            (display.getWidth()), (int) (display.getWidth())));
 
                     // reviews
                     reviewLayout.setVisibility(View.VISIBLE);
@@ -509,14 +492,15 @@ public class PhotoBrowsingFragment extends SherlockFragment {
             }
 
             @Override
-            public void onLoadingCancelled(String s, View view) {
-
+            public void onError() {
+                if (loadingDialog != null && loadingDialog.isShowing()) {
+                    loadingDialog.dismiss();
+                }
+                LayoutUtil.showRefreshLayout(getActivity(), R.string.photoLoadingError);
             }
-
         };
 
-        imageLoader.loadImage(clientImage.getPath(), imageLoadingListener);
-
+        PicassoHolder.getPicasso().load(clientImage.getPath()).into(photoImageView, callback);
     }
 
     /**
