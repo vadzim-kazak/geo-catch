@@ -176,10 +176,10 @@ public class PhotoBrowsingFragment extends SherlockFragment {
 
                     case ImageService.ResultStatus.ERROR:
 
-                        if (loadingDialog != null && !loadingDialog.isShowing()) {
+                        if (loadingDialog != null && loadingDialog.isShowing()) {
                             loadingDialog.dismiss();
                         }
-                        if (deletingDialog != null && !deletingDialog.isShowing()) {
+                        if (deletingDialog != null && deletingDialog.isShowing()) {
                             deletingDialog.dismiss();
                         }
 
