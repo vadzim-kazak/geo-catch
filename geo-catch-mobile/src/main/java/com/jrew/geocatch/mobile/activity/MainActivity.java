@@ -1,9 +1,11 @@
 package com.jrew.geocatch.mobile.activity;
 
+import android.app.Dialog;
 import android.content.res.Resources;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -16,6 +18,7 @@ import com.jrew.geocatch.mobile.dao.DomainDatabaseManager;
 import com.jrew.geocatch.mobile.dao.PostponedImageManager;
 import com.jrew.geocatch.mobile.reciever.DomainInfoServiceResultReceiver;
 import com.jrew.geocatch.mobile.service.DomainInfoService;
+import com.jrew.geocatch.mobile.service.LocationManager;
 import com.jrew.geocatch.mobile.util.*;
 
 import java.util.Date;
@@ -122,7 +125,11 @@ public class MainActivity extends SherlockFragmentActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        LocationManagerHolder.getLocationManager().connect();
+        LocationManager locationManager = LocationManagerHolder.getLocationManager();
+        if (locationManager != null) {
+            locationManager.connect();
+        }
+
     }
 
     /*
@@ -130,7 +137,10 @@ public class MainActivity extends SherlockFragmentActivity implements
          */
     @Override
     protected void onStop() {
-        LocationManagerHolder.getLocationManager().disconnect();
+        LocationManager locationManager = LocationManagerHolder.getLocationManager();
+        if (locationManager != null) {
+            locationManager.disconnect();
+        }
         HttpClientHolder.release();
         super.onStop();
     }
@@ -145,14 +155,38 @@ public class MainActivity extends SherlockFragmentActivity implements
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (ConnectionResult.SUCCESS == resultCode) {
             return true;
+        } else {
+            showGooglePlayServicesAvailabilityErrorDialog(resultCode);
+            return false;
         }
-
-        return false;
     }
 
     @Override
     protected void onDestroy() {
         PostponedImageManager.close();
         super.onDestroy();
+    }
+
+    /**
+     *
+     * @param connectionStatusCode
+     */
+    private void showGooglePlayServicesAvailabilityErrorDialog (final int connectionStatusCode) {
+
+        runOnUiThread(new Runnable() {
+
+            private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+            public void run() {
+                final Dialog dialog = GooglePlayServicesUtil.getErrorDialog(
+                        connectionStatusCode, MainActivity.this, PLAY_SERVICES_RESOLUTION_REQUEST);
+                dialog.setCancelable(false);
+                if (dialog == null) {
+                    Toast.makeText(MainActivity.this, "Incompatible version of Google Play Services",
+                            Toast.LENGTH_LONG).show();
+                }
+                dialog.show();
+            }
+        });
     }
 }
