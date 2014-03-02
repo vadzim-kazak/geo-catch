@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.fragment.PhotoBrowsingFragment;
 import com.jrew.geocatch.mobile.service.ImageService;
-import com.jrew.geocatch.mobile.util.CommonUtil;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.PicassoHolder;
 import com.jrew.geocatch.web.model.ClientImagePreview;
@@ -35,20 +34,17 @@ public class UploadedPhotosAdapter extends BaseAdapter {
     private final Activity activity;
 
     /** **/
-    private double thumbnailScaleFactor;
+    private int cellSize;
 
     /**
      *
      * @param activity
      */
-    public UploadedPhotosAdapter(Activity activity) {
+    public UploadedPhotosAdapter(Activity activity, int cellSize) {
 
         super();
-
         this.activity = activity;
-
-        thumbnailScaleFactor = Double.parseDouble(
-                this.activity.getResources().getString(R.config.gridPhotosThumbnailSizeScaleFactor));
+        this.cellSize = cellSize;
     }
 
     @Override
@@ -88,9 +84,7 @@ public class UploadedPhotosAdapter extends BaseAdapter {
         }
 
         final ImageView thumbnailImageView = (ImageView) row.findViewById(R.id.thumbnailImageView);
-        int displaySize = CommonUtil.getDisplayLargerSideSize(activity);
-        int thumbnailSize = (int) (displaySize * thumbnailScaleFactor);
-        thumbnailImageView.setLayoutParams(new LinearLayout.LayoutParams(thumbnailSize, thumbnailSize));
+        thumbnailImageView.setLayoutParams(new LinearLayout.LayoutParams(cellSize, cellSize));
         thumbnailImageView.setImageResource(R.drawable.fish_frame);
 
         final ClientImagePreview clientImagePreview = images.get(i);

@@ -34,6 +34,8 @@
 
     <item name="gridPhotosThumbnailSizeScaleFactor" type="config">0.18</item>
 
+    <item name="gridPhotosSpacingFactor" type="config">0.01</item>
+
     <item name="locationDetectionAccuracy" type="config">30</item>
 
     <!-- In seconds -->

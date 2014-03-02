@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -59,6 +60,33 @@ public class UploadedPhotosFragment extends SherlockFragment {
             layout = inflater.inflate(R.layout.uploaded_photos_fragment, container, false);
             final GridView photosGridView = (GridView) layout.findViewById(R.id.photosGridView);
 
+            // This fragment available only in portrait mode.
+            // So, the bigger side os display height
+            int displayHeight = CommonUtil.getDisplayLargerSideSize(getActivity());
+            double thumbnailScaleFactor = Double.parseDouble(
+                   getResources().getString(R.config.gridPhotosThumbnailSizeScaleFactor));
+            int cellSize = (int) (displayHeight * thumbnailScaleFactor);
+            int displayWidth = CommonUtil.getDisplaySmallerSideSize(getActivity());
+
+            // Get num of columns of grid view columns
+            int columnsNumber = displayWidth / cellSize;
+            photosGridView.setNumColumns(columnsNumber);
+
+            int widthRest = displayWidth % cellSize;
+
+            double gridPhotosSpacingFactor = Double.parseDouble(
+                    getResources().getString(R.config.gridPhotosSpacingFactor));
+            int cellSpacing = (int) (cellSize * gridPhotosSpacingFactor);
+            photosGridView.setHorizontalSpacing(cellSpacing);
+            photosGridView.setVerticalSpacing(cellSpacing);
+
+            int gridViewMargin = (widthRest - ((columnsNumber - 1) * cellSpacing)) / 2;
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(gridViewMargin, 0, gridViewMargin, 0);
+            photosGridView.setLayoutParams(layoutParams);
+
+
             DialogInterface.OnCancelListener listener = new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialogInterface) {
@@ -67,7 +95,7 @@ public class UploadedPhotosFragment extends SherlockFragment {
             };
 
             if (uploadedPhotosAdapter == null) {
-                uploadedPhotosAdapter = new UploadedPhotosAdapter(getActivity());
+                uploadedPhotosAdapter = new UploadedPhotosAdapter(getActivity(), cellSize);
             }
 
             if (uploadedPhotosAdapter.getImagesCount() == 0) {

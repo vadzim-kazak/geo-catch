@@ -47,12 +47,17 @@ public class CommonUtil {
      */
     public static int getDisplayLargerSideSize(Activity activity) {
         Display display = activity.getWindowManager().getDefaultDisplay();
-        int largerSide = display.getWidth();
-        if (display.getHeight() > largerSide) {
-            largerSide = display.getHeight();
-        }
+        return  Math.max(display.getHeight(), display.getWidth());
+    }
 
-        return largerSide;
+    /**
+     *
+     * @param activity
+     * @return
+     */
+    public static int getDisplaySmallerSideSize(Activity activity) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        return Math.min(display.getHeight(), display.getWidth());
     }
 
     /**
