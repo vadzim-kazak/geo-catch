@@ -62,7 +62,6 @@ public class UploadedPhotosFragment extends SherlockFragment {
             DialogInterface.OnCancelListener listener = new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialogInterface) {
-
                     ServiceUtil.abortImageService(getActivity());
                 }
             };
@@ -93,7 +92,7 @@ public class UploadedPhotosFragment extends SherlockFragment {
                                 List<ClientImagePreview> loadedImages = (List<ClientImagePreview>) resultData.getSerializable(ImageService.RESULT_KEY);
                                 ImageCache.getInstance().addClientImagesPreview(loadedImages);
 
-                                if (loadedImages != null && loadedImages.size() != uploadedPhotosAdapter.getImagesCount()) {
+                                if (loadedImages != null && loadedImages.size() > uploadedPhotosAdapter.getImagesCount()) {
                                     uploadedPhotosAdapter.setImages(loadedImages);
                                     uploadedPhotosAdapter.notifyDataSetChanged();
                                 }
@@ -118,7 +117,9 @@ public class UploadedPhotosFragment extends SherlockFragment {
                             break;
 
                         case ImageService.ResultStatus.ABORTED:
-                            LayoutUtil.showRefreshLayout(getActivity(), R.string.uploadedPhotosLoadingCancelled);
+                            if (uploadedPhotosAdapter.getImagesCount() == 0) {
+                                LayoutUtil.showRefreshLayout(getActivity(), R.string.uploadedPhotosLoadingCancelled);
+                            }
                             break;
                     }
                 }

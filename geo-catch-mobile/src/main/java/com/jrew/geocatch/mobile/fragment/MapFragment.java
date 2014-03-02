@@ -23,6 +23,7 @@ import com.androidmapsextensions.MarkerOptions;
 import com.androidmapsextensions.SupportMapFragment;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -50,11 +51,50 @@ import java.util.*;
 public class MapFragment extends SupportMapFragment implements Watson.OnCreateOptionsMenuListener,
         Watson.OnOptionsItemSelectedListener, LocationListener {
 
+    /**
+     *
+     */
+    private class ImageLoadingTarget implements Target {
+
+        /** **/
+        private MarkerOptions markerOptions;
+
+        /** **/
+        private ClientImagePreview imagePreview;
+
+        /**
+         *
+         * @param markerOptions
+         * @param imagePreview
+         */
+        ImageLoadingTarget(MarkerOptions markerOptions, ClientImagePreview imagePreview) {
+            this.markerOptions = markerOptions;
+            this.imagePreview = imagePreview;
+        }
+
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
+            targets.remove(imagePreview.getId());
+
+            Bitmap markerImage = BitmapUtil.createIconWithBorder(bitmap, getActivity());
+            ImageCache.getInstance().addMarker(imagePreview.getId(), markerImage);
+            addMarker(markerImage, markerOptions, imagePreview);
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable drawable) {
+            targets.remove(imagePreview.getId());
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable drawable) {}
+    }
+
     /** **/
     private GoogleMap googleMap;
 
+    /** **/
     private Map<Long, Marker> markers;
-
 
     /** **/
     private boolean isLocationSet;
@@ -64,6 +104,9 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
     /** **/
     private ServiceResultReceiver imageResultReceiver;
+
+    /** **/
+    private Map<Long, Target> targets;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -111,34 +154,14 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
                                                 Bitmap markerImage = ImageCache.getInstance().getMarker(imagePreview.getId());
                                                 if (markerImage != null) {
-                                                    CommonUtil.addMarker(markerImage, markerOptions, imagePreview, markers, googleMap);
+                                                    addMarker(markerImage, markerOptions, imagePreview);
                                                 } else {
-
-                                                    Target target = new Target() {
-
-                                                        @Override
-                                                        public void onBitmapLoaded(Bitmap loadedImage, Picasso.LoadedFrom from) {
-
-                                                            Bitmap markerImage = BitmapUtil.createIconWithBorder(loadedImage, getActivity());
-                                                            ImageCache.getInstance().addMarker(imagePreview.getId(), markerImage);
-                                                            CommonUtil.addMarker(markerImage, markerOptions, imagePreview, markers, googleMap);
-                                                        }
-
-                                                        @Override
-                                                        public void onBitmapFailed(Drawable drawable) {}
-
-                                                        @Override
-                                                        public void onPrepareLoad(Drawable drawable) {}
-
-                                                    };
-
-                                                    PicassoHolder.getPicasso().load(imagePreview.getThumbnailPath()).into(target);
+                                                    loadRemoteImage(imagePreview, markerOptions);
                                                 }
                                             }
                                         }
                                     }
                                 }
-
                                 break;
                         }
                     }
@@ -151,6 +174,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                 googleMap.setMapType(mapType);
 
                 markers = Collections.synchronizedMap(new HashMap<Long, Marker>());
+                targets = Collections.synchronizedMap(new HashMap<Long, Target>());
 
                 googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
@@ -223,21 +247,6 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
         return true;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (WebUtil.isNetworkAvailable(getActivity())) {
-        }
-    }
-
-    @Override
-    public void onPause() {
-
-        super.onPause();
-
-    }
-
     /**
      *
      */
@@ -300,22 +309,6 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
      *
      * @return
      */
-    public Map<Long, Marker> getMarkers() {
-        return markers;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public GoogleMap getGoogleMap() {
-        return googleMap;
-    }
-
-    /**
-     *
-     * @return
-     */
     private LatLngBounds getLatLngBounds() {
         return googleMap.getProjection().getVisibleRegion().latLngBounds;
     }
@@ -369,7 +362,8 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
     private void displayImagesFromCache(LatLngBounds latLngBounds) {
 
         // Display images from cache here
-        List<ClientImagePreview> cachedImages = ImageCache.getInstance().getClientImagePreview(SearchCriteriaHolder.getSearchCriteria());
+        List<ClientImagePreview> cachedImages =
+                ImageCache.getInstance().getClientImagePreview(SearchCriteriaHolder.getSearchCriteria());
         final MarkerOptions markerOptions = new MarkerOptions();
         for (final ClientImagePreview imagePreview : cachedImages) {
 
@@ -377,30 +371,56 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
                 Bitmap markerImage = ImageCache.getInstance().getMarker(imagePreview.getId());
                 if (markerImage != null) {
-                    CommonUtil.addMarker(markerImage, markerOptions, imagePreview, markers, googleMap);
+                    addMarker(markerImage, markerOptions, imagePreview);
                 } else {
-
-                    Target target = new Target() {
-
-                        @Override
-                        public void onBitmapLoaded(Bitmap loadedImage, Picasso.LoadedFrom from) {
-
-                            Bitmap markerImage = BitmapUtil.createIconWithBorder(loadedImage, getActivity());
-                            ImageCache.getInstance().addMarker(imagePreview.getId(), markerImage);
-                            CommonUtil.addMarker(markerImage, markerOptions, imagePreview, markers, googleMap);
-
-                        }
-
-                        @Override
-                        public void onBitmapFailed(Drawable drawable) {}
-
-                        @Override
-                        public void onPrepareLoad(Drawable drawable) {}
-
-                    };
-
-                    PicassoHolder.getPicasso().load(imagePreview.getThumbnailPath()).into(target);
+                    loadRemoteImage(imagePreview, markerOptions);
                 }
+            }
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Iterator<Map.Entry<Long, Target>> iterator = targets.entrySet().iterator();
+        while(iterator.hasNext()) {
+            Map.Entry<Long, Target> entry = iterator.next();
+            Target target = entry.getValue();
+            PicassoHolder.getPicasso().cancelRequest(target);
+            iterator.remove();
+        }
+    }
+
+    /**
+     *
+     * @param imagePreview
+     * @param markerOptions
+     */
+    private void loadRemoteImage(final ClientImagePreview imagePreview, final MarkerOptions markerOptions) {
+        if (!targets.containsKey(imagePreview.getId())) {
+            ImageLoadingTarget imageLoadingTarget = new ImageLoadingTarget(markerOptions, imagePreview);
+            targets.put(imagePreview.getId(), imageLoadingTarget);
+            PicassoHolder.getPicasso().load(imagePreview.getThumbnailPath()).into(imageLoadingTarget);
+        }
+    }
+
+    /**
+     *
+     * @param markerBitmap
+     * @param markerOptions
+     * @param imagePreview
+     */
+    private void addMarker(Bitmap markerBitmap,
+                           MarkerOptions markerOptions,
+                           ClientImagePreview imagePreview) {
+
+        markerOptions.position(new LatLng(imagePreview.getLatitude(), imagePreview.getLongitude()));
+        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(markerBitmap));
+        synchronized (markers) {
+            if (!markers.containsKey(imagePreview.getId())) {
+                Marker marker = googleMap.addMarker(markerOptions);
+                marker.setData(imagePreview);
+                markers.put(imagePreview.getId(), marker);
             }
         }
 

@@ -12,9 +12,7 @@ import com.jrew.geocatch.web.model.DomainProperty;
 import com.jrew.geocatch.web.model.ViewBounds;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -117,6 +115,22 @@ public class ImageCache {
                 cachedImages.add(image);
             }
         }
+
+        Collections.sort(cachedImages, new Comparator<ClientImagePreview>() {
+
+            // Sort desc by id
+            @Override
+            public int compare(ClientImagePreview lhs, ClientImagePreview rhs) {
+
+                if (lhs.getId() > rhs.getId()) {
+                    return -1;
+                } else if (lhs.getId() < rhs.getId()) {
+                    return 11;
+                }
+
+                return 0;
+            }
+        });
 
         return cachedImages;
     }

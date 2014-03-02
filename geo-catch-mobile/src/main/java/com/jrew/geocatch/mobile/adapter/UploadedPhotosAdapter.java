@@ -2,8 +2,6 @@ package com.jrew.geocatch.mobile.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +16,6 @@ import com.jrew.geocatch.mobile.util.CommonUtil;
 import com.jrew.geocatch.mobile.util.FragmentSwitcherHolder;
 import com.jrew.geocatch.mobile.util.PicassoHolder;
 import com.jrew.geocatch.web.model.ClientImagePreview;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.List;
 
@@ -53,7 +49,6 @@ public class UploadedPhotosAdapter extends BaseAdapter {
 
         thumbnailScaleFactor = Double.parseDouble(
                 this.activity.getResources().getString(R.config.gridPhotosThumbnailSizeScaleFactor));
-
     }
 
     @Override
@@ -100,22 +95,9 @@ public class UploadedPhotosAdapter extends BaseAdapter {
 
         final ClientImagePreview clientImagePreview = images.get(i);
 
-//        Target target = new Target() {
-//            @Override
-//            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
-//                thumbnailImageView.setImageBitmap(bitmap);
-//            }
-//
-//            @Override
-//            public void onBitmapFailed(Drawable drawable) {}
-//
-//            @Override
-//            public void onPrepareLoad(Drawable drawable) {}
-//        };
-//
-//        PicassoHolder.getPicasso().load(clientImagePreview.getThumbnailPath()).into(target);
-
-        PicassoHolder.getPicasso().load(clientImagePreview.getThumbnailPath()).into(thumbnailImageView);
+        PicassoHolder.getPicasso().load(clientImagePreview.getThumbnailPath())
+                                  .placeholder(R.drawable.fish_frame)
+                                  .into(thumbnailImageView);
 
         thumbnailImageView.setOnClickListener(new View.OnClickListener() {
             @Override

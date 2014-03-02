@@ -30,7 +30,6 @@ public class ClientImagePreviewConverter implements Converter<Image, ClientImage
         clientImagePreview.setThumbnailPath(image.getThumbnailPath());
         clientImagePreview.setDomainProperties(domainPropertiesConverter.convert(image.getDomainProperties()));
 
-
         return clientImagePreview;
     }
 }
