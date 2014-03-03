@@ -108,6 +108,12 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
     /** **/
     private Map<Long, Target> targets;
 
+    /** **/
+    private boolean[][] mapOccupancyMatrix;
+
+    /** **/
+    private double imagesFilteringAreasNumber;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -147,22 +153,86 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
                                     if(!images.isEmpty()) {
 
+                                        // 1) Clean occupancy matrix
+                                        for (int i = 0; i < mapOccupancyMatrix.length; i++) {
+                                            for (int j = 0; j < mapOccupancyMatrix[i].length; j++) {
+                                                mapOccupancyMatrix[i][j] = false;
+                                            }
+                                        }
+
+                                        //2) Prepare iteration data
+                                        LatLngBounds latLngBounds = getLatLngBounds();
+                                        double latitudeRange = latLngBounds.northeast.latitude - latLngBounds.southwest.latitude;
+                                        double longitudeRange = latLngBounds.northeast.longitude - latLngBounds.southwest.longitude;
+                                        double minDegreeRange = Math.min(latitudeRange, longitudeRange);
+                                        double initialLatitude =  latLngBounds.southwest.latitude;
+                                        double initialLongitude =  latLngBounds.southwest.longitude;
+                                        double areaSize = minDegreeRange / imagesFilteringAreasNumber;
+                                        int latitudeAreasNumber = (int)(latitudeRange / areaSize);
+                                        int longitudeAreasNumber = (int)(longitudeRange / areaSize);
+
+
+                                        // 3) Iterate through displayed markers
+                                        Iterator<Map.Entry<Long, Marker>> iterator = markers.entrySet().iterator();
+                                        while(iterator.hasNext()) {
+                                            Map.Entry<Long, Marker> entry = iterator.next();
+                                            Marker marker = entry.getValue();
+                                            ClientImagePreview image = marker.getData();
+
+                                            for (int i = 0; i < latitudeAreasNumber; i++) {
+                                                for (int j = 0; j < longitudeAreasNumber; j++ ) {
+
+                                                    if (image.getLatitude() >= i * areaSize + initialLatitude &&
+                                                        image.getLatitude() < (i + 1) * areaSize + initialLatitude &&
+                                                        image.getLongitude() >=  j * areaSize + initialLongitude &&
+                                                        image.getLongitude() < (j + 1) * areaSize + initialLongitude) {
+
+                                                        if (mapOccupancyMatrix[i][j] == false ) {
+                                                            mapOccupancyMatrix[i][j] = true;
+                                                        } else {
+                                                            marker.remove();
+                                                            iterator.remove();
+                                                        }
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        // 4) Add new images to free cells
                                         final MarkerOptions markerOptions = new MarkerOptions();
-                                        for (final ClientImagePreview imagePreview : images) {
+                                        for (final ClientImagePreview image : images) {
 
-                                            if (!markers.containsKey(imagePreview.getId())) {
+                                            if (!markers.containsKey(image.getId())) {
 
-                                                Bitmap markerImage = ImageCache.getInstance().getMarker(imagePreview.getId());
-                                                if (markerImage != null) {
-                                                    addMarker(markerImage, markerOptions, imagePreview);
-                                                } else {
-                                                    loadRemoteImage(imagePreview, markerOptions);
+                                                for (int i = 0; i < latitudeAreasNumber; i++) {
+                                                    for (int j = 0; j < longitudeAreasNumber; j++ ) {
+
+                                                        if (image.getLatitude() >= i * areaSize + initialLatitude &&
+                                                            image.getLatitude() < (i + 1) * areaSize + initialLatitude &&
+                                                            image.getLongitude() >=  j * areaSize + initialLongitude &&
+                                                            image.getLongitude() < (j + 1) * areaSize + initialLongitude) {
+
+                                                            if (mapOccupancyMatrix[i][j] == false ) {
+                                                                mapOccupancyMatrix[i][j] = true;
+
+                                                                Bitmap markerImage = ImageCache.getInstance().getMarker(image.getId());
+                                                                if (markerImage != null) {
+                                                                    addMarker(markerImage, markerOptions, image);
+                                                                } else {
+                                                                    loadRemoteImage(image, markerOptions);
+                                                                }
+                                                            }
+                                                            break;
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
-                                break;
+
+                            break;
                         }
                     }
                 });
@@ -204,6 +274,9 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                 });
 
                 isLocationSet = false;
+
+                imagesFilteringAreasNumber = Double.parseDouble(
+                        getResources().getString(R.config.imagesFilteringAreasNumber));
 
                 loadImages();
 
@@ -277,7 +350,19 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
             latLngBounds.southwest.latitude == 0 &&
             latLngBounds.southwest.longitude == 0)) {
 
-            displayImagesFromCache(latLngBounds);
+            // init occupancy matrix
+            if (mapOccupancyMatrix == null) {
+
+                double latitudeRange = latLngBounds.northeast.latitude - latLngBounds.southwest.latitude;
+                double longitudeRange = latLngBounds.northeast.longitude - latLngBounds.southwest.longitude;
+                double minRange = Math.min(latitudeRange, longitudeRange);
+
+                double areaRange = minRange / imagesFilteringAreasNumber;
+                int latitudeAreasNumber = (int) (latitudeRange / areaRange);
+                int longitudeAreasNumber = (int) (longitudeRange / areaRange);
+
+                mapOccupancyMatrix = new boolean[latitudeAreasNumber][longitudeAreasNumber];
+            }
 
             ViewBounds viewBounds = new ViewBounds(latLngBounds.northeast.latitude,
                     latLngBounds.northeast.longitude,
@@ -293,7 +378,6 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
             searchCriteria.setViewBounds(viewBounds);
 
             ServiceUtil.callLoadImagesService(searchCriteria, imageResultReceiver, getActivity());
-
         }
     }
 
@@ -352,30 +436,6 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         if (googleMap != null) {
             loadImages();
-        }
-    }
-
-    /**
-     *
-     * @param latLngBounds
-     */
-    private void displayImagesFromCache(LatLngBounds latLngBounds) {
-
-        // Display images from cache here
-        List<ClientImagePreview> cachedImages =
-                ImageCache.getInstance().getClientImagePreview(SearchCriteriaHolder.getSearchCriteria());
-        final MarkerOptions markerOptions = new MarkerOptions();
-        for (final ClientImagePreview imagePreview : cachedImages) {
-
-            if (!markers.containsKey(imagePreview.getId())) {
-
-                Bitmap markerImage = ImageCache.getInstance().getMarker(imagePreview.getId());
-                if (markerImage != null) {
-                    addMarker(markerImage, markerOptions, imagePreview);
-                } else {
-                    loadRemoteImage(imagePreview, markerOptions);
-                }
-            }
         }
     }
 

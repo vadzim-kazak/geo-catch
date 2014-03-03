@@ -55,5 +55,9 @@
 
     <item name="debugTag" type="config">geoCatch</item>
 
+    <item name="imagesFilteringDegreeThreshold" type="config">0.05</item>
+
+    <item name="imagesFilteringAreasNumber" type="config">6</item>
+
 </resources>
 

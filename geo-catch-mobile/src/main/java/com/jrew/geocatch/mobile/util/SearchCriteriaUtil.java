@@ -1,10 +1,13 @@
 package com.jrew.geocatch.mobile.util;
 
+import android.content.Context;
+import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.DomainProperty;
 import com.jrew.geocatch.web.model.ViewBounds;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -107,5 +110,21 @@ public class SearchCriteriaUtil {
         return true;
     }
 
+    /**
+     *
+     * @param images
+     * @param imageId
+     * @return
+     */
+    public static boolean isImagePresented(List<ClientImagePreview> images, long imageId) {
+
+        for (ClientImagePreview image : images) {
+            if (image.getId() == imageId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 }

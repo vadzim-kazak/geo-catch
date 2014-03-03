@@ -1,5 +1,6 @@
 package com.jrew.geocatch.mobile.service.cache;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
 import com.google.android.gms.maps.model.LatLng;
@@ -84,8 +85,8 @@ public class ImageCache {
 
     /**
      *
-     *
-     * @param searchCriteria@return
+     * @param searchCriteria
+     * @return
      */
     public List<ClientImagePreview> getClientImagePreview(SearchCriteria searchCriteria) {
 
@@ -98,7 +99,7 @@ public class ImageCache {
             }
         }
 
-        return cachedImages;
+        return  cachedImages;
     }
 
     /**
