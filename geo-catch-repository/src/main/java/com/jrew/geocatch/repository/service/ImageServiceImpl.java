@@ -156,19 +156,22 @@ public class ImageServiceImpl implements ImageService {
         double longitudeRange = viewBounds.getNorthEastLng() - viewBounds.getSouthWestLng();
 
         double minDegreeRange = Math.min(latitudeRange, longitudeRange);
-        if (minDegreeRange < imagesFilteringDegreeThreshold) {
+        if (searchCriteria.isLoadOwnImages() || minDegreeRange < imagesFilteringDegreeThreshold) {
             return images;
         } else {
-
             List<Image> filteredResult = new ArrayList<Image>();
+            double initialLatitude =  viewBounds.getSouthWestLat();
+            double initialLongitude =  viewBounds.getSouthWestLng();
             double areaSize = minDegreeRange / imagesFilteringAreasNumber;
-            int latitudeAreaNumber = (int)(latitudeRange / areaSize);
-            int longitudeAreaNumber = (int)(longitudeRange / areaSize);
-            for (int i = 0; i < latitudeAreaNumber; i++) {
-                for (int j = 0; j < longitudeAreaNumber; j++ ) {
-                    Image image = getImageForArea(i * areaSize, j * areaSize,
-                                                 (i + 1) * areaSize, (j + 1) * areaSize,
-                                                  images);
+            int latitudeAreasNumber = (int)(latitudeRange / areaSize);
+            int longitudeAreasNumber = (int)(longitudeRange / areaSize);
+            for (int i = 0; i < latitudeAreasNumber; i++) {
+                for (int j = 0; j < longitudeAreasNumber; j++ ) {
+                    Image image = getImageForArea((i + 1) * areaSize + initialLatitude,
+                                                  (j + 1) * areaSize + initialLongitude,
+                                                   i * areaSize + initialLatitude,
+                                                   j * areaSize + initialLongitude,
+                                                   images);
                     if (image != null) {
                         filteredResult.add(image);
                     }
@@ -203,6 +206,4 @@ public class ImageServiceImpl implements ImageService {
 
         return null;
     }
-
-
 }
