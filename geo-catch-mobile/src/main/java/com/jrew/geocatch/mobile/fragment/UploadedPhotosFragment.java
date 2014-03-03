@@ -91,6 +91,9 @@ public class UploadedPhotosFragment extends SherlockFragment {
                 @Override
                 public void onCancel(DialogInterface dialogInterface) {
                     ServiceUtil.abortImageService(getActivity());
+                    if (uploadedPhotosAdapter.getImagesCount() == 0) {
+                        LayoutUtil.showRefreshLayout(getActivity(), R.string.uploadedPhotosLoadingCancelled);
+                    }
                 }
             };
 
@@ -145,9 +148,6 @@ public class UploadedPhotosFragment extends SherlockFragment {
                             break;
 
                         case ImageService.ResultStatus.ABORTED:
-                            if (uploadedPhotosAdapter.getImagesCount() == 0) {
-                                LayoutUtil.showRefreshLayout(getActivity(), R.string.uploadedPhotosLoadingCancelled);
-                            }
                             break;
                     }
                 }
