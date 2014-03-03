@@ -5,9 +5,11 @@ import com.jrew.geocatch.repository.dao.filesystem.FileSystemManager;
 import com.jrew.geocatch.repository.model.Image;
 import com.jrew.geocatch.web.model.ClientImage;
 import com.jrew.geocatch.web.model.ClientImagePreview;
+import com.jrew.geocatch.web.model.ViewBounds;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.util.StringUtils;
 
@@ -40,6 +42,14 @@ public class ImageServiceImpl implements ImageService {
     @Qualifier("clientImageConverter")
     private Converter<Image, ClientImage> clientImageConverter;
 
+    /** **/
+    @Value("#{configProperties['imagesFilteringDegreeThreshold']}")
+    private double imagesFilteringDegreeThreshold;
+
+    /** **/
+    @Value("#{configProperties['imagesFilteringAreasNumber']}")
+    private double imagesFilteringAreasNumber;
+
     public ImageServiceImpl(FileSystemManager fileSystemManager, ImageDBManager imageDBManager) {
         this.fileSystemManager = fileSystemManager;
         this.imageDBManager = imageDBManager;
@@ -49,6 +59,7 @@ public class ImageServiceImpl implements ImageService {
     public List<ClientImagePreview> getImages(SearchCriteria searchCriteria) {
 
         List<Image> images = imageDBManager.loadImages(searchCriteria);
+        images = filterImages(searchCriteria, images);
 
         // Update images paths
         fileSystemManager.updateThumbnailPath(images);
@@ -131,4 +142,67 @@ public class ImageServiceImpl implements ImageService {
     public void updateImage(Image image) {
         imageDBManager.saveImage(image);
     }
+
+    /**
+     *
+     * @param searchCriteria
+     * @param images
+     * @return
+     */
+    private List<Image> filterImages(SearchCriteria searchCriteria, List<Image> images) {
+
+        ViewBounds viewBounds = searchCriteria.getViewBounds();
+        double latitudeRange = viewBounds.getNorthEastLat() - viewBounds.getSouthWestLat();
+        double longitudeRange = viewBounds.getNorthEastLng() - viewBounds.getSouthWestLng();
+
+        double minDegreeRange = Math.min(latitudeRange, longitudeRange);
+        if (minDegreeRange < imagesFilteringDegreeThreshold) {
+            return images;
+        } else {
+
+            List<Image> filteredResult = new ArrayList<Image>();
+            double areaSize = minDegreeRange / imagesFilteringAreasNumber;
+            int latitudeAreaNumber = (int)(latitudeRange / areaSize);
+            int longitudeAreaNumber = (int)(longitudeRange / areaSize);
+            for (int i = 0; i < latitudeAreaNumber; i++) {
+                for (int j = 0; j < longitudeAreaNumber; j++ ) {
+                    Image image = getImageForArea(i * areaSize, j * areaSize,
+                                                 (i + 1) * areaSize, (j + 1) * areaSize,
+                                                  images);
+                    if (image != null) {
+                        filteredResult.add(image);
+                    }
+                }
+            }
+
+            return filteredResult;
+        }
+    }
+
+    /**
+     *
+     * @param northEastLat
+     * @param northEastLng
+     * @param southWestLat
+     * @param southWestLng
+     * @return
+     */
+    private Image getImageForArea(double northEastLat,
+                                  double northEastLng,
+                                  double southWestLat,
+                                  double southWestLng,
+                                  List<Image> images) {
+
+        for (Image image: images) {
+            if (image.getLatitude() >= southWestLat && image.getLatitude() < northEastLat &&
+                image.getLongitude() >= southWestLng && image.getLongitude() < northEastLng ) {
+
+                return image;
+            }
+        }
+
+        return null;
+    }
+
+
 }
