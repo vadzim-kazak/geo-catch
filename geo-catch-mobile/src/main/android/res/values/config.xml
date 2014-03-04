@@ -49,7 +49,7 @@
             MAP_TYPE_TERRAIN = 3;
             MAP_TYPE_HYBRID = 4;
     -->
-    <item name="mapType" type="config">3</item>
+    <item name="mapType" type="config">1</item>
 
     <item name="cameraInitialZoom" type="config">12</item>
 
