@@ -76,11 +76,17 @@
 
     <string name="photoLoadingCancelled">Photo loading is cancelled.</string>
 
-    <string name="photoDeleteAlertTitle">Are you sure want to delete this photo?</string>
+    <string name="photoDeleteAlertTitle">Are you sure you want to delete this photo?</string>
 
     <string name="photoDeleteAlertYes">Yes</string>
 
     <string name="photoDeleteAlertCancel">Cancel</string>
+
+    <string name="photoReportAlertTitle">Do you really want to report this photo?</string>
+
+    <string name="photoReportAlertYes">Yes</string>
+
+    <string name="photoReportAlertCancel">Cancel</string>
 
     <!-- Uploaded photos fragment -->
     <string name="uploadedPhotosFragmentLabel">My photos</string>

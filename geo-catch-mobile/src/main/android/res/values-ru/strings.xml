@@ -82,6 +82,12 @@
 
     <string name="photoDeleteAlertCancel">Отмена</string>
 
+    <string name="photoReportAlertTitle">Пометить фото как неуместное?</string>
+
+    <string name="photoReportAlertYes">Да</string>
+
+    <string name="photoReportAlertCancel">Отмена</string>
+
     <!-- Uploaded photos fragment -->
     <string name="uploadedPhotosFragmentLabel">Мои фото</string>
 

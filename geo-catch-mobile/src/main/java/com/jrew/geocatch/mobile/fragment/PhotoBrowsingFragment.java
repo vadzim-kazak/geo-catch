@@ -460,16 +460,18 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                     reportsImageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-
-                            ImageReview imageReview =  createImageReview(clientImage);
-                            imageReview.setReviewType(ImageReview.ReviewType.REPORT);
-                            if (isReportSelected) {
-                                imageReview.setSelected(false);
+                            if (!isReportSelected) {
+                                showReportAlertDialog();
                             } else {
-                                imageReview.setSelected(true);
+                                if (clientImage != null) {
+                                    ImageReview imageReview = createImageReview(clientImage);
+                                    imageReview.setReviewType(ImageReview.ReviewType.REPORT);
+                                    if (isReportSelected) {
+                                        imageReview.setSelected(false);
+                                    }
+                                    ServiceUtil.callUploadReviewService(imageReview, imageResultReceiver, getActivity());
+                                }
                             }
-
-                            ServiceUtil.callUploadReviewService(imageReview, imageResultReceiver, getActivity());
                         }
                     });
 
@@ -531,6 +533,46 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                     requestBundle.putLong(ImageService.IMAGE_ID_KEY, clientImage.getId());
                     requestBundle.putString(ImageService.DEVICE_ID_KEY, CommonUtil.getDeviceId(getActivity()));
                     ServiceUtil.callDeleteImageService(requestBundle, imageResultReceiver, getActivity());
+                }
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    /**
+     *
+     * @return
+     */
+    private void showReportAlertDialog() {
+
+        // 1. Instantiate an AlertDialog.Builder with its constructor
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        // 2. Chain together various setter methods to set the dialog characteristics
+        builder.setIcon(R.drawable.report_selected).
+                setTitle(R.string.photoReportAlertTitle);
+
+        // Add the buttons
+        builder.setNegativeButton(R.string.photoReportAlertCancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.setPositiveButton(R.string.photoReportAlertYes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (clientImage != null) {
+                    ImageReview imageReview = createImageReview(clientImage);
+                    imageReview.setReviewType(ImageReview.ReviewType.REPORT);
+                    if (isReportSelected) {
+                        imageReview.setSelected(false);
+                    } else {
+                        imageReview.setSelected(true);
+                    }
+
+                    ServiceUtil.callUploadReviewService(imageReview, imageResultReceiver, getActivity());
                 }
             }
         });
