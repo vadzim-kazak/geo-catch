@@ -55,7 +55,7 @@ public class GeoCatchApplication extends Application {
                                .downloader(new OkHttpDownloader(getApplicationContext()))
                                .build();
 
-        picasso.setDebugging(true);
+       // picasso.setDebugging(true);
 
         PicassoHolder.setPicasso(picasso);
     }

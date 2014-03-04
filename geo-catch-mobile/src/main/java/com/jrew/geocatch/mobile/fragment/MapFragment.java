@@ -353,27 +353,30 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
      */
     private void loadImages() {
 
-        LatLngBounds latLngBounds = getLatLngBounds();
+        if (getActivity() != null) {
 
-        if (!(latLngBounds.northeast.latitude == 0 &&
-            latLngBounds.northeast.longitude == 0 &&
-            latLngBounds.southwest.latitude == 0 &&
-            latLngBounds.southwest.longitude == 0)) {
+            LatLngBounds latLngBounds = getLatLngBounds();
 
-            ViewBounds viewBounds = new ViewBounds(latLngBounds.northeast.latitude,
-                    latLngBounds.northeast.longitude,
-                    latLngBounds.southwest.latitude,
-                    latLngBounds.southwest.longitude);
+            if (!(latLngBounds.northeast.latitude == 0 &&
+                    latLngBounds.northeast.longitude == 0 &&
+                    latLngBounds.southwest.latitude == 0 &&
+                    latLngBounds.southwest.longitude == 0)) {
 
-            SearchCriteria searchCriteria = SearchCriteriaHolder.getSearchCriteria();
+                ViewBounds viewBounds = new ViewBounds(latLngBounds.northeast.latitude,
+                        latLngBounds.northeast.longitude,
+                        latLngBounds.southwest.latitude,
+                        latLngBounds.southwest.longitude);
 
-            // DeviceId
-            String deviceId = Settings.Secure.getString(getActivity().getContentResolver(),
-                    Settings.Secure.ANDROID_ID);
-            searchCriteria.setDeviceId(deviceId);
-            searchCriteria.setViewBounds(viewBounds);
+                SearchCriteria searchCriteria = SearchCriteriaHolder.getSearchCriteria();
 
-            ServiceUtil.callLoadImagesService(searchCriteria, imageResultReceiver, getActivity());
+                // DeviceId
+                String deviceId = Settings.Secure.getString(getActivity().getContentResolver(),
+                        Settings.Secure.ANDROID_ID);
+                searchCriteria.setDeviceId(deviceId);
+                searchCriteria.setViewBounds(viewBounds);
+
+                ServiceUtil.callLoadImagesService(searchCriteria, imageResultReceiver, getActivity());
+            }
         }
     }
 
@@ -474,7 +477,7 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
         markerOptions.position(new LatLng(imagePreview.getLatitude(), imagePreview.getLongitude()));
         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(markerBitmap));
-        markerOptions.alpha(0.5f);
+        //markerOptions.alpha(0.5f);
         synchronized (markers) {
             if (!markers.containsKey(imagePreview.getId())) {
                 Marker marker = googleMap.addMarker(markerOptions);
@@ -482,5 +485,11 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                 markers.put(imagePreview.getId(), marker);
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        clearMarkers();
+        super.onDestroy();
     }
 }

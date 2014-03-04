@@ -22,8 +22,8 @@ public class BitmapUtil {
     /** **/
     private static Paint thumbnailPaint;
 
-    /** **/
-    private static Paint debugPaint;
+//    /** **/
+//    private static Paint debugPaint;
 
     static {
         iconPaint = new Paint();
@@ -32,9 +32,9 @@ public class BitmapUtil {
 
         thumbnailPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
 
-        debugPaint = new Paint();
-        debugPaint.setColor(Color.RED);
-        debugPaint.setStyle(Paint.Style.FILL);
+//        debugPaint = new Paint();
+//        debugPaint.setColor(Color.RED);
+//        debugPaint.setStyle(Paint.Style.FILL);
     }
 
     /**
@@ -65,7 +65,7 @@ public class BitmapUtil {
         // Draw scaled thumbnail on bitmap
         canvas.drawBitmap(scaledThumbnail, borderSize, borderSize, thumbnailPaint);
 
-        canvas.drawCircle(borderSize + scaledThumbnail.getWidth() / 2, 2 * borderSize + scaledThumbnail.getWidth(), 5, debugPaint);
+       // canvas.drawCircle(borderSize + scaledThumbnail.getWidth() / 2, 2 * borderSize + scaledThumbnail.getWidth(), 5, debugPaint);
 
         return icon;
     }
