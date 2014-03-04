@@ -150,7 +150,10 @@ public class FragmentSwitcher implements ActionBar.TabListener {
     private Fragment createFragment(String fragmentTag) {
 
         if (TAG.MAP_FRAGMENT_TAG.equals(fragmentTag)){
-            return new MapFragment();
+            Bundle bundle = new Bundle();
+            MapFragment mapFragment = new MapFragment();
+            mapFragment.setArguments(bundle);
+            return mapFragment;
         } else if (TAG.MAP_SETTINGS_FRAGMENT_TAG.equals(fragmentTag)) {
             return new MapSettingsFragment();
         } else if (TAG.PHOTO_BROWSING_FRAGMENT_TAG.equals(fragmentTag)) {
@@ -178,7 +181,21 @@ public class FragmentSwitcher implements ActionBar.TabListener {
      *
      */
     public void showMapFragment() {
-        showFragment(TAG.MAP_FRAGMENT_TAG);
+        showMapFragment(false);
+    }
+
+    /**
+     *
+     */
+    public void showMapFragment(boolean resetMarkers) {
+
+        if (resetMarkers) {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(MapFragment.RESET_MARKERS_FLAG, true);
+            showFragment(TAG.MAP_FRAGMENT_TAG, bundle);
+        } else {
+            showFragment(TAG.MAP_FRAGMENT_TAG);
+        }
     }
 
     /**

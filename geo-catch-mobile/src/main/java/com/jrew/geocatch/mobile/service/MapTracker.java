@@ -23,9 +23,6 @@ public class MapTracker {
     private boolean isMapZooming = false;
 
     /** **/
-    private boolean isMapFirstTimeViewed = false;
-
-    /** **/
     private LatLngBounds currentMapBounds, previousMapBounds;
 
     /**
@@ -34,7 +31,6 @@ public class MapTracker {
      */
     public MapTracker(GoogleMap googleMap) {
         this.googleMap = googleMap;
-        isMapFirstTimeViewed = true;
     }
 
     /**
@@ -76,21 +72,5 @@ public class MapTracker {
      */
     public LatLngBounds getCurrentMapBounds() {
         return currentMapBounds;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public boolean isMapFirstTimeViewed() {
-        return isMapFirstTimeViewed;
-    }
-
-    /**
-     *
-     * @param mapFirstTimeViewed
-     */
-    public void setMapFirstTimeViewed(boolean mapFirstTimeViewed) {
-        isMapFirstTimeViewed = mapFirstTimeViewed;
     }
 }

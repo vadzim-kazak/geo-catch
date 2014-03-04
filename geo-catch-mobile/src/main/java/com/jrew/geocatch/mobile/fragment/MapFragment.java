@@ -54,6 +54,9 @@ import java.util.*;
 public class MapFragment extends SupportMapFragment implements Watson.OnCreateOptionsMenuListener,
         Watson.OnOptionsItemSelectedListener, LocationListener {
 
+    /** **/
+    public static final String RESET_MARKERS_FLAG = "resetMarkersFlag";
+
     /**
      *
      */
@@ -158,9 +161,8 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
                                     if (mapAreasManager.isMapAreasMode()) {
 
-                                        if (mapTracker.isMapZooming() || mapTracker.isMapFirstTimeViewed()) {
+                                        if (mapTracker.isMapZooming()) {
                                             // Map is zoomed or just opened
-                                            mapTracker.setMapFirstTimeViewed(false);
                                             processVisibleMarkers(true);
 
                                             for (final ClientImagePreview image : images) {
@@ -191,7 +193,6 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
                         }
                     }
                 });
-
 
                 googleMap = getExtendedMap();
 
@@ -233,7 +234,11 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
 
                 isLocationSet = false;
             } else {
-                clearMarkers();
+                Bundle bundle = getArguments();
+                if (bundle != null && bundle.containsKey(RESET_MARKERS_FLAG)) {
+                    bundle.remove(RESET_MARKERS_FLAG);
+                    clearMarkers();
+                }
             }
 
             loadImages();
@@ -427,10 +432,6 @@ public class MapFragment extends SupportMapFragment implements Watson.OnCreateOp
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         if (googleMap != null) {
             loadImages();
-        }
-
-        if (mapTracker != null) {
-            mapTracker.setMapFirstTimeViewed(true);
         }
     }
 
