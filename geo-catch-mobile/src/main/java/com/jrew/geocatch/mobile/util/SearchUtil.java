@@ -1,7 +1,11 @@
 package com.jrew.geocatch.mobile.util;
 
 import android.content.Context;
+import android.graphics.Point;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.jrew.geocatch.mobile.R;
+import com.jrew.geocatch.mobile.service.MapAreasManager;
 import com.jrew.geocatch.web.model.ClientImagePreview;
 import com.jrew.geocatch.web.model.DomainProperty;
 import com.jrew.geocatch.web.model.ViewBounds;
@@ -17,7 +21,7 @@ import java.util.List;
  * Time: 17:28
  * To change this template use File | Settings | File Templates.
  */
-public class SearchCriteriaUtil {
+public class SearchUtil {
 
     /**
      *
@@ -49,6 +53,25 @@ public class SearchCriteriaUtil {
                 image.getLatitude() < viewBounds.getNorthEastLat() &&
                 image.getLongitude() >= viewBounds.getSouthWestLng() &&
                 image.getLongitude() < viewBounds.getNorthEastLng()) {
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     *
+     * @param image
+     * @param bounds
+     * @return
+     */
+    public static boolean isImageBounded(ClientImagePreview image, LatLngBounds bounds) {
+
+        if (image.getLatitude() >= bounds.southwest.latitude &&
+                image.getLatitude() < bounds.northeast.latitude &&
+                image.getLongitude() >= bounds.southwest.longitude &&
+                image.getLongitude() < bounds.northeast.longitude) {
 
             return true;
         }
@@ -126,5 +149,4 @@ public class SearchCriteriaUtil {
 
         return false;
     }
-
 }

@@ -1,16 +1,10 @@
 package com.jrew.geocatch.mobile.service.cache;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.jrew.geocatch.mobile.util.SearchCriteriaHolder;
-import com.jrew.geocatch.mobile.util.SearchCriteriaUtil;
+import com.jrew.geocatch.mobile.util.SearchUtil;
 import com.jrew.geocatch.web.model.ClientImage;
 import com.jrew.geocatch.web.model.ClientImagePreview;
-import com.jrew.geocatch.web.model.DomainProperty;
-import com.jrew.geocatch.web.model.ViewBounds;
 import com.jrew.geocatch.web.model.criteria.SearchCriteria;
 
 import java.util.*;
@@ -94,7 +88,7 @@ public class ImageCache {
         List<ClientImagePreview> cachedImages = new ArrayList<ClientImagePreview>();
         for (Map.Entry<Long, ClientImagePreview> entries : images.entrySet()) {
             ClientImagePreview image = entries.getValue();
-            if (SearchCriteriaUtil.isPassingSearchCriteria(image, searchCriteria)) {
+            if (SearchUtil.isPassingSearchCriteria(image, searchCriteria)) {
                 cachedImages.add(image);
             }
         }

@@ -151,12 +151,16 @@ public class ImageServiceImpl implements ImageService {
      */
     private List<Image> filterImages(SearchCriteria searchCriteria, List<Image> images) {
 
+        if (searchCriteria.isLoadOwnImages()) {
+            return images;
+        }
+
         ViewBounds viewBounds = searchCriteria.getViewBounds();
         double latitudeRange = viewBounds.getNorthEastLat() - viewBounds.getSouthWestLat();
         double longitudeRange = viewBounds.getNorthEastLng() - viewBounds.getSouthWestLng();
 
         double minDegreeRange = Math.min(latitudeRange, longitudeRange);
-        if (searchCriteria.isLoadOwnImages() || minDegreeRange < imagesFilteringDegreeThreshold) {
+        if ( minDegreeRange < imagesFilteringDegreeThreshold) {
             return images;
         } else {
             List<Image> filteredResult = new ArrayList<Image>();
