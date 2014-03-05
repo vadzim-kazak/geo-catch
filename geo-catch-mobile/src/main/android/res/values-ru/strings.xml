@@ -132,6 +132,8 @@
 
     <string name="commonServerCommunicationError">Ошибка связи с сервером</string>
 
+    <string name="progressBarCancel">Отмена</string>
+
     <string-array name="shareSectionOptions">
         <item>Открытый</item>
         <item>Закрытый</item>

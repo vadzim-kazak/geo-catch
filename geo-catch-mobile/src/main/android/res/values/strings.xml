@@ -134,6 +134,8 @@
 
     <string name="commonServerCommunicationError">Server communication error</string>
 
+    <string name="progressBarCancel">Cancel</string>
+
     <string-array name="shareSectionOptions">
         <item>Public</item>
         <item>Private</item>

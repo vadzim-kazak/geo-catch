@@ -3,29 +3,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:orientation="horizontal"
+              android:orientation="vertical"
               android:layout_gravity="center"
               android:gravity="center"
-              android:background="@drawable/dialog_background"
-              android:padding="15dip"  >
+              android:background="@drawable/dialog_background">
 
-    <ProgressBar android:id="@+id/progressBar1"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_centerInParent="true" />
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:padding="15dip"
+                  android:gravity="center"
+                  android:orientation="horizontal" >
 
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginLeft="5dip"
-              android:id="@+id/message"/>
+        <ProgressBar android:id="@+id/progressBar1"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_centerInParent="true" />
 
-    <ImageView android:id="@+id/cancelButton"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_marginLeft="5dip"
-               android:clickable="true"
-               android:src="@android:drawable/ic_menu_close_clear_cancel"
-               android:background="@drawable/abs__item_background_holo_light"
-               android:visibility="gone"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="5dip"
+                  android:id="@+id/message"/>
+
+    </LinearLayout>
+
+    <View android:id="@+id/separator"
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="@android:color/darker_gray"
+          android:visibility="gone" />
+
+    <TextView android:id="@+id/cancelButton"
+              android:paddingTop="15dip"
+              android:paddingBottom="15dip"
+              android:background="@drawable/abs__item_background_holo_light"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:visibility="gone"
+              android:text="@string/progressBarCancel"/>
 
 </LinearLayout>
