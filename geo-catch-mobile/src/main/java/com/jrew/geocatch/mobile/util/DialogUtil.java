@@ -3,7 +3,9 @@ package com.jrew.geocatch.mobile.util;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.jrew.geocatch.mobile.R;
 
@@ -45,12 +47,22 @@ public class DialogUtil {
      */
     public static ProgressDialog createProgressDialog(Context context, int resourceId,
                                                       DialogInterface.OnCancelListener listener) {
-        ProgressDialog dialog = new ProgressDialog(context);
+        final ProgressDialog dialog = new ProgressDialog(context);
         dialog.setCancelable(true);
         dialog.setOnCancelListener(listener);
         dialog.show();
 
         dialog.setContentView(R.layout.progress_dialog);
+
+        final DialogInterface.OnCancelListener cancelListener = listener;
+        ImageView imageView = (ImageView) dialog.findViewById(R.id.cancelButton);
+        imageView.setVisibility(View.VISIBLE);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
 
         TextView textView = (TextView) dialog.findViewById(R.id.message);
         textView.setText(context.getString(resourceId));

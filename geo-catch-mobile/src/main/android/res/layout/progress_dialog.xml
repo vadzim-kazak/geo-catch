@@ -19,4 +19,13 @@
               android:layout_marginLeft="5dip"
               android:id="@+id/message"/>
 
+    <ImageView android:id="@+id/cancelButton"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginLeft="5dip"
+               android:clickable="true"
+               android:src="@android:drawable/ic_menu_close_clear_cancel"
+               android:background="@drawable/abs__item_background_holo_light"
+               android:visibility="gone"/>
+
 </LinearLayout>
