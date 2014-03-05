@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -143,7 +144,13 @@ public class UploadedPhotosFragment extends SherlockFragment {
                         case ImageService.ResultStatus.ERROR:
                             if (loadingDialog.isShowing()) {
                                 loadingDialog.dismiss();
+                            }
+
+                            if (uploadedPhotosAdapter.getImagesCount() == 0) {
                                 LayoutUtil.showRefreshLayout(getActivity(), R.string.uploadedPhotosLoadingError);
+                            } else {
+                                Toast.makeText(getActivity(), getResources().getString(R.string.uploadedPhotosLoadingError),
+                                        Toast.LENGTH_SHORT).show();
                             }
                             break;
 
