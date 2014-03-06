@@ -95,6 +95,8 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
     /** **/
     private Spinner shareSection;
 
+    private AlertDialog noGPSEnabled;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -205,7 +207,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
         super.onResume();
 
         //currentLocation = LocationManagerHolder.getLocationManager().getCurrentLocation();
-        if (!CommonUtil.isGPSEnabled(getActivity())) {
+        if (!CommonUtil.isGPSEnabled(getActivity()) && (noGPSEnabled == null || !noGPSEnabled.isShowing())) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(getResources().getString(R.string.noGPSConnectionWarning))
                     .setCancelable(false)
@@ -220,8 +222,8 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
                         }
                     });
 
-            final AlertDialog alert = builder.create();
-            alert.show();
+            noGPSEnabled = builder.create();
+            noGPSEnabled.show();
         } else {
             if (currentLocation == null) {
                 ActionBarUtil.statusAreaHandleLocationLoading(getActivity());

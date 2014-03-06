@@ -110,6 +110,7 @@ public class DomainPropertyView extends AutoCompleteTextView implements TextWatc
         String typedValue = getText().toString();
         if (typedValue != null && typedValue.length() > 0 && !typedValue.equalsIgnoreCase(initialValue)) {
 
+            typedValue = typedValue.toLowerCase();
             DomainProperty selectedDomainProperty = adapter.getDomainPropertyByValue(typedValue);
             if (selectedDomainProperty == null && createIfNotExisted) {
                 // New value is typed. Create domain property from scratch

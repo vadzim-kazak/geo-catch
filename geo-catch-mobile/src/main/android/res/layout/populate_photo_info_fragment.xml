@@ -58,7 +58,8 @@
                        android:layout_height="wrap_content"
                        android:src="@drawable/fish"
                        android:paddingLeft="5dip"
-                       android:layout_gravity="center_vertical" android:layout_alignParentLeft="true"
+                       android:layout_gravity="center_vertical"
+                       android:layout_alignParentLeft="true"
                        android:layout_centerVertical="true"/>
 
             <com.jrew.geocatch.mobile.view.DomainPropertyView android:layout_width="match_parent"
@@ -68,7 +69,8 @@
                                                               android:paddingLeft="5dip"
                                                               android:id="@+id/fishTypeView"
                                                               android:layout_centerVertical="true"
-                                                              android:layout_toRightOf="@+id/fishIconView"/>
+                                                              android:layout_toRightOf="@+id/fishIconView"
+                                                              android:inputType="text"/>
 
             <ImageView android:layout_width="8dip"
                        android:layout_height="8dip"
@@ -100,7 +102,8 @@
                                                               android:text="@string/toolDomainPropertyInitialLabel"
                                                               android:paddingLeft="5dip"
                                                               android:id="@+id/fishingToolView"
-                                                              android:layout_gravity="center"/>
+                                                              android:layout_gravity="center"
+                                                              android:inputType="text"/>
 
         </LinearLayout>
 
@@ -123,7 +126,8 @@
                                                               android:layout_gravity="center"
                                                               android:paddingLeft="5dip"
                                                               android:text="@string/baitDomainPropertyInitialLabel"
-                                                              android:id="@+id/fishingBaitView"/>
+                                                              android:id="@+id/fishingBaitView"
+                                                              android:inputType="text"/>
 
         </LinearLayout>
 
