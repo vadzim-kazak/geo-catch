@@ -55,7 +55,7 @@ public class DialogUtil {
         View separator = dialog.findViewById(R.id.separator);
         separator.setVisibility(View.VISIBLE);
 
-        TextView cancelButton = (TextView) dialog.findViewById(R.id.cancelButton);
+        final TextView cancelButton = (TextView) dialog.findViewById(R.id.cancelButton);
         cancelButton.setVisibility(View.VISIBLE);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override

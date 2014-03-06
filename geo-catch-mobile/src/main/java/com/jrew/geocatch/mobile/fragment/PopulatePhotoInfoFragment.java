@@ -207,7 +207,7 @@ public class PopulatePhotoInfoFragment extends SherlockFragment implements Locat
         //currentLocation = LocationManagerHolder.getLocationManager().getCurrentLocation();
         if (!CommonUtil.isGPSEnabled(getActivity())) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage(getResources().getString(R.string.noGPSConnectionWarning))
+            builder.setTitle(getResources().getString(R.string.noGPSConnectionWarning))
                     .setCancelable(false)
                     .setNegativeButton(getResources().getString(R.string.noGPSConnectionLaterChoice), new DialogInterface.OnClickListener() {
                         public void onClick(final DialogInterface dialog, final int id) {
