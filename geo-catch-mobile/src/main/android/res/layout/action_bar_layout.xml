@@ -8,10 +8,10 @@
                 android:paddingLeft="5dip"
                 android:paddingRight="0dip">
 
-    <ImageView android:layout_width="33dip"
-               android:layout_height="33dip"
+    <ImageView android:layout_width="35dip"
+               android:layout_height="35dip"
                android:id="@+id/imageView"
-               android:src="@drawable/icon"
+               android:src="@drawable/action_bar_icon"
                android:layout_gravity="center_vertical|left"
                android:layout_alignParentLeft="true"
                android:layout_centerVertical="true"/>
