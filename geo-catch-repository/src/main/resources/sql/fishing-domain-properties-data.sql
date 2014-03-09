@@ -20,7 +20,7 @@ INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VA
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (41, 1, 5, 'густера', 'ru', 0);
 
 -- Елец / common dace
-INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (50, 1, 6, 'common dace', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (50, 1, 6, 'dace', 'en', 1);
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (51, 1, 6, 'елец', 'ru', 0);
 
 -- Ерш / ruffe
@@ -49,11 +49,11 @@ INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VA
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (102, 1, 11, 'сазан', 'ru', 0);
 
 -- Красноперка / сommon rudd
-INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (110, 1, 12, 'сommon rudd', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (110, 1, 12, 'rudd', 'en', 1);
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (111, 1, 12, 'красноперка', 'ru', 0);
 
 -- Лещ / common bream
-INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (120, 1, 13, 'common bream', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (120, 1, 13, 'bream', 'en', 1);
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (121, 1, 13, 'лещ', 'ru', 0);
 
 -- Линь / tench
@@ -100,10 +100,6 @@ INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VA
 -- Уклея / bleak
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (230, 1, 24, 'bleak', 'en', 1);
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (231, 1, 24, 'уклея', 'ru', 0);
-
--- Усач / barbel
-INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (240, 1, 25, 'barbel', 'en', 1);
-INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (241, 1, 25, 'усач', 'ru', 0);
 
 -- Усач / barbel
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (240, 1, 25, 'barbel', 'en', 1);
