@@ -6,7 +6,7 @@
     <!-- Map fragment -->
     <string name="mapFragmentLabel">Карта</string>
 
-    <string name="syncError">Не удалось подгрузить данные с сервера...</string>
+    <string name="syncError">Не удалось подгрузить рыболовные данные...</string>
 
     <!-- Settings fragment -->
     <string name="settingsFragmentLabel">Настройки</string>
@@ -19,12 +19,12 @@
     <string name="processingPhotoMessage">Обработка фото...</string>
 
     <!-- Preview photo fragment -->
-    <string name="previewPhotoFragmentLabel">Предпросмотр фото</string>
+    <string name="previewPhotoFragmentLabel">Просмотр фото</string>
 
     <!-- Populate photo info fragment (some strings are also used in map settings fragment)-->
-    <string name="populatePhotoInfoFragmentLabel">Фото инфо</string>
+    <string name="populatePhotoInfoFragmentLabel">Информация о фото</string>
 
-    <string name="photoDescriptionInitialLabel">Добавьте здесь описание...</string>
+    <string name="photoDescriptionInitialLabel">Добавьте описание...</string>
 
     <string name="domainPropertiesSectionLabel">ДЕТАЛИ</string>
 
@@ -40,11 +40,11 @@
 
     <string name="sharePrivateOptionLabel">Закрытый</string>
 
-    <string name="locationLoadingWarning">Ожидание определения местоположения...</string>
+    <string name="locationLoadingWarning">Определение локации...</string>
 
-    <string name="imageUploadingError">Ошибка загрузки фото</string>
+    <string name="imageUploadingAborted">Загрузка отменена</string>
 
-    <string name="imageUploadingAborted">Загрузка фото отменена</string>
+    <string name="imageUploadingError">Ошибка загрузки</string>
 
     <string name="imageUploadingRetry">Повторить</string>
 
@@ -54,7 +54,9 @@
 
     <string name="postponedImageSavingMessage">Сохранение фото...</string>
 
-    <string name="postponedImageSavingError">Ошибка подготовки фото к отложенной загрузке.</string>
+    <string name="postponedImageSavingError">Ошибка сохранения фото</string>
+
+    <string name="fishNotPopulatedWarning">Пожалуйста выберите тип рыбы</string>
 
     <!-- Map settings fragment -->
     <string name="mapSettingsFragmentLabel">Настройки карты</string>
@@ -63,18 +65,16 @@
 
     <string name="domainPropertyNotPresented">Введенное значение не существует</string>
 
-    <string name="fishNotPopulatedWarning">Обязательное поле рыба не заполненно. Пожалуйсто заполните его.</string>
-
     <!-- Photo browsing fragment -->
     <string name="photoBrowsingFragmentLabel">Просмотр фото</string>
 
     <string name="photoLoadingMessage">Загрузка фото...</string>
 
-    <string name="photoLoadingError">Ошибка загрузки фото.</string>
+    <string name="photoLoadingError">Ошибка загрузки</string>
 
     <string name="photoDeletingMessage">Удаление фото...</string>
 
-    <string name="photoLoadingCancelled">Загрузка фотографии отменена.</string>
+    <string name="photoLoadingCancelled">Загрузка отменена</string>
 
     <string name="photoDeleteAlertTitle">Вы действительно хотите удалить это фото?</string>
 
@@ -82,53 +82,53 @@
 
     <string name="photoDeleteAlertCancel">Отмена</string>
 
-    <string name="photoReportAlertTitle">Пометить фото как неуместное?</string>
+    <string name="photoReportAlertTitle">Вы хотите пожаловаться на это фото?</string>
 
     <string name="photoReportAlertYes">Да</string>
 
-    <string name="photoReportAlertCancel">Отмена</string>
+    <string name="photoReportAlertCancel">Нет</string>
 
     <!-- Uploaded photos fragment -->
     <string name="uploadedPhotosFragmentLabel">Мои фото</string>
 
     <string name="uploadedPhotosLoadingMessage">Загрузка фото...</string>
 
-    <string name="uploadedPhotosLoadingError">Ошибка загрузки фото</string>
+    <string name="uploadedPhotosLoadingError">Ошибка загрузки</string>
 
-    <string name="uploadedPhotosLoadingCancelled">Загрузка фото отменена.</string>
+    <string name="uploadedPhotosLoadingCancelled">Загрузка отменена</string>
 
     <!-- Postponed photos fragment -->
     <string name="postponedPhotosFragmentLabel">Отложенные фото</string>
 
-    <string name="postponedPhotosLoadingMessage">Подготовка отложенных фото...</string>
+    <string name="postponedPhotosLoadingMessage">Загрузка отложенных фото...</string>
 
-    <string name="postponedPhotosLoadingError">Ошибка загрузки отложенных фото.</string>
+    <string name="postponedPhotosLoadingError">Ошибка загрузки</string>
 
     <string name="postponedPhotosUploadingMessage">Загрузка фото...</string>
 
-    <string name="postponedPhotosUploadingError">Ошибка загрузки фото. Попробуйте загрузить его позже.</string>
+    <string name="postponedPhotosUploadingError">Ошибка загрузки</string>
 
-    <string name="postponedPhotosUploadingCancelled">Загрузка фото отменена.</string>
+    <string name="postponedPhotosUploadingCancelled">Загрузка отменена</string>
 
     <string name="postponedPhotosDeletingMessage">Удаление фото...</string>
 
-    <string name="postponedPhotosDeletingError">Ошибка удаления отложенного фото.</string>
+    <string name="postponedPhotosDeletingError">Ошибка удаления</string>
 
     <!-- -->
     <string name="noNetworkConnectionError">Нет доступа к интернету</string>
 
-    <string name="noGPSConnectionWarning">GPS сенсор выключен. Вы хотите включить его?</string>
+    <string name="noGPSConnectionWarning">Для работы приложения нужен GPS. Вы хотите включить его сейчас?</string>
 
     <string name="noGPSConnectionYesChoice">Да</string>
 
     <string name="noGPSConnectionLaterChoice">Позже</string>
 
     <!-- Action bar status area -->
-    <string name="statusAreaLocationNotDetected">Местоположение не определено</string>
+    <string name="statusAreaLocationNotDetected">Локация не определена</string>
 
-    <string name="statusAreaLocationIsLoading">Определение местоположения ...</string>
+    <string name="statusAreaLocationIsLoading">Определение локации...</string>
 
-    <string name="statusAreaLocationDetected">Местоположение определено</string>
+    <string name="statusAreaLocationDetected">Локация определена</string>
 
     <string name="commonServerCommunicationError">Ошибка связи с сервером</string>
 

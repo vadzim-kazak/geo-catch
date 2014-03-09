@@ -6,7 +6,7 @@
     <!-- Map fragment -->
     <string name="mapFragmentLabel">Map</string>
 
-    <string name="syncError">Couldn\'t load application data...</string>
+    <string name="syncError">Couldn\'t load fishing data...</string>
 
     <!-- Settings fragment -->
     <string name="settingsFragmentLabel">Settings</string>
@@ -40,11 +40,11 @@
 
     <string name="sharePrivateOptionLabel">Private</string>
 
-    <string name="locationLoadingWarning">Wait for location loading...</string>
+    <string name="locationLoadingWarning">Loading location...</string>
 
-    <string name="imageUploadingError">Photo uploading error</string>
+    <string name="imageUploadingAborted">Uploading is cancelled</string>
 
-    <string name="imageUploadingAborted">Photo uploading is cancelled</string>
+    <string name="imageUploadingError">Uploading error</string>
 
     <string name="imageUploadingRetry">Retry</string>
 
@@ -52,29 +52,29 @@
 
     <string name="imageUploadingMessage">Uploading photo...</string>
 
-    <string name="postponedImageSavingMessage">Saving image...</string>
+    <string name="postponedImageSavingMessage">Saving photo...</string>
 
-    <string name="postponedImageSavingError">Couldn\'t prepare photo for postponed uploading.</string>
+    <string name="postponedImageSavingError">Couldn\'t save photo</string>
 
-    <string name="fishNotPopulatedWarning">Required field \"fish\" isn\'t populated. Please populate it.</string>
+    <string name="fishNotPopulatedWarning">Fish type is required</string>
 
     <!-- Map settings fragment -->
     <string name="mapSettingsFragmentLabel">Map settings</string>
 
     <string name="photoOwnerSectionLabel">OWNER</string>
 
-    <string name="domainPropertyNotPresented">Populated value isn\'t presented</string>
+    <string name="domainPropertyNotPresented">There is no such value</string>
 
     <!-- Photo browsing fragment -->
     <string name="photoBrowsingFragmentLabel">View photo</string>
 
     <string name="photoLoadingMessage">Loading photo...</string>
 
-    <string name="photoLoadingError">Couldn\'t load photo.</string>
+    <string name="photoLoadingError">Couldn\'t load photo</string>
 
-    <string name="photoDeletingMessage">Removing image...</string>
+    <string name="photoDeletingMessage">Removing photo...</string>
 
-    <string name="photoLoadingCancelled">Photo loading is cancelled.</string>
+    <string name="photoLoadingCancelled">Loading is cancelled</string>
 
     <string name="photoDeleteAlertTitle">Are you sure you want to delete this photo?</string>
 
@@ -82,7 +82,7 @@
 
     <string name="photoDeleteAlertCancel">Cancel</string>
 
-    <string name="photoReportAlertTitle">Do you really want to report this photo?</string>
+    <string name="photoReportAlertTitle">Are you sure you want to report this photo?</string>
 
     <string name="photoReportAlertYes">Yes</string>
 
@@ -93,31 +93,31 @@
 
     <string name="uploadedPhotosLoadingMessage">Loading photos...</string>
 
-    <string name="uploadedPhotosLoadingError">Photos loading error</string>
+    <string name="uploadedPhotosLoadingError">Couldn\'t load photos</string>
 
-    <string name="uploadedPhotosLoadingCancelled">Photos loading is cancelled.</string>
+    <string name="uploadedPhotosLoadingCancelled">Loading is cancelled</string>
 
     <!-- Postponed photos fragment -->
     <string name="postponedPhotosFragmentLabel">Postponed photos</string>
 
     <string name="postponedPhotosLoadingMessage">Loading postponed photos...</string>
 
-    <string name="postponedPhotosLoadingError">Couldn\'t load postponed photos.</string>
+    <string name="postponedPhotosLoadingError">Couldn\'t load postponed photos</string>
 
     <string name="postponedPhotosUploadingMessage">Uploading photo...</string>
 
-    <string name="postponedPhotosUploadingCancelled">Photo uploading is cancelled.</string>
+    <string name="postponedPhotosUploadingCancelled">Uploading is cancelled</string>
 
-    <string name="postponedPhotosUploadingError">Photo uploading error. Try to upload it later.</string>
+    <string name="postponedPhotosUploadingError">Couldn\'t upload photo</string>
 
     <string name="postponedPhotosDeletingMessage">Removing photo...</string>
 
-    <string name="postponedPhotosDeletingError">Couldn\'t remove postponed photo.</string>
+    <string name="postponedPhotosDeletingError">Couldn\'t remove photo</string>
 
    <!-- -->
-   <string name="noNetworkConnectionError">Network connection isn\'t available.</string>
+   <string name="noNetworkConnectionError">Network connection is not available</string>
 
-   <string name="noGPSConnectionWarning">Your GPS seems to be disabled, do you want to enable it?</string>
+   <string name="noGPSConnectionWarning">GPS is required. Do you want to enable it now?</string>
 
    <string name="noGPSConnectionYesChoice">Yes</string>
 
@@ -128,7 +128,7 @@
    <!-- Action bar status area -->
     <string name="statusAreaLocationNotDetected">Location is not detected</string>
 
-    <string name="statusAreaLocationIsLoading">Loading location ...</string>
+    <string name="statusAreaLocationIsLoading">Loading location...</string>
 
     <string name="statusAreaLocationDetected">Location is detected</string>
 
