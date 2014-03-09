@@ -32,7 +32,7 @@ public class HttpClientHolder {
     private final static String HTTPS_PROTOCOL = "https";
 
     /** **/
-    private static final int CONNECTION_TIMEOUT = 5000;
+    private static final int CONNECTION_TIMEOUT = 7000;
 
     /** **/
     private static HttpClient httpClient = null;
