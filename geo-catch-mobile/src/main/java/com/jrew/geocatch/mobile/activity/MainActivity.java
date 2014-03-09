@@ -45,6 +45,7 @@ public class MainActivity extends SherlockFragmentActivity implements
         super.onCreate(savedInstanceState);
 
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         getSupportActionBar().show();
 
         setContentView(R.layout.main_layout);

@@ -31,7 +31,7 @@
 
         <activity android:name="com.jrew.geocatch.mobile.activity.MainActivity"
                   android:uiOptions="splitActionBarWhenNarrow"
-                  android:theme="@style/Theme.Styled">
+                  android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
