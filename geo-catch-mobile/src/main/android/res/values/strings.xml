@@ -18,6 +18,8 @@
 
     <string name="processingPhotoMessage">Processing photo...</string>
 
+    <string name="noCameraSupport">The camera of this device currently isn\'t supported</string>
+
     <!-- Preview photo fragment -->
     <string name="previewPhotoFragmentLabel">Photo preview</string>
 
@@ -97,6 +99,8 @@
 
     <string name="uploadedPhotosLoadingCancelled">Loading is cancelled</string>
 
+    <string name="uploadedPhotosNoPhotosYet">You have no photos yet</string>
+
     <!-- Postponed photos fragment -->
     <string name="postponedPhotosFragmentLabel">Postponed photos</string>
 
@@ -135,6 +139,8 @@
     <string name="commonServerCommunicationError">Server communication error</string>
 
     <string name="progressBarCancel">Cancel</string>
+
+    <string name="googlePlayServicesError">Please install Google Play Services...</string>
 
     <string-array name="shareSectionOptions">
         <item>Public</item>

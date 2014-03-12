@@ -6,7 +6,9 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -64,52 +66,15 @@ public class MainActivity extends SherlockFragmentActivity implements
             FragmentSwitcherHolder.getFragmentSwitcher().handleActivityCreation();
 
 
-            if (WebUtil.isNetworkAvailable(this)) {
-                syncDomainsInfo();
-            }
-
             /*
              * Create a new location client, using the enclosing class to
              * handle callbacks.
              */
             LocationManagerHolder.initLocationHolder(this);
+        }  else {
+            TextView errorTextView = (TextView) findViewById(R.id.noGoogleServices);
+            errorTextView.setVisibility(View.VISIBLE);
         }
-    }
-
-    /**
-     *
-     * @return
-     */
-    private void syncDomainsInfo() {
-
-        Date lastSyncDate = SharedPreferencesHelper.loadLastSyncDate(this);
-        if (lastSyncDate != null) {
-
-            int syncPeriod = getResources().getInteger(R.config.domainInfoSyncPeriodInHours);
-
-            Date currentDate = new Date();
-            if (currentDate.getTime() - lastSyncDate.getTime() >= syncPeriod * 60 * 60 * 1000 ) {
-                // It's time to perform sync
-                processSyncDomainsInfo();
-            }
-
-        } else {
-            // LastSyncDate isn't set. Probably this is first app launch
-            processSyncDomainsInfo();
-        }
-    }
-
-    /**
-     *
-     */
-    private void processSyncDomainsInfo() {
-
-        Bundle bundle = new Bundle();
-
-        String locale = Locale.getDefault().getLanguage();
-        bundle.putString(DomainInfoService.LOCALE_KEY, locale);
-
-        ServiceUtil.callLoadDomainInfoService(bundle, new DomainInfoServiceResultReceiver(new Handler(), this), this);
     }
 
     @Override

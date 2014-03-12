@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentTransaction;
 import com.actionbarsherlock.app.ActionBar;
 import com.jrew.geocatch.mobile.R;
 import com.jrew.geocatch.mobile.util.ActionBarUtil;
+import com.jrew.geocatch.mobile.util.CommonUtil;
+import com.jrew.geocatch.mobile.util.WebUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -90,6 +92,10 @@ public class FragmentSwitcher implements ActionBar.TabListener {
      * @param addToBackStack
      */
     private void showFragment(String fragmentTag, Bundle bundle, boolean addToBackStack) {
+
+        if (WebUtil.isNetworkAvailable(activity)) {
+            CommonUtil.syncDomainsInfo(activity);
+        }
 
         Fragment fragment = getFragment(fragmentTag);
 

@@ -5,6 +5,16 @@
              android:layout_width="fill_parent"
              android:layout_height="fill_parent">
 
+    <TextView android:id="@+id/noCameraSupport"
+              android:layout_marginTop="10dip"
+              android:layout_marginLeft="10dip"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="left"
+              android:textSize="16dip"
+              android:text="@string/noCameraSupport"
+              android:visibility="gone"  />
+
     <android.view.SurfaceView android:id="@+id/surface"
                               android:layout_gravity="center"
                               android:layout_width="wrap_content"

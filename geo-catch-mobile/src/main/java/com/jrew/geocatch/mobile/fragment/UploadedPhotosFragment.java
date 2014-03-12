@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
@@ -53,12 +54,11 @@ public class UploadedPhotosFragment extends SherlockFragment {
         // Action bar subtitle
         ActionBarUtil.setActionBarSubtitle(R.string.uploadedPhotosFragmentLabel, getActivity());
 
-        View layout = null;
+        final View layout = inflater.inflate(R.layout.uploaded_photos_fragment, container, false);;
         if (WebUtil.isNetworkAvailable(getActivity())) {
 
             LayoutUtil.showFragmentContainer(getActivity());
 
-            layout = inflater.inflate(R.layout.uploaded_photos_fragment, container, false);
             final GridView photosGridView = (GridView) layout.findViewById(R.id.photosGridView);
 
             // This fragment available only in portrait mode.
@@ -122,11 +122,17 @@ public class UploadedPhotosFragment extends SherlockFragment {
                             if (resultData.containsKey(ImageService.RESULT_KEY)) {
 
                                 List<ClientImagePreview> loadedImages = (List<ClientImagePreview>) resultData.getSerializable(ImageService.RESULT_KEY);
-                                ImageCache.getInstance().addClientImagesPreview(loadedImages);
+                                if (loadedImages != null && !loadedImages.isEmpty()) {
+                                    ImageCache.getInstance().addClientImagesPreview(loadedImages);
 
-                                if (loadedImages != null && loadedImages.size() > uploadedPhotosAdapter.getImagesCount()) {
-                                    uploadedPhotosAdapter.setImages(loadedImages);
-                                    uploadedPhotosAdapter.notifyDataSetChanged();
+                                    if (loadedImages.size() > uploadedPhotosAdapter.getImagesCount()) {
+                                        uploadedPhotosAdapter.setImages(loadedImages);
+                                        uploadedPhotosAdapter.notifyDataSetChanged();
+                                    }
+                                } else {
+                                    TextView textView = (TextView) layout.findViewById(R.id.noPhotosYet);
+                                    textView.setText(getResources().getString(R.string.uploadedPhotosNoPhotosYet));
+                                    textView.setVisibility(View.VISIBLE);
                                 }
 
                                 if (loadingDialog!= null && loadingDialog.isShowing()) {
@@ -163,7 +169,6 @@ public class UploadedPhotosFragment extends SherlockFragment {
             loadImagesServiceCall();
 
         } else {
-
             LayoutUtil.showRefreshLayout(getActivity(), R.string.noNetworkConnectionError);
         }
 

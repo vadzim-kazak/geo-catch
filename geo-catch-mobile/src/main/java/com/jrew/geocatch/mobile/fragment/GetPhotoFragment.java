@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.*;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
@@ -56,6 +57,9 @@ public class GetPhotoFragment extends SherlockFragment {
     /** **/
     private Camera.Size cameraPreviewSize, cameraSnapshotSize;
 
+    /** **/
+    private Menu menu;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -88,6 +92,7 @@ public class GetPhotoFragment extends SherlockFragment {
     public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_get_photo, menu);
+        this.menu = menu;
     }
 
     @Override
@@ -183,6 +188,12 @@ public class GetPhotoFragment extends SherlockFragment {
 
                 } else {
                     // Currently this camera isn't supported
+                    TextView errorTextView = (TextView) parentLayout.findViewById(R.id.noCameraSupport);
+                    errorTextView.setVisibility(View.VISIBLE);
+
+                    preview.setVisibility(View.GONE);
+
+                    menu.removeItem(R.id.takePhotoMenuOption);
                 }
             }
         }
@@ -205,22 +216,32 @@ public class GetPhotoFragment extends SherlockFragment {
      */
     private boolean calculateCameraSizes(int width, int height, Camera.Parameters parameters){
 
-        int resultArea = 0;
-        for (Camera.Size size : parameters.getSupportedPreviewSizes()) {
+        List<Camera.Size> previewSizes = parameters.getSupportedPreviewSizes();
 
-            double currentAspectRatio = getSizeAspectRatio(size);
-            // Check size of preview mode
+        // Get best preview size index
+        int previewSizeIndex = 0;
+        int resultArea = 0;
+        for (int i = 0; i < previewSizes.size(); i++) {
+            Camera.Size size = previewSizes.get(i);
             if (size.width <= width && size.height <= height) {
-                // Get max available preview mode by square
                 int newArea = size.width * size.height;
                 if (newArea > resultArea) {
-                    // Looking for camera snapshot size with the same aspect ration
-                    Camera.Size snapshotSize = findCameraSnapshotSize(parameters, currentAspectRatio);
-                    if (snapshotSize != null) {
-                        cameraPreviewSize = size;
-                        cameraSnapshotSize = snapshotSize;
-                    }
+                    resultArea = newArea;
+                    previewSizeIndex = i;
                 }
+            }
+        }
+
+        // It is assumed that camera preview sizes are sorted by size in DESC order
+        for (int i = previewSizeIndex; i >= 0; i--) {
+            Camera.Size size = previewSizes.get(i);
+            double currentAspectRatio = getSizeAspectRatio(size);
+            // Looking for camera snapshot size with the same aspect ration
+            Camera.Size snapshotSize = findCameraSnapshotSize(parameters, currentAspectRatio);
+            if (snapshotSize != null) {
+                cameraPreviewSize = size;
+                cameraSnapshotSize = snapshotSize;
+                break;
             }
         }
 
@@ -333,14 +354,13 @@ public class GetPhotoFragment extends SherlockFragment {
      * @param data
      * @param camera
      */
-    public void onPictureTake(byte[] data, Camera camera){
+    public void onPictureTake(byte[] data, Camera camera) {
 
         Bitmap shapshot = BitmapFactory.decodeByteArray(data, 0, data.length);
         shapshot = cropImage(shapshot);
 
         Bundle bundle = new Bundle();
         bundle.putParcelable("bmp", shapshot);
-        MainActivity activity = (MainActivity) getActivity();
         FragmentSwitcherHolder.getFragmentSwitcher().showPreviewPhotoFragment(bundle);
 
         dialog.dismiss();
