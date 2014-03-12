@@ -67,6 +67,7 @@ public class ServiceUtil {
         intent.putExtra(ImageService.RECEIVER_KEY, resultReceiver);
         intent.putExtra(ImageService.COMMAND_KEY, ImageService.Commands.LOAD_IMAGE_DATA);
         intent.putExtra(ImageService.REQUEST_KEY, image.getId());
+        intent.putExtra(ImageService.DEVICE_ID_KEY, CommonUtil.getDeviceId(activity));
         activity.startService(intent);
     }
 

@@ -22,10 +22,12 @@ public interface ImageService {
 
     /**
      *
+     *
      * @param imageId
+     * @param deviceId
      * @return
      */
-    public ClientImage getImage(long imageId);
+    public ClientImage getImage(long imageId, String deviceId);
 
     /**
      *
