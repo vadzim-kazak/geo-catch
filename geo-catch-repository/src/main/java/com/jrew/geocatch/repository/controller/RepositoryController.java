@@ -63,7 +63,7 @@ public class RepositoryController {
 
     @RequestMapping(value = "images/{imageId}/{deviceId}", method = RequestMethod.GET)
     public @ResponseBody ClientImage loadImage(@PathVariable("imageId") long imageId, @PathVariable("imageId") String deviceId) {
-        return imageService.getImage(imageId, );
+        return imageService.getImage(imageId, deviceId);
     }
 
     @RequestMapping(value = "search", method = RequestMethod.POST, produces = "application/json")
