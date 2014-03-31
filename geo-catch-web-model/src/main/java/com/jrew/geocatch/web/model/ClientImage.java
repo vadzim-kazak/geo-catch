@@ -65,6 +65,9 @@ public class ClientImage implements Serializable {
     /** **/
     private int reportsCount;
 
+    /** **/
+    private boolean own;
+
     /**
      *
      * @return
@@ -287,5 +290,21 @@ public class ClientImage implements Serializable {
      */
     public void setReportsCount(int reportsCount) {
         this.reportsCount = reportsCount;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isOwn() {
+        return own;
+    }
+
+    /**
+     *
+     * @param own
+     */
+    public void setOwn(boolean own) {
+        this.own = own;
     }
 }

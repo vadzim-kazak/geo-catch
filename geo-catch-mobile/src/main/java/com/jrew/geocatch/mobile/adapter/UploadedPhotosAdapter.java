@@ -98,7 +98,6 @@ public class UploadedPhotosAdapter extends BaseAdapter {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(ImageService.IMAGE_KEY, clientImagePreview);
-                bundle.putBoolean(PhotoBrowsingFragment.BrowsingMode.OWN_PHOTO_BROWSING.toString(), true);
                 FragmentSwitcherHolder.getFragmentSwitcher().showPhotoBrowsingFragment(bundle);
             }
         });

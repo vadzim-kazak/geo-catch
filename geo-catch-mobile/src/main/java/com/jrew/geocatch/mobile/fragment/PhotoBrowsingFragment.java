@@ -63,18 +63,6 @@ public class PhotoBrowsingFragment extends SherlockFragment {
     /** **/
     private DateFormat browsingDateFormat;
 
-    /**
-     *
-     */
-    public enum BrowsingMode {
-
-       /** **/
-       FOREIGN_PHOTO_BROWSING,
-
-       /** **/
-       OWN_PHOTO_BROWSING
-    }
-
     /** **/
     private ServiceResultReceiver imageResultReceiver;
 
@@ -85,10 +73,10 @@ public class PhotoBrowsingFragment extends SherlockFragment {
     private ClientImage clientImage;
 
     /** **/
-    private BrowsingMode browsingMode = BrowsingMode.FOREIGN_PHOTO_BROWSING;
+    private boolean isLikeSelected, isDislikeSelected, isReportSelected;
 
     /** **/
-    private boolean isLikeSelected, isDislikeSelected, isReportSelected;
+    private Menu menu;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -265,10 +253,6 @@ public class PhotoBrowsingFragment extends SherlockFragment {
         Bundle fragmentData = getArguments();
         if (fragmentData != null && !fragmentData.isEmpty()) {
 
-            if (fragmentData.containsKey(BrowsingMode.OWN_PHOTO_BROWSING.toString())) {
-                browsingMode = BrowsingMode.OWN_PHOTO_BROWSING;
-            }
-
             ClientImagePreview image = (ClientImagePreview) fragmentData.getSerializable(ImageService.IMAGE_KEY);
 
             clientImage = ImageCache.getInstance().getClientImage(image.getId());
@@ -287,18 +271,9 @@ public class PhotoBrowsingFragment extends SherlockFragment {
     public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_photo_browsing, menu);
+        menu.findItem(R.id.deleteImageMenuOption).setVisible(false);
 
-        switch (browsingMode) {
-            case FOREIGN_PHOTO_BROWSING:
-                // Remove delete photo menu option
-                menu.removeItem(R.id.deleteImageMenuOption);
-                break;
-
-            case  OWN_PHOTO_BROWSING:
-                // Remove report photo menu option
-                break;
-        }
-
+        this.menu = menu;
     }
 
     @Override
@@ -484,6 +459,10 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                     if (description != null && description.length() > 0) {
                         descriptionView.setText(description);
                         descriptionLayout.setVisibility(View.VISIBLE);
+                    }
+
+                    if (clientImage.isOwn()) {
+                        menu.findItem(R.id.deleteImageMenuOption).setVisible(true);
                     }
 
                     if (loadingDialog.isShowing()) {

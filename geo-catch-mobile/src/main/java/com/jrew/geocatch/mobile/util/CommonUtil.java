@@ -4,9 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.location.LocationManager;
+import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.view.Display;
 import com.jrew.geocatch.mobile.R;
+import com.jrew.geocatch.mobile.reciever.DomainInfoServiceResultReceiver;
+import com.jrew.geocatch.mobile.service.DomainInfoService;
+
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created with IntelliJ IDEA.
@@ -70,5 +77,42 @@ public class CommonUtil {
                 Settings.Secure.ANDROID_ID);
     }
 
+
+    /**
+     *
+     * @param activity
+     */
+    public static void syncDomainsInfo(Activity activity) {
+
+        Date lastSyncDate = SharedPreferencesHelper.loadLastSyncDate(activity);
+        if (lastSyncDate != null) {
+
+            int syncPeriod = activity.getResources().getInteger(R.config.domainInfoSyncPeriodInHours);
+
+            Date currentDate = new Date();
+            if (currentDate.getTime() - lastSyncDate.getTime() >= syncPeriod * 60 * 60 * 1000 ) {
+                // It's time to perform sync
+                processSyncDomainsInfo(activity);
+            }
+
+        } else {
+            // LastSyncDate isn't set. Probably this is first app launch
+            processSyncDomainsInfo(activity);
+        }
+    }
+
+    /**
+     *
+     * @param activity
+     */
+    private static void processSyncDomainsInfo(Activity activity) {
+
+        Bundle bundle = new Bundle();
+
+        String locale = Locale.getDefault().getLanguage();
+        bundle.putString(DomainInfoService.LOCALE_KEY, locale);
+
+        ServiceUtil.callLoadDomainInfoService(bundle, new DomainInfoServiceResultReceiver(new Handler(), activity), activity);
+    }
 
 }

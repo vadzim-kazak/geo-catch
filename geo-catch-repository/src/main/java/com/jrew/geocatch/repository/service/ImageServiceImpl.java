@@ -68,7 +68,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public ClientImage getImage(long imageId) {
+    public ClientImage getImage(long imageId, String deviceId) {
         Image image = imageDBManager.loadImage(imageId);
         fileSystemManager.updatePath(image);
 
@@ -78,9 +78,15 @@ public class ImageServiceImpl implements ImageService {
         clientImage.setDislikesCount(imageReviewService.getDislikeReviewsCount(image.getId()));
         clientImage.setReportsCount(imageReviewService.getReportReviewsCount(image.getId()));
 
-        clientImage.setLikeSelected(imageReviewService.isLikeSelected(image.getId(), image.getDeviceId()));
-        clientImage.setDislikeSelected(imageReviewService.isDislikeSelected(image.getId(), image.getDeviceId()));
-        clientImage.setReportSelected(imageReviewService.isReportSelected(image.getId(), image.getDeviceId()));
+        if (!StringUtils.isEmpty(deviceId)) {
+            clientImage.setLikeSelected(imageReviewService.isLikeSelected(image.getId(), deviceId));
+            clientImage.setDislikeSelected(imageReviewService.isDislikeSelected(image.getId(), deviceId));
+            clientImage.setReportSelected(imageReviewService.isReportSelected(image.getId(), deviceId));
+
+            if (deviceId.equalsIgnoreCase(image.getDeviceId())) {
+                clientImage.setOwn(true);
+            }
+        }
 
         return clientImage;
     }

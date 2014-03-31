@@ -42,6 +42,9 @@ public class ImageRestUtil {
     /** **/
     private static HttpRequestBase httpMethod;
 
+    /** **/
+    private static final String URI_SEPARATOR = "/";
+
     /**
      *
      * @param intent
@@ -111,13 +114,16 @@ public class ImageRestUtil {
         HttpContext localContext = new BasicHttpContext();
 
         long imageId = (Long) intent.getSerializableExtra(ImageService.REQUEST_KEY);
+        String deviceId = (String) intent.getSerializableExtra(ImageService.DEVICE_ID_KEY);
 
         StringBuilder loadImageUrl = new StringBuilder();
         loadImageUrl.append(resources.getString(R.config.repositoryUrl))
                 .append(resources.getString(R.config.repositoryPath))
                 .append(resources.getString(R.config.repositoryImagesUri))
-                .append("/")
-                .append(imageId);
+                .append(URI_SEPARATOR)
+                .append(imageId)
+                .append(URI_SEPARATOR)
+                .append(deviceId);
 
         httpMethod.setURI(URI.create(loadImageUrl.toString()));
 
@@ -220,9 +226,9 @@ public class ImageRestUtil {
         deleteImageUrl.append(resources.getString(R.config.repositoryUrl))
                 .append(resources.getString(R.config.repositoryPath))
                 .append(resources.getString(R.config.repositoryImagesUri))
-                .append("/")
+                .append(URI_SEPARATOR)
                 .append(imageId)
-                .append("/")
+                .append(URI_SEPARATOR)
                 .append(deviceId);
 
         HttpDelete httpDelete = new HttpDelete(deleteImageUrl.toString());

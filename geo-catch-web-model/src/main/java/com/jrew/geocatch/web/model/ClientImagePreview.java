@@ -122,5 +122,4 @@ public class ClientImagePreview implements Serializable {
     public void setOwn(boolean own) {
         this.own = own;
     }
-
 }

@@ -187,6 +187,9 @@ public class WebUtil {
         boolean isReportSelected = jsonObject.getBoolean("reportSelected");
         clientImage.setReportSelected(isReportSelected);
 
+        boolean own = jsonObject.getBoolean("own");
+        clientImage.setOwn(own);
+
         return clientImage;
     }
 

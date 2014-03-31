@@ -49,11 +49,11 @@ public class RepositoryController {
         imageService.uploadImage(image);
     }
 
-    @RequestMapping(value = "images/{imageId}", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
-    public void updateImage(@RequestBody Image image) {
-        imageService.updateImage(image);
-    }
+//    @RequestMapping(value = "images/{imageId}", method = RequestMethod.POST)
+//    @ResponseStatus(HttpStatus.OK)
+//    public void updateImage(@RequestBody Image image) {
+//        imageService.updateImage(image);
+//    }
 
     @RequestMapping(value = "images/{imageId}/{deviceId}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
@@ -61,9 +61,9 @@ public class RepositoryController {
        imageService.deleteImage(imageId, deviceId);
     }
 
-    @RequestMapping(value = "images/{imageId}", method = RequestMethod.GET)
-    public @ResponseBody ClientImage loadImage(@PathVariable("imageId") long imageId) {
-        return imageService.getImage(imageId);
+    @RequestMapping(value = "images/{imageId}/{deviceId}", method = RequestMethod.GET)
+    public @ResponseBody ClientImage loadImage(@PathVariable("imageId") long imageId, @PathVariable("deviceId") String deviceId) {
+        return imageService.getImage(imageId, deviceId);
     }
 
     @RequestMapping(value = "search", method = RequestMethod.POST, produces = "application/json")

@@ -18,6 +18,8 @@
 
     <string name="processingPhotoMessage">Обработка фото...</string>
 
+    <string name="noCameraSupport">На данный момент камера этого устройства не поддерживается</string>
+
     <!-- Preview photo fragment -->
     <string name="previewPhotoFragmentLabel">Просмотр фото</string>
 
@@ -97,6 +99,8 @@
 
     <string name="uploadedPhotosLoadingCancelled">Загрузка отменена</string>
 
+    <string name="uploadedPhotosNoPhotosYet">На данный момент у вас нет собственных фотографий</string>
+
     <!-- Postponed photos fragment -->
     <string name="postponedPhotosFragmentLabel">Отложенные фото</string>
 
@@ -133,6 +137,8 @@
     <string name="commonServerCommunicationError">Ошибка связи с сервером</string>
 
     <string name="progressBarCancel">Отмена</string>
+
+    <string name="googlePlayServicesError">Пожалуйста установите Google Play Services...</string>
 
     <string-array name="shareSectionOptions">
         <item>Открытый</item>
