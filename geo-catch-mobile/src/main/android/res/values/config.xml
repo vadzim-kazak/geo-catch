@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <item name="repositoryUrl" type="config">http://geo-catch.herokuapp.com/</item>
 
-    <item name="repositoryPath" type="config"></item>
+
+    <item name="repositoryUrl" type="config">http://54.186.214.138:8080/</item>
+
+    <item name="repositoryPath" type="config">fishing/</item>
+
+    <!-- item name="repositoryUrl" type="config">http://geo-catch.herokuapp.com/</item>
+
+    <item name="repositoryPath" type="config"></item -->
 
     <!-- item name="repositoryUrl" type="config">http://192.168.0.100:9000/</item>
 
