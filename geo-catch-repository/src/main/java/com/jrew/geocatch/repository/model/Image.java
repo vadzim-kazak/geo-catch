@@ -18,7 +18,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@Table(name="IMAGE")
+@Table(name="image")
 public class Image {
 
     /**
@@ -72,7 +72,7 @@ public class Image {
     private Date date;
 
     @ManyToMany
-    @JoinTable( name="IMAGE_DOMAIN_PROPERTY",
+    @JoinTable( name="image_domain_property",
                 joinColumns={@JoinColumn(name="image_id", referencedColumnName="id")},
                 inverseJoinColumns={@JoinColumn(name="domain_property_id", referencedColumnName="id")})
     private List<DomainProperty> domainProperties;

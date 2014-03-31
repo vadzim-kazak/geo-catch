@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 @Entity
-@Table(name="DOMAIN_PROPERTY")
+@Table(name="domain_property")
 public class DomainProperty {
 
     /** **/
