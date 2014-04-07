@@ -138,7 +138,7 @@ INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VA
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5001, 2, 5000, 'спиннинг', 'ru', 0);
 
 -- Float fishing rod
-INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5010, 2, 5001, 'fishing rod', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5010, 2, 5001, 'float fishing rod', 'en', 1);
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5011, 2, 5001, 'поплавочная удочка', 'ru', 0);
 
 -- Picker
@@ -156,12 +156,24 @@ INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VA
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5041, 2, 5004, 'троллинг', 'ru', 0);
 
 -- Spearfishing
-INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5050, 2, 5004, 'spearfishing', 'en', 1);
-INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5051, 2, 5004, 'подводная охота', 'ru', 0);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5050, 2, 5005, 'spearfishing', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5051, 2, 5005, 'подводная охота', 'ru', 0);
 
 -- Fly fishing
-INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5060, 2, 5005, 'flyfishing', 'en', 1);
-INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5061, 2, 5005, 'нахлыст', 'ru', 0);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5060, 2, 5006, 'flyfishing', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5061, 2, 5006, 'нахлыст', 'ru', 0);
+
+-- Ice road
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5070, 2, 5007, 'ice road', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5071, 2, 5007, 'зимняя удочка', 'ru', 0);
+
+-- Hands
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5080, 2, 5008, 'hands', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5081, 2, 5008, 'руки', 'ru', 0);
+
+-- Net
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5080, 2, 5008, 'net', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5081, 2, 5008, 'сеть', 'ru', 0);
 
 -- Baits
 -- Wobbler
@@ -173,5 +185,66 @@ INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VA
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8011, 3, 8001, 'червяк', 'ru', 0);
 
 -- Spinnerbait
-INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8020, 3, 8001, 'spinnerbait', 'en', 1);
-INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8021, 3, 8001, 'блесна вращающаяся', 'ru', 0);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8020, 3, 8002, 'spinnerbait', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8021, 3, 8002, 'блесна вращающаяся', 'ru', 0);
+
+-- Spoon lure
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8030, 3, 8003, 'spoon lure', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8031, 3, 8003, 'блесна колеблющуюся', 'ru', 0);
+
+-- Bread
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8040, 3, 8004, 'bread', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8041, 3, 8004, 'хлеб', 'ru', 0);
+
+-- Dough
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8050, 3, 8005, 'dough', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8051, 3, 8005, 'тесто', 'ru', 0);
+
+-- Maggot
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8060, 3, 8006, 'maggot', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8061, 3, 8006, 'опарыш', 'ru', 0);
+
+-- Bloodworm
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8070, 3, 8007, 'bloodworm', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8071, 3, 8007, 'мотыль', 'ru', 0);
+
+-- Pearl barley
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8080, 3, 8008, 'pearl barley', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8081, 3, 8008, 'перловка', 'ru', 0);
+
+-- Сorn
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8090, 3, 8009, 'corn', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8091, 3, 8009, 'кукуруза', 'ru', 0);
+
+-- Peas
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8090, 3, 8009, 'peas', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8091, 3, 8009, 'горох', 'ru', 0);
+
+-- Twister
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8100, 3, 8010, 'twister', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8101, 3, 8010, 'твистер', 'ru', 0);
+
+-- Twister
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8110, 3, 8011, 'twister', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8111, 3, 8011, 'твистер', 'ru', 0);
+
+-- Fly lure
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8120, 3, 8012, 'fly lure', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8121, 3, 8012, 'мушка', 'ru', 0);
+
+-- Plastic bait
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8130, 3, 8013, 'plastic bait', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8131, 3, 8013, 'виброхвост', 'ru', 0);
+
+-- Frog
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8140, 3, 8014, 'frog', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8141, 3, 8014, 'лягушка', 'ru', 0);
+
+-- Leech
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8150, 3, 8015, 'leech', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8151, 3, 8015, 'пиявка', 'ru', 0);
+
+-- Caddisfly
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8160, 3, 8016, 'caddisfly', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8161, 3, 8016, 'ручейник', 'ru', 0);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8162, 3, 8016, 'шитик', 'ru', 0);
