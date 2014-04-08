@@ -188,7 +188,7 @@ public class PostponedImageAdapter extends BaseAdapter {
             PostponedImage postponedImage = iterator.next();
             if (postponedImage.getId() == postponedImageId) {
                 PostponedImageManager.deletePostponedImage(PostponedImageAdapter.this.context, postponedImage);
-                postponedImages.remove(postponedImage);
+                iterator.remove();
             }
         }
     }
