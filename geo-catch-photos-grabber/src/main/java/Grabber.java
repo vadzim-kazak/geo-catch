@@ -23,18 +23,24 @@ import java.util.Iterator;
  */
 public class Grabber {
 
-    private static final String APP_KEY = "AIzaSyDfONNlJ4dXbQ5aOYVbzvcVSdBmmi17YCU";
-    private static final String CUSTOM_SEARCH_ENGINE_ID = "015818362943938412551:ry9yvwdtvia";
+    //private static final String APP_KEY = "AIzaSyDfONNlJ4dXbQ5aOYVbzvcVSdBmmi17YCU";
+    //private static final String CUSTOM_SEARCH_ENGINE_ID = "015818362943938412551:ry9yvwdtvia";
+    //private static final String APP_KEY = "AIzaSyC9BmNMu5xdVVQwvN_bckDNT48j0tK6QlI";
+    //private static final String CUSTOM_SEARCH_ENGINE_ID = "006361190187043371315:__h03xmpoxo";
+
+    private static final String APP_KEY = "AIzaSyBldH3nLO2Qb9lEa1VAb00xNp_GX5uItAc";
+    private static final String CUSTOM_SEARCH_ENGINE_ID = "006361190187043371315:__h03xmpoxo";
+
     private static final int SEARCH_RESULTS_COUNTER = 10;
     private static final int PAGE_COUNTER = 10;
-    private static final int MIN_IMAGE_SIDE_SIZE = 700;
+    private static final int MIN_IMAGE_SIDE_SIZE = 500;
     private static int GPS_COUNTER = 0;
 
     public static void main(String[] args) {
 
         GPS_COUNTER = 0;
 
-        String query = "pike geotag";
+        String query = "tench geotagged photos";
 
         for (int i = 0; i < PAGE_COUNTER; i++) {
 
@@ -49,7 +55,7 @@ public class Grabber {
                     .append(query)
                     .append("&searchType=image&start=")
                     .append(i * SEARCH_RESULTS_COUNTER + 1)
-                    .append("&fileType=jpg&imgSize=xxlarge");
+                    .append("&fileType=jpg&imgSize=xlarge");
 
            try {
                ResponseEntity<JsonNode> responseEntity = restTemplate.getForEntity(uri.toString(), JsonNode.class);
