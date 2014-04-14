@@ -54,7 +54,7 @@ public class UploadedPhotosFragment extends SherlockFragment {
         // Action bar subtitle
         ActionBarUtil.setActionBarSubtitle(R.string.uploadedPhotosFragmentLabel, getActivity());
 
-        final View layout = inflater.inflate(R.layout.uploaded_photos_fragment, container, false);;
+        final View layout = inflater.inflate(R.layout.uploaded_photos_fragment, container, false);
         if (WebUtil.isNetworkAvailable(getActivity())) {
 
             LayoutUtil.showFragmentContainer(getActivity());
