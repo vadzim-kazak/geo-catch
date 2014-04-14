@@ -70,11 +70,6 @@
   </head>
   <body>
   <div>
-     Device id: <input type="text" id="deviceId" value="0"/>
-     Owner: <select id="owner">
-                <option value="any" selected>From anyone</option>
-                <option value="self">Only my</option>
-             </select>
 
      Fish: <select id="fish">
            </select>
@@ -82,18 +77,16 @@
      Fishing tool: <select id="fishingTool">
                    </select>
 
-      Fishing bite: <select id="fishingBite">
-      </select>
+     Fishing bite: <select id="fishingBite">
+                   </select>
 
-      <input type="checkbox" id="hours"/>
-      Hours from: <input type="text" id="fromHour" value="1" size="2"/>
-      to: <input type="text" id="toHour" value="24" size="2"/>
+     Language: <select id="language">
+                <option value="en" selected>English</option>
+                <option value="ru">Russian</option>
+               </select>
 
-      <input type="checkbox" id="months" />
-      Months from: <input type="text" id="fromMonth" value="1" size="2"/>
-      to: <input type="text" id="toMonth" value="12" size="2"/>
+     <input type="button" id="refresh" value="Refresh" />
 
-     <input type="button" id="refresh" value="Refresh" >
   </div>
   <div id="map-canvas"></div>
   </body>

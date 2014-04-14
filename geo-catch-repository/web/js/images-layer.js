@@ -31,12 +31,10 @@ var ImageLayer = function(map) {
      */
     loadImages = function() {
 
-        var currentLocale="ru";
-
-        requestData = {
+        var requestData = {
             viewBounds : getViewBounds(),
-            deviceId: $('#deviceId').val(),
-            owner : $('#owner').val(),
+            deviceId: 0,
+            owner : 'any',
             domainProperties: []
         }
 
@@ -44,7 +42,7 @@ var ImageLayer = function(map) {
         if (fish && fish.length > 0 ) {
             requestData.domainProperties.push({
                 type: 1,
-                locale : currentLocale,
+                locale : $('#language').val(),
                 item : fish
             });
         }
@@ -53,7 +51,7 @@ var ImageLayer = function(map) {
         if (tool && tool.length > 0) {
             requestData.domainProperties.push({
                 type: 2,
-                locale : currentLocale,
+                locale : $('#language').val(),
                 item : tool
             });
         }
@@ -62,30 +60,12 @@ var ImageLayer = function(map) {
         if (bite && bite.length > 0) {
             requestData.domainProperties.push({
                 type: 3,
-                locale : currentLocale,
+                locale : $('#language').val(),
                 item : bite
             });
         }
 
-        if($("#hours").is(':checked')){
-            var dayPeriod = {
-                fromHour:  $("#fromHour").val(),
-                toHour: $("#toHour").val()
-            }
-
-            requestData.dayPeriod = dayPeriod;
-        }
-
-        if($("#months").is(':checked')){
-            var monthPeriod = {
-                fromMonth:  $("#fromMonth").val(),
-                toMonth: $("#toMonth").val()
-            }
-
-            requestData.monthPeriod = monthPeriod;
-        }
-
-        // make ajax call to marker provide service
+        // make ajax call to image provision service
         $.ajax({
             dataType: "json",
             url: generateImageProviderUrl(),
@@ -94,7 +74,6 @@ var ImageLayer = function(map) {
             data: JSON.stringify(requestData),
             success: imageProviderResponseHandler
         });
-
     }
 
     /**
