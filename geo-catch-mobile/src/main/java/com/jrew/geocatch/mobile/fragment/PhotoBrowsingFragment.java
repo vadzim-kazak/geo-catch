@@ -271,7 +271,10 @@ public class PhotoBrowsingFragment extends SherlockFragment {
     public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_photo_browsing, menu);
-        menu.findItem(R.id.deleteImageMenuOption).setVisible(false);
+
+        if (!(clientImage != null && clientImage.isOwn())) {
+            menu.findItem(R.id.deleteImageMenuOption).setVisible(false);
+        }
 
         this.menu = menu;
     }
@@ -461,8 +464,11 @@ public class PhotoBrowsingFragment extends SherlockFragment {
                         descriptionLayout.setVisibility(View.VISIBLE);
                     }
 
-                    if (clientImage.isOwn()) {
-                        menu.findItem(R.id.deleteImageMenuOption).setVisible(true);
+                    if (clientImage.isOwn() && menu != null) {
+                        MenuItem menuItem = menu.findItem(R.id.deleteImageMenuOption);
+                        if (menuItem != null) {
+                            menuItem.setVisible(true);
+                        }
                     }
 
                     if (loadingDialog.isShowing()) {
