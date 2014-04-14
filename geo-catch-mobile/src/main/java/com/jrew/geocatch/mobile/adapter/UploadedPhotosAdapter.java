@@ -85,12 +85,12 @@ public class UploadedPhotosAdapter extends BaseAdapter {
 
         final ImageView thumbnailImageView = (ImageView) row.findViewById(R.id.thumbnailImageView);
         thumbnailImageView.setLayoutParams(new LinearLayout.LayoutParams(cellSize, cellSize));
-        thumbnailImageView.setImageResource(R.drawable.fish_frame);
+        thumbnailImageView.setImageResource(R.drawable.placeholder);
 
         final ClientImagePreview clientImagePreview = images.get(i);
 
         PicassoHolder.getPicasso().load(clientImagePreview.getThumbnailPath())
-                                  .placeholder(R.drawable.fish_frame)
+                                  .placeholder(R.drawable.placeholder)
                                   .into(thumbnailImageView);
 
         thumbnailImageView.setOnClickListener(new View.OnClickListener() {

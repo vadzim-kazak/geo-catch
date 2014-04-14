@@ -9,6 +9,6 @@
     <ImageView android:id="@+id/thumbnailImageView"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:src="@drawable/fish_frame"/>
+               android:src="@drawable/placeholder"/>
 
 </LinearLayout>

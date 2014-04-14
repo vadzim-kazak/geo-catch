@@ -85,16 +85,16 @@ public class PostponedImageAdapter extends BaseAdapter {
                                 FragmentSwitcherHolder.getFragmentSwitcher().showUploadedPhotosFragment();
                             }
                         } else {
-                            showImageProcessingMessage(R.string.postponedPhotosUploadingError);
+                            showImageProcessingResultMessage(R.string.postponedPhotosUploadingError);
                         }
                         break;
 
                     case ImageService.ResultStatus.ERROR:
-                        showImageProcessingMessage(R.string.postponedPhotosUploadingError);
+                        showImageProcessingResultMessage(R.string.postponedPhotosUploadingError);
                         break;
 
                     case ImageService.ResultStatus.ABORTED:
-                        showImageProcessingMessage(R.string.postponedPhotosUploadingCancelled);
+                        showImageProcessingResultMessage(R.string.postponedPhotosUploadingCancelled);
                         break;
                 }
             }
@@ -204,7 +204,7 @@ public class PostponedImageAdapter extends BaseAdapter {
     /**
      *
      */
-    public void showImageProcessingMessage(int messageId) {
+    public void showImageProcessingResultMessage(int messageId) {
         if (uploadingPhotoDialog.isShowing()) {
             uploadingPhotoDialog.dismiss();
         }
