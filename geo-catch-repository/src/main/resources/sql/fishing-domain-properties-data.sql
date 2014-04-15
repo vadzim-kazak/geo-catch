@@ -140,6 +140,7 @@ INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VA
 -- Float fishing rod
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5010, 2, 5001, 'float fishing rod', 'en', 1);
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5011, 2, 5001, 'поплавочная удочка', 'ru', 0);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5012, 2, 5001, 'маховая удочка', 'ru', 0);
 
 -- Picker
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5020, 2, 5002, 'picker', 'en', 1);
@@ -174,6 +175,16 @@ INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VA
 -- Net
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5080, 2, 5008, 'net', 'en', 1);
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5081, 2, 5008, 'сеть', 'ru', 0);
+
+-- Bolognese rod
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5090, 2, 5009, 'bolognese rod', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5091, 2, 5009, 'болонское удилище', 'ru', 0);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5092, 2, 5009, 'болонская удочка', 'ru', 0);
+
+-- Match rod
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5100, 2, 5010, 'match rod', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5101, 2, 5010, 'матчевое удилище', 'ru', 0);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5102, 2, 5010, 'матчевая удочка', 'ru', 0);
 
 -- Baits
 -- Wobbler
