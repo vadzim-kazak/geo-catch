@@ -37,6 +37,8 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
     /** **/
     private static final String TMP_DIRECTORY_KEY = "java.io.tmpdir";
 
+    private static final String PATH_SEPARATOR = "/";
+
     /** Used for file name generation **/
     @Autowired
     private FileNameGenerator geoTimeFileNameGenerator;
@@ -85,7 +87,7 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
         putObjectRequest.withCannedAcl(CannedAccessControlList.Private);
         amazonS3.putObject(putObjectRequest);
         // Set to image relative to image file path
-        image.setPath(bucketName + File.separator + imageFileName);
+        image.setPath(bucketName + PATH_SEPARATOR + imageFileName);
 
         // Create thumbnail for original image
         File thumbnailFile = thumbnailFactory.createThumbnailFile(imageFile);
@@ -94,7 +96,7 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
         putObjectRequest = new PutObjectRequest(bucketName, thumbnailFileName, thumbnailFile);
         putObjectRequest.withCannedAcl(CannedAccessControlList.Private);
         amazonS3.putObject(putObjectRequest);
-        image.setThumbnailPath(bucketName + File.separator + thumbnailFileName);
+        image.setThumbnailPath(bucketName + PATH_SEPARATOR + thumbnailFileName);
 
         // Delete image files from file system
         FileUtil.deleteFile(imageFile);
@@ -148,7 +150,7 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
      * @return
      */
     private String getBucketName(String path) {
-        int separatorIndex = path.lastIndexOf(File.separator);
+        int separatorIndex = path.lastIndexOf(PATH_SEPARATOR);
         return path.substring(0, separatorIndex);
     }
 
@@ -158,7 +160,7 @@ public class AmazonS3FileSystemManagerImpl implements FileSystemManager {
      * @return
      */
     private String getFileName(String path) {
-        int separatorIndex = path.lastIndexOf(File.separator);
+        int separatorIndex = path.lastIndexOf(PATH_SEPARATOR);
         return path.substring(separatorIndex + 1);
     }
 

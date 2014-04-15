@@ -1,7 +1,9 @@
 var ImageLayer = function(map) {
 
     /** Image provider url prefix **/
-    var imageProviderUrl = "http://${repository.domain.name}/${repository.context.path}/${repository.search.path}";
+    var imageSearchProviderUrl = "http://${repository.domain.name}/${repository.context.path}/${repository.search.path}";
+
+    var imageProviderUrl = "http://${repository.domain.name}/${repository.context.path}/${repository.provider.path}";
 
     /** InfoWindow template id for JsRender **/
     var infoWindowTemplateId = 'infoWindowTmpl';
@@ -80,7 +82,7 @@ var ImageLayer = function(map) {
      * @returns {string}
      */
     var generateImageProviderUrl = function() {
-        return imageProviderUrl;
+        return imageSearchProviderUrl;
     }
 
     /**
@@ -156,10 +158,9 @@ var ImageLayer = function(map) {
         // make ajax call to marker provide service
         $.ajax({
             dataType: "json",
-            url: generateImageProviderUrl() + "/" + image.id,
+            url: imageProviderUrl + "/" + image.id,
             type: "GET",
             contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(requestData),
             success: function (fullImage) {
                 image.infoWindow = createInfoWindow(fullImage);
                 image.fullImage = fullImage;

@@ -66,6 +66,11 @@ public class RepositoryController {
         return imageService.getImage(imageId, deviceId);
     }
 
+    @RequestMapping(value = "images/{imageId}", method = RequestMethod.GET)
+    public @ResponseBody ClientImage loadImageForWeb(@PathVariable("imageId") long imageId) {
+        return imageService.getImage(imageId, null);
+    }
+
     @RequestMapping(value = "search", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody List<ClientImagePreview> loadImages(@RequestBody SearchCriteria searchCriteria) {
 
