@@ -92,7 +92,12 @@
   </head>
   <body>
   <div style="overflow:hidden">
-     <div style="float:left">
+
+
+      <div style="float:left; position:relative">
+
+         <img src="icons/icon.png" width="20" height="20" style="min-height:50px;position:absolute;top:0;bottom:0;margin:auto"/>
+
          Fish: <select id="fish" onchange="loadImages()">
                </select>
 
