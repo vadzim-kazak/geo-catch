@@ -56,7 +56,12 @@ public class DomainPropertyDBManagerJPAImpl implements DomainPropertyDBManager {
 
         TypedQuery<DomainProperty> query = entityManager.createQuery(loadDomainPropertiesQuery, DomainProperty.class);
         query.setParameter(1, locale);
+        List<DomainProperty> result = query.getResultList();
 
-        return query.getResultList();
+        if (result != null) {
+            result.size();
+        }
+
+        return result;
     }
 }
