@@ -34,6 +34,22 @@
 
       <script type="text/javascript">
 
+          var domainContainers = [
+              {
+                  id : "fish",
+                  type: 1
+              },
+              {
+                  id : "fishingTool",
+                  type: 2
+              },{
+                  id : "fishingBait",
+                  type: 3
+              }
+          ]
+
+          var locale = 'ru';
+
           // Enable the visual refresh
           google.maps.visualRefresh = true;
 
@@ -57,36 +73,42 @@
              google.maps.event.addListener(map, 'zoom_changed', imageLayer.handleChangeZoomEvent);
 
              $( document ).ready(function() {
-                $("#refresh").click(imageLayer.refresh);
-
-                 populateDomainProperty('1', 'ru', 'fish', true, true);
-                 populateDomainProperty('2', 'ru', 'fishingTool', true, true);
-                 populateDomainProperty('3', 'ru', 'fishingBite', true, true);
+                 populateDomainProperties(locale, domainContainers);
              });
           }
 
           google.maps.event.addDomListener(window, 'load', initialize);
+
+          function handleLocaleSelection() {
+
+              var selectedLocale = $("#language").val();
+              if (selectedLocale != locale) {
+                locale = selectedLocale;
+                populateDomainProperties(locale, domainContainers);
+              }
+          }
+
       </script>
   </head>
   <body>
-  <div>
-
-     Fish: <select id="fish">
-           </select>
-
-     Fishing tool: <select id="fishingTool">
-                   </select>
-
-     Fishing bite: <select id="fishingBite">
-                   </select>
-
-     Language: <select id="language">
-                <option value="en" selected>English</option>
-                <option value="ru">Russian</option>
+  <div style="overflow:hidden">
+     <div style="float:left">
+         Fish: <select id="fish" onchange="loadImages()">
                </select>
 
-     <input type="button" id="refresh" value="Refresh" />
+         Tool: <select id="fishingTool" onchange="loadImages()">
+                       </select>
 
+         Bait: <select id="fishingBait" onchange="loadImages()">
+                       </select>
+     </div>
+
+     <div style="float:right">
+         Language: <select id="language" onchange="handleLocaleSelection()">
+                    <option value="en">English</option>
+                    <option value="ru" selected>Russian</option>
+                   </select>
+     </div>
   </div>
   <div id="map-canvas"></div>
   </body>

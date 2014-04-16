@@ -1,39 +1,78 @@
 /**
  *
- * @param type
  * @param locale
- * @param containerId
+ * @param containerData
  */
-function populateDomainProperty(type, locale, containerId, isItem, isFirstEmpty) {
+function populateDomainProperties(locale, containerData) {
 
     $.ajax({
         dataType: "json",
-        url: '/fishing/repo/domain/' + type + '/' + locale,
+        url: '/${repository.context.path}/${repository.domain.path}/' + locale,
         type: "GET",
         contentType: "application/json; charset=utf-8",
         data: null,
         success: function(response) {
-            populateSelect(response);
+            handleResponse(response);
         }
     });
 
     /**
      *
      */
-    var populateSelect = function(response) {
+    var handleResponse = function(response) {
 
-        if (isFirstEmpty) {
-            var option= '<option value="" selected></option>';
-            $('#' + containerId).append(option);
+        var arrayLength = containerData.length;
+        for (var i = 0; i < arrayLength; i++) {
+            var container = containerData[i];
+            var domainProperties = filterDomainProperties(response, container.type);
+            populateSelectList(domainProperties, container.id);
         }
-        for (var i = 0; i < response.length; i++) {
+    }
+
+    /**
+     *
+     * @param domainProperties
+     * @param type
+     * @returns {Array}
+     */
+    var filterDomainProperties = function(domainProperties, type) {
+
+        var result = [];
+        var counter = 0;
+        var currentItem = 0;
+
+        for (var i = 0; i < domainProperties.length; i++) {
             // Check if current image is currently shown on map
-            var domainProperty = response[i];
-            if (isItem) {
-                var option= '<option value="' + domainProperty.item + '">' + domainProperty.value + '</option>';
-            } else {
-                var option= '<option value="' + domainProperty.id + '">' + domainProperty.value + '</option>';
+            var domainProperty = domainProperties[i];
+            if (domainProperty.type == type && domainProperty.item != currentItem) {
+                result[counter] = domainProperty;
+                currentItem = domainProperty.item;
+                counter++;
             }
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @param domainProperties
+     * @param containerId
+     */
+    var populateSelectList = function (domainProperties, containerId) {
+
+        $('#' + containerId)
+            .find('option')
+            .remove()
+            .end();
+
+        var option= '<option value="" selected></option>';
+        $('#' + containerId).append(option);
+
+        for (var i = 0; i < domainProperties.length; i++) {
+            // Check if current image is currently shown on map
+            var domainProperty = domainProperties[i];
+            var option= '<option value="' + domainProperty.item + '">' + domainProperty.value + '</option>';
             $('#' + containerId).append(option);
         }
     }

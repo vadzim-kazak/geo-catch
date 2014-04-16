@@ -58,12 +58,12 @@ var ImageLayer = function(map) {
             });
         }
 
-        var bite = $("#fishingBite").val();
-        if (bite && bite.length > 0) {
+        var bait = $("#fishingBait").val();
+        if (bait && bait.length > 0) {
             requestData.domainProperties.push({
                 type: 3,
                 locale : $('#language').val(),
-                item : bite
+                item : bait
             });
         }
 
