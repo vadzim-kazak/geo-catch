@@ -9,11 +9,11 @@ var ImageLayer = function(map) {
     var infoWindowTemplateId = 'infoWindowTmpl';
 
     /**  **/
-    var zoomThreshold = 8;
+    var zoomThreshold = 12;
 
     /** **/
     var iconSize = {
-        small: 16,
+        small: 24,
         big: 32
     }
 
@@ -176,6 +176,12 @@ var ImageLayer = function(map) {
      * @returns {google.maps.InfoWindow}
      */
     var createInfoWindow = function(image) {
+
+        var domainProperties = image.domainProperties;
+        for (var i = 0; i < domainProperties.length; i++) {
+            domainProperties[i].value = getLocalizedValue(locale, domainProperties[i]);
+        }
+
         var infoWindow = $("#" + infoWindowTemplateId).render(image);
         return new google.maps.InfoWindow({
             content: infoWindow

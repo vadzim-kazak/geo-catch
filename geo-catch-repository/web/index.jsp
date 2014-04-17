@@ -26,10 +26,11 @@
       </script>
 
       <script id="infoWindowTmpl" type="text/x-jquery-tmpl">
+          {{for domainProperties}} {{:value}} <b>|</b>{{/for}}
           <div>
-            {{:description}}
-            <img src="{{:path}}" />
+            <img src="{{:path}}" width="500" height="500"/>
           </div>
+          <div>{{:description}}</div>
       </script>
 
       <script type="text/javascript">
@@ -48,7 +49,7 @@
               }
           ]
 
-          var locale = 'ru';
+          locale = 'ru';
 
           // Enable the visual refresh
           google.maps.visualRefresh = true;
@@ -65,7 +66,7 @@
               };
 
               var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-              var imageLayer = new ImageLayer(map);
+              imageLayer = new ImageLayer(map);
 
              //Add map events listeners
              google.maps.event.addListener(map, 'dragend', imageLayer.handleChangeViewBoundsEvent);
@@ -86,6 +87,12 @@
                 locale = selectedLocale;
                 populateDomainProperties(locale, domainContainers);
               }
+
+              refresh();
+          }
+
+          function refresh() {
+              imageLayer.refresh();
           }
 
       </script>
@@ -96,16 +103,14 @@
 
       <div style="float:left; position:relative">
 
-         <img src="icons/icon.png" width="20" height="20" style="min-height:50px;position:absolute;top:0;bottom:0;margin:auto"/>
+         <img src="icons/icon.png" width="20" height="20" />
 
-         Fish: <select id="fish" onchange="loadImages()">
-               </select>
+         Fish: <select id="fish" onchange="refresh()"></select>
 
-         Tool: <select id="fishingTool" onchange="loadImages()">
-                       </select>
+         Tool: <select id="fishingTool" onchange="refresh()"></select>
 
-         Bait: <select id="fishingBait" onchange="loadImages()">
-                       </select>
+         Bait: <select id="fishingBait" onchange="refresh()"></select>
+
      </div>
 
      <div style="float:right">

@@ -1,3 +1,6 @@
+// Somain data container
+var domainData = {};
+
 /**
  *
  * @param locale
@@ -5,21 +8,28 @@
  */
 function populateDomainProperties(locale, containerData) {
 
-    $.ajax({
-        dataType: "json",
-        url: '/${repository.context.path}/${repository.domain.path}/' + locale,
-        type: "GET",
-        contentType: "application/json; charset=utf-8",
-        data: null,
-        success: function(response) {
-            handleResponse(response);
-        }
-    });
+    if (domainData[locale] === undefined) {
+
+        $.ajax({
+            dataType: "json",
+            url: '/${repository.context.path}/${repository.domain.path}/' + locale,
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            data: null,
+            success: function(response) {
+                domainData[locale] = response;
+                handleDomainData(response);
+            }
+        });
+
+    } else {
+        handleDomainData(domainData[locale]);
+    }
 
     /**
      *
      */
-    var handleResponse = function(response) {
+    function handleDomainData(response) {
 
         var arrayLength = containerData.length;
         for (var i = 0; i < arrayLength; i++) {
@@ -35,7 +45,7 @@ function populateDomainProperties(locale, containerData) {
      * @param type
      * @returns {Array}
      */
-    var filterDomainProperties = function(domainProperties, type) {
+    function filterDomainProperties(domainProperties, type) {
 
         var result = [];
         var counter = 0;
@@ -59,7 +69,7 @@ function populateDomainProperties(locale, containerData) {
      * @param domainProperties
      * @param containerId
      */
-    var populateSelectList = function (domainProperties, containerId) {
+    function populateSelectList(domainProperties, containerId) {
 
         $('#' + containerId)
             .find('option')
@@ -76,4 +86,17 @@ function populateDomainProperties(locale, containerData) {
             $('#' + containerId).append(option);
         }
     }
+}
+
+function getLocalizedValue(locale, domainProperty) {
+    if (domainData[locale] !== undefined) {
+        var localizedDomainProperties = domainData[locale];
+        for (var i = 0; i < localizedDomainProperties.length; i++) {
+            if (domainProperty.item == localizedDomainProperties[i].item) {
+                return localizedDomainProperties[i].value;
+            }
+        }
+    }
+
+    return domainProperty.value;
 }
