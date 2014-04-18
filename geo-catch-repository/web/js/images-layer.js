@@ -11,6 +11,8 @@ var ImageLayer = function(map) {
     /**  **/
     var zoomThreshold = 12;
 
+    var dateFormat = 'YYYY MMM DD, HH:mm:ss';
+
     /** **/
     var iconSize = {
         small: 24,
@@ -150,7 +152,9 @@ var ImageLayer = function(map) {
         return {
             url : image.thumbnailPath,
             size : new google.maps.Size(iconSize, iconSize), // desired size
-            scaledSize: new google.maps.Size(iconSize, iconSize)
+            scaledSize: new google.maps.Size(iconSize, iconSize),
+            strokeColor: 'white',
+            strokeWeight: 3
         };
     }
 
@@ -181,6 +185,13 @@ var ImageLayer = function(map) {
         var domainProperties = image.domainProperties;
         for (var i = 0; i < domainProperties.length; i++) {
             domainProperties[i].value = getLocalizedValue($('#language').val(), domainProperties[i]);
+        }
+
+
+        if (image.parsedDate === undefined) {
+            // Convert date to string
+            // It is assumed that string comes in
+            image.parsedDate = moment(image.date, "YYDDDHHmmssSSS").format(dateFormat);
         }
 
         var infoWindow = $("#" + infoWindowTemplateId).render(image);

@@ -21,22 +21,35 @@
       <script src="js/jsrender.js"></script>
       <script src="js/images-layer.js"></script>
       <script src="js/domain.js"></script>
+      <script src="js/moment.min.js"></script>
       <script type="text/javascript"
               src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBI_eGAZN3QUbNyJIxV73LWlRf2iCUa5ew&sensor=false">
       </script>
 
       <script id="infoWindowTmpl" type="text/x-jquery-tmpl">
           {{for domainProperties}}
-              {{if #index < #parent.data.length - 1}}
-                {{:value}} <b>|</b>
-              {{else}}
-                {{:value}}
+
+              {{if type == 1}}
+                <img src="icons/fish.png" width="20" height="20" style="vertical-align:middle"/>
               {{/if}}
+              {{if type == 2}}
+                <img src="icons/rod.png" width="20" height="20" style="vertical-align:middle"/>
+              {{/if}}
+              {{if type == 3}}
+                <img src="icons/hook.png" width="20" height="20" style="vertical-align:middle"/>
+              {{/if}}
+
+              {{:value}}
+
           {{/for}}
           <div>
             <img src="{{:path}}" width="500" height="500"/>
           </div>
-          <div>{{:description}}</div>
+          <div><img src="icons/like_unselected.png" width="18" height="18" style="vertical-align:middle"/> {{:likesCount}} <img src="icons/dislike_unselected.png" width="18" height="18" style="vertical-align:middle"/> {{:dislikesCount}} <img src="icons/report_unselected.png" width="18" height="18" style="vertical-align:middle"/> {{:reportsCount}}</div>
+          <div><img src="icons/clock.png" width="18" height="18" style="vertical-align:middle"/> {{:parsedDate}}</div>
+          {{if description}}
+            <div><img src="icons/chat.png" width="18" height="18" style="vertical-align:middle"/> {{:description}}</div>
+          {{/if}}
       </script>
 
       <script type="text/javascript">
@@ -104,10 +117,7 @@
   <body>
   <div style="overflow:hidden">
 
-
       <div style="float:left; position:relative">
-
-         <img src="icons/icon.png" width="20" height="20" />
 
          Fish: <select id="fish" onchange="refresh()"></select>
 
