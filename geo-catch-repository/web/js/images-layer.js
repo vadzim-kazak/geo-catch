@@ -134,6 +134,7 @@ var ImageLayer = function(map) {
         //image.infoWindow = loadFullImage(image);
         google.maps.event.addListener(image.marker, 'click', function() {
             if (image.fullImage) {
+                image.infoWindow = createInfoWindow(image.fullImage);
                 image.infoWindow.open(map, image.marker);
             } else {
                 loadFullImage(image);
@@ -179,7 +180,7 @@ var ImageLayer = function(map) {
 
         var domainProperties = image.domainProperties;
         for (var i = 0; i < domainProperties.length; i++) {
-            domainProperties[i].value = getLocalizedValue(locale, domainProperties[i]);
+            domainProperties[i].value = getLocalizedValue($('#language').val(), domainProperties[i]);
         }
 
         var infoWindow = $("#" + infoWindowTemplateId).render(image);

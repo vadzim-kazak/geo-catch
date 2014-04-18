@@ -26,7 +26,13 @@
       </script>
 
       <script id="infoWindowTmpl" type="text/x-jquery-tmpl">
-          {{for domainProperties}} {{:value}} <b>|</b>{{/for}}
+          {{for domainProperties}}
+              {{if #index < #parent.data.length - 1}}
+                {{:value}} <b>|</b>
+              {{else}}
+                {{:value}}
+              {{/if}}
+          {{/for}}
           <div>
             <img src="{{:path}}" width="500" height="500"/>
           </div>
@@ -62,7 +68,7 @@
               var mapOptions = {
                   center: new google.maps.LatLng(0, 0),
                   zoom: 4,
-                  mapTypeId: google.maps.MapTypeId.TERRAIN
+                  mapTypeId: google.maps.MapTypeId.ROADMAP
               };
 
               var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
@@ -87,8 +93,6 @@
                 locale = selectedLocale;
                 populateDomainProperties(locale, domainContainers);
               }
-
-              refresh();
           }
 
           function refresh() {
