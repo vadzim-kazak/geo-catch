@@ -11,7 +11,7 @@
 
       <link rel="icon" type="image/png" href="icons/favicon.png" />
 
-      <title></title>
+      <title>Geo-Catch | Fishing</title>
 
       <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 
