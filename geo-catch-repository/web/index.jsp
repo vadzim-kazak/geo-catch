@@ -8,7 +8,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
   <head>
-    <title></title>
+
+      <link rel="icon" type="image/png" href="icons/favicon.png" />
+
+      <title></title>
+
       <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 
       <style type="text/css">
@@ -79,8 +83,9 @@
           function initialize() {
 
               var mapOptions = {
-                  center: new google.maps.LatLng(0, 0),
-                  zoom: 4,
+                  // temporary center of map Minsk, Belarus
+                  center: new google.maps.LatLng(53.9475743, 27.5376985),
+                  zoom: 6,
                   mapTypeId: google.maps.MapTypeId.ROADMAP
               };
 
@@ -88,7 +93,7 @@
               imageLayer = new ImageLayer(map);
 
              //Add map events listeners
-             google.maps.event.addListener(map, 'dragend', imageLayer.handleChangeViewBoundsEvent);
+             google.maps.event.addListener(map, 'bounds_changed', imageLayer.handleChangeViewBoundsEvent);
              google.maps.event.addListener(map, 'zoom_changed', imageLayer.handleChangeViewBoundsEvent);
              google.maps.event.addListener(map, 'zoom_changed', imageLayer.handleChangeZoomEvent);
 
