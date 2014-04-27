@@ -1,4 +1,4 @@
-var ImageLayer = function(map) {
+var ImageLayer = function(map, imageId) {
 
     /** Image provider url prefix **/
     var imageSearchProviderUrl = "http://${repository.domain.name}/${repository.context.path}/${repository.search.path}";
@@ -22,6 +22,41 @@ var ImageLayer = function(map) {
     /** Array of loaded images **/
     var images = [];
 
+    this.showImageOnLoad = function(imageId) {
+        // make ajax call to marker provide service
+        $.ajax({
+            dataType: "json",
+            url: imageProviderUrl + "/" + imageId,
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            success: function (fullImage) {
+
+                map.setCenter(new google.maps.LatLng(fullImage.latitude, fullImage.longitude));
+                map.setZoom(16);
+
+                var showImageOnLoadCallback = function() {
+                    for (var i = 0; i < images.length; i++) {
+                        var image = images[i];
+                        if (image.id == imageId) {
+
+                            image.fullImage = fullImage;
+                            image.infoWindow = createInfoWindow(image.fullImage);
+
+                            setTimeout(function(){
+                                google.maps.event.trigger(image.marker, "click");
+                                console.log("clicked");
+                            }, 500);
+
+                            break;
+                        }
+                    }
+                }
+
+                loadImages(showImageOnLoadCallback);
+            }
+        });
+    }
+
     /**
      *
      */
@@ -33,7 +68,7 @@ var ImageLayer = function(map) {
     /**
      *
      */
-    loadImages = function() {
+    loadImages = function(loadImagesCallback) {
 
         var requestData = {
             viewBounds : getViewBounds(),
@@ -76,7 +111,21 @@ var ImageLayer = function(map) {
             type: "POST",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(requestData),
-            success: imageProviderResponseHandler
+            success: function(response) {
+
+                for (var i = 0; i < response.length; i++) {
+                    // Check if current image is currently shown on map
+                    var image = response[i];
+                    if(!isImageLoaded(image)) {
+                        showImage(image);
+                        images.push(image);
+                    }
+                }
+
+                if (loadImagesCallback !== undefined) {
+                    loadImagesCallback();
+                }
+            }
         });
     }
 
@@ -101,21 +150,6 @@ var ImageLayer = function(map) {
                  northEastLng : northEast.lng(),
                  southWestLat : southWest.lat(),
                  southWestLng : southWest.lng() }
-    }
-
-    /**
-     *
-     */
-    var imageProviderResponseHandler = function(response) {
-
-        for (var i = 0; i < response.length; i++) {
-            // Check if current image is currently shown on map
-            var image = response[i];
-            if(!isImageLoaded(image)) {
-                showImage(image);
-                images.push(image);
-            }
-        }
     }
 
     /**
@@ -186,7 +220,6 @@ var ImageLayer = function(map) {
         for (var i = 0; i < domainProperties.length; i++) {
             domainProperties[i].value = getLocalizedValue($('#language').val(), domainProperties[i]);
         }
-
 
         if (image.parsedDate === undefined) {
             // Convert date to string

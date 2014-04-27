@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
   <head>
 
@@ -58,6 +59,11 @@
 
       <script type="text/javascript">
 
+          var imageId = 0;
+          <c:if test="${not empty param.image}">
+            imageId = <c:out value="${param.image}"/>;
+          </c:if>
+
           var domainContainers = [
               {
                   id : "fish",
@@ -96,6 +102,12 @@
              google.maps.event.addListener(map, 'bounds_changed', imageLayer.handleChangeViewBoundsEvent);
              google.maps.event.addListener(map, 'zoom_changed', imageLayer.handleChangeViewBoundsEvent);
              google.maps.event.addListener(map, 'zoom_changed', imageLayer.handleChangeZoomEvent);
+
+             if (imageId > 0) {
+                 google.maps.event.addListenerOnce(map, 'idle', function(){
+                     imageLayer.showImageOnLoad(imageId);
+                 });
+             }
 
              $( document ).ready(function() {
                  populateDomainProperties(locale, domainContainers);
@@ -140,5 +152,6 @@
      </div>
   </div>
   <div id="map-canvas"></div>
+
   </body>
 </html>
