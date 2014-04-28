@@ -32,30 +32,32 @@
       </script>
 
       <script id="infoWindowTmpl" type="text/x-jquery-tmpl">
-          {{for domainProperties}}
+          <div style="min-height: 580px;max-height:750px">
+              {{for domainProperties}}
 
-              {{if type == 1}}
-                <img src="icons/fish.png" width="20" height="20" style="vertical-align:middle"/>
-              {{/if}}
-              {{if type == 2}}
-                <img src="icons/rod.png" width="20" height="20" style="vertical-align:middle"/>
-              {{/if}}
-              {{if type == 3}}
-                <img src="icons/hook.png" width="20" height="20" style="vertical-align:middle"/>
-              {{/if}}
+                  {{if type == 1}}
+                    <img src="icons/fish.png" width="20" height="20" style="vertical-align:middle"/>
+                  {{/if}}
+                  {{if type == 2}}
+                    <img src="icons/rod.png" width="20" height="20" style="vertical-align:middle"/>
+                  {{/if}}
+                  {{if type == 3}}
+                    <img src="icons/hook.png" width="20" height="20" style="vertical-align:middle"/>
+                  {{/if}}
 
-              {{:value}}
+                  {{:value}}
 
-          {{/for}}
-          <input type="button" value="Share" onclick="copyToClipboard('http://${repository.domain.name}/${repository.context.path}?image={{:id}}')" style="float: right;">
-          <div>
-            <img src="{{:path}}" width="500" height="500"/>
+              {{/for}}
+              <input type="button" value="Share" onclick="copyToClipboard('http://${repository.domain.name}/${repository.context.path}?image={{:id}}')" style="float: right;">
+              <div>
+                <img src="{{:path}}" width="500" height="500"/>
+              </div>
+              <div><img src="icons/like_unselected.png" width="18" height="18" style="vertical-align:middle"/> {{:likesCount}} <img src="icons/dislike_unselected.png" width="18" height="18" style="vertical-align:middle"/> {{:dislikesCount}} <img src="icons/report_unselected.png" width="18" height="18" style="vertical-align:middle"/> {{:reportsCount}}</div>
+              <div><img src="icons/clock.png" width="18" height="18" style="vertical-align:middle"/> {{:parsedDate}}</div>
+              {{if description}}
+                <div><img src="icons/chat.png" width="18" height="18" style="vertical-align:middle"/> {{:description}}</div>
+              {{/if}}
           </div>
-          <div><img src="icons/like_unselected.png" width="18" height="18" style="vertical-align:middle"/> {{:likesCount}} <img src="icons/dislike_unselected.png" width="18" height="18" style="vertical-align:middle"/> {{:dislikesCount}} <img src="icons/report_unselected.png" width="18" height="18" style="vertical-align:middle"/> {{:reportsCount}}</div>
-          <div><img src="icons/clock.png" width="18" height="18" style="vertical-align:middle"/> {{:parsedDate}}</div>
-          {{if description}}
-            <div><img src="icons/chat.png" width="18" height="18" style="vertical-align:middle"/> {{:description}}</div>
-          {{/if}}
       </script>
 
       <script type="text/javascript">
