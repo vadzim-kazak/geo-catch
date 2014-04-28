@@ -47,6 +47,7 @@
               {{:value}}
 
           {{/for}}
+          <input type="button" value="Share" onclick="copyToClipboard('http://${repository.domain.name}/${repository.context.path}?image={{:id}}')" style="float: right;">
           <div>
             <img src="{{:path}}" width="500" height="500"/>
           </div>
@@ -127,6 +128,10 @@
 
           function refresh() {
               imageLayer.refresh();
+          }
+
+          function copyToClipboard(link) {
+              window.prompt("Copy to clipboard: Ctrl+C, Enter", link);
           }
 
       </script>

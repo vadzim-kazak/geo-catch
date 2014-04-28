@@ -184,9 +184,13 @@
                             <filtering>true</filtering>
                         </resource>
                         <resource>
-                            <directory>web\js</directory>
-                            <targetPath>js</targetPath>
+                            <directory>web</directory>
+                            <targetPath>\</targetPath>
                             <filtering>true</filtering>
+                            <includes>
+                                <include>**/*.jsp</include>
+                                <include>**/*.js</include>
+                            </includes>
                         </resource>
                     </webResources>
                     <warSourceDirectory>web</warSourceDirectory>
