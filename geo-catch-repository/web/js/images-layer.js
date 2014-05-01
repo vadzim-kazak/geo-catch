@@ -11,11 +11,14 @@ var ImageLayer = function(map, imageId) {
     /**  **/
     var zoomThreshold = 12;
 
+    /**  **/
     var dateFormat = 'YYYY MMM DD, HH:mm:ss';
+
+    var imagePreviewZoomLevel = 16;
 
     /** **/
     var iconSize = {
-        small: 24,
+        small: 32,
         big: 32
     }
 
@@ -32,7 +35,7 @@ var ImageLayer = function(map, imageId) {
             success: function (fullImage) {
 
                 map.setCenter(new google.maps.LatLng(fullImage.latitude, fullImage.longitude));
-                map.setZoom(16);
+                map.setZoom(imagePreviewZoomLevel);
 
                 var showImageOnLoadCallback = function() {
                     for (var i = 0; i < images.length; i++) {
@@ -44,7 +47,6 @@ var ImageLayer = function(map, imageId) {
 
                             setTimeout(function(){
                                 google.maps.event.trigger(image.marker, "click");
-                                console.log("clicked");
                             }, 500);
 
                             break;
@@ -159,12 +161,16 @@ var ImageLayer = function(map, imageId) {
 
         // Update image with position property
         image.position = new google.maps.LatLng(image.latitude, image.longitude);
-        // Create & set to image new marker entity
-        image.marker = new google.maps.Marker({
+
+        // Create & set to image new rich marker entity
+        image.marker = new RichMarker({
             position: image.position,
             map: map,
-            icon: createIcon(image)
+            anchor: RichMarkerPosition.TOP,
+            content: createIcon(image)
         });
+
+        image.marker.size = getRequiredIconSize();
 
         // Create & set to image new info window entity
         //image.infoWindow = loadFullImage(image);
@@ -182,14 +188,13 @@ var ImageLayer = function(map, imageId) {
      * @param image
      */
     var createIcon = function(image) {
-        var iconSize = getRequiredIconSize();
-        return {
-            url : image.thumbnailPath,
-            size : new google.maps.Size(iconSize, iconSize), // desired size
-            scaledSize: new google.maps.Size(iconSize, iconSize),
-            strokeColor: 'white',
-            strokeWeight: 3
-        };
+
+        var size = getRequiredIconSize();
+
+        return '<img src="' + image.thumbnailPath + '"' +
+            ' width="' + size + '"' +
+            ' height="' + size + '"' +
+            ' style="border:1px solid white;-moz-box-shadow:0px 0px 10px #000;-webkit-box-shadow:0px 0px 10px #000;box-shadow:0px 0px 10px #000;"/>';
     }
 
 
@@ -275,23 +280,26 @@ var ImageLayer = function(map, imageId) {
      *
      */
     this.handleChangeZoomEvent = function() {
-        if (isNeedToUpdateIconSize()) {
-            updateIconsSize();
+        var imagesToUpdate = filterIconsBySize();
+        if (imagesToUpdate.length > 0) {
+            updateIconsSize(imagesToUpdate);
         }
     }
 
     /**
      * @returns {boolean}
      */
-    var isNeedToUpdateIconSize = function() {
+    var filterIconsBySize = function() {
         var requiredIconSize = getRequiredIconSize();
+        var imagesToUpdate = [];
         for (var i = 0; i < images.length; i++){
-            var iconSize = images[i].marker.icon.size.width;
+            var iconSize = images[i].marker.size;
             if (iconSize != requiredIconSize) {
-                return true;
+                imagesToUpdate.push(images[i]);
             }
         }
-        return false;
+
+        return imagesToUpdate;
     }
 
     /**
@@ -308,11 +316,12 @@ var ImageLayer = function(map, imageId) {
     /**
      *
      */
-    var updateIconsSize = function() {
-        for (var i = 0; i < images.length; i++){
-            var image = images[i];
+    var updateIconsSize = function(imagesToUpdate) {
+        for (var i = 0; i < imagesToUpdate.length; i++){
+            var image = imagesToUpdate[i];
             var newIcon = createIcon(image);
-            image.marker.setIcon(newIcon);
+            image.marker.setContent(newIcon);
+            image.marker.content_changed();
         }
     }
 

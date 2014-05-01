@@ -22,17 +22,18 @@
           #map-canvas { height: 100% }
       </style>
 
+      <script type="text/javascript"
+              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBI_eGAZN3QUbNyJIxV73LWlRf2iCUa5ew&sensor=false">
+      </script>
       <script src="js/jquery-1.10.2.js"></script>
       <script src="js/jsrender.js"></script>
       <script src="js/images-layer.js"></script>
       <script src="js/domain.js"></script>
       <script src="js/moment.min.js"></script>
-      <script type="text/javascript"
-              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBI_eGAZN3QUbNyJIxV73LWlRf2iCUa5ew&sensor=false">
-      </script>
+      <script src="js/richmarker.js"></script>
 
       <script id="infoWindowTmpl" type="text/x-jquery-tmpl">
-          <div style="min-height: 580px;max-height:750px">
+          <div style="min-height: 590px;max-height:750px;">
               {{for domainProperties}}
 
                   {{if type == 1}}
