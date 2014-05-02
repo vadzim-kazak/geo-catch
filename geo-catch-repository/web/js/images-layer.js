@@ -19,12 +19,12 @@ var ImageLayer = function(map, imageId) {
     var imagePreviewZoomLevel = 16;
 
     /**  **/
-    var zoomThreshold = 12;
+    var zoomThreshold = 10;
 
     /** **/
     var iconSize = {
-        small: 32,
-        big: 32
+        small: 28,
+        big: 34
     }
 
     var showInfoWindowDelay = 500;
@@ -183,7 +183,11 @@ var ImageLayer = function(map, imageId) {
         //image.infoWindow = loadFullImage(image);
         google.maps.event.addListener(image.marker, 'click', function() {
             if (image.fullImage) {
-                image.infoWindow = createInfoWindow(image.fullImage);
+                if (image.infoWindow == undefined) {
+                    image.infoWindow = createInfoWindow(image.fullImage);
+                } else {
+                    image.infoWindow.setContent(createInfoWindowData(image.fullImage));
+                }
                 image.infoWindow.open(map, image.marker);
             } else {
                 loadFullImage(image);
@@ -228,6 +232,12 @@ var ImageLayer = function(map, imageId) {
      */
     var createInfoWindow = function(image) {
 
+        return new google.maps.InfoWindow({
+            content: createInfoWindowData(image)
+        });
+    }
+
+    var createInfoWindowData = function(image) {
         var domainProperties = image.domainProperties;
         for (var i = 0; i < domainProperties.length; i++) {
             domainProperties[i].value = getLocalizedValue($('#language').val(), domainProperties[i]);
@@ -239,10 +249,7 @@ var ImageLayer = function(map, imageId) {
             image.parsedDate = moment(image.date, imageDateTimeFormat).format(dateFormatToDisplay);
         }
 
-        var infoWindow = $("#" + infoWindowTemplateId).render(image);
-        return new google.maps.InfoWindow({
-            content: infoWindow
-        });
+        return $("#" + infoWindowTemplateId).render(image);
     }
 
     /**
@@ -328,7 +335,7 @@ var ImageLayer = function(map, imageId) {
             var image = imagesToUpdate[i];
             var newIcon = createIcon(image);
             image.marker.setContent(newIcon);
-            image.marker.content_changed();
+            image.marker.size = getRequiredIconSize();
         }
     }
 
