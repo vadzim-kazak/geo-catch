@@ -3,24 +3,31 @@ var ImageLayer = function(map, imageId) {
     /** Image provider url prefix **/
     var imageSearchProviderUrl = "http://${repository.domain.name}/${repository.context.path}/${repository.search.path}";
 
+    /**  **/
     var imageProviderUrl = "http://${repository.domain.name}/${repository.context.path}/${repository.provider.path}";
 
     /** InfoWindow template id for JsRender **/
     var infoWindowTemplateId = 'infoWindowTmpl';
 
     /**  **/
-    var zoomThreshold = 12;
+    var dateFormatToDisplay = 'YYYY MMM DD, HH:mm:ss';
 
     /**  **/
-    var dateFormat = 'YYYY MMM DD, HH:mm:ss';
+    var imageDateTimeFormat = 'YYDDDHHmmssSSS';
 
+    /**  **/
     var imagePreviewZoomLevel = 16;
+
+    /**  **/
+    var zoomThreshold = 12;
 
     /** **/
     var iconSize = {
         small: 32,
         big: 32
     }
+
+    var showInfoWindowDelay = 500;
 
     /** Array of loaded images **/
     var images = [];
@@ -47,7 +54,7 @@ var ImageLayer = function(map, imageId) {
 
                             setTimeout(function(){
                                 google.maps.event.trigger(image.marker, "click");
-                            }, 500);
+                            }, showInfoWindowDelay);
 
                             break;
                         }
@@ -229,7 +236,7 @@ var ImageLayer = function(map, imageId) {
         if (image.parsedDate === undefined) {
             // Convert date to string
             // It is assumed that string comes in
-            image.parsedDate = moment(image.date, "YYDDDHHmmssSSS").format(dateFormat);
+            image.parsedDate = moment(image.date, imageDateTimeFormat).format(dateFormatToDisplay);
         }
 
         var infoWindow = $("#" + infoWindowTemplateId).render(image);
@@ -336,5 +343,4 @@ var ImageLayer = function(map, imageId) {
 
         loadImages();
     }
-
 }
