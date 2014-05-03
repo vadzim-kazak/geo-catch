@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
         http://www.springframework.org/schema/context
@@ -10,7 +10,7 @@
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/aop
-        http://www.springframework.org/schema/aop/spring-aop.xsd">
+        http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <context:spring-configured/>
 
@@ -18,28 +18,24 @@
 
     <context:component-scan base-package="com.jrew.geocatch.repository.controller;com.jrew.geocatch.repository.aop" />
 
+    <mvc:annotation-driven />
+
     <aop:aspectj-autoproxy>
         <aop:include name="aopLogger"/>
     </aop:aspectj-autoproxy>
 
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix">
-            <value>/</value>
-        </property>
-        <property name="suffix">
-            <value>.jsp</value>
-        </property>
-    </bean>
-
-    <!-- binding messages.properties -->
     <bean class="org.springframework.context.support.ResourceBundleMessageSource" id="messageSource">
-        <property name="basename" value="messages" />
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="basenames">
+            <list>
+                <value>messages</value>
+                <value>i18n/web-messages</value>
+            </list>
+        </property>
     </bean>
-
-    <mvc:annotation-driven />
 
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
-        <property name="defaultLocale" value="ru" />
+        <property name="defaultLocale" value="en" />
     </bean>
 
     <bean id="localeChangeInterceptor"
@@ -47,12 +43,19 @@
         <property name="paramName" value="locale" />
     </bean>
 
-    <bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" >
-        <property name="interceptors">
-            <list>
-                <ref bean="localeChangeInterceptor" />
-            </list>
-        </property>
+    <!-- Configures Handler Interceptors -->
+    <mvc:interceptors>
+        <!-- Changes the locale when a 'locale' request parameter is sent; e.g. /?locale=de -->
+        <ref bean="localeChangeInterceptor" />
+    </mvc:interceptors>
+
+    <mvc:resources mapping="/icons/**" location="/icons/" />
+    <mvc:resources mapping="/js/**" location="/js/" />
+    <mvc:view-controller path="/" view-name="map"/>
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/pages/"/>
+        <property name="suffix" value=".jsp"/>
     </bean>
 
 </beans>

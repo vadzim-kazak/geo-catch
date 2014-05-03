@@ -8,10 +8,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <html>
   <head>
 
-      <link rel="icon" type="image/png" href="icons/favicon.png" />
+      <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/icons/favicon.png" />
 
       <title><spring:message code="title" /></title>
 
@@ -26,12 +27,12 @@
       <script type="text/javascript"
               src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBI_eGAZN3QUbNyJIxV73LWlRf2iCUa5ew&sensor=false">
       </script>
-      <script src="js/jquery-1.10.2.js"></script>
-      <script src="js/jsrender.js"></script>
-      <script src="js/images-layer.js"></script>
-      <script src="js/domain.js"></script>
-      <script src="js/moment.min.js"></script>
-      <script src="js/richmarker.js"></script>
+      <script src="${pageContext.request.contextPath}/js/jquery-1.10.2.js"></script>
+      <script src="${pageContext.request.contextPath}/js/jsrender.js"></script>
+      <script src="${pageContext.request.contextPath}/js/images-layer.js"></script>
+      <script src="${pageContext.request.contextPath}/js/domain.js"></script>
+      <script src="${pageContext.request.contextPath}/js/moment.min.js"></script>
+      <script src="${pageContext.request.contextPath}/js/richmarker.js"></script>
 
       <!-- Google Analytics -->
       <script>
@@ -50,26 +51,26 @@
               {{for domainProperties}}
 
                   {{if type == 1}}
-                    <img src="icons/fish.png" width="20" height="20" style="vertical-align:middle"/>
+                    <img src="${pageContext.request.contextPath}/icons/fish.png" width="20" height="20" style="vertical-align:middle"/>
                   {{/if}}
                   {{if type == 2}}
-                    <img src="icons/rod.png" width="20" height="20" style="vertical-align:middle"/>
+                    <img src="${pageContext.request.contextPath}/icons/rod.png" width="20" height="20" style="vertical-align:middle"/>
                   {{/if}}
                   {{if type == 3}}
-                    <img src="icons/hook.png" width="20" height="20" style="vertical-align:middle"/>
+                    <img src="${pageContext.request.contextPath}/icons/hook.png" width="20" height="20" style="vertical-align:middle"/>
                   {{/if}}
 
                   {{:value}}
 
               {{/for}}
-              <input type="button" value="<spring:message code="share" />" onclick="copyToClipboard('http://${repository.domain.name}/${repository.context.path}?image={{:id}}')&locale=${pageContext.response.locale}" style="float:right;">
+              <input type="button" value="<spring:message code="share.label" />" onclick="copyToClipboard('http://${repository.domain.name}/${repository.context.path}?image={{:id}}&locale=${pageContext.response.locale}')" style="float:right;">
               <div>
                 <img src="{{:path}}" width="500" height="500"/>
               </div>
-              <div><img src="icons/like_unselected.png" width="18" height="18" style="vertical-align:middle"/> {{:likesCount}} <img src="icons/dislike_unselected.png" width="18" height="18" style="vertical-align:middle"/> {{:dislikesCount}} <img src="icons/report_unselected.png" width="18" height="18" style="vertical-align:middle"/> {{:reportsCount}}</div>
-              <div><img src="icons/clock.png" width="18" height="18" style="vertical-align:middle"/> {{:parsedDate}}</div>
+              <div><img src="${pageContext.request.contextPath}/icons/like_unselected.png" width="18" height="18" style="vertical-align:middle"/> {{:likesCount}} <img src="${pageContext.request.contextPath}/icons/dislike_unselected.png" width="18" height="18" style="vertical-align:middle"/> {{:dislikesCount}} <img src="${pageContext.request.contextPath}/icons/report_unselected.png" width="18" height="18" style="vertical-align:middle"/> {{:reportsCount}}</div>
+              <div><img src="${pageContext.request.contextPath}/icons/clock.png" width="18" height="18" style="vertical-align:middle"/> {{:parsedDate}}</div>
               {{if description}}
-                <div><img src="icons/chat.png" width="18" height="18" style="vertical-align:middle"/> {{:description}}</div>
+                <div><img src="${pageContext.request.contextPath}/icons/chat.png" width="18" height="18" style="vertical-align:middle"/> {{:description}}</div>
               {{/if}}
           </div>
       </script>
@@ -95,7 +96,7 @@
               }
           ]
 
-          locale = 'ru';
+          locale = 'en';
           <c:if test="${not empty param.locale}">
             locale = '<c:out value="${param.locale}"/>';
           </c:if>
@@ -150,7 +151,7 @@
           }
 
           function copyToClipboard(link) {
-              window.prompt("Copy to clipboard: Ctrl+C, Enter", link);
+              window.prompt("<spring:message code="share.message" />", link);
           }
 
       </script>
@@ -170,8 +171,8 @@
 
      <div style="float:right">
          <spring:message code="language" /> <select id="language" onchange="handleLocaleSelection()">
-                                                <option value="en"><spring:message code="language.en" /></option>
-                                                <option value="ru" selected><spring:message code="language.ru" /></option>
+                                                <option value="en" <c:if test="${fn:startsWith(param.locale, 'en')}">selected</c:if>><spring:message code="language.en" /></option>
+                                                <option value="ru" <c:if test="${fn:startsWith(param.locale, 'ru')}">selected</c:if>><spring:message code="language.ru" /></option>
                                             </select>
      </div>
   </div>
