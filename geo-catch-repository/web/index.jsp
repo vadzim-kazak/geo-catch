@@ -7,12 +7,13 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
   <head>
 
       <link rel="icon" type="image/png" href="icons/favicon.png" />
 
-      <title>Geo-Catch | Fishing</title>
+      <title><spring:message code="title" /></title>
 
       <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 
@@ -61,7 +62,7 @@
                   {{:value}}
 
               {{/for}}
-              <input type="button" value="Share" onclick="copyToClipboard('http://${repository.domain.name}/${repository.context.path}?image={{:id}}')" style="float: right;">
+              <input type="button" value="<spring:message code="share" />" onclick="copyToClipboard('http://${repository.domain.name}/${repository.context.path}?image={{:id}}')&locale=${pageContext.response.locale}" style="float:right;">
               <div>
                 <img src="{{:path}}" width="500" height="500"/>
               </div>
@@ -95,6 +96,9 @@
           ]
 
           locale = 'ru';
+          <c:if test="${not empty param.locale}">
+            locale = '<c:out value="${param.locale}"/>';
+          </c:if>
 
           // Enable the visual refresh
           google.maps.visualRefresh = true;
@@ -137,8 +141,7 @@
 
               var selectedLocale = $("#language").val();
               if (selectedLocale != locale) {
-                locale = selectedLocale;
-                populateDomainProperties(locale, domainContainers);
+                  window.location.href = '${pageContext.request.contextPath}?locale=' + selectedLocale;
               }
           }
 
@@ -157,21 +160,22 @@
 
       <div style="float:left; position:relative">
 
-         Fish: <select id="fish" onchange="refresh()"></select>
+          <spring:message code="dropdown.fish.title" /> <select id="fish" onchange="refresh()"></select>
 
-         Tool: <select id="fishingTool" onchange="refresh()"></select>
+          <spring:message code="dropdown.tool.title" /> <select id="fishingTool" onchange="refresh()"></select>
 
-         Bait: <select id="fishingBait" onchange="refresh()"></select>
+          <spring:message code="dropdown.bait.title" /> <select id="fishingBait" onchange="refresh()"></select>
 
      </div>
 
      <div style="float:right">
-         Language: <select id="language" onchange="handleLocaleSelection()">
-                    <option value="en">English</option>
-                    <option value="ru" selected>Russian</option>
-                   </select>
+         <spring:message code="language" /> <select id="language" onchange="handleLocaleSelection()">
+                                                <option value="en"><spring:message code="language.en" /></option>
+                                                <option value="ru" selected><spring:message code="language.ru" /></option>
+                                            </select>
      </div>
   </div>
+
   <div id="map-canvas"></div>
 
   </body>
