@@ -115,15 +115,16 @@
               imageLayer = new ImageLayer(map);
 
              //Add map events listeners
-             google.maps.event.addListener(map, 'bounds_changed', imageLayer.handleChangeViewBoundsEvent);
-             google.maps.event.addListener(map, 'zoom_changed', imageLayer.handleChangeViewBoundsEvent);
+             google.maps.event.addListener(map, 'dragend', imageLayer.handleChangeViewBoundsEvent);
              google.maps.event.addListener(map, 'zoom_changed', imageLayer.handleChangeZoomEvent);
 
-             if (imageId > 0) {
-                 google.maps.event.addListenerOnce(map, 'idle', function(){
-                     imageLayer.showImageOnLoad(imageId);
-                 });
-             }
+             google.maps.event.addListenerOnce(map, 'idle', function(){
+                if (imageId > 0) {
+                    imageLayer.showImageOnLoad(imageId);
+                } else {
+                    imageLayer.handleChangeViewBoundsEvent();
+                }
+             });
 
              $( document ).ready(function() {
                  populateDomainProperties(locale, domainContainers);

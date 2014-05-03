@@ -294,6 +294,11 @@ var ImageLayer = function(map, imageId) {
      *
      */
     this.handleChangeZoomEvent = function() {
+
+        loadImages();
+
+        removeInvisibleImages();
+
         var imagesToUpdate = filterIconsBySize();
         if (imagesToUpdate.length > 0) {
             updateIconsSize(imagesToUpdate);
