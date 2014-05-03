@@ -169,10 +169,18 @@
 
      </div>
 
+
+     <c:set var="pageLocale" value="${pageContext.response.locale}" />
+     <c:if test="${not fn:startsWith(pageContext.response.locale, 'en') and
+                   not fn:startsWith(pageContext.response.locale, 'ru')}">
+        <%-- Current locale isn't supported. Set default locale here --%>
+        <c:set var="pageLocale" value="en" />
+     </c:if>
+
      <div style="float:right">
          <spring:message code="language" /> <select id="language" onchange="handleLocaleSelection()">
-                                                <option value="en" <c:if test="${fn:startsWith(param.locale, 'en')}">selected</c:if>><spring:message code="language.en" /></option>
-                                                <option value="ru" <c:if test="${fn:startsWith(param.locale, 'ru')}">selected</c:if>><spring:message code="language.ru" /></option>
+                                                <option value="en" <c:if test="${fn:startsWith(pageLocale, 'en')}">selected</c:if>><spring:message code="language.en" /></option>
+                                                <option value="ru" <c:if test="${fn:startsWith(pageLocale, 'ru')}">selected</c:if>><spring:message code="language.ru" /></option>
                                             </select>
      </div>
   </div>
