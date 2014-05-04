@@ -215,6 +215,15 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>local</id>
+        </profile>
+        <profile>
+            <id>amazon</id>
+        </profile>
+    </profiles>
+
     <repositories>
         <repository>
             <id>central</id>

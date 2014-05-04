@@ -18,6 +18,7 @@
 
       <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 
+      <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootswatch.min.css">
       <style type="text/css">
           html { height: 100% }
           body { height: 100%; margin: 0; padding: 0 }
@@ -154,33 +155,51 @@
       </script>
   </head>
   <body>
-  <div style="overflow:hidden">
+  <div class="navbar navbar-default navbar-fixed-top">
 
-      <div style="float:left; position:relative">
+      <span class="navbar-brand">Geo-Catch | Fishing</span>
 
-          <img src="${pageContext.request.contextPath}/icons/fish.png" width="20" height="20" style="vertical-align:middle"/> <spring:message code="dropdown.fish.title" /> <select id="fish" onchange="refresh()"></select>
+      <div class="navbar-collapse collapse navbar-responsive-collapse">
 
-          <img src="${pageContext.request.contextPath}/icons/rod.png" width="20" height="20" style="vertical-align:middle;margin-left:20px;"/> <spring:message code="dropdown.tool.title" /> <select id="fishingTool" onchange="refresh()"></select>
+          <ul class="nav navbar-nav">
+              <li>
+                  <div class="input-group" style="width: 250px">
+                      <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/fish.png" width="20" height="20" /></span>
+                      <select id="fish" class="form-control" onchange="refresh()"></select>
+                  </div>
+              </li>
+              <li>
+                  <div class="input-group" style="width: 250px;margin-left: 20px">
+                      <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/rod.png" width="20" height="20" /></span>
+                      <select id="fishingTool" class="form-control" onchange="refresh()"></select>
+                  </div>
+              </li>
+              <li>
+                  <div class="input-group" style="width: 250px;margin-left: 20px">
+                      <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/hook.png" width="20" height="20" /></span>
+                      <select id="fishingBait" class="form-control" onchange="refresh()"></select>
+                  </div>
+              </li>
+          </ul>
 
-          <img src="${pageContext.request.contextPath}/icons/hook.png" width="20" height="20" style="vertical-align:middle;margin-left:20px"/> <spring:message code="dropdown.bait.title" /> <select id="fishingBait" onchange="refresh()"></select>
-
-     </div>
-
-
-     <c:set var="pageLocale" value="${pageContext.response.locale}" />
-     <c:if test="${not fn:startsWith(pageContext.response.locale, 'en') and
+          <c:set var="pageLocale" value="${pageContext.response.locale}" />
+          <c:if test="${not fn:startsWith(pageContext.response.locale, 'en') and
                    not fn:startsWith(pageContext.response.locale, 'ru')}">
-        <%-- Current locale isn't supported. Set default locale here --%>
-        <c:set var="pageLocale" value="en" />
-     </c:if>
+              <%-- Current locale isn't supported. Set default locale here --%>
+              <c:set var="pageLocale" value="en" />
+          </c:if>
 
-     <div style="float:right">
-         <spring:message code="language" /> <select id="language" onchange="handleLocaleSelection()">
-                                                <option value="en" <c:if test="${fn:startsWith(pageLocale, 'en')}">selected</c:if>><spring:message code="language.en" /></option>
-                                                <option value="ru" <c:if test="${fn:startsWith(pageLocale, 'ru')}">selected</c:if>><spring:message code="language.ru" /></option>
-                                            </select>
-     </div>
+          <div class="nav navbar-nav navbar-right">
+              <div class="input-group" style="width: 250px;margin-right: 20px;">
+                  <span class="input-group-addon"> <spring:message code="language" /></span>
+                  <select id="language" class="form-control" onchange="handleLocaleSelection()">
+                      <option value="en" <c:if test="${fn:startsWith(pageLocale, 'en')}">selected</c:if>><spring:message code="language.en" /></option>
+                      <option value="ru" <c:if test="${fn:startsWith(pageLocale, 'ru')}">selected</c:if>><spring:message code="language.ru" /></option>
+                  </select>
+              </div>
+          </div>
 
+      </div>
   </div>
 
   <div id="map-canvas"></div>
