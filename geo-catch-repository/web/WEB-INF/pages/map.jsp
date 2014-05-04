@@ -158,11 +158,11 @@
 
       <div style="float:left; position:relative">
 
-          <spring:message code="dropdown.fish.title" /> <select id="fish" onchange="refresh()"></select>
+          <img src="${pageContext.request.contextPath}/icons/fish.png" width="20" height="20" style="vertical-align:middle"/> <spring:message code="dropdown.fish.title" /> <select id="fish" onchange="refresh()"></select>
 
-          <spring:message code="dropdown.tool.title" /> <select id="fishingTool" onchange="refresh()"></select>
+          <img src="${pageContext.request.contextPath}/icons/rod.png" width="20" height="20" style="vertical-align:middle;margin-left:20px;"/> <spring:message code="dropdown.tool.title" /> <select id="fishingTool" onchange="refresh()"></select>
 
-          <spring:message code="dropdown.bait.title" /> <select id="fishingBait" onchange="refresh()"></select>
+          <img src="${pageContext.request.contextPath}/icons/hook.png" width="20" height="20" style="vertical-align:middle;margin-left:20px"/> <spring:message code="dropdown.bait.title" /> <select id="fishingBait" onchange="refresh()"></select>
 
      </div>
 
