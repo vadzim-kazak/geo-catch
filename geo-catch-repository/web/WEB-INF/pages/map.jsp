@@ -119,6 +119,8 @@
              //Add map events listeners
              google.maps.event.addListener(map, 'dragend', imageLayer.handleChangeViewBoundsEvent);
              google.maps.event.addListener(map, 'zoom_changed', imageLayer.handleChangeZoomEvent);
+             google.maps.event.addListener(map, 'dragend', function() {loadDomainProperties(locale, domainContainers);});
+             google.maps.event.addListener(map, 'zoom_changed', function() {loadDomainProperties(locale, domainContainers);});
 
              google.maps.event.addListenerOnce(map, 'idle', function(){
                 if (imageId > 0) {
@@ -126,10 +128,8 @@
                 } else {
                     imageLayer.handleChangeViewBoundsEvent();
                 }
-             });
 
-             $( document ).ready(function() {
-                 populateDomainProperties(locale, domainContainers);
+                 loadDomainProperties(locale, domainContainers);
              });
           }
 

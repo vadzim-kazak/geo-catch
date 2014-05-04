@@ -6,6 +6,18 @@ var domainData = {};
  * @param locale
  * @param containerData
  */
+function loadDomainProperties(locale, containerData) {
+
+    if (domainData[locale] === undefined) {
+        populateDomainProperties(locale, containerData);
+    }
+}
+
+/**
+ *
+ * @param locale
+ * @param containerData
+ */
 function populateDomainProperties(locale, containerData) {
 
     if (domainData[locale] === undefined) {
