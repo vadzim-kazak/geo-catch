@@ -182,6 +182,7 @@ var ImageLayer = function(map, imageId) {
         // Create & set to image new info window entity
         //image.infoWindow = loadFullImage(image);
         google.maps.event.addListener(image.marker, 'click', function() {
+            closeOpenedInfoWindows();
             if (image.fullImage) {
                 if (image.infoWindow == undefined) {
                     image.infoWindow = createInfoWindow(image.fullImage);
@@ -344,6 +345,9 @@ var ImageLayer = function(map, imageId) {
         }
     }
 
+    /**
+     *
+     */
     this.refresh = function() {
         for (var i = 0; i < images.length; i++){
             var image = images[i];
@@ -354,5 +358,20 @@ var ImageLayer = function(map, imageId) {
         images = [];
 
         loadImages();
+    }
+
+    /**
+     *
+     */
+    var closeOpenedInfoWindows = function() {
+        for (var i = 0; i < images.length; i++){
+            var image = images[i];
+            if (image.infoWindow != undefined) {
+                var map = image.infoWindow.getMap();
+                if (map !== null && typeof map !== "undefined") {
+                    image.infoWindow.close();
+                }
+            }
+        }
     }
 }
