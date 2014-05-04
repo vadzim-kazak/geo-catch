@@ -96,10 +96,7 @@
               }
           ]
 
-          locale = 'en';
-          <c:if test="${not empty param.locale}">
-            locale = '<c:out value="${param.locale}"/>';
-          </c:if>
+          locale = '${pageContext.response.locale}';
 
           // Enable the visual refresh
           google.maps.visualRefresh = true;
@@ -183,6 +180,7 @@
                                                 <option value="ru" <c:if test="${fn:startsWith(pageLocale, 'ru')}">selected</c:if>><spring:message code="language.ru" /></option>
                                             </select>
      </div>
+
   </div>
 
   <div id="map-canvas"></div>
