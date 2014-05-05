@@ -20,7 +20,7 @@
 
       <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootswatch.min.css">
       <style type="text/css">
-          #map-canvas { width: 100%; height: 90%; margin-top: 50px}
+          #map-canvas { width: 100%; height: 93%; margin-top: 50px}
       </style>
 
       <script type="text/javascript"
@@ -232,6 +232,7 @@
 
   <div id="map-canvas"></div>
 
+  <%--
   <div style="margin-left: 2%;margin-right: 2%">
 
       <div class="bs-docs-section" style="margin-top: 1%">
@@ -273,6 +274,6 @@
       </div>
 
   </div>
-
+  --%>
   </body>
 </html>
