@@ -47,7 +47,7 @@ function populateDomainProperties(locale, containerData) {
         for (var i = 0; i < arrayLength; i++) {
             var container = containerData[i];
             var domainProperties = filterDomainProperties(response, container.type);
-            populateSelectList(domainProperties, container.id);
+            populateSelectList(domainProperties, container.id, container);
         }
     }
 
@@ -80,15 +80,18 @@ function populateDomainProperties(locale, containerData) {
      *
      * @param domainProperties
      * @param containerId
+     * @param container
      */
-    function populateSelectList(domainProperties, containerId) {
+    function populateSelectList(domainProperties, containerId, container) {
 
         $('#' + containerId)
             .find('option')
             .remove()
             .end();
 
-        var option= '<option value="" selected></option>';
+        var labelOptionId = containerId + 'Label';
+
+        var option= '<option value="" id="' + labelOptionId + '" selected>' + container.label + '</option>';
         $('#' + containerId).append(option);
 
         for (var i = 0; i < domainProperties.length; i++) {
@@ -97,6 +100,14 @@ function populateDomainProperties(locale, containerData) {
             var option= '<option value="' + domainProperty.item + '">' + domainProperty.value + '</option>';
             $('#' + containerId).append(option);
         }
+
+        $('#' + containerId).on('change', function() {
+            if ($('#' + containerId)[0].selectedIndex !== 0) {
+                $('#' + labelOptionId).text(containerData.clearLabel);
+            } else {
+                $('#' + labelOptionId).text(container.label);
+            }
+        });
     }
 }
 
