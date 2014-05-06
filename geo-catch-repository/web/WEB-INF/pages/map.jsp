@@ -19,6 +19,8 @@
       <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 
       <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootswatch.min.css">
+      <link rel="stylesheet" href="${pageContext.request.contextPath}/css/chosen.css">
+      <link rel="stylesheet" href="${pageContext.request.contextPath}/css/chosen.bootstrap.css">
       <style type="text/css">
           #map-canvas { width: 100%; height: 90%; margin-top: 50px}
       </style>
@@ -32,6 +34,7 @@
       <script src="${pageContext.request.contextPath}/js/domain.js"></script>
       <script src="${pageContext.request.contextPath}/js/moment.min.js"></script>
       <script src="${pageContext.request.contextPath}/js/richmarker.js"></script>
+      <script src="${pageContext.request.contextPath}/js/chosen.jquery.js"></script>
 
       <!-- Google Analytics -->
       <script>
@@ -107,21 +110,16 @@
           var domainContainers = [
               {
                   id : "fish",
-                  type: 1,
-                  label: '<spring:message code="dropdown.fish.label" />'
+                  type: 1
               },
               {
                   id : "fishingTool",
-                  type: 2,
-                  label: '<spring:message code="dropdown.tool.label" />'
+                  type: 2
               },{
                   id : "fishingBait",
-                  type: 3,
-                  label: '<spring:message code="dropdown.bait.label" />'
+                  type: 3
               }
           ]
-
-          domainContainers.clearLabel = '<spring:message code="dropdown.label.clear" />';
 
           locale = '${pageContext.response.locale}';
 
@@ -180,6 +178,20 @@
               window.prompt("<spring:message code="share.message" />", link);
           }
 
+          $(document).ready(function () {
+              var config = {
+                  '.disable-search'          : {disable_search: true},
+                  '.chosen-select'           : {},
+                  '.chosen-select-deselect'  : {allow_single_deselect:true, no_results_text:'<spring:message code="dropdown.no.results" />'},
+                  '.chosen-select-no-single' : {disable_search_threshold:5},
+                  '.chosen-select-width'     : {width:"95%"}
+              }
+
+              for (var selector in config) {
+                  $(selector).chosen(config[selector]);
+              }
+          });
+
       </script>
   </head>
   <body>
@@ -192,20 +204,26 @@
           <ul class="nav navbar-nav">
               <li>
                   <div class="input-group navbar-form" style="width: 250px">
-                      <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/fish.png" width="20" height="20" /></span>
-                      <select id="fish" class="form-control" style="width: 200px" onchange="refresh()"></select>
+                      <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/fish.png" width="15" height="15" /></span>
+                      <select id="fish" data-placeholder="<spring:message code="dropdown.fish.label" />" class="form-control chosen-select-deselect" style="width: 200px" onchange="refresh()">
+                          <option value=""></option>
+                      </select>
                   </div>
               </li>
               <li>
                   <div class="input-group navbar-form" style="width: 250px">
-                      <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/rod.png" width="20" height="20" /></span>
-                      <select id="fishingTool" class="form-control" style="width: 200px" onchange="refresh()"></select>
+                      <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/rod.png" width="15" height="15" /></span>
+                      <select id="fishingTool" data-placeholder="<spring:message code="dropdown.tool.label" />" class="form-control chosen-select-deselect"  style="width: 200px" onchange="refresh()">
+                          <option value=""></option>
+                      </select>
                   </div>
               </li>
               <li>
                   <div class="input-group navbar-form" style="width: 250px">
-                      <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/hook.png" width="20" height="20" /></span>
-                      <select id="fishingBait" class="form-control" style="width: 200px" onchange="refresh()"></select>
+                      <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/hook.png" width="15" height="15" /></span>
+                      <select id="fishingBait" data-placeholder="<spring:message code="dropdown.bait.label" />" class="form-control chosen-select-deselect" style="width: 200px" onchange="refresh()">
+                          <option value=""></option>
+                      </select>
                   </div>
               </li>
           </ul>
@@ -220,7 +238,7 @@
           <div class="nav navbar-nav navbar-right">
               <div class="input-group navbar-form" style="width: 250px;">
                   <span class="input-group-addon"> <spring:message code="language" /></span>
-                  <select id="language" class="form-control" onchange="handleLocaleSelection()">
+                  <select id="language" class="form-control chosen-select disable-search" onchange="handleLocaleSelection()">
                       <option value="en" <c:if test="${fn:startsWith(pageLocale, 'en')}">selected</c:if>><spring:message code="language.en" /></option>
                       <option value="ru" <c:if test="${fn:startsWith(pageLocale, 'ru')}">selected</c:if>><spring:message code="language.ru" /></option>
                   </select>
@@ -232,6 +250,7 @@
 
   <div id="map-canvas"></div>
 
+  <%--
   <div style="margin-left: 2%;margin-right: 2%">
 
       <div class="bs-docs-section" style="margin-top: 1%">
@@ -273,6 +292,7 @@
       </div>
 
   </div>
+  --%>
 
   </body>
 </html>

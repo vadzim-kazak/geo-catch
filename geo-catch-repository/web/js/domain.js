@@ -84,14 +84,12 @@ function populateDomainProperties(locale, containerData) {
      */
     function populateSelectList(domainProperties, containerId, container) {
 
-        $('#' + containerId)
+        $('#' + containerId + ' option:not(:first)')
             .find('option')
             .remove()
             .end();
 
-        var labelOptionId = containerId + 'Label';
-
-        var option= '<option value="" id="' + labelOptionId + '" selected>' + container.label + '</option>';
+        var option= '<option value=""></option>';
         $('#' + containerId).append(option);
 
         for (var i = 0; i < domainProperties.length; i++) {
@@ -101,13 +99,7 @@ function populateDomainProperties(locale, containerData) {
             $('#' + containerId).append(option);
         }
 
-        $('#' + containerId).on('change', function() {
-            if ($('#' + containerId)[0].selectedIndex !== 0) {
-                $('#' + labelOptionId).text(containerData.clearLabel);
-            } else {
-                $('#' + labelOptionId).text(container.label);
-            }
-        });
+        $('#' + containerId).trigger("chosen:updated");
     }
 }
 
