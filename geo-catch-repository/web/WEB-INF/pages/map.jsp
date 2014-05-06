@@ -21,6 +21,14 @@
       <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootswatch.min.css">
       <style type="text/css">
           #map-canvas { width: 100%; height: 93%; margin-top: 50px}
+
+          select {
+              /*Remove down arrow under firefox browser*/
+              -moz-appearance: none;
+              text-indent: 0.01px;
+              text-overflow: '';
+          }
+
       </style>
 
       <script type="text/javascript"
@@ -275,5 +283,6 @@
 
   </div>
   --%>
+
   </body>
 </html>
