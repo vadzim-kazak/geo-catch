@@ -1,3 +1,4 @@
+<!DOCTYPE HTML>
 <%--
   Created by IntelliJ IDEA.
   User: Vadim
@@ -17,17 +18,38 @@
       <title><spring:message code="app.title" /></title>
 
       <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
       <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootswatch.min.css">
       <link rel="stylesheet" href="${pageContext.request.contextPath}/css/chosen.css">
       <link rel="stylesheet" href="${pageContext.request.contextPath}/css/chosen.bootstrap.css">
       <style type="text/css">
-          #map-canvas { width: 100%; height: 90%; margin-top: 50px}
+
+          html { height: 100% }
+          body { height: 100%; margin: 0; padding: 0 }
+          #map-canvas { width: 100%; height: 93%; margin-top: 50px}
+
+          select {
+              /*Remove down arrow under firefox*/
+              -moz-appearance: none;
+              -o-appearance:none;
+              text-indent: 0.01px;
+              text-overflow: '';
+          }
+
+          /*Remove down arrow under IE */
+          select::-ms-expand {
+              display: none;
+          }
+
       </style>
 
+      <script src="${pageContext.request.contextPath}/js/html5shiv.min.js"></script>
+      <script src="${pageContext.request.contextPath}/js/respond.min.js"></script>
       <script type="text/javascript"
               src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBI_eGAZN3QUbNyJIxV73LWlRf2iCUa5ew&sensor=false">
       </script>
+      <script src="${pageContext.request.contextPath}/js/json2.js"></script>
       <script src="${pageContext.request.contextPath}/js/jquery-1.10.2.js"></script>
       <script src="${pageContext.request.contextPath}/js/jsrender.js"></script>
       <script src="${pageContext.request.contextPath}/js/images-layer.js"></script>
