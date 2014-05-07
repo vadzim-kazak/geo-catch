@@ -1,5 +1,5 @@
 select{
-    width: 80%;/* Only for example */
+    width: 100%;/* Only for example */
 }
 
 select.form-control + .chosen-container.chosen-container-single .chosen-single {

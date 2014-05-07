@@ -42,6 +42,12 @@
               display: none;
           }
 
+          .trace {
+              border: 2px;
+              border-color: red;
+              border-style: solid;
+          }
+
       </style>
 
       <script src="${pageContext.request.contextPath}/js/html5shiv.min.js"></script>
@@ -219,54 +225,99 @@
   <body>
   <div class="navbar navbar-default navbar-fixed-top">
 
-      <span class="navbar-brand"><spring:message code="app.title" /></span>
+      <div class="container-fluid">
 
-      <div class="navbar-collapse collapse navbar-responsive-collapse">
+          <div class="row">
 
-          <ul class="nav navbar-nav">
-              <li>
-                  <div class="input-group navbar-form" style="width: 250px">
-                      <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/fish.png" width="15" height="15" /></span>
-                      <select id="fish" data-placeholder="<spring:message code="dropdown.fish.label" />" class="form-control chosen-select-deselect" style="width: 200px" onchange="refresh()">
-                          <option value=""></option>
-                      </select>
+              <div class="col-md-3 col-md-offset-1">
+                  <div class="navbar-brand" >
+                    <spring:message code="app.title" />
                   </div>
-              </li>
-              <li>
-                  <div class="input-group navbar-form" style="width: 250px">
-                      <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/rod.png" width="15" height="15" /></span>
-                      <select id="fishingTool" data-placeholder="<spring:message code="dropdown.tool.label" />" class="form-control chosen-select-deselect"  style="width: 200px" onchange="refresh()">
-                          <option value=""></option>
-                      </select>
-                  </div>
-              </li>
-              <li>
-                  <div class="input-group navbar-form" style="width: 250px">
-                      <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/hook.png" width="15" height="15" /></span>
-                      <select id="fishingBait" data-placeholder="<spring:message code="dropdown.bait.label" />" class="form-control chosen-select-deselect" style="width: 200px" onchange="refresh()">
-                          <option value=""></option>
-                      </select>
-                  </div>
-              </li>
-          </ul>
+              </div>
 
-          <c:set var="pageLocale" value="${pageContext.response.locale}" />
-          <c:if test="${not fn:startsWith(pageContext.response.locale, 'en') and
-                   not fn:startsWith(pageContext.response.locale, 'ru')}">
-              <%-- Current locale isn't supported. Set default locale here --%>
-              <c:set var="pageLocale" value="en" />
-          </c:if>
+              <div class="col-md-8">
 
-          <div class="nav navbar-nav navbar-right">
-              <div class="input-group navbar-form" style="width: 250px;">
-                  <span class="input-group-addon"> <spring:message code="language" /></span>
-                  <select id="language" class="form-control chosen-select disable-search" onchange="handleLocaleSelection()">
-                      <option value="en" <c:if test="${fn:startsWith(pageLocale, 'en')}">selected</c:if>><spring:message code="language.en" /></option>
-                      <option value="ru" <c:if test="${fn:startsWith(pageLocale, 'ru')}">selected</c:if>><spring:message code="language.ru" /></option>
-                  </select>
+                  <div class="navbar-collapse collapse navbar-responsive-collapse">
+
+                      <div class="row trace">
+                        <div class="col-md-3">
+                            <div class="input-group navbar-form">
+                                <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/fish.png" width="15" height="15" /></span>
+                                <select id="fish" data-placeholder="<spring:message code="dropdown.fish.label" />" class="form-control chosen-select-deselect" onchange="refresh()">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="input-group navbar-form">
+                                <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/rod.png" width="15" height="15" /></span>
+                                <select id="fishingTool" data-placeholder="<spring:message code="dropdown.tool.label" />" class="form-control chosen-select-deselect" onchange="refresh()">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="input-group navbar-form">
+                                <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/hook.png" width="15" height="15" /></span>
+                                <select id="fishingBait" data-placeholder="<spring:message code="dropdown.bait.label" />" class="form-control chosen-select-deselect" onchange="refresh()">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                          <c:set var="pageLocale" value="${pageContext.response.locale}" />
+                          <c:if test="${not fn:startsWith(pageContext.response.locale, 'en') and
+                                        not fn:startsWith(pageContext.response.locale, 'ru')}">
+                              <%-- Current locale isn't supported. Set default locale here --%>
+                              <c:set var="pageLocale" value="en" />
+                          </c:if>
+
+                          <div class="col-md-2 col-md-offset-1">
+                              <div class="nav navbar-nav navbar-right">
+                                  <div class="input-group navbar-form">
+                                      <span class="input-group-addon"> <spring:message code="language" /></span>
+                                      <select id="language" class="form-control chosen-select disable-search" onchange="handleLocaleSelection()">
+                                          <option value="en" <c:if test="${fn:startsWith(pageLocale, 'en')}">selected</c:if>><spring:message code="language.en" /></option>
+                                          <option value="ru" <c:if test="${fn:startsWith(pageLocale, 'ru')}">selected</c:if>><spring:message code="language.ru" /></option>
+                                      </select>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                      <%--
+                      <ul class="nav navbar-nav">
+                          <li>
+                              <div class="input-group navbar-form">
+                                  <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/fish.png" width="15" height="15" /></span>
+                                  <select id="fish" data-placeholder="<spring:message code="dropdown.fish.label" />" class="form-control chosen-select-deselect" onchange="refresh()">
+                                      <option value=""></option>
+                                  </select>
+                              </div>
+                          </li>
+                          <li>
+                              <div class="input-group navbar-form">
+                                  <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/rod.png" width="15" height="15" /></span>
+                                  <select id="fishingTool" data-placeholder="<spring:message code="dropdown.tool.label" />" class="form-control chosen-select-deselect" onchange="refresh()">
+                                      <option value=""></option>
+                                  </select>
+                              </div>
+                          </li>
+                          <li>
+                              <div class="input-group navbar-form">
+                                  <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/hook.png" width="15" height="15" /></span>
+                                  <select id="fishingBait" data-placeholder="<spring:message code="dropdown.bait.label" />" class="form-control chosen-select-deselect" onchange="refresh()">
+                                      <option value=""></option>
+                                  </select>
+                              </div>
+                          </li>
+                      </ul>
+                      --%>
+                  </div>
               </div>
           </div>
-
       </div>
   </div>
 
