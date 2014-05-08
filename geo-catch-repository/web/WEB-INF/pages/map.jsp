@@ -273,13 +273,24 @@
 
             <div class="col-md-3">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <div class="navbar-brand"><spring:message code="app.title" /></div>
+                    <div class="nav dropdown">
+                        <a class="navbar-brand dropdown-toggle" data-toggle="dropdown">
+                            <spring:message code="app.title" />
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#aboutModal" data-toggle="modal"><h5><spring:message code="app.about" /></h5></a></li>
+                            <li><a href="#faqModal" data-toggle="modal"><h5><spring:message code="app.faq" /></h5></a></li>
+                            <li><a href="#mobileModal" data-toggle="modal"><h5><spring:message code="app.mobile" /></h5></a></li>
+                            <li><a href="#feedbackModal" data-toggle="modal"><h5><spring:message code="app.feedback" /></h5></a></li>
+                        </ul>
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -334,35 +345,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <%--
-                    <ul class="nav navbar-nav">
-                        <li>
-                            <div class="input-group navbar-form">
-                                <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/fish.png" width="15" height="15" /></span>
-                                <select id="fish" data-placeholder="<spring:message code="dropdown.fish.label" />" class="form-control chosen-select-deselect" onchange="refresh()">
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="input-group navbar-form">
-                                <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/rod.png" width="15" height="15" /></span>
-                                <select id="fishingTool" data-placeholder="<spring:message code="dropdown.tool.label" />" class="form-control chosen-select-deselect" onchange="refresh()">
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="input-group navbar-form">
-                                <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/hook.png" width="15" height="15" /></span>
-                                <select id="fishingBait" data-placeholder="<spring:message code="dropdown.bait.label" />" class="form-control chosen-select-deselect" onchange="refresh()">
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                        </li>
-                    </ul>
-                    --%>
                 </div>
             </div>
         </div>
@@ -371,49 +353,78 @@
 
 <div id="map-canvas"></div>
 
-<%--
-<div style="margin-left: 2%;margin-right: 2%">
-
-    <div class="bs-docs-section" style="margin-top: 1%">
-        <div class="col-lg-10">
-            <h2 id="nav-tabs">Info</h2>
-            <div class="bs-component">
-                <ul class="nav nav-tabs">
-                    <li class="active"><a href="#home" data-toggle="tab">About</a></li>
-                    <li class=""><a href="#profile" data-toggle="tab">FAQ</a></li>
-                    <li class=""><a href="#profile" data-toggle="tab">Get mobile app</a></li>
-                    <li class=""><a href="#profile" data-toggle="tab">Feedback</a></li>
-                </ul>
-                <div id="myTabContent" class="tab-content">
-                    <div class="tab-pane fade active in" id="home">
-                        <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
-                    </div>
-                    <div class="tab-pane fade" id="profile">
-                        <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
-                    </div>
-                    <div class="tab-pane fade" id="dropdown1">
-                        <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork.</p>
-                    </div>
-                    <div class="tab-pane fade" id="dropdown2">
-                        <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater.</p>
-                    </div>
-                </div>
-                <div id="source-button" class="btn btn-primary btn-xs" style="display: none;">&lt; &gt;</div></div>
+<!--About Modal -->
+<div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><spring:message code="app.about" /></h4>
+            </div>
+            <div class="modal-body">
+                <spring:message code="app.about.modal.body" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
-
-    <div class="bs-docs-section">
-        <footer>
-            <div class="bs-component">
-                <div class="col-lg-12">
-                    <h5 align="center">2014 (c) Jrew</h5>
-                </div>
-            </div>
-        </footer>
-    </div>
-
 </div>
---%>
+
+<!--FAQ Modal -->
+<div class="modal fade" id="faqModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><spring:message code="app.faq" /></h4>
+            </div>
+            <div class="modal-body">
+                <spring:message code="app.about.modal.body" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Get mobile app modal -->
+<div class="modal fade" id="mobileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><spring:message code="app.mobile" /></h4>
+            </div>
+            <div class="modal-body">
+                <spring:message code="app.about.modal.body" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Feedback modal -->
+<div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><spring:message code="app.feedback" /></h4>
+            </div>
+            <div class="modal-body">
+                <spring:message code="app.about.modal.body" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 </body>
 </html>
