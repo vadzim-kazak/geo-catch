@@ -22,8 +22,8 @@ function sendEmail(modalId, emailId, messageId, subject, nameId) {
         name: name
     }
 
-    $('#' + modalId).find('.loading-indicator').show();
 
+    showLoading();
 
     $.ajax({
         dataType: "text",
@@ -33,12 +33,24 @@ function sendEmail(modalId, emailId, messageId, subject, nameId) {
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(emailData),
         success: function(response) {
-            $('#' + modalId).find('.loading-indicator').hide();
+            hideLoading();
             $('#' + modalId).modal('hide');
         },
         error: function(response) {
-            $('#' + modalId).find('.loading-indicator').hide();
+            hideLoading();
             $('#' + modalId).find('.error-block').show();
         }
     });
+
+    function showLoading() {
+        $('#' + modalId).find('.modal-content').block({ message: null,
+                                                        overlayCSS: {backgroundColor: '#bbb' }
+                                                      });
+        $('#' + modalId).find('.loading-indicator').show();
+    }
+
+    function hideLoading() {
+        $('#' + modalId).find('.modal-content').unblock();
+        $('#' + modalId).find('.loading-indicator').hide();
+    }
 }

@@ -97,6 +97,9 @@
         display: none;
     }
 
+    textarea.form-control {
+        line-height: 20px !important;
+    }
 
 </style>
 
@@ -114,7 +117,9 @@
 <script src="${pageContext.request.contextPath}/js/richmarker.js"></script>
 <script src="${pageContext.request.contextPath}/js/chosen.jquery.js"></script>
 <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/jquery.blockUI.js"></script>
 <script src="${pageContext.request.contextPath}/js/util.js"></script>
+
 
 <!-- Google Analytics -->
 <script>
@@ -281,8 +286,17 @@
         for (var selector in config) {
             $(selector).chosen(config[selector]);
         }
+
+        // Backups for all modal windows.
+        var modalBackups = $('.modal').clone();
+        $('body').on('hidden.bs.modal', '.modal', function () {
+            $(this).remove();
+            var modalClone = modalBackups.closest('#' + $(this).attr('id')).clone();
+            $('body').append(modalClone);
+        });
     });
 
+    // Triggered during modal close event
     $(function(){
         $("[data-hide]").on("click", function(){
             $(this).hide();
@@ -435,12 +449,12 @@
 </div>
 
 <!--Feedback modal -->
-<div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <img src="${pageContext.request.contextPath}/icons/ajax-loader.gif" class="loading-indicator" style="display:none" />
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" class="close close-modal" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title"><spring:message code="app.feedback" /></h4>
             </div>
             <div class="modal-body">
@@ -470,7 +484,7 @@
                                 <div class="form-group">
                                     <label for="feedbackMessage" class="col-lg-2 control-label"><spring:message code="app.feedback.message.label" /></label>
                                     <div class="col-lg-10">
-                                        <textarea class="form-control" rows="6" id="feedbackMessage" placeholder="<spring:message code="app.feedback.message.placeholder" />"></textarea>
+                                        <textarea class="form-control" rows="10" id="feedbackMessage" placeholder="<spring:message code="app.feedback.message.placeholder" />"></textarea>
                                     </div>
                                 </div>
                             </fieldset>
@@ -478,7 +492,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="sendEmail('feedbackModal', 'feedbackEmail', 'feedbackMessage', 'Geo-Catch Feedback', 'feedbackName')"><span class="glyphicon glyphicon-send"></span>&nbsp;&nbsp;<spring:message code="app.feedback.send.label" /></button>
+                <button type="button" class="btn btn-primary close-modal" onclick="sendEmail('feedbackModal', 'feedbackEmail', 'feedbackMessage', 'Geo-Catch Feedback', 'feedbackName')"><span class="glyphicon glyphicon-send"></span>&nbsp;&nbsp;<spring:message code="app.feedback.send.label" /></button>
             </div>
         </div>
     </div>
