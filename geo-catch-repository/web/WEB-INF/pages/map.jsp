@@ -29,6 +29,12 @@
     body { height: 100%; margin: 0; padding: 0; padding-top: 50px; }
     #map-canvas { width: 100%; height: 100%;}
 
+    @font-face {
+        font-family: 'Glyphicons Halflings';
+        src: url("${pageContext.request.contextPath}/fonts/glyphicons-halflings-regular.eot");
+        src: url('${pageContext.request.contextPath}/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('${pageContext.request.contextPath}/fonts/glyphicons-halflings-regular.woff') format('woff'), url('${pageContext.request.contextPath}/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('${pageContext.request.contextPath}/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+    }
+
     select {
         /*Remove down arrow under firefox*/
         -moz-appearance: none;
@@ -78,6 +84,20 @@
         }
     }
 
+    .loading-indicator {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-left: -16px; /* -1 * image width / 2 */
+        margin-top: -16px;  /* -1 * image height / 2 */
+        z-index: 5;
+    }
+
+    .error-block {
+        display: none;
+    }
+
+
 </style>
 
 <script src="${pageContext.request.contextPath}/js/html5shiv.min.js"></script>
@@ -94,6 +114,7 @@
 <script src="${pageContext.request.contextPath}/js/richmarker.js"></script>
 <script src="${pageContext.request.contextPath}/js/chosen.jquery.js"></script>
 <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/util.js"></script>
 
 <!-- Google Analytics -->
 <script>
@@ -262,6 +283,12 @@
         }
     });
 
+    $(function(){
+        $("[data-hide]").on("click", function(){
+            $(this).hide();
+        });
+    });
+
 </script>
 </head>
 <body>
@@ -411,20 +438,51 @@
 <div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
+            <img src="${pageContext.request.contextPath}/icons/ajax-loader.gif" class="loading-indicator" style="display:none" />
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title"><spring:message code="app.feedback" /></h4>
             </div>
             <div class="modal-body">
-                <spring:message code="app.about.modal.body" />
+                <div class="bs-component error-block" data-hide="alert">
+                    <div class="alert alert-dismissable alert-danger">
+                        <button type="button" class="close">×</button>
+                        <spring:message code="app.modal.ajax.error" />
+                    </div>
+                </div>
+                <div class="container-fluid">
+                        <form class="form-horizontal">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label for="feedbackName" class="col-lg-2 control-label"><spring:message code="app.feedback.name.label" /></label>
+                                    <div class="col-lg-10">
+                                        <input type="text" class="form-control" id="feedbackName" placeholder="<spring:message code="app.feedback.name.placeholder" />">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="feedbackEmail" class="col-lg-2 control-label"><spring:message code="app.feedback.email.label" /></label>
+                                    <div class="col-lg-10">
+                                        <input type="text" class="form-control" id="feedbackEmail" placeholder="<spring:message code="app.feedback.email.placeholder" />">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="feedbackMessage" class="col-lg-2 control-label"><spring:message code="app.feedback.message.label" /></label>
+                                    <div class="col-lg-10">
+                                        <textarea class="form-control" rows="6" id="feedbackMessage" placeholder="<spring:message code="app.feedback.message.placeholder" />"></textarea>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="sendEmail('feedbackModal', 'feedbackEmail', 'feedbackMessage', 'Geo-Catch Feedback', 'feedbackName')"><span class="glyphicon glyphicon-send"></span>&nbsp;&nbsp;<spring:message code="app.feedback.send.label" /></button>
             </div>
         </div>
     </div>
 </div>
-
 
 </body>
 </html>
