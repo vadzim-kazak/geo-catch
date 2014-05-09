@@ -44,11 +44,14 @@ public class MailServiceImpl implements MailService {
         }
 
         emailMessage.append("Email: ")
-                    .append(email.getFrom())
-                    .append(System.getProperty("line.separator"))
+                    .append(email.getFrom());
+
+        if (!StringUtils.isEmpty(email.getMessage())) {
+            emailMessage.append(System.getProperty("line.separator"))
                     .append(System.getProperty("line.separator"))
                     .append("Message: ")
                     .append(email.getMessage());
+        }
 
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(email.getTo()));
         message.setSubject(email.getSubject(), ENCODING);

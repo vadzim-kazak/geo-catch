@@ -431,18 +431,50 @@
 </div>
 
 <!--Get mobile app modal -->
-<div class="modal fade" id="mobileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="mobileModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
+            <img src="${pageContext.request.contextPath}/icons/ajax-loader.gif" class="loading-indicator" style="display:none" />
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" class="close close-modal" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title"><spring:message code="app.mobile" /></h4>
             </div>
             <div class="modal-body">
-                <spring:message code="app.about.modal.body" />
+                <div class="bs-component error-block" data-hide="alert">
+                    <div class="alert alert-dismissable alert-danger">
+                        <button type="button" class="close">×</button>
+                        <spring:message code="app.modal.ajax.error" />
+                    </div>
+                </div>
+                <div class="container-fluid">
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <p><spring:message code="app.mobile.body" /></p>
+                        </div>
+                    </div>
+
+                    <form class="form-horizontal">
+                        <fieldset>
+                            <legend></legend>
+                            <div class="form-group">
+                                <label for="userName" class="col-lg-2 control-label"><spring:message code="app.feedback.name.label" /></label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="userName" placeholder="<spring:message code="app.feedback.name.placeholder" />">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="userEmail" class="col-lg-2 control-label"><spring:message code="app.feedback.email.label" /></label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="userEmail" placeholder="<spring:message code="app.feedback.email.placeholder" />">
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary close-modal" onclick="sendEmail('mobileModal', 'userEmail', '', 'Get App Request', 'userName')"><span class="glyphicon glyphicon-send"></span>&nbsp;&nbsp;<spring:message code="app.modal.send.label" /></button>
             </div>
         </div>
     </div>
@@ -465,8 +497,16 @@
                     </div>
                 </div>
                 <div class="container-fluid">
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <p><spring:message code="app.feedback.description" /></p>
+                            </div>
+                        </div>
+
                         <form class="form-horizontal">
                             <fieldset>
+                                <legend></legend>
                                 <div class="form-group">
                                     <label for="feedbackName" class="col-lg-2 control-label"><spring:message code="app.feedback.name.label" /></label>
                                     <div class="col-lg-10">
@@ -492,7 +532,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary close-modal" onclick="sendEmail('feedbackModal', 'feedbackEmail', 'feedbackMessage', 'Geo-Catch Feedback', 'feedbackName')"><span class="glyphicon glyphicon-send"></span>&nbsp;&nbsp;<spring:message code="app.feedback.send.label" /></button>
+                <button type="button" class="btn btn-primary close-modal" onclick="sendEmail('feedbackModal', 'feedbackEmail', 'feedbackMessage', 'Feedback', 'feedbackName')"><span class="glyphicon glyphicon-send"></span>&nbsp;&nbsp;<spring:message code="app.modal.send.label" /></button>
             </div>
         </div>
     </div>
