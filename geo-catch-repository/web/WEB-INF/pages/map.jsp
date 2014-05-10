@@ -452,7 +452,53 @@
                 <h4 class="modal-title"><spring:message code="app.about" /></h4>
             </div>
             <div class="modal-body">
-                <spring:message code="app.about.modal.body" />
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-24"><spring:message code="app.about.modal.body.part1" /></div>
+                    </div>
+                    <div class="row alert alert-info faq">
+                        <c:set var="items" value="5"/>
+                        <c:forEach begin="1" end="${items}" varStatus="iterator">
+                            <div class="col-md-24"><spring:message code="app.about.modal.body.list1.item${iterator.index}" /></div>
+                        </c:forEach>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-24"><spring:message code="app.about.modal.body.part2" /></div>
+                    </div>
+                    <div class="row alert alert-info faq">
+                        <c:set var="items" value="2"/>
+                        <c:forEach begin="1" end="${items}" varStatus="iterator">
+                            <div class="col-md-24"><spring:message code="app.about.modal.body.list2.item${iterator.index}" /></div>
+                        </c:forEach>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-24"><spring:message code="app.about.modal.body.part3" /></div>
+                    </div>
+                    <div class="row alert alert-info faq">
+                        <c:set var="items" value="3"/>
+                        <c:forEach begin="1" end="${items}" varStatus="iterator">
+                            <div class="col-md-24"><spring:message code="app.about.modal.body.list3.item${iterator.index}" /></div>
+                        </c:forEach>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-24"><spring:message code="app.about.modal.body.part4" /></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-24"><spring:message code="app.about.modal.body.part5" /></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-24"><spring:message code="app.about.modal.body.part6" /></div>
+                    </div>
+                    <div class="row alert alert-info faq">
+                        <c:set var="items" value="2"/>
+                        <c:forEach begin="1" end="${items}" varStatus="iterator">
+                            <div class="col-md-24"><spring:message code="app.about.modal.body.list6.item${iterator.index}" /></div>
+                        </c:forEach>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-24"><spring:message code="app.about.modal.body.part7" /></div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
