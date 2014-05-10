@@ -20,7 +20,7 @@
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootswatch.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootswatch.customized.min.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/chosen.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/chosen.bootstrap.css">
 <style type="text/css">
@@ -99,6 +99,42 @@
 
     textarea.form-control {
         line-height: 20px !important;
+    }
+
+    .no-indent {
+        padding: 0px !important;
+        margin: 0px !important;
+    }
+
+    .top-indent {
+        margin-top: 2px !important;
+    }
+
+    .no-indent-right {
+        padding-right: 0px !important;
+        margin-right: 0px !important;
+    }
+
+    .no-indent-left {
+        padding-left: 0px !important;
+        margin-left: 0px !important;
+    }
+
+    div.full-height {
+        height: 100% !important;
+    }
+
+    /* Overriding bootstrap classes */
+    .form-control {
+        line-height:38px !important;
+    }
+
+    .navbar-form .form-control {
+        width:100% !important;
+    }
+
+    .dropdown-menu{
+        margin:0 0 0 !important;
     }
 
 </style>
@@ -312,7 +348,7 @@
 
         <div class="row">
 
-            <div class="col-md-3">
+            <div class="col-md-5 no-indent-right">
                 <div class="navbar-header">
                     <div class="nav dropdown">
                         <a class="navbar-brand dropdown-toggle" data-toggle="dropdown">
@@ -335,12 +371,12 @@
                 </div>
             </div>
 
-            <div class="col-md-9">
+            <div class="col-md-19 no-indent-left">
 
                 <div class="navbar-collapse collapse navbar-responsive-collapse" id="navbar-collapse">
 
-                    <div class="row">
-                        <div class="col-md-3">
+                    <div class="row top-indent">
+                        <div class="col-md-5 no-indent">
                             <div class="input-group navbar-form">
                                 <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/fish.png" width="15" height="15" /></span>
                                 <select id="fish" data-placeholder="<spring:message code="dropdown.fish.label" />" class="form-control chosen-select-deselect" onchange="refresh()">
@@ -349,7 +385,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3">
+                        <div class="col-md-5 no-indent full-height">
                             <div class="input-group navbar-form">
                                 <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/rod.png" width="15" height="15" /></span>
                                 <select id="fishingTool" data-placeholder="<spring:message code="dropdown.tool.label" />" class="form-control chosen-select-deselect" onchange="refresh()">
@@ -358,7 +394,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3">
+                        <div class="col-md-5 no-indent full-height">
                             <div class="input-group navbar-form">
                                 <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/hook.png" width="15" height="15" /></span>
                                 <select id="fishingBait" data-placeholder="<spring:message code="dropdown.bait.label" />" class="form-control chosen-select-deselect" onchange="refresh()">
@@ -374,8 +410,7 @@
                             <c:set var="pageLocale" value="en" />
                         </c:if>
 
-                        <div class="col-md-3">
-                            <div class="pull-right">
+                        <div class="col-md-6 col-md-offset-3">
                                 <div class="input-group navbar-form">
                                     <span class="input-group-addon"> <spring:message code="language" /></span>
                                     <select id="language" class="form-control chosen-select disable-search" onchange="handleLocaleSelection()">
@@ -383,7 +418,6 @@
                                         <option value="ru" <c:if test="${fn:startsWith(pageLocale, 'ru')}">selected</c:if>><spring:message code="language.ru" /></option>
                                     </select>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -449,7 +483,7 @@
                 <div class="container-fluid">
 
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-24">
                             <p><spring:message code="app.mobile.body" /></p>
                         </div>
                     </div>
@@ -458,14 +492,14 @@
                         <fieldset>
                             <legend></legend>
                             <div class="form-group">
-                                <label for="userName" class="col-lg-2 control-label"><spring:message code="app.feedback.name.label" /></label>
-                                <div class="col-lg-10">
+                                <label for="userName" class="col-lg-4 control-label"><spring:message code="app.feedback.name.label" /></label>
+                                <div class="col-lg-20">
                                     <input type="text" class="form-control" id="userName" placeholder="<spring:message code="app.feedback.name.placeholder" />">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="userEmail" class="col-lg-2 control-label"><spring:message code="app.feedback.email.label" /></label>
-                                <div class="col-lg-10">
+                                <label for="userEmail" class="col-lg-4 control-label"><spring:message code="app.feedback.email.label" /></label>
+                                <div class="col-lg-20">
                                     <input type="text" class="form-control" id="userEmail" placeholder="<spring:message code="app.feedback.email.placeholder" />">
                                 </div>
                             </div>
@@ -499,7 +533,7 @@
                 <div class="container-fluid">
 
                         <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-lg-24">
                                 <p><spring:message code="app.feedback.description" /></p>
                             </div>
                         </div>
@@ -508,22 +542,22 @@
                             <fieldset>
                                 <legend></legend>
                                 <div class="form-group">
-                                    <label for="feedbackName" class="col-lg-2 control-label"><spring:message code="app.feedback.name.label" /></label>
-                                    <div class="col-lg-10">
+                                    <label for="feedbackName" class="col-lg-4 control-label"><spring:message code="app.feedback.name.label" /></label>
+                                    <div class="col-lg-20">
                                         <input type="text" class="form-control" id="feedbackName" placeholder="<spring:message code="app.feedback.name.placeholder" />">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="feedbackEmail" class="col-lg-2 control-label"><spring:message code="app.feedback.email.label" /></label>
-                                    <div class="col-lg-10">
+                                    <label for="feedbackEmail" class="col-lg-4 control-label"><spring:message code="app.feedback.email.label" /></label>
+                                    <div class="col-lg-20">
                                         <input type="text" class="form-control" id="feedbackEmail" placeholder="<spring:message code="app.feedback.email.placeholder" />">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="feedbackMessage" class="col-lg-2 control-label"><spring:message code="app.feedback.message.label" /></label>
-                                    <div class="col-lg-10">
+                                    <label for="feedbackMessage" class="col-lg-4 control-label"><spring:message code="app.feedback.message.label" /></label>
+                                    <div class="col-lg-20">
                                         <textarea class="form-control" rows="10" id="feedbackMessage" placeholder="<spring:message code="app.feedback.message.placeholder" />"></textarea>
                                     </div>
                                 </div>
