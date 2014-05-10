@@ -20,7 +20,7 @@
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta charset="utf-8" />
-<meta name="description" content="Geo tagged fishing photos displayed on map." >
+<meta name="description" content="Geotagged fishing photos displayed on map." >
 <meta name="keywords" content="fishing, fish, geo, geotag, geotagging, gps, map" >
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootswatch.customized.min.css">
@@ -125,6 +125,18 @@
 
     div.full-height {
         height: 100% !important;
+    }
+
+    .divider {
+        border-bottom: 1px solid #ddd;
+        margin-top: 2px;
+        margin-bottom: 2px;
+    }
+
+    div.faq {
+        margin-left: 6px !important;
+        margin-right: 6px !important;
+        padding: 5px !important;
     }
 
     /* Overriding bootstrap classes */
@@ -458,7 +470,148 @@
                 <h4 class="modal-title"><spring:message code="app.faq" /></h4>
             </div>
             <div class="modal-body">
-                <spring:message code="app.about.modal.body" />
+                <div class="container-fluid">
+
+                    <div class="row alert alert-info faq">
+                        <div class="col-md-24">
+                            <span class="text-info"><strong><spring:message code="app.faq.question.sign" /></strong> - <spring:message code="app.faq.question.sign.description" />,
+                                                    <strong><spring:message code="app.faq.answer.sign" /></strong> - <spring:message code="app.faq.answer.description" />.</span>
+                        </div>
+                    </div>
+
+                    <div class="row well faq">
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.question.sign" /></span> <spring:message code="app.faq.question1" />
+                        </div>
+                        <div class="col-md-24">
+                            <div class="divider"></div>
+                        </div>
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.answer.sign" /></span> <spring:message code="app.faq.answer1" />
+                        </div>
+                    </div>
+
+                    <div class="row well faq">
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.question.sign" /></span> <spring:message code="app.faq.question2" />
+                        </div>
+                        <div class="col-md-24">
+                            <div class="divider"></div>
+                        </div>
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.answer.sign" /></span> <spring:message code="app.faq.answer2" />
+                        </div>
+                    </div>
+
+                    <div class="row well faq">
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.question.sign" /></span> <spring:message code="app.faq.question3" />
+                        </div>
+                        <div class="col-md-24">
+                            <div class="divider"></div>
+                        </div>
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.answer.sign" /></span> <spring:message code="app.faq.answer3" />
+                        </div>
+                    </div>
+
+                    <div class="row well faq">
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.question.sign" /></span> <spring:message code="app.faq.question4" />
+                        </div>
+                        <div class="col-md-24">
+                            <div class="divider"></div>
+                        </div>
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.answer.sign" /></span> <spring:message code="app.faq.answer4" />
+                        </div>
+                    </div>
+
+                    <div class="row well faq">
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.question.sign" /></span> <spring:message code="app.faq.question5" />
+                        </div>
+                        <div class="col-md-24">
+                            <div class="divider"></div>
+                        </div>
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.answer.sign" /></span> <spring:message code="app.faq.answer5" />
+                        </div>
+                    </div>
+
+                    <div class="row well faq">
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.question.sign" /></span> <spring:message code="app.faq.question6" />
+                        </div>
+                        <div class="col-md-24">
+                            <div class="divider"></div>
+                        </div>
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.answer.sign" /></span> <spring:message code="app.faq.answer6" />
+                        </div>
+                    </div>
+
+                    <div class="row well faq">
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.question.sign" /></span> <spring:message code="app.faq.question7" />
+                        </div>
+                        <div class="col-md-24">
+                            <div class="divider"></div>
+                        </div>
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.answer.sign" /></span> <spring:message code="app.faq.answer7" />
+                        </div>
+                    </div>
+
+                    <div class="row well faq">
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.question.sign" /></span> <spring:message code="app.faq.question8" />
+                        </div>
+                        <div class="col-md-24">
+                            <div class="divider"></div>
+                        </div>
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.answer.sign" /></span> <spring:message code="app.faq.answer8" />
+                        </div>
+                    </div>
+
+                    <div class="row well faq">
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.question.sign" /></span> <spring:message code="app.faq.question9" />
+                        </div>
+                        <div class="col-md-24">
+                            <div class="divider"></div>
+                        </div>
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.answer.sign" /></span> <spring:message code="app.faq.answer9" />
+                        </div>
+                    </div>
+
+                    <div class="row well faq">
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.question.sign" /></span> <spring:message code="app.faq.question10" />
+                        </div>
+                        <div class="col-md-24">
+                            <div class="divider"></div>
+                        </div>
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.answer.sign" /></span> <spring:message code="app.faq.answer10" />
+                        </div>
+                    </div>
+
+                    <div class="row well faq">
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.question.sign" /></span> <spring:message code="app.faq.question11" />
+                        </div>
+                        <div class="col-md-24">
+                            <div class="divider"></div>
+                        </div>
+                        <div class="col-md-24">
+                            <span class="text-info"><spring:message code="app.faq.answer.sign" /></span> <spring:message code="app.faq.answer11" />
+                        </div>
+                    </div>
+
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
