@@ -18,7 +18,10 @@
 <title><spring:message code="app.title" /></title>
 
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="utf-8" />
+<meta name="description" content="Geo tagged fishing photos displayed on map." >
+<meta name="keywords" content="fishing, fish, geo, geotag, geotagging, gps, map" >
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootswatch.customized.min.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/chosen.css">
