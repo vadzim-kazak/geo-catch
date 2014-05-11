@@ -454,54 +454,76 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-24"><spring:message code="app.about.modal.body.part1" /></div>
+                        <div class="col-md-24"><p><spring:message code="app.about.modal.body.part1" /></p></div>
                     </div>
-                    <div class="row alert alert-info faq">
+                    <div class="row well faq">
                         <c:set var="items" value="5"/>
                         <c:forEach begin="1" end="${items}" varStatus="iterator">
                             <div class="col-md-24"><spring:message code="app.about.modal.body.list1.item${iterator.index}" /></div>
+                            <c:if test="${not iterator.last}">
+                                <div class="col-md-24">
+                                    <div class="divider"></div>
+                                </div>
+                            </c:if>
                         </c:forEach>
                     </div>
                     <div class="row">
-                        <div class="col-md-24"><spring:message code="app.about.modal.body.part2" /></div>
+                        <div class="col-md-24"><p><spring:message code="app.about.modal.body.part2" /></p></div>
                     </div>
-                    <div class="row alert alert-info faq">
+                    <div class="row well faq">
                         <c:set var="items" value="2"/>
                         <c:forEach begin="1" end="${items}" varStatus="iterator">
                             <div class="col-md-24"><spring:message code="app.about.modal.body.list2.item${iterator.index}" /></div>
+                            <c:if test="${not iterator.last}">
+                                <div class="col-md-24">
+                                    <div class="divider"></div>
+                                </div>
+                            </c:if>
                         </c:forEach>
                     </div>
                     <div class="row">
-                        <div class="col-md-24"><spring:message code="app.about.modal.body.part3" /></div>
+                        <div class="col-md-24"><p><spring:message code="app.about.modal.body.part3" /></p></div>
                     </div>
-                    <div class="row alert alert-info faq">
-                        <c:set var="items" value="3"/>
+                    <div class="row well faq">
+                        <c:set var="items" value="1"/>
                         <c:forEach begin="1" end="${items}" varStatus="iterator">
                             <div class="col-md-24"><spring:message code="app.about.modal.body.list3.item${iterator.index}" /></div>
+                            <c:if test="${not iterator.last}">
+                                <div class="col-md-24">
+                                    <div class="divider"></div>
+                                </div>
+                            </c:if>
                         </c:forEach>
                     </div>
                     <div class="row">
-                        <div class="col-md-24"><spring:message code="app.about.modal.body.part4" /></div>
+                        <div class="col-md-24"><p><spring:message code="app.about.modal.body.part4" /></p></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-24"><spring:message code="app.about.modal.body.part5" /></div>
+                        <div class="col-md-24"><p><spring:message code="app.about.modal.body.part5" /></p></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-24"><spring:message code="app.about.modal.body.part6" /></div>
+                        <div class="col-md-24"><p><spring:message code="app.about.modal.body.part6" /></p></div>
                     </div>
-                    <div class="row alert alert-info faq">
+                    <div class="row well faq">
                         <c:set var="items" value="2"/>
                         <c:forEach begin="1" end="${items}" varStatus="iterator">
                             <div class="col-md-24"><spring:message code="app.about.modal.body.list6.item${iterator.index}" /></div>
+                            <c:if test="${not iterator.last}">
+                                <div class="col-md-24">
+                                    <div class="divider"></div>
+                                </div>
+                            </c:if>
                         </c:forEach>
                     </div>
                     <div class="row">
-                        <div class="col-md-24"><spring:message code="app.about.modal.body.part7" /></div>
+                        <div class="col-md-24"><p><spring:message code="app.about.modal.body.part7" /></p></div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    <spring:message code="app.modal.close.label" />
+                </button>
             </div>
         </div>
     </div>
@@ -543,7 +565,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    <spring:message code="app.modal.close.label" />
+                </button>
             </div>
         </div>
     </div>
