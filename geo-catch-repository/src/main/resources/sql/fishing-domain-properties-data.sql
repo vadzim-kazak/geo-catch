@@ -32,7 +32,7 @@ INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VA
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (71, 1, 8, 'жерех', 'ru', 0);
 
 -- Карась золотой / сrucian carp
-INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (80, 1, 9, 'сrucian carp', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (80, 1, 9, 'crucian carp', 'en', 1);
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (81, 1, 9, 'карась золотой', 'ru', 0);
 
 -- Карась серебряный / prussian carp

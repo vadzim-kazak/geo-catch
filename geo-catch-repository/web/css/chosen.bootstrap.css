@@ -1,5 +1,5 @@
 select{
-    width: 80%;/* Only for example */
+    width: 100%;/* Only for example */
 }
 
 select.form-control + .chosen-container.chosen-container-single .chosen-single {
@@ -132,15 +132,6 @@ select.form-control + .chosen-container-multi .chosen-choices li.search-choice {
 select.form-control + .chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
     top:8px;
     right:6px;
-}
-
-select.form-control + .chosen-container-multi.chosen-container-active .chosen-choices,
-select.form-control + .chosen-container.chosen-container-single.chosen-container-active .chosen-single,
-select.form-control + .chosen-container .chosen-search input[type=text]:focus{
-    border-color: #66AFE9;
-    outline: 0;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),0 0 8px rgba(102, 175, 233, 0.6);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),0 0 8px rgba(102, 175, 233, 0.6);
 }
 
 select.form-control + .chosen-container-multi .chosen-results li.result-selected{

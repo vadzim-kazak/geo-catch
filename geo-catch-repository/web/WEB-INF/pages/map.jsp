@@ -11,310 +11,675 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <html>
-  <head>
+<head>
 
-      <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/icons/favicon.png" />
+<link rel="icon" type="image/png" href="${pageContext.request.contextPath}/icons/favicon.png" />
 
-      <title><spring:message code="app.title" /></title>
+<title><spring:message code="app.title" /></title>
 
-      <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="utf-8" />
+<meta name="description" content="Geotagged fishing photos displayed on map." >
+<meta name="keywords" content="fishing, fish, geo, geotag, geotagging, gps, map" >
 
-      <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootswatch.min.css">
-      <link rel="stylesheet" href="${pageContext.request.contextPath}/css/chosen.css">
-      <link rel="stylesheet" href="${pageContext.request.contextPath}/css/chosen.bootstrap.css">
-      <style type="text/css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootswatch.customized.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/chosen.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/chosen.bootstrap.css">
+<style type="text/css">
 
-          html { height: 100% }
-          body { height: 100%; margin: 0; padding: 0 }
-          #map-canvas { width: 100%; height: 93%; margin-top: 50px}
+    html { height: 100% }
+    body { height: 100%; margin: 0; padding: 0; padding-top: 50px; }
+    #map-canvas { width: 100%; height: 100%;}
 
-          select {
-              /*Remove down arrow under firefox*/
-              -moz-appearance: none;
-              -o-appearance:none;
-              text-indent: 0.01px;
-              text-overflow: '';
-          }
+    @font-face {
+        font-family: 'Glyphicons Halflings';
+        src: url("${pageContext.request.contextPath}/fonts/glyphicons-halflings-regular.eot");
+        src: url('${pageContext.request.contextPath}/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('${pageContext.request.contextPath}/fonts/glyphicons-halflings-regular.woff') format('woff'), url('${pageContext.request.contextPath}/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('${pageContext.request.contextPath}/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+    }
 
-          /*Remove down arrow under IE */
-          select::-ms-expand {
-              display: none;
-          }
+    select {
+        /*Remove down arrow under firefox*/
+        -moz-appearance: none;
+        -o-appearance:none;
+        text-indent: 0.01px;
+        text-overflow: '';
+        -webkit-box-sizing : border-box !important;‌​
+    -moz-box-sizing : border-box !important;
+        box-sizing : border-box !important;
+    }
 
-      </style>
+        /*Remove down arrow under IE */
+    select::-ms-expand {
+        display: none;
+    }
 
-      <script src="${pageContext.request.contextPath}/js/html5shiv.min.js"></script>
-      <script src="${pageContext.request.contextPath}/js/respond.min.js"></script>
-      <script type="text/javascript"
-              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBI_eGAZN3QUbNyJIxV73LWlRf2iCUa5ew&sensor=false">
-      </script>
-      <script src="${pageContext.request.contextPath}/js/json2.js"></script>
-      <script src="${pageContext.request.contextPath}/js/jquery-1.10.2.js"></script>
-      <script src="${pageContext.request.contextPath}/js/jsrender.js"></script>
-      <script src="${pageContext.request.contextPath}/js/images-layer.js"></script>
-      <script src="${pageContext.request.contextPath}/js/domain.js"></script>
-      <script src="${pageContext.request.contextPath}/js/moment.min.js"></script>
-      <script src="${pageContext.request.contextPath}/js/richmarker.js"></script>
-      <script src="${pageContext.request.contextPath}/js/chosen.jquery.js"></script>
+    .trace {
+        border: 2px;
+        border-color: red;
+        border-style: solid;
+    }
 
-      <!-- Google Analytics -->
-      <script>
-          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    @media (max-width: 1000px) {
+        .navbar-header {
+            float: none;
+        }
+        .navbar-toggle {
+            display: block;
+        }
+        .navbar-collapse {
+            border-top: 1px solid transparent;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+        .navbar-collapse.collapse {
+            display: none!important;
+        }
+        .navbar-nav {
+            float: none!important;
+            margin: 7.5px -15px;
+        }
+        .navbar-nav>li {
+            float: none;
+        }
+        .navbar-nav>li>a {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+    }
 
-          ga('create', 'UA-50623419-1', 'geo-catch.com');
-          ga('send', 'pageview');
+    .loading-indicator {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-left: -16px; /* -1 * image width / 2 */
+        margin-top: -16px;  /* -1 * image height / 2 */
+        z-index: 5;
+    }
 
-      </script>
+    .error-block {
+        display: none;
+    }
 
-      <script id="infoWindowTmpl" type="text/x-jquery-tmpl">
-          <div class="roundInfoWindow" style="min-height: 580px;max-height:750px;">
-              <div>
-                  <ul class="nav nav-pills" style="height: 30px">
-                  {{for domainProperties}}
+    textarea.form-control {
+        line-height: 20px !important;
+    }
 
-                      <li>
-                      {{if type == 1}}
-                        <img src="${pageContext.request.contextPath}/icons/fish.png" width="20" height="20" style="vertical-align:middle"/>
-                      {{/if}}
-                      {{if type == 2}}
-                        <img src="${pageContext.request.contextPath}/icons/rod.png" width="20" height="20" style="vertical-align:middle"/>
-                      {{/if}}
-                      {{if type == 3}}
-                        <img src="${pageContext.request.contextPath}/icons/hook.png" width="20" height="20" style="vertical-align:middle"/>
-                      {{/if}}
+    .no-indent {
+        padding: 0px !important;
+        margin: 0px !important;
+    }
 
-                      <span class="text-center">{{:value}}</span>
-                      </li>
+    .top-indent {
+        margin-top: 2px !important;
+    }
 
-                  {{/for}}
+    .no-indent-right {
+        padding-right: 0px !important;
+        margin-right: 0px !important;
+    }
 
-                      <li class="pull-right">
-                        <input type="button" class="btn btn-primary btn-xs" value="<spring:message code="share.label" />" onclick="copyToClipboard('http://${repository.domain.name}/${repository.context.path}?image={{:id}}&locale=${pageContext.response.locale}')" style="float:right;">
-                      </li>
-                  </ul>
-              </div>
-              <div>
-                <img src="{{:path}}" width="500" height="500"/>
-              </div>
-              <div>
-                <ul class="nav nav-pills">
-                    <li>
-                        <img src="${pageContext.request.contextPath}/icons/clock.png" width="18" height="18" style="vertical-align:middle"/> <span class="text-center">{{:parsedDate}}</span>
-                    </li>
-                    <li class="pull-right">
-                        <img src="${pageContext.request.contextPath}/icons/report_unselected.png" width="18" height="18" style="vertical-align:middle"/> <span class="text-center">{{:reportsCount}}</span>
-                    </li>
-                    <li class="pull-right">
-                        <img src="${pageContext.request.contextPath}/icons/dislike_unselected.png" width="18" height="18" style="vertical-align:middle"/> <span class="text-center">{{:dislikesCount}}</span>
-                    </li>
-                    <li class="pull-right">
-                        <img src="${pageContext.request.contextPath}/icons/like_unselected.png" width="18" height="18" style="vertical-align:middle"/> <span class="text-center">{{:likesCount}}</span>
-                    </li>
-                </ul>
-              </div>
-              {{if description}}
-                <div><img src="${pageContext.request.contextPath}/icons/chat.png" width="18" height="18" style="vertical-align:middle"/> <span class="text-center">{{:description}}</span></div>
-              {{/if}}
-          </div>
-      </script>
+    .no-indent-left {
+        padding-left: 0px !important;
+        margin-left: 0px !important;
+    }
 
-      <script type="text/javascript">
+    div.full-height {
+        height: 100% !important;
+    }
 
-          var imageId = 0;
-          <c:if test="${not empty param.image}">
-            imageId = <c:out value="${param.image}"/>;
-          </c:if>
+    .divider {
+        border-bottom: 1px solid #ddd;
+        margin-top: 2px;
+        margin-bottom: 2px;
+    }
 
-          var domainContainers = [
-              {
-                  id : "fish",
-                  type: 1
-              },
-              {
-                  id : "fishingTool",
-                  type: 2
-              },{
-                  id : "fishingBait",
-                  type: 3
-              }
-          ]
+    div.faq {
+        margin-left: 6px !important;
+        margin-right: 6px !important;
+        padding: 5px !important;
+    }
 
-          locale = '${pageContext.response.locale}';
+    /* Overriding bootstrap classes */
+    .form-control {
+        line-height:38px !important;
+    }
 
-          // Enable the visual refresh
-          google.maps.visualRefresh = true;
+    .navbar-form .form-control {
+        width:100% !important;
+    }
 
-          /**
-          * Initializes google map on page loading
-          */
-          function initialize() {
+    .dropdown-menu{
+        margin:0 0 0 !important;
+    }
 
-              var mapOptions = {
-                  // temporary center of map Minsk, Belarus
-                  center: new google.maps.LatLng(53.9475743, 27.5376985),
-                  zoom: 6,
-                  mapTypeId: google.maps.MapTypeId.ROADMAP,
-                  streetViewControl: false,
-                  mapTypeControl: false
-              };
+</style>
 
-              var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-              imageLayer = new ImageLayer(map);
+<script src="${pageContext.request.contextPath}/js/html5shiv.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/respond.min.js"></script>
+<script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBI_eGAZN3QUbNyJIxV73LWlRf2iCUa5ew&sensor=false">
+</script>
+<script src="${pageContext.request.contextPath}/js/json2.js"></script>
+<script src="${pageContext.request.contextPath}/js/jquery-1.10.2.js"></script>
+<script src="${pageContext.request.contextPath}/js/jsrender.js"></script>
+<script src="${pageContext.request.contextPath}/js/images-layer.js"></script>
+<script src="${pageContext.request.contextPath}/js/domain.js"></script>
+<script src="${pageContext.request.contextPath}/js/moment.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/richmarker.js"></script>
+<script src="${pageContext.request.contextPath}/js/chosen.jquery.js"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/jquery.blockUI.js"></script>
+<script src="${pageContext.request.contextPath}/js/util.js"></script>
 
-             //Add map events listeners
-             google.maps.event.addListener(map, 'dragend', imageLayer.handleChangeViewBoundsEvent);
-             google.maps.event.addListener(map, 'zoom_changed', imageLayer.handleChangeZoomEvent);
-             google.maps.event.addListener(map, 'dragend', function() {loadDomainProperties(locale, domainContainers);});
-             google.maps.event.addListener(map, 'zoom_changed', function() {loadDomainProperties(locale, domainContainers);});
 
-             google.maps.event.addListenerOnce(map, 'idle', function(){
-                if (imageId > 0) {
-                    imageLayer.showImageOnLoad(imageId);
-                } else {
-                    imageLayer.handleChangeViewBoundsEvent();
-                }
+<!-- Google Analytics -->
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-                 loadDomainProperties(locale, domainContainers);
-             });
-          }
+    ga('create', 'UA-50623419-1', 'geo-catch.com');
+    ga('send', 'pageview');
 
-          google.maps.event.addDomListener(window, 'load', initialize);
+</script>
 
-          function handleLocaleSelection() {
+<script id="infoWindowTmpl" type="text/x-jquery-tmpl">
+    <div class="roundInfoWindow" style="min-height: 580px;max-height:750px;">
+        <div>
+            <ul class="nav nav-pills" style="height: 30px">
+                {{for domainProperties}}
 
-              var selectedLocale = $("#language").val();
-              if (selectedLocale != locale) {
-                  window.location.href = '${pageContext.request.contextPath}?locale=' + selectedLocale;
-              }
-          }
+                <li>
+                    {{if type == 1}}
+                    <img src="${pageContext.request.contextPath}/icons/fish.png" width="20" height="20" style="vertical-align:middle"/>
+                    {{/if}}
+                    {{if type == 2}}
+                    <img src="${pageContext.request.contextPath}/icons/rod.png" width="20" height="20" style="vertical-align:middle"/>
+                    {{/if}}
+                    {{if type == 3}}
+                    <img src="${pageContext.request.contextPath}/icons/hook.png" width="20" height="20" style="vertical-align:middle"/>
+                    {{/if}}
 
-          function refresh() {
-              imageLayer.refresh();
-          }
+                    <span class="text-center">{{:value}}</span>
+                </li>
 
-          function copyToClipboard(link) {
-              window.prompt("<spring:message code="share.message" />", link);
-          }
+                {{/for}}
 
-          $(document).ready(function () {
-              var config = {
-                  '.disable-search'          : {disable_search: true},
-                  '.chosen-select'           : {},
-                  '.chosen-select-deselect'  : {allow_single_deselect:true, no_results_text:'<spring:message code="dropdown.no.results" />'},
-                  '.chosen-select-no-single' : {disable_search_threshold:5},
-                  '.chosen-select-width'     : {width:"95%"}
-              }
+                <li class="pull-right">
+                    <input type="button" class="btn btn-primary btn-xs" value="<spring:message code="share.label" />" onclick="copyToClipboard('http://${repository.domain.name}/${repository.context.path}?image={{:id}}&locale=${pageContext.response.locale}')" style="float:right;">
+                </li>
+            </ul>
+        </div>
+        <div>
+            <img src="{{:path}}" width="500" height="500"/>
+        </div>
+        <div>
+            <ul class="nav nav-pills">
+                <li>
+                    <img src="${pageContext.request.contextPath}/icons/clock.png" width="18" height="18" style="vertical-align:middle"/> <span class="text-center">{{:parsedDate}}</span>
+                </li>
+                <li class="pull-right">
+                    <img src="${pageContext.request.contextPath}/icons/report_unselected.png" width="18" height="18" style="vertical-align:middle"/> <span class="text-center">{{:reportsCount}}</span>
+                </li>
+                <li class="pull-right">
+                    <img src="${pageContext.request.contextPath}/icons/dislike_unselected.png" width="18" height="18" style="vertical-align:middle"/> <span class="text-center">{{:dislikesCount}}</span>
+                </li>
+                <li class="pull-right">
+                    <img src="${pageContext.request.contextPath}/icons/like_unselected.png" width="18" height="18" style="vertical-align:middle"/> <span class="text-center">{{:likesCount}}</span>
+                </li>
+            </ul>
+        </div>
+        {{if description}}
+        <div><img src="${pageContext.request.contextPath}/icons/chat.png" width="18" height="18" style="vertical-align:middle"/> <span class="text-center">{{:description}}</span></div>
+        {{/if}}
+    </div>
+</script>
 
-              for (var selector in config) {
-                  $(selector).chosen(config[selector]);
-              }
-          });
+<script type="text/javascript">
 
-      </script>
-  </head>
-  <body>
-  <div class="navbar navbar-default navbar-fixed-top">
+    var imageId = 0;
+    <c:if test="${not empty param.image}">
+    imageId = <c:out value="${param.image}"/>;
+    </c:if>
 
-      <span class="navbar-brand"><spring:message code="app.title" /></span>
+    var domainContainers = [
+        {
+            id : "fish",
+            type: 1
+        },
+        {
+            id : "fishingTool",
+            type: 2
+        },{
+            id : "fishingBait",
+            type: 3
+        }
+    ]
 
-      <div class="navbar-collapse collapse navbar-responsive-collapse">
+    locale = '${pageContext.response.locale}';
 
-          <ul class="nav navbar-nav">
-              <li>
-                  <div class="input-group navbar-form" style="width: 250px">
-                      <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/fish.png" width="15" height="15" /></span>
-                      <select id="fish" data-placeholder="<spring:message code="dropdown.fish.label" />" class="form-control chosen-select-deselect" style="width: 200px" onchange="refresh()">
-                          <option value=""></option>
-                      </select>
-                  </div>
-              </li>
-              <li>
-                  <div class="input-group navbar-form" style="width: 250px">
-                      <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/rod.png" width="15" height="15" /></span>
-                      <select id="fishingTool" data-placeholder="<spring:message code="dropdown.tool.label" />" class="form-control chosen-select-deselect"  style="width: 200px" onchange="refresh()">
-                          <option value=""></option>
-                      </select>
-                  </div>
-              </li>
-              <li>
-                  <div class="input-group navbar-form" style="width: 250px">
-                      <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/hook.png" width="15" height="15" /></span>
-                      <select id="fishingBait" data-placeholder="<spring:message code="dropdown.bait.label" />" class="form-control chosen-select-deselect" style="width: 200px" onchange="refresh()">
-                          <option value=""></option>
-                      </select>
-                  </div>
-              </li>
-          </ul>
+    // Enable the visual refresh
+    google.maps.visualRefresh = true;
 
-          <c:set var="pageLocale" value="${pageContext.response.locale}" />
-          <c:if test="${not fn:startsWith(pageContext.response.locale, 'en') and
-                   not fn:startsWith(pageContext.response.locale, 'ru')}">
-              <%-- Current locale isn't supported. Set default locale here --%>
-              <c:set var="pageLocale" value="en" />
-          </c:if>
+    /**
+     * Initializes google map on page loading
+     */
+    function initialize() {
 
-          <div class="nav navbar-nav navbar-right">
-              <div class="input-group navbar-form" style="width: 250px;">
-                  <span class="input-group-addon"> <spring:message code="language" /></span>
-                  <select id="language" class="form-control chosen-select disable-search" onchange="handleLocaleSelection()">
-                      <option value="en" <c:if test="${fn:startsWith(pageLocale, 'en')}">selected</c:if>><spring:message code="language.en" /></option>
-                      <option value="ru" <c:if test="${fn:startsWith(pageLocale, 'ru')}">selected</c:if>><spring:message code="language.ru" /></option>
-                  </select>
-              </div>
-          </div>
+        var mapOptions = {
+            // temporary center of map Minsk, Belarus
+            center: new google.maps.LatLng(53.9475743, 27.5376985),
+            zoom: 6,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            streetViewControl: false,
+            mapTypeControl: false
+        };
 
-      </div>
-  </div>
+        var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+        imageLayer = new ImageLayer(map);
 
-  <div id="map-canvas"></div>
+        //Add map events listeners
+        google.maps.event.addListener(map, 'dragend', imageLayer.handleChangeViewBoundsEvent);
+        google.maps.event.addListener(map, 'zoom_changed', imageLayer.handleChangeZoomEvent);
+        google.maps.event.addListener(map, 'dragend', function() {loadDomainProperties(locale, domainContainers);});
+        google.maps.event.addListener(map, 'zoom_changed', function() {loadDomainProperties(locale, domainContainers);});
 
-  <%--
-  <div style="margin-left: 2%;margin-right: 2%">
+        google.maps.event.addListenerOnce(map, 'idle', function(){
+            if (imageId > 0) {
+                imageLayer.showImageOnLoad(imageId);
+            } else {
+                imageLayer.handleChangeViewBoundsEvent();
+            }
 
-      <div class="bs-docs-section" style="margin-top: 1%">
-          <div class="col-lg-10">
-              <h2 id="nav-tabs">Info</h2>
-              <div class="bs-component">
-                  <ul class="nav nav-tabs">
-                      <li class="active"><a href="#home" data-toggle="tab">About</a></li>
-                      <li class=""><a href="#profile" data-toggle="tab">FAQ</a></li>
-                      <li class=""><a href="#profile" data-toggle="tab">Get mobile app</a></li>
-                      <li class=""><a href="#profile" data-toggle="tab">Feedback</a></li>
-                  </ul>
-                  <div id="myTabContent" class="tab-content">
-                      <div class="tab-pane fade active in" id="home">
-                          <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
-                      </div>
-                      <div class="tab-pane fade" id="profile">
-                          <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
-                      </div>
-                      <div class="tab-pane fade" id="dropdown1">
-                          <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork.</p>
-                      </div>
-                      <div class="tab-pane fade" id="dropdown2">
-                          <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater.</p>
-                      </div>
-                  </div>
-                  <div id="source-button" class="btn btn-primary btn-xs" style="display: none;">&lt; &gt;</div></div>
-          </div>
-      </div>
+            loadDomainProperties(locale, domainContainers);
+        });
+    }
 
-      <div class="bs-docs-section">
-          <footer>
-              <div class="bs-component">
-                  <div class="col-lg-12">
-                      <h5 align="center">2014 (c) Jrew</h5>
-                  </div>
-              </div>
-          </footer>
-      </div>
+    google.maps.event.addDomListener(window, 'load', initialize);
 
-  </div>
-  --%>
+    function handleLocaleSelection() {
 
-  </body>
+        var selectedLocale = $("#language").val();
+        if (selectedLocale != locale) {
+            window.location.href = '${pageContext.request.contextPath}?locale=' + selectedLocale;
+        }
+    }
+
+    function refresh() {
+        imageLayer.refresh();
+    }
+
+    function copyToClipboard(link) {
+        window.prompt("<spring:message code="share.message" />", link);
+    }
+
+    // to be placed anywhere before the jquery.chosen initialization
+    var getHiddenOffsetWidth = function (el) {
+        // save a reference to a cloned element that can be measured
+        var $hiddenElement = $(el).clone().appendTo('body');
+        // calculate the width of the clone
+        var width = $hiddenElement.outerWidth();
+        // remove the clone from the DOM
+        $hiddenElement.remove();
+        return width * 0.7;
+    };
+
+    $(document).ready(function () {
+        var config = {
+            '.disable-search'          : {disable_search: true},
+            '.chosen-select'           : {},
+            '.chosen-select-deselect'  : {allow_single_deselect:true, no_results_text:'<spring:message code="dropdown.no.results" />'},
+            '.chosen-select-no-single' : {disable_search_threshold:5},
+            '.chosen-select-width'     : {width:"95%"}
+        }
+
+        for (var selector in config) {
+            $(selector).chosen(config[selector]);
+        }
+
+        // Backups for all modal windows.
+        var modalBackups = $('.modal').clone();
+        $('body').on('hidden.bs.modal', '.modal', function () {
+            $(this).remove();
+            var modalClone = modalBackups.closest('#' + $(this).attr('id')).clone();
+            $('body').append(modalClone);
+        });
+    });
+
+    // Triggered during modal close event
+    $(function(){
+        $("[data-hide]").on("click", function(){
+            $(this).hide();
+        });
+    });
+
+</script>
+</head>
+<body>
+<div class="navbar navbar-default navbar-fixed-top">
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <div class="col-md-5 no-indent-right">
+                <div class="navbar-header">
+                    <div class="nav dropdown">
+                        <a class="navbar-brand dropdown-toggle" data-toggle="dropdown">
+                            <spring:message code="app.title" />
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#aboutModal" data-toggle="modal"><h5><spring:message code="app.about" /></h5></a></li>
+                            <li><a href="#faqModal" data-toggle="modal"><h5><spring:message code="app.faq" /></h5></a></li>
+                            <li><a href="#mobileModal" data-toggle="modal"><h5><spring:message code="app.mobile" /></h5></a></li>
+                            <li><a href="#feedbackModal" data-toggle="modal"><h5><spring:message code="app.feedback" /></h5></a></li>
+                        </ul>
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-19 no-indent-left">
+
+                <div class="navbar-collapse collapse navbar-responsive-collapse" id="navbar-collapse">
+
+                    <div class="row top-indent">
+                        <div class="col-md-5 no-indent">
+                            <div class="input-group navbar-form">
+                                <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/fish.png" width="15" height="15" /></span>
+                                <select id="fish" data-placeholder="<spring:message code="dropdown.fish.label" />" class="form-control chosen-select-deselect" onchange="refresh()">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 no-indent full-height">
+                            <div class="input-group navbar-form">
+                                <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/rod.png" width="15" height="15" /></span>
+                                <select id="fishingTool" data-placeholder="<spring:message code="dropdown.tool.label" />" class="form-control chosen-select-deselect" onchange="refresh()">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 no-indent full-height">
+                            <div class="input-group navbar-form">
+                                <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/hook.png" width="15" height="15" /></span>
+                                <select id="fishingBait" data-placeholder="<spring:message code="dropdown.bait.label" />" class="form-control chosen-select-deselect" onchange="refresh()">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <c:set var="pageLocale" value="${pageContext.response.locale}" />
+                        <c:if test="${not fn:startsWith(pageContext.response.locale, 'en') and
+                                        not fn:startsWith(pageContext.response.locale, 'ru')}">
+                            <%-- Current locale isn't supported. Set default locale here --%>
+                            <c:set var="pageLocale" value="en" />
+                        </c:if>
+
+                        <div class="col-md-6 col-md-offset-3">
+                                <div class="input-group navbar-form">
+                                    <span class="input-group-addon"> <spring:message code="language" /></span>
+                                    <select id="language" class="form-control chosen-select disable-search" onchange="handleLocaleSelection()">
+                                        <option value="en" <c:if test="${fn:startsWith(pageLocale, 'en')}">selected</c:if>><spring:message code="language.en" /></option>
+                                        <option value="ru" <c:if test="${fn:startsWith(pageLocale, 'ru')}">selected</c:if>><spring:message code="language.ru" /></option>
+                                    </select>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="map-canvas"></div>
+
+<!--About Modal -->
+<div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><spring:message code="app.about" /></h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-24"><p><spring:message code="app.about.modal.body.part1" /></p></div>
+                    </div>
+                    <div class="row well faq">
+                        <c:set var="items" value="5"/>
+                        <c:forEach begin="1" end="${items}" varStatus="iterator">
+                            <div class="col-md-24"><spring:message code="app.about.modal.body.list1.item${iterator.index}" /></div>
+                            <c:if test="${not iterator.last}">
+                                <div class="col-md-24">
+                                    <div class="divider"></div>
+                                </div>
+                            </c:if>
+                        </c:forEach>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-24"><p><spring:message code="app.about.modal.body.part2" /></p></div>
+                    </div>
+                    <div class="row well faq">
+                        <c:set var="items" value="2"/>
+                        <c:forEach begin="1" end="${items}" varStatus="iterator">
+                            <div class="col-md-24"><spring:message code="app.about.modal.body.list2.item${iterator.index}" /></div>
+                            <c:if test="${not iterator.last}">
+                                <div class="col-md-24">
+                                    <div class="divider"></div>
+                                </div>
+                            </c:if>
+                        </c:forEach>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-24"><p><spring:message code="app.about.modal.body.part3" /></p></div>
+                    </div>
+                    <div class="row well faq">
+                        <c:set var="items" value="1"/>
+                        <c:forEach begin="1" end="${items}" varStatus="iterator">
+                            <div class="col-md-24"><spring:message code="app.about.modal.body.list3.item${iterator.index}" /></div>
+                            <c:if test="${not iterator.last}">
+                                <div class="col-md-24">
+                                    <div class="divider"></div>
+                                </div>
+                            </c:if>
+                        </c:forEach>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-24"><p><spring:message code="app.about.modal.body.part4" /></p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-24"><p><spring:message code="app.about.modal.body.part5" /></p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-24"><p><spring:message code="app.about.modal.body.part6" /></p></div>
+                    </div>
+                    <div class="row well faq">
+                        <c:set var="items" value="2"/>
+                        <c:forEach begin="1" end="${items}" varStatus="iterator">
+                            <div class="col-md-24"><spring:message code="app.about.modal.body.list6.item${iterator.index}" /></div>
+                            <c:if test="${not iterator.last}">
+                                <div class="col-md-24">
+                                    <div class="divider"></div>
+                                </div>
+                            </c:if>
+                        </c:forEach>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-24"><p><spring:message code="app.about.modal.body.part7" /></p></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    <spring:message code="app.modal.close.label" />
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--FAQ Modal -->
+<div class="modal fade" id="faqModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><spring:message code="app.faq" /></h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+
+                    <div class="row alert alert-info faq">
+                        <div class="col-md-24">
+                            <span class="text-info"><strong><spring:message code="app.faq.question.sign" /></strong> - <spring:message code="app.faq.question.sign.description" />,
+                                                    <strong><spring:message code="app.faq.answer.sign" /></strong> - <spring:message code="app.faq.answer.description" />.</span>
+                        </div>
+                    </div>
+
+                    <c:set var="faqItems" value="12"/>
+                    <c:forEach begin="1" end="${faqItems}" varStatus="iterator">
+                        <div class="row well faq">
+                            <div class="col-md-24">
+                                <span class="text-info"><spring:message code="app.faq.question.sign" /></span> <spring:message code="app.faq.question${iterator.index}" />
+                            </div>
+                            <div class="col-md-24">
+                                <div class="divider"></div>
+                            </div>
+                            <div class="col-md-24">
+                                <span class="text-info"><spring:message code="app.faq.answer.sign" /></span> <spring:message code="app.faq.answer${iterator.index}" />
+                            </div>
+                        </div>
+                    </c:forEach>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    <spring:message code="app.modal.close.label" />
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Get mobile app modal -->
+<div class="modal fade" id="mobileModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <img src="${pageContext.request.contextPath}/icons/ajax-loader.gif" class="loading-indicator" style="display:none" />
+            <div class="modal-header">
+                <button type="button" class="close close-modal" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><spring:message code="app.mobile" /></h4>
+            </div>
+            <div class="modal-body">
+                <div class="bs-component error-block" data-hide="alert">
+                    <div class="alert alert-dismissable alert-danger">
+                        <button type="button" class="close">×</button>
+                        <spring:message code="app.modal.ajax.error" />
+                    </div>
+                </div>
+                <div class="container-fluid">
+
+                    <div class="row">
+                        <div class="col-lg-24">
+                            <p><spring:message code="app.mobile.body" /></p>
+                        </div>
+                    </div>
+
+                    <form class="form-horizontal">
+                        <fieldset>
+                            <legend></legend>
+                            <div class="form-group">
+                                <label for="userName" class="col-lg-4 control-label"><spring:message code="app.feedback.name.label" /></label>
+                                <div class="col-lg-20">
+                                    <input type="text" class="form-control" id="userName" placeholder="<spring:message code="app.feedback.name.placeholder" />">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="userEmail" class="col-lg-4 control-label"><spring:message code="app.feedback.email.label" /></label>
+                                <div class="col-lg-20">
+                                    <input type="text" class="form-control" id="userEmail" placeholder="<spring:message code="app.feedback.email.placeholder" />">
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary close-modal" onclick="sendEmail('mobileModal', 'userEmail', '', 'Get App Request', 'userName')"><span class="glyphicon glyphicon-send"></span>&nbsp;&nbsp;<spring:message code="app.modal.send.label" /></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Feedback modal -->
+<div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <img src="${pageContext.request.contextPath}/icons/ajax-loader.gif" class="loading-indicator" style="display:none" />
+            <div class="modal-header">
+                <button type="button" class="close close-modal" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><spring:message code="app.feedback" /></h4>
+            </div>
+            <div class="modal-body">
+                <div class="bs-component error-block" data-hide="alert">
+                    <div class="alert alert-dismissable alert-danger">
+                        <button type="button" class="close">×</button>
+                        <spring:message code="app.modal.ajax.error" />
+                    </div>
+                </div>
+                <div class="container-fluid">
+
+                        <div class="row">
+                            <div class="col-lg-24">
+                                <p><spring:message code="app.feedback.description" /></p>
+                            </div>
+                        </div>
+
+                        <form class="form-horizontal">
+                            <fieldset>
+                                <legend></legend>
+                                <div class="form-group">
+                                    <label for="feedbackName" class="col-lg-4 control-label"><spring:message code="app.feedback.name.label" /></label>
+                                    <div class="col-lg-20">
+                                        <input type="text" class="form-control" id="feedbackName" placeholder="<spring:message code="app.feedback.name.placeholder" />">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="feedbackEmail" class="col-lg-4 control-label"><spring:message code="app.feedback.email.label" /></label>
+                                    <div class="col-lg-20">
+                                        <input type="text" class="form-control" id="feedbackEmail" placeholder="<spring:message code="app.feedback.email.placeholder" />">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="feedbackMessage" class="col-lg-4 control-label"><spring:message code="app.feedback.message.label" /></label>
+                                    <div class="col-lg-20">
+                                        <textarea class="form-control" rows="10" id="feedbackMessage" placeholder="<spring:message code="app.feedback.message.placeholder" />"></textarea>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary close-modal" onclick="sendEmail('feedbackModal', 'feedbackEmail', 'feedbackMessage', 'Feedback', 'feedbackName')"><span class="glyphicon glyphicon-send"></span>&nbsp;&nbsp;<spring:message code="app.modal.send.label" /></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
 </html>

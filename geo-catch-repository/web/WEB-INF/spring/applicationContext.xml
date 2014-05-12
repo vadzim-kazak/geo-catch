@@ -18,6 +18,8 @@
 
     <util:properties id="configProperties" location="classpath:config.properties" />
 
+    <util:properties id="emailProperties" location="classpath:email.properties" />
+
     <bean id="domainPropertyService" class="com.jrew.geocatch.repository.service.DomainPropertyServiceImpl" >
         <constructor-arg name="dbManager" ref="domainPropertyDBManager"/>
     </bean>
@@ -58,6 +60,25 @@
     <bean class="com.jrew.geocatch.repository.converter.DomainPropertiesConverter" />
 
     <bean id="imageReviewService" class="com.jrew.geocatch.repository.service.ImageReviewServiceImpl" />
+
+    <!-- Java mail sender bean configuration -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="#{emailProperties['email.host']}" />
+        <property name="port" value="#{emailProperties['email.port']}" />
+        <property name="username" value="#{emailProperties['email.username']}" />
+        <property name="password" value="#{emailProperties['email.password']}" />
+        <property name="defaultEncoding" value="UTF-8"/>
+
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.mime.charset">UTF-8</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="mailService" class="com.jrew.geocatch.repository.service.MailServiceImpl" />
 
     <bean id="amazonRegionsConfig" class="com.jrew.geocatch.repository.dao.filesystem.AmazonS3RegionsConfig" >
         <property name="regions">

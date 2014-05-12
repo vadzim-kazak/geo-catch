@@ -47,7 +47,7 @@ function populateDomainProperties(locale, containerData) {
         for (var i = 0; i < arrayLength; i++) {
             var container = containerData[i];
             var domainProperties = filterDomainProperties(response, container.type);
-            populateSelectList(domainProperties, container.id, container);
+            populateSelectList(sortDomainProperties(domainProperties), container.id, container);
         }
     }
 
@@ -74,6 +74,18 @@ function populateDomainProperties(locale, containerData) {
         }
 
         return result;
+    }
+
+    /**
+     *
+     * @param domainProperties
+     * @returns {*}
+     */
+    function sortDomainProperties(domainProperties) {
+
+        return domainProperties.sort(function(first, second) {
+            return first.value.toUpperCase().localeCompare(second.value.toUpperCase());
+        });
     }
 
     /**
