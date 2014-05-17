@@ -201,7 +201,7 @@ INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VA
 
 -- Spoon lure
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8030, 3, 8003, 'spoon lure', 'en', 1);
-INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8031, 3, 8003, 'блесна колеблющуюся', 'ru', 0);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8031, 3, 8003, 'блесна колеблющаяся', 'ru', 0);
 
 -- Bread
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (8040, 3, 8004, 'bread', 'en', 1);
