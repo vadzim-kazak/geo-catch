@@ -49,7 +49,7 @@
         box-sizing : border-box !important;
     }
 
-        /*Remove down arrow under IE */
+    /*Remove down arrow under IE */
     select::-ms-expand {
         display: none;
     }
@@ -58,33 +58,6 @@
         border: 2px;
         border-color: red;
         border-style: solid;
-    }
-
-    @media (max-width: 1000px) {
-        .navbar-header {
-            float: none;
-        }
-        .navbar-toggle {
-            display: block;
-        }
-        .navbar-collapse {
-            border-top: 1px solid transparent;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
-        }
-        .navbar-collapse.collapse {
-            display: none!important;
-        }
-        .navbar-nav {
-            float: none!important;
-            margin: 7.5px -15px;
-        }
-        .navbar-nav>li {
-            float: none;
-        }
-        .navbar-nav>li>a {
-            padding-top: 10px;
-            padding-bottom: 10px;
-        }
     }
 
     .loading-indicator {
@@ -139,7 +112,7 @@
         padding: 5px !important;
     }
 
-    /* Overriding bootstrap classes */
+        /* Overriding bootstrap classes */
     .form-control {
         line-height:38px !important;
     }
@@ -150,6 +123,48 @@
 
     .dropdown-menu{
         margin:0 0 0 !important;
+    }
+
+    button.navbar-toggle {
+        margin-right: 30px !important;
+    }
+
+    @media (max-width: 1000px) {
+        .navbar-header {
+            float: none;
+        }
+        .navbar-toggle {
+            display: block;
+        }
+        .navbar-collapse {
+            border-top: 1px solid transparent;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+        .navbar-collapse.collapse {
+            display: none!important;
+        }
+        .navbar-nav {
+            float: none!important;
+            margin: 7.5px -15px;
+        }
+        .navbar-nav>li {
+            float: none;
+        }
+        .navbar-nav>li>a {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+        .screen-xs {
+            padding: 0px !important;
+            margin-left: 30px !important;
+        }
+        .input-group.navbar-form {
+            border: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            padding-top: 0px;
+        }
+
     }
 
 </style>
@@ -400,7 +415,7 @@
                 <div class="navbar-collapse collapse navbar-responsive-collapse" id="navbar-collapse">
 
                     <div class="row top-indent">
-                        <div class="col-md-5 no-indent">
+                        <div class="col-md-5 no-indent screen-xs">
                             <div class="input-group navbar-form">
                                 <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/fish.png" width="15" height="15" /></span>
                                 <select id="fish" data-placeholder="<spring:message code="dropdown.fish.label" />" class="form-control chosen-select-deselect" onchange="refresh()">
@@ -409,7 +424,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-5 no-indent full-height">
+                        <div class="col-md-5 no-indent full-height screen-xs">
                             <div class="input-group navbar-form">
                                 <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/rod.png" width="15" height="15" /></span>
                                 <select id="fishingTool" data-placeholder="<spring:message code="dropdown.tool.label" />" class="form-control chosen-select-deselect" onchange="refresh()">
@@ -418,7 +433,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-5 no-indent full-height">
+                        <div class="col-md-5 no-indent full-height screen-xs">
                             <div class="input-group navbar-form">
                                 <span class="input-group-addon"><img src="${pageContext.request.contextPath}/icons/hook.png" width="15" height="15" /></span>
                                 <select id="fishingBait" data-placeholder="<spring:message code="dropdown.bait.label" />" class="form-control chosen-select-deselect" onchange="refresh()">
@@ -434,7 +449,7 @@
                             <c:set var="pageLocale" value="en" />
                         </c:if>
 
-                        <div class="col-md-6 col-md-offset-3">
+                        <div class="col-md-6 col-md-offset-3 screen-xs">
                                 <div class="input-group navbar-form">
                                     <span class="input-group-addon"> <spring:message code="language" /></span>
                                     <select id="language" class="form-control chosen-select disable-search" onchange="handleLocaleSelection()">
