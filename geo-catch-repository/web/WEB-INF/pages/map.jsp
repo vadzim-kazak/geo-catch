@@ -159,6 +159,7 @@
 <script type="text/javascript"
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBI_eGAZN3QUbNyJIxV73LWlRf2iCUa5ew&sensor=false">
 </script>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script src="${pageContext.request.contextPath}/js/json2.js"></script>
 <script src="${pageContext.request.contextPath}/js/jquery-1.10.2.js"></script>
 <script src="${pageContext.request.contextPath}/js/jsrender.js"></script>
@@ -267,9 +268,17 @@
      */
     function initialize() {
 
+        // Default map displaying center
+        var mapCenter = new google.maps.LatLng(0, 0);
+
+        // If ClientLocation was filled in by the loader, use that info instead
+        if (google.loader && google.loader.ClientLocation) {
+            mapCenter = new google.maps.LatLng(google.loader.ClientLocation.latitude, google.loader.ClientLocation.longitude);
+        }
+
+
         var mapOptions = {
-            // temporary center of map Minsk, Belarus
-            center: new google.maps.LatLng(53.9475743, 27.5376985),
+            center: mapCenter,
             zoom: 6,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
             streetViewControl: false,
