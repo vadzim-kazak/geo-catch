@@ -607,6 +607,9 @@
                 <h4 class="modal-title"><spring:message code="app.mobile" /></h4>
             </div>
             <div class="modal-body">
+                <div class="alert alert-info sendConfirmation" style="display: none">
+                    <spring:message code="app.mobile.sent" />
+                </div>
                 <div class="bs-component error-block" data-hide="alert">
                     <div class="alert alert-dismissable alert-danger">
                         <button type="button" class="close">×</button>
@@ -642,6 +645,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary close-modal" onclick="sendEmail('mobileModal', 'userEmail', '', 'Get App Request', 'userName')"><span class="glyphicon glyphicon-send"></span>&nbsp;&nbsp;<spring:message code="app.modal.send.label" /></button>
+                <button type="button" class="btn btn-primary close-modal confirmationClose" data-dismiss="modal" style="display: none">
+                    <spring:message code="app.modal.close.label" />
+                </button>
             </div>
         </div>
     </div>
@@ -657,6 +663,9 @@
                 <h4 class="modal-title"><spring:message code="app.feedback" /></h4>
             </div>
             <div class="modal-body">
+                <div class="alert alert-info sendConfirmation" style="display: none">
+                    <spring:message code="app.feedback.sent" />
+                </div>
                 <div class="bs-component error-block" data-hide="alert">
                     <div class="alert alert-dismissable alert-danger">
                         <button type="button" class="close">×</button>
@@ -700,6 +709,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary close-modal" onclick="sendEmail('feedbackModal', 'feedbackEmail', 'feedbackMessage', 'Feedback', 'feedbackName')"><span class="glyphicon glyphicon-send"></span>&nbsp;&nbsp;<spring:message code="app.modal.send.label" /></button>
+                <button type="button" class="btn btn-primary close-modal confirmationClose" data-dismiss="modal" style="display: none">
+                    <spring:message code="app.modal.close.label" />
+                </button>
             </div>
         </div>
     </div>

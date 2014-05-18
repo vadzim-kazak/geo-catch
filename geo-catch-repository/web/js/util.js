@@ -22,7 +22,6 @@ function sendEmail(modalId, emailId, messageId, subject, nameId) {
         name: name
     }
 
-
     showLoading();
 
     $.ajax({
@@ -34,7 +33,12 @@ function sendEmail(modalId, emailId, messageId, subject, nameId) {
         data: JSON.stringify(emailData),
         success: function(response) {
             hideLoading();
-            $('#' + modalId).modal('hide');
+
+            $('#' + modalId).find('.modal-body > div').hide();
+            $('#' + modalId).find('.sendConfirmation').show();
+
+            $('#' + modalId).find('.modal-footer > button').hide();
+            $('#' + modalId).find('.confirmationClose').show();
         },
         error: function(response) {
             hideLoading();
