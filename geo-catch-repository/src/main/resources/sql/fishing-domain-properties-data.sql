@@ -132,6 +132,10 @@ INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VA
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (301, 1, 31, 'orfe', 'en', 0);
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (302, 1, 31, 'язь', 'ru', 0);
 
+--Сарган / Garfish
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (310, 1, 32, 'garfish', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (311, 1, 32, 'сарган', 'ru', 0);
+
 -- Fishing tools
 -- Spinning
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5000, 2, 5000, 'spinning', 'en', 1);
