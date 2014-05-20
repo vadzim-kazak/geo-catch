@@ -73,7 +73,12 @@ public class DomainPropertyServiceImpl implements DomainPropertyService {
              */
 
             long domainPropertyType = domainProperty.getType();
+
             String domainPropertyValue = domainProperty.getValue();
+            if (!StringUtils.isEmpty(domainPropertyValue)) {
+                domainPropertyValue = domainPropertyValue.toLowerCase();
+                domainProperty.setValue(domainPropertyValue);
+            }
 
             if (domainPropertyType > 0 && !StringUtils.isEmpty(domainPropertyValue)) {
                 DomainProperty persistedDomainProperty =
