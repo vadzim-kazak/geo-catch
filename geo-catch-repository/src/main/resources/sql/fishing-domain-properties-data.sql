@@ -144,6 +144,14 @@ INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VA
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (330, 1, 34, 'bass smallmouth', 'en', 1);
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (331, 1, 34, 'окунь малоротый', 'ru', 0);
 
+--Ставрида / Jack mackerels 
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (340, 1, 35, 'jack mackerels', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (341, 1, 35, 'ставрида', 'ru', 0);
+
+--Кефаль / Mullet
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (350, 1, 36, 'mullet', 'en', 1);
+INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (351, 1, 36, 'кефаль', 'ru', 0);
+
 -- Fishing tools
 -- Spinning
 INSERT IGNORE INTO domain_property (id, type, item, value, locale, isDefault) VALUES (5000, 2, 5000, 'spinning', 'en', 1);
